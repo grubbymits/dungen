@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+  <body>
+  <script>
+    "use strict"
+
+    const UPSCALE_FACTOR = 1;
+    const MAP_WIDTH_PIXELS = 1280;
+    const MAP_HEIGHT_PIXELS = 896;
+    const TILE_SIZE = 32;
+    const PATH_WIDTH = 3;
+
+    function begin() {
+      console.log("begin");
+
+      // Initialise canvas
+      var gameCanvas = document.createElement("canvas");
+      document.body.appendChild(gameCanvas);
+      gameCanvas.width = MAP_WIDTH_PIXELS;
+      gameCanvas.height = MAP_HEIGHT_PIXELS;
+      var gameContext = gameCanvas.getContext("2d");
+      gameContext.fillStyle = '#000000';
+      gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
+
+      var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
+      console.log("theGame = ", theGame);
+      theGame.renderMap();
+
+      var run = function() {
+        theGame.isRunning = true;
+        // set a maximum game rate
+        while ((new Date()).getTime() > theGame.nextGameTick) {
+          //Game.map.update();
+          theGame.nextGameTick += theGame.skipTicks;
+        }
+        // update game logic
+        theGame.update();
+        window.requestAnimationFrame(run);
+      };
+
+      run();
+    }
+  </script>
+  <script type="text/javascript" src="map.js"></script>
+  <script type="text/javascript" src="actor.js"></script>
+  <script type="text/javascript" src="ui.js"></script>
+  <script type="text/javascript" src="game.js"></script>
+  <script type="text/javascript" src="sprite.js"></script>
+  <script>
+  </script>
+  </body>
+</html>
