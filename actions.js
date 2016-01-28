@@ -15,7 +15,7 @@ class RestAction extends Action {
     super(actor);
   }
   perform() {
-    this.actor.modEnergy(1);
+    this.actor.energy(this.actor.energy + 1);
   }
 }
 
@@ -31,7 +31,38 @@ class WalkAction extends Action {
     return this.direction;
   }
   perform() {
-
+    let map = this.actor.game.map;
+    let pos = this.actor.pos;
+    switch(this.direction) {
+      case UP:
+        if (!map.isBlocked(pos.x, pos.y-1)) {
+          map.removeEntity(pos.x, pos.y);
+          this.actor.pos.y -= 1;
+          map.placeEntity(pos.x, pos.y-1, this.actor);
+        }
+      break;
+      case DOWN:
+        if (!map.isBlocked(pos.x, pos.y+1)) {
+          map.removeEntity(pos.x, pos.y);
+          this.actor.pos.y += 1;
+          map.placeEntity(pos.x, pos.y+1, this.actor);
+        }
+      break;
+      case LEFT:
+        if (!map.isBlocked(pos.x-1, pos.y)) {
+          map.removeEntity(pos.x, pos.y);
+          this.actor.pos.x -= 1;
+          map.placeEntity(pos.x-1, pos.y, this.actor);
+        }
+      break;
+      case RIGHT:
+        if (!map.isBlocked(pos.x+1, pos.y)) {
+          map.removeEntity(pos.x, pos.y);
+          this.actor.pos.x += 1;
+          map.placeEntity(pos.x+1, pos.y, this.actor);
+        }
+      break;
+    }
   }
 
 }
@@ -96,7 +127,7 @@ class FindTarget extends Action {
       radius = radius + 1;
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y - radius;
-        let target = this.map.findEntity(x, y);
+        let target = this.map.getEntity(x, y);
         if (target === null) {
           continue;
         } else {
@@ -113,14 +144,14 @@ class FindTarget extends Action {
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x - radius;
-        let target = this.map.findEntity(x, y);
+        let target = this.map.getEntity(x, y);
         if (target === null) {
           continue;
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x + radius;
-        let target = this.map.findEntity(x, y);
+        let target = this.map.getEntity(x, y);
         if (target === null) {
           continue;
         }

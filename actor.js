@@ -22,11 +22,11 @@ class Actor extends Entity {
     // Calculate what the next action should be.
     return this.nextAction;
   }
-  get position() {
+  get pos() {
     return this.position;
   }
-  modEnergy(val) {
-    this.energy = this.energy + val;
+  set energy(energy) {
+    this.energy = energy;
   }
 
 }
@@ -36,7 +36,7 @@ class Hero extends Actor {
     super(health, energy, position, sprite);
   }
   setWalkAction(dir) {
-    nextAction = this.walk(this, dir);
+    this.nextAction = this.walk(this, dir);
   }
 }
 

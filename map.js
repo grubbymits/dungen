@@ -27,6 +27,9 @@ class Location {
     this.tileType = type;
   }
   get isBlocking() {
+    if (this.entity) {
+      return this.blocking | this.entity.blocking;
+    }
     return this.blocking;
   }
   set isBlocking(blocking) {
@@ -66,7 +69,31 @@ class GameMap {
     }
   }
 
-  findEntity(x, y) {
+  getLocation(x, y) {
+    if (this.isOutOfRange(x, y)) {
+      throw new console.error("Index out of range:", x, y);
+    }
+    return this.locations[x][y];
+  }
+  
+  isBlocked(x, y) {
+    if (this.isOutOfRange(x, y)) {
+      return true;
+    } else if (this.locations[x][y].entity) {
+      return this.locations[x][y].entity.isBlocking;
+    }
+    return false;
+  }
+
+  removeEntity(x, y) {
+    this.locations[x][y].entity(null);
+  }
+  
+  placeEntity(x, y, entity) {
+    this.locations[x][y].entity(entity);
+  }
+  
+  getEntity(x, y) {
     if (this.isOutOfRange(x, y)) {
       return null;
     }
@@ -75,16 +102,9 @@ class GameMap {
     return loc.entity;
   }
 
-  getLocation(x, y) {
-    if (this.isOutOfRange(x, y)) {
-      throw new console.error("Index out of range:", x, y);
-    }
-    return this.locations[x][y];
-  }
-
   placeTile(x, y, type, blocking) {
     // Check for out-of-bounds
-    if (x < 0 || y < 0 || x > this.xMax || y > this.yMax) {
+    if (this.isOutOfRange(x, y)) {
       return;
     } else {
       this.locations[x][y].type = type;

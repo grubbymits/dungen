@@ -8,20 +8,24 @@ class Game {
     this.isRunning = false;
     this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
-    this.map = new GameMap(width, height);
-    this.map.generate();
+    this.theMap = new GameMap(width, height);
+    this.theMap.generate();
     console.log("isRunning = ", this.isRunning);
     //this.prevTime = (new Date()).getTime();
   }
 
   renderMap() {
     // draw everything
-    for (var x = 0; x < this.map.xMax; x++) {
-      for (var y = 0; y < this.map.yMax; y++) {
+    for (var x = 0; x < this.theMap.xMax; x++) {
+      for (var y = 0; y < this.theMap.yMax; y++) {
         var type = this.map.getLocation(x,y).type;
         tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
       }
     }
+  }
+  
+  get map() {
+    return this.theMap;
   }
 
   update() {
