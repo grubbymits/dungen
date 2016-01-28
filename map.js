@@ -66,22 +66,13 @@ class GameMap {
     }
   }
 
-  findTarget(actor, range) {
-    var pos = actor.position;
-    for (let x = pos.x - range; x < pos.x + range; x++) {
-      for (let y = pos.y - range; y < pos.y + range; y++) {
-        if (this.isOutOfRange(x, y)) {
-          continue;
-        }
-        var loc = this.locations[x][y];
-        if (loc.entity !== null) {
-          if (loc.entity instanceof Hero) {
-            return loc.entity;
-          }
-        }
-      }
+  findEntity(x, y) {
+    if (this.isOutOfRange(x, y)) {
+      return null;
     }
-    return null;
+    var loc = this.locations[x][y];
+    // entity maybe null;
+    return loc.entity;
   }
 
   getLocation(x, y) {

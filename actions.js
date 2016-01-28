@@ -39,54 +39,93 @@ class WalkAction extends Action {
 // Performing an attack action will return the attack attempt (eg swingweapon)
 // Whether it connects depends on the actor and the target.
 // DealDamage is the final action which determines how much damage is dealt.
-class DealDamage extends Action {
-  constructor(actor, power, type) {
+class DealMeleeDamage extends Action {
+  constructor(actor) {
     super(actor);
-    this.power = power;
-    this.type = type;
+  }
+  perform() {
+    let power = this.actor.meleeAttack.power;
+    let type = this.actor.meleeAttack.type;
+    let defense = this.target.physicalDefense;
+    let elemDefense = this.target.elementalDefense(type);
+    this.target.health((power - defense) * elemDefense);
+    
+    if (this.target.health <= 0) {
+      return new KillActor(this.actor, this.target);
+    }
   }
   set target(target) {
     this.target = target;
-  }
-
-  perform() {
-
   }
 }
 
-class SwingWeapon extends Action {
+class MeleeAttack extends Action {
   constructor(actor) {
     super(actor);
+    this.direction = direction;
     let power = actor.equippedMeleeWeapon.attackPower;
     let type = actor.equippedMeleeWeapon.type;
-    this.dealDamage = new DealDamage(this.actor, power, type);
+    this.dealDamage = new DealDamage(actor, power, type);
   }
+  
   set target(target) {
     this.target = target;
   }
+
   perform() {
     if (target.dodges) {
       return null;
     } else {
-      this.dealDamage.target(target);
+      //this.dealDamage.target(target);
       return this.dealDamage;
     }
   }
 }
 
-class MeleeAttack extends Action {
-  constructor(actor, direction) {
+class FindTarget extends Action {
+  constructor(actor) {
     super(actor);
-    this.direction = direction;
-    this.swingWeapon = new SwingWeapon(this.actor);
+    this.range = actor.range;
+    this.map = this.actor.game.map;
   }
-
   perform() {
-    // get target.
-    var target = {};
-    // try to attack
-    this.swingWeapon.target(target);
-    return this.swingWeapon;
+    let radius = 0;
+    let pos = this.actor.pos;
+    
+    while (radius < this.range) {
+      radius = radius + 1;
+      for (let x = pos.x - radius; x < pos.x + radius; x++) {
+        let y = pos.y - radius;
+        let target = this.map.findEntity(x, y);
+        if (target === null) {
+          continue;
+        } else {
+          // if target is in range, we can return an attack action,
+          // otherwise we should return a walkaction to get closer.
+        }
+      }
+      for (let x = pos.x - radius; x < pos.x + radius; x++) {
+        let y = pos.y + radius;
+        let target = this.map.findEntity(x, y);
+        if (target === null) {
+          continue;
+        }
+      }
+      for (let y = pos.y - radius; y < pos.y + radius; y++) {
+        let x = pos.x - radius;
+        let target = this.map.findEntity(x, y);
+        if (target === null) {
+          continue;
+        }
+      }
+      for (let y = pos.y - radius; y < pos.y + radius; y++) {
+        let x = pos.x + radius;
+        let target = this.map.findEntity(x, y);
+        if (target === null) {
+          continue;
+        }
+      }
+    }
   }
 }
 
