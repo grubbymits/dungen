@@ -20,19 +20,17 @@ class RestAction extends Action {
 }
 
 class WalkAction extends Action {
-  constructor(actor, dir) {
+  constructor(actor) {
     super(actor);
-    this.direction = dir;
   }
-  set direction(dir) {
-    this.direction = dir;
-  }
-  get direction() {
-    return this.direction;
+  set dest(goal) {
+    this.destination = goal;
   }
   perform() {
     let map = this.actor.game.map;
     let pos = this.actor.pos;
+    
+    /*
     switch(this.direction) {
       case UP:
         if (!map.isBlocked(pos.x, pos.y-1)) {
@@ -62,7 +60,7 @@ class WalkAction extends Action {
           map.placeEntity(pos.x+1, pos.y, this.actor);
         }
       break;
-    }
+    }*/
   }
 
 }
