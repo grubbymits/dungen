@@ -60,6 +60,18 @@ class GameMap {
       }
     }
   }
+  
+  getPath(start, end) {
+    // adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
+    var frontier = [];
+    frontier.push(start);
+    var cameFrom = new Map();
+    cameFrom[start] = null;
+    
+    while (frontier.length > 0) {
+      
+    }
+  }
 
   isOutOfRange(x, y) {
     if (x < 0 || y < 0 || x > this.xMax || y > this.yMax) {
