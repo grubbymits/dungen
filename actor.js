@@ -19,7 +19,13 @@ class Actor extends Entity {
     this.nextAction = this.rest;
   }
   get action() {
-    // Calculate what the next action should be.
+    if (this.nextAction === null) {
+      // If this actor has a destination which it is not at, move toward it.
+      if (this.destination != this.position && this.path !== null) {
+        this.walk.destination(this.path.shift());
+        this.nextAction = this.walk;
+      }
+    }
     return this.nextAction;
   }
   get pos() {
@@ -27,6 +33,10 @@ class Actor extends Entity {
   }
   set energy(energy) {
     this.energy = energy;
+  }
+  set destination(x, y) {
+    this.destination = new Vec(x, y);
+    this.path = this.game.map.getPath(this.position, this.destination);
   }
 
 }

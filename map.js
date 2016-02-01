@@ -61,16 +61,66 @@ class GameMap {
     }
   }
   
-  getPath(start, end) {
-    // adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
+  getNeighbours(vec) {
+    var neighbours = [];
+    for (let x = vec.x - 1; x < vec.x + 1; x++) {
+      for (let y = vec.y - 1; y < vec.y + 1; y++) {
+        if (this.isOutOfRange(x, y)) {
+          continue;
+        }
+        if (this.locations[x][y].isBlocking) {
+          continue;
+        }
+        neighbours.push(new Vec(x, y));
+      }
+    }
+    return neighbours;
+  }
+  
+  getPath(start, goal) {
+    // if, somewhere, the click is out range or is a blocked location, ignore it.
+    if (this.isOutOfRange(goal)) {
+      return null;
+    }
+    if (this.locations[goal.x][goal.y].blocking) {
+      return null;
+    }
+    // Adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
     var frontier = [];
     frontier.push(start);
     var cameFrom = new Map();
     cameFrom[start] = null;
     
+    // breadth-first search
     while (frontier.length > 0) {
+      let current = frontier.shift();
       
+      // exit early
+      if (current == goal) {
+        break;
+      }
+      
+      // need to include the cost of moving diagonal. lets round 1.44 to 1.5 and have
+      // a normal move cost 2 and a diagonal cost 3 and this can correlate directly to
+      // the cost that it will take the actor to move.
+      
+      for (let next in this.getNeighbours(current)) {
+        if (!cameFrom.has(next)) {
+          frontier.push(next);
+          cameFrom[next] = current;
+        }
+      }
     }
+   
+    // finalise the path.
+    var current = goal;
+    var path = [current];
+    while (current != start) {
+      current = cameFrom[current];
+      path.push(current);
+    }
+    path.reverse();
+    return path;
   }
 
   isOutOfRange(x, y) {

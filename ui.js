@@ -26,5 +26,9 @@ class Interface {
       }, false);
 
     //addEventListener("keyup", (e) => this.keysDown[e.keyCode] = false, false);
+    
+    addEventListener("click", function(e) {
+      this.hero.destination(e.clientX, e.clientY);
+    }, false);
   }
 }
