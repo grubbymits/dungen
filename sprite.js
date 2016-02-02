@@ -70,3 +70,5 @@ var sprite_sheet = new SpriteSheet('tileset');
 var tileSprites = [ new Sprite(sprite_sheet, 1, 1, 32, 32),
                     new Sprite(sprite_sheet, 1, 0, 32, 32),
                     new Sprite(sprite_sheet, 2, 2, 32, 32)];
+                    
+var knightSprite = new Sprite(sprite_sheet, 5, 18, 32, 32);

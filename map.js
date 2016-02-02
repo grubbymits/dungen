@@ -48,8 +48,8 @@ class Location {
 class GameMap {
   constructor(width, height) {
     this.locations = [];
-    this.width = width;
-    this.height = height;
+    //this.width = width;
+    //this.height = height;
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
 
@@ -59,6 +59,14 @@ class GameMap {
         this.locations[x][y] = new Location(true, null, CEILING);
       }
     }
+  }
+  
+  get width() {
+    return this.xMax;
+  }
+  
+  get height() {
+    return this.yMax;
   }
   
   getNeighbours(vec) {

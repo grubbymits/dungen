@@ -4,14 +4,21 @@
 </head>
   <body>
   <script>
-    "use strict"
+    "use strict";
 
     const UPSCALE_FACTOR = 1;
     const MAP_WIDTH_PIXELS = 1280;
     const MAP_HEIGHT_PIXELS = 896;
     const TILE_SIZE = 32;
     const PATH_WIDTH = 3;
-
+  </script>
+  <script type="text/javascript" src="map.js"></script>
+  <script type="text/javascript" src="actions.js"></script>
+  <script type="text/javascript" src="actor.js"></script>
+  <script type="text/javascript" src="ui.js"></script>
+  <script type="text/javascript" src="game.js"></script>
+  <script type="text/javascript" src="sprite.js"></script>
+  <script>
     function begin() {
       console.log("begin");
 
@@ -27,6 +34,11 @@
       var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
       console.log("theGame = ", theGame);
       theGame.renderMap();
+      
+      
+      var startPos = new Vec(theGame.map.width / 2, theGame.map.height / 2);
+      var hero = new Hero(30, 6, startPos, knightSprite, theGame);
+      var UI = new Interface(hero);
 
       var run = function() {
         theGame.isRunning = true;
@@ -34,6 +46,11 @@
         while ((new Date()).getTime() > theGame.nextGameTick) {
           //Game.map.update();
           theGame.nextGameTick += theGame.skipTicks;
+        }
+        if (hero.path !== null) {
+          for (let node in hero.path) {
+            gameContext.strokeRect(node.x, node.y, TILE_WIDTH, TILE_HEIGHT);
+          }
         }
         // update game logic
         theGame.update();
@@ -43,11 +60,6 @@
       run();
     }
   </script>
-  <script type="text/javascript" src="map.js"></script>
-  <script type="text/javascript" src="actor.js"></script>
-  <script type="text/javascript" src="ui.js"></script>
-  <script type="text/javascript" src="game.js"></script>
-  <script type="text/javascript" src="sprite.js"></script>
   <script>
   </script>
   </body>

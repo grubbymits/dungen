@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 class Interface {
   constructor(hero) {
@@ -28,7 +28,8 @@ class Interface {
     //addEventListener("keyup", (e) => this.keysDown[e.keyCode] = false, false);
     
     addEventListener("click", function(e) {
-      this.hero.destination(e.clientX, e.clientY);
+      console.log("registering a click");
+      this.hero.setDestination(e.clientX, e.clientY);
     }, false);
   }
 }

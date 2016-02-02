@@ -13,8 +13,8 @@ class Actor extends Entity {
   constructor(health, energy, position, sprite, game) {
     super(position, true, sprite, game);
     this.health = health;
-    this.energy = energy;
-    this.walk = new WalkAction(this, null);
+    this.currentEnergy = energy;
+    this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.nextAction = this.rest;
   }
@@ -31,19 +31,23 @@ class Actor extends Entity {
   get pos() {
     return this.position;
   }
-  set energy(energy) {
-    this.energy = energy;
+  get path() {
+    return this.path;
   }
-  set destination(x, y) {
-    this.destination = new Vec(x, y);
+  set energy(energy) {
+    this.currentEnergy = energy;
+  }
+  setDestination(x, y) {
+    this.destination.x = x;
+    this.destination.y = y;
     this.path = this.game.map.getPath(this.position, this.destination);
   }
 
 }
 
 class Hero extends Actor {
-  constructor(health, energy, position, sprite) {
-    super(health, energy, position, sprite);
+  constructor(health, energy, position, sprite, game) {
+    super(health, energy, position, sprite, game);
   }
   setWalkAction(dir) {
     this.nextAction = this.walk(this, dir);
