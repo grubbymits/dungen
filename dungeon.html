@@ -12,13 +12,9 @@
     const TILE_SIZE = 32;
     const PATH_WIDTH = 3;
   </script>
-  <script type="text/javascript" src="map.js"></script>
-  <script type="text/javascript" src="actions.js"></script>
-  <script type="text/javascript" src="actor.js"></script>
-  <script type="text/javascript" src="ui.js"></script>
-  <script type="text/javascript" src="game.js"></script>
-  <script type="text/javascript" src="sprite.js"></script>
   <script>
+    "use strict";
+    
     function begin() {
       console.log("begin");
 
@@ -36,7 +32,8 @@
       theGame.renderMap();
       
       
-      var startPos = new Vec(theGame.map.width / 2, theGame.map.height / 2);
+      var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
+      console.log("starting hero at block =", startPos);
       var hero = new Hero(30, 6, startPos, knightSprite, theGame);
       var UI = new Interface(hero);
 
@@ -48,8 +45,9 @@
           theGame.nextGameTick += theGame.skipTicks;
         }
         if (hero.path !== null) {
-          for (let node in hero.path) {
-            gameContext.strokeRect(node.x, node.y, TILE_WIDTH, TILE_HEIGHT);
+          var path = hero.path;
+          for (let node of path) {
+            gameContext.strokeRect(node.x * TILE_SIZE, node.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
           }
         }
         // update game logic
@@ -60,7 +58,11 @@
       run();
     }
   </script>
-  <script>
-  </script>
+  <script type="text/javascript" src="map.js"></script>
+  <script type="text/javascript" src="actions.js"></script>
+  <script type="text/javascript" src="actor.js"></script>
+  <script type="text/javascript" src="ui.js"></script>
+  <script type="text/javascript" src="game.js"></script>
+  <script type="text/javascript" src="sprite.js"></script>
   </body>
 </html>

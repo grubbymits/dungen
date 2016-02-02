@@ -17,12 +17,14 @@ class Actor extends Entity {
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.nextAction = this.rest;
+    this.destination = new Vec(this.position.x, this.position.y);
+    this.currentPath = null;
   }
   get action() {
     if (this.nextAction === null) {
       // If this actor has a destination which it is not at, move toward it.
       if (this.destination != this.position && this.path !== null) {
-        this.walk.destination(this.path.shift());
+        this.walk.destination(this.currentPath.shift());
         this.nextAction = this.walk;
       }
     }
@@ -32,15 +34,14 @@ class Actor extends Entity {
     return this.position;
   }
   get path() {
-    return this.path;
+    return this.currentPath;
   }
   set energy(energy) {
     this.currentEnergy = energy;
   }
   setDestination(x, y) {
-    this.destination.x = x;
-    this.destination.y = y;
-    this.path = this.game.map.getPath(this.position, this.destination);
+    this.destination = this.game.map.getLocation(x, y).vec;
+    this.currentPath = this.game.map.getPath(this.position, this.destination);
   }
 
 }

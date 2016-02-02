@@ -14,21 +14,30 @@ class Vec {
     this.x = x;
     this.y = y;
   }
-
-  getWeight(vec) {
-
+  getCost(from) {
+    var costX = Math.abs(from.x - this.x) * 2;
+    var costY = Math.abs(from.y - this.y) * 2;
+    if (costX == 0) {
+      return costY;
+    } else if (costY == 0) {
+      return costX;
+    }
   }
 }
 
+// We need a priority queue for pathfinding. An array of WeightedVec can be
+// customed sorted which would provide the needed functionality.
+
 class Location {
-  constructor(blocking, entity, type) {
+  constructor(blocking, entity, type, x, y) {
     this.blocking = blocking;
     this.entity = entity;
     this.tileType = type;
+    this.vec = new Vec(x, y);
   }
   get isBlocking() {
     if (this.entity) {
-      return this.blocking | this.entity.blocking;
+      return this.blocking || this.entity.blocking;
     }
     return this.blocking;
   }
@@ -56,7 +65,7 @@ class GameMap {
     for (let x = 0; x < this.xMax; x++) {
       this.locations[x] = [];
       for (let y = 0; y < this.yMax; y++) {
-        this.locations[x][y] = new Location(true, null, CEILING);
+        this.locations[x][y] = new Location(true, null, CEILING, x, y);
       }
     }
   }
@@ -71,23 +80,28 @@ class GameMap {
   
   getNeighbours(vec) {
     var neighbours = [];
-    for (let x = vec.x - 1; x < vec.x + 1; x++) {
-      for (let y = vec.y - 1; y < vec.y + 1; y++) {
+    for (let x = vec.x - 1; x < vec.x + 2; x++) {
+      for (let y = vec.y - 1; y < vec.y + 2; y++) {
         if (this.isOutOfRange(x, y)) {
           continue;
         }
         if (this.locations[x][y].isBlocking) {
           continue;
         }
-        neighbours.push(new Vec(x, y));
+        if (x == vec.x && y == vec.y) {
+          continue;
+        }
+        neighbours.push(this.locations[x][y].vec);
       }
     }
     return neighbours;
   }
   
   getPath(start, goal) {
+    console.log("getPath");
+    console.log("start = ", start, " goal = ", goal);
     // if, somewhere, the click is out range or is a blocked location, ignore it.
-    if (this.isOutOfRange(goal)) {
+    if (this.isOutOfRange(goal.x, goal.y)) {
       return null;
     }
     if (this.locations[goal.x][goal.y].blocking) {
@@ -97,11 +111,14 @@ class GameMap {
     var frontier = [];
     frontier.push(start);
     var cameFrom = new Map();
-    cameFrom[start] = null;
-    
+    cameFrom.set(start, null);
+   
+    console.log("begin BFS");
+    var counter = 0;
     // breadth-first search
-    while (frontier.length > 0) {
+    while (frontier.length > 0 && counter < 1000) {
       let current = frontier.shift();
+      counter++;
       
       // exit early
       if (current == goal) {
@@ -111,23 +128,28 @@ class GameMap {
       // need to include the cost of moving diagonal. lets round 1.44 to 1.5 and have
       // a normal move cost 2 and a diagonal cost 3 and this can correlate directly to
       // the cost that it will take the actor to move.
+      var neighbours = this.getNeighbours(current);
       
-      for (let next in this.getNeighbours(current)) {
-        if (!cameFrom.has(next)) {
-          frontier.push(next);
-          cameFrom[next] = current;
+      for (let next of neighbours) {
+        if (cameFrom.has(next)) {
+          console.log("already visited this node");
+          continue;
         }
+        frontier.push(next);
+        cameFrom.set(next, current);
       }
     }
    
+    console.log("now finalise path");
     // finalise the path.
     var current = goal;
     var path = [current];
     while (current != start) {
-      current = cameFrom[current];
+      current = cameFrom.get(current);
       path.push(current);
     }
     path.reverse();
+    console.log("path created: ", path);
     return path;
   }
 
@@ -138,7 +160,7 @@ class GameMap {
       return false;
     }
   }
-
+  
   getLocation(x, y) {
     if (this.isOutOfRange(x, y)) {
       throw new console.error("Index out of range:", x, y);

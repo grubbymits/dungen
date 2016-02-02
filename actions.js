@@ -1,3 +1,5 @@
+"use strict";
+
 class Action {
   constructor(actor) {
     this.actor = actor;

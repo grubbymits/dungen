@@ -27,9 +27,13 @@ class Interface {
 
     //addEventListener("keyup", (e) => this.keysDown[e.keyCode] = false, false);
     
-    addEventListener("click", function(e) {
-      console.log("registering a click");
-      this.hero.setDestination(e.clientX, e.clientY);
-    }, false);
+    addEventListener("click", this.onClick.bind(this), false);
+  }
+    
+  onClick(event) {
+    console.log("registering a click");
+    let x = Math.floor(event.clientX / TILE_SIZE);
+    let y = Math.floor(event.clientY / TILE_SIZE);
+    this.hero.setDestination(x, y);
   }
 }
