@@ -14,19 +14,18 @@ class Vec {
     this.x = x;
     this.y = y;
   }
-  getCost(from) {
-    var costX = Math.abs(from.x - this.x) * 2;
-    var costY = Math.abs(from.y - this.y) * 2;
-    if (costX == 0) {
+  getCost(other) {
+    var costX = Math.abs(other.x - this.x) * 2;
+    var costY = Math.abs(other.y - this.y) * 2;
+    if (costX === 0) {
       return costY;
-    } else if (costY == 0) {
+    } else if (costY === 0) {
       return costX;
+    } else {
+      return Math.sqrt(Math.pow(costX, 2) + Math.pow(costY, 2));
     }
   }
 }
-
-// We need a priority queue for pathfinding. An array of WeightedVec can be
-// customed sorted which would provide the needed functionality.
 
 class Location {
   constructor(blocking, entity, type, x, y) {
@@ -100,6 +99,7 @@ class GameMap {
   getPath(start, goal) {
     console.log("getPath");
     console.log("start = ", start, " goal = ", goal);
+    
     // if, somewhere, the click is out range or is a blocked location, ignore it.
     if (this.isOutOfRange(goal.x, goal.y)) {
       return null;
@@ -107,39 +107,48 @@ class GameMap {
     if (this.locations[goal.x][goal.y].blocking) {
       return null;
     }
+    
     // Adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
     var frontier = [];
-    frontier.push(start);
     var cameFrom = new Map();
+    var costSoFar = new Map();
     cameFrom.set(start, null);
+    costSoFar.set(start, 0);
+    // frontier is a sorted list of locations with their lowest cost
+    frontier.push({loc : start, cost : 0});
    
-    console.log("begin BFS");
-    var counter = 0;
     // breadth-first search
-    while (frontier.length > 0 && counter < 1000) {
+    while (frontier.length > 0) {
       let current = frontier.shift();
-      counter++;
       
       // exit early
-      if (current == goal) {
+      if (current.loc == goal) {
         break;
       }
       
-      // need to include the cost of moving diagonal. lets round 1.44 to 1.5 and have
-      // a normal move cost 2 and a diagonal cost 3 and this can correlate directly to
-      // the cost that it will take the actor to move.
-      var neighbours = this.getNeighbours(current);
+      var neighbours = this.getNeighbours(current.loc);
       
       for (let next of neighbours) {
-        if (cameFrom.has(next)) {
-          console.log("already visited this node");
-          continue;
+        let newCost = costSoFar.get(current.loc) + current.loc.getCost(next);
+        
+        if (!costSoFar.has(next) || newCost < costSoFar.get(next)) {
+          frontier.push({loc : next, cost : newCost});
+          costSoFar.set(next, newCost);
+          
+          frontier.sort((a, b) => {
+            if (a.cost > b.cost) {
+              return 1;
+            } else if (a.cost < b.cost) {
+              return -1;
+            } else {
+              return 0;
+            }
+          });
+          cameFrom.set(next, current.loc);
         }
-        frontier.push(next);
-        cameFrom.set(next, current);
       }
     }
-   
+ 
     console.log("now finalise path");
     // finalise the path.
     var current = goal;
@@ -149,7 +158,7 @@ class GameMap {
       path.push(current);
     }
     path.reverse();
-    console.log("path created: ", path);
+    console.log("path created: ", path.length);
     return path;
   }
 
@@ -163,7 +172,7 @@ class GameMap {
   
   getLocation(x, y) {
     if (this.isOutOfRange(x, y)) {
-      throw new console.error("Index out of range:", x, y);
+      throw "Index out of range:";
     }
     return this.locations[x][y];
   }

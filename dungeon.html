@@ -36,6 +36,7 @@
       console.log("starting hero at block =", startPos);
       var hero = new Hero(30, 6, startPos, knightSprite, theGame);
       var UI = new Interface(hero);
+      knightSprite.render(hero.pos.x * TILE_SIZE, hero.pos.y * TILE_SIZE , gameContext);
 
       var run = function() {
         theGame.isRunning = true;

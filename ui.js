@@ -31,9 +31,10 @@ class Interface {
   }
     
   onClick(event) {
-    console.log("registering a click");
-    let x = Math.floor(event.clientX / TILE_SIZE);
-    let y = Math.floor(event.clientY / TILE_SIZE);
+    var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
+    var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
+    let x = Math.floor((event.clientX + offsetX) / TILE_SIZE);
+    let y = Math.floor((event.clientY + offsetY) / TILE_SIZE);
     this.hero.setDestination(x, y);
   }
 }
