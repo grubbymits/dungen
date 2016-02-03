@@ -6,6 +6,10 @@ class Entity {
     this.blocking = blocking;
     this.sprite = sprite;
     this.game = game;
+    console.log("constructing entity");
+  }
+  render() {
+    this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
   }
 }
 
@@ -16,34 +20,45 @@ class Actor extends Entity {
     this.currentEnergy = energy;
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
-    this.nextAction = this.rest;
+    this.nextAction = null;
     this.destination = new Vec(this.position.x, this.position.y);
-    this.currentPath = null;
+    this.currentPath = [];
   }
   get action() {
-    if (this.nextAction === null) {
-      // If this actor has a destination which it is not at, move toward it.
-      if (this.destination != this.position && this.path !== null) {
-        this.walk.destination(this.currentPath.shift());
-        this.nextAction = this.walk;
-      }
+    console.log("nextAction");
+    // If this actor has a destination which it is not at, move toward it.
+    if (this.destination != this.position && this.currentPath.length != 0) {
+      console.log("nextAction = walk");
+      this.nextAction = this.walk;
+    } else {
+      this.nextAction = null;
     }
-    return this.nextAction;
   }
   get pos() {
     return this.position;
   }
+  set pos(pos) {
+    this.position = pos;
+  }
   get path() {
     return this.currentPath;
   }
+  get energy() {
+    this.currentEnergy;
+  }
   set energy(energy) {
     this.currentEnergy = energy;
+  }
+  get nextStep() {
+    return this.currentPath[0];
+  }
+  shiftNextStep() {
+    this.currentPath.shift();
   }
   setDestination(x, y) {
     this.destination = this.game.map.getLocation(x, y).vec;
     this.currentPath = this.game.map.getPath(this.position, this.destination);
   }
-
 }
 
 class Hero extends Actor {
@@ -131,6 +146,8 @@ const CYCLOP = 28;
 const WEREWOLF = 29;
 const GOLEM = 30;
 const DEMON = 31;
+
+const KNIGHT = 5;
 
 function createMonster(type, position, game) {
   switch(type) {

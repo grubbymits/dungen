@@ -24,19 +24,33 @@ class Game {
     }
   }
   
+  createHero(pos, type) {
+    if (type == KNIGHT) {
+      this.hero = new Hero(30, 6, pos, knightSprite, this);
+    }
+    this.actors.push(this.hero);
+    return this.hero;
+  }
+  
+  renderActors() {
+    for (let actor of this.actors) {
+      actor.render();
+    }
+  }
+  
   get map() {
     return this.theMap;
   }
 
   update() {
     for (let actor of this.actors) {
-      let action = actor.nextAction;
+      let action = actor.action;
       // this will only work if each non-player character always selects
       // a move (ie, restAction)
-      if (action === null) {
+      if (!action) {
         return false;
       }
-      while(action !== null) {
+      while(action) {
         action = action.perform();
       }
     }

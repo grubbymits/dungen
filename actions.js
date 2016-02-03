@@ -17,7 +17,8 @@ class RestAction extends Action {
     super(actor);
   }
   perform() {
-    this.actor.energy(this.actor.energy + 1);
+    console.log("rest");
+    this.actor.currentEnergy++;
   }
 }
 
@@ -31,38 +32,29 @@ class WalkAction extends Action {
   perform() {
     let map = this.actor.game.map;
     let pos = this.actor.pos;
+    let next = this.actor.nextStep;
     
-    /*
-    switch(this.direction) {
-      case UP:
-        if (!map.isBlocked(pos.x, pos.y-1)) {
-          map.removeEntity(pos.x, pos.y);
-          this.actor.pos.y -= 1;
-          map.placeEntity(pos.x, pos.y-1, this.actor);
-        }
-      break;
-      case DOWN:
-        if (!map.isBlocked(pos.x, pos.y+1)) {
-          map.removeEntity(pos.x, pos.y);
-          this.actor.pos.y += 1;
-          map.placeEntity(pos.x, pos.y+1, this.actor);
-        }
-      break;
-      case LEFT:
-        if (!map.isBlocked(pos.x-1, pos.y)) {
-          map.removeEntity(pos.x, pos.y);
-          this.actor.pos.x -= 1;
-          map.placeEntity(pos.x-1, pos.y, this.actor);
-        }
-      break;
-      case RIGHT:
-        if (!map.isBlocked(pos.x+1, pos.y)) {
-          map.removeEntity(pos.x, pos.y);
-          this.actor.pos.x += 1;
-          map.placeEntity(pos.x+1, pos.y, this.actor);
-        }
-      break;
-    }*/
+    var energyRequired = 0;
+    if (pos.x == next.x) {
+      energyRequired = 2;
+    } else if (pos.y == next.y) {
+      energyRequired = 2;
+    } else {
+      energyRequired = 3;
+    }
+    console.log("energy required = ", energyRequired);
+    
+    // May not be able to perform the action.
+    if (this.actor.currentEnergy < energyRequired) {
+      return null;
+    }
+    
+    this.actor.shiftNextStep();
+    map.removeEntity(pos);
+    map.placeEntity(next);
+    this.actor.pos = next;
+    this.actor.currentEnergy -= energyRequired;
+    console.log("currentEnergy = ", this.actor.currentEnergy);
   }
 
 }

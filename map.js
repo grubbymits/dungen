@@ -186,12 +186,12 @@ class GameMap {
     return false;
   }
 
-  removeEntity(x, y) {
-    this.locations[x][y].entity(null);
+  removeEntity(pos) {
+    this.locations[pos.x][pos.y].entity = null;
   }
   
-  placeEntity(x, y, entity) {
-    this.locations[x][y].entity(entity);
+  placeEntity(pos, entity) {
+    this.locations[pos.x][pos.y].entity = entity;
   }
   
   getEntity(x, y) {
