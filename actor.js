@@ -16,10 +16,14 @@ class Entity {
 class Actor extends Entity {
   constructor(health, energy, position, sprite, game) {
     super(position, true, sprite, game);
-    this.health = health;
+    this.currentHealth = health;
+    this.maxHealth = health;
     this.currentEnergy = energy;
+    this.maxEnergy = energy;
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
+    this.findTarget = new TargetFinder(this);
+    this.targetGen = this.findTarget.find();
     this.nextAction = null;
     this.destination = new Vec(this.position.x, this.position.y);
     this.currentPath = [];
@@ -83,7 +87,29 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(5, 3, position)
+    super(5, 3, position, ratSprite);
+    this.index = 0;
+  }
+}
+
+class Spiders extends Monster {
+  constructor(position, game) {
+    super(5, 3, position, spidersSprite);
+    this.index = 1;
+  }
+}
+
+class Lizard extends Monster {
+  constructor(position, game) {
+    super(15, 4, position, lizardSprite);
+    this.index = 2;
+  }
+}
+
+class SpiderChampion extends Monster {
+  constructor(position, game) {
+    super(20, 4, position, bigSpiderSprite);
+    this.index = 3;
   }
 }
 

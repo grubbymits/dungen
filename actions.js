@@ -126,6 +126,7 @@ class FindTarget extends Action {
         } else {
           // if target is in range, we can return an attack action,
           // otherwise we should return a walkaction to get closer.
+          let weaponRange = this.actor.equippedWeapon.range;
         }
       }
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
