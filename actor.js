@@ -81,6 +81,12 @@ class Monster extends Actor {
   }
 }
 
+class Rat extends Monster {
+  constructor(position, game) {
+    super(5, 3, position)
+  }
+}
+
 const ENEMY_NAMES = [ "Rat",
                       "Spiders",
                       "Lizard",
@@ -147,7 +153,13 @@ const WEREWOLF = 29;
 const GOLEM = 30;
 const DEMON = 31;
 
+const ROGUE = 0;
+const WARLOCK = 1;
+const BERSERKER = 2;
+const ARCHER = 4;
 const KNIGHT = 5;
+const WIZARD = 6;
+const BLACK_MAGE = 7;
 
 function createMonster(type, position, game) {
   switch(type) {

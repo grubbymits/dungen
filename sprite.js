@@ -66,9 +66,48 @@ class Sprite {
   }
 }
 
-var sprite_sheet = new SpriteSheet('tileset');
-var tileSprites = [ new Sprite(sprite_sheet, 1, 1, 32, 32),
-                    new Sprite(sprite_sheet, 1, 0, 32, 32),
-                    new Sprite(sprite_sheet, 2, 2, 32, 32)];
-                    
-var knightSprite = new Sprite(sprite_sheet, 5, 18, 32, 32);
+var spriteSheet = new SpriteSheet('tileset');
+var tileSprites = [ new Sprite(spriteSheet, 1, 1, 32, 32),
+                    new Sprite(spriteSheet, 1, 0, 32, 32),
+                    new Sprite(spriteSheet, 2, 2, 32, 32)];
+
+var rogueSprite = new Sprite(spriteSheet, 0, 18, 32, 32);
+var warlockSprite = new Sprite(spriteSheet, 1, 18, 32, 32);
+var berserkerSprite = new Sprite(spriteSheet, 2, 18, 32, 32);
+var archerSprite = new Sprite(spriteSheet, 4, 18, 32, 32);
+var knightSprite = new Sprite(spriteSheet, 5, 18, 32, 32);
+var wizardSprite = new Sprite(spriteSheet, 6, 18, 32, 32);
+var blackMageSprite = new Sprite(spriteSheet, 7, 18, 32, 32);
+
+var ratSprite = new Sprite(spriteSheet, 0, 19, 32, 32);
+var spidersSprite = new Sprite(spriteSheet, 1, 19, 32, 32);
+var lizardSprite = new Sprite(spriteSheet, 2, 19, 32, 32);
+var bigSpiderSprite = new Sprite(spriteSheet, 3, 19, 32, 32);
+var toadSprite = new Sprite(spriteSheet, 4, 19, 32, 32);
+var scarabSprite = new Sprite(spriteSheet, 5, 19, 32, 32);
+var centipedeSprite = new Sprite(spriteSheet, 6, 19, 32, 32);
+var serpentSprite = new Sprite(spriteSheet, 7, 19, 32, 32);
+var mushroomSprite = new Sprite(spriteSheet, 0, 20, 32, 32);
+var rabbitSprite = new Sprite(spriteSheet, 1, 20, 32, 32);
+var batSprite = new Sprite(spriteSheet, 2, 20, 32, 32);
+var bigBatSprite = new Sprite(spriteSheet, 3, 20, 32, 32);
+var snakeSprite = new Sprite(spriteSheet, 4, 20, 32, 32);
+var wolfSprite = new Sprite(spriteSheet, 5, 20, 32, 32);
+var boarSprite = new Sprite(spriteSheet, 6, 20, 32, 32);
+var bearSprite = new Sprite(spriteSheet, 7, 20, 32, 32);
+var slimesSprite = new Sprite(spriteSheet, 0, 21, 32, 32);
+var bigSlimeSprite = new Sprite(spriteSheet, 1, 21, 32, 32);
+var scorpionSprite = new Sprite(spriteSheet, 2, 21, 32, 32);
+var krakenSprite = new Sprite(spriteSheet, 3, 21, 32, 32);
+var vampireSprite = new Sprite(spriteSheet, 4, 21, 32, 32);
+var mummySprite = new Sprite(spriteSheet, 5, 21, 32, 32);
+var wraithSprite = new Sprite(spriteSheet, 6, 21, 32, 32);
+var carabiaSprite = new Sprite(spriteSheet, 7, 21, 32, 32);
+var goblinSprite = new Sprite(spriteSheet, 0, 22, 32, 32);
+var zombieSprite = new Sprite(spriteSheet, 1, 22, 32, 32);
+var undeadSprite = new Sprite(spriteSheet, 2, 22, 32, 32);
+var orcSprite = new Sprite(spriteSheet, 3, 22, 32, 32);
+var cyclopsSprite = new Sprite(spriteSheet, 4, 22, 32, 32);
+var werewolfSprite = new Sprite(spriteSheet, 5, 22, 32, 32);
+var golemSprite = new Sprite(spriteSheet, 6, 22, 32, 32);
+var demonSprite = new Sprite(spriteSheet, 7, 22, 32, 32);

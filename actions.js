@@ -44,9 +44,10 @@ class WalkAction extends Action {
     }
     console.log("energy required = ", energyRequired);
     
-    // May not be able to perform the action.
+    // May not be able to perform the action, so rest and allow the next actor
+    // to take their turn.
     if (this.actor.currentEnergy < energyRequired) {
-      return null;
+      return this.rest;
     }
     
     this.actor.shiftNextStep();
