@@ -77,6 +77,10 @@ class GameMap {
     return this.yMax;
   }
   
+  getDistance(entity0, entity1) {
+    return entity0.pos.getCost(entity1.pos);
+  }
+  
   getNeighbours(vec) {
     var neighbours = [];
     for (let x = vec.x - 1; x < vec.x + 2; x++) {

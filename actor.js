@@ -11,6 +11,13 @@ class Entity {
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
   }
+  
+  get pos() {
+    return this.position;
+  }
+  set pos(pos) {
+    this.position = pos;
+  }
 }
 
 class Actor extends Entity {
@@ -22,11 +29,11 @@ class Actor extends Entity {
     this.maxEnergy = energy;
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
-    this.findTarget = new TargetFinder(this);
-    this.targetGen = this.findTarget.find();
     this.nextAction = null;
     this.destination = new Vec(this.position.x, this.position.y);
     this.currentPath = [];
+    this.rangeAttack = null;
+    this.meleeAttack = null;
   }
   get action() {
     console.log("nextAction");
@@ -37,12 +44,6 @@ class Actor extends Entity {
     } else {
       this.nextAction = null;
     }
-  }
-  get pos() {
-    return this.position;
-  }
-  set pos(pos) {
-    this.position = pos;
   }
   get path() {
     return this.currentPath;
@@ -75,41 +76,24 @@ class Hero extends Actor {
 }
 
 class Monster extends Actor {
-  constructor(health, energy, position, sprite) {
-    super(health, energy, position, sprite);
+  constructor(health, energy, position, sprite, game) {
+    super(health, energy, position, sprite, game);
+    this.level = this.game.level;
+    this.meleeAttack = null;
+    this.rangedAttack = null;
+    this.meleeAttackPower = 0;
+    this.rangedAttackPower = 0;
   }
   calcAction() {
     if (this.energy <= 0) {
       return this.rest;
     }
   }
-}
-
-class Rat extends Monster {
-  constructor(position, game) {
-    super(5, 3, position, ratSprite);
-    this.index = 0;
+  get meleeAtkPower() {
+    return this.meleeAttackPower + (this.level * this.meleeAttackPower * 0.05);
   }
-}
-
-class Spiders extends Monster {
-  constructor(position, game) {
-    super(5, 3, position, spidersSprite);
-    this.index = 1;
-  }
-}
-
-class Lizard extends Monster {
-  constructor(position, game) {
-    super(15, 4, position, lizardSprite);
-    this.index = 2;
-  }
-}
-
-class SpiderChampion extends Monster {
-  constructor(position, game) {
-    super(20, 4, position, bigSpiderSprite);
-    this.index = 3;
+  get rangedAtkPower() {
+    return this.rangedAttackPower + (this.level * this.meleeAttackPower * 0.05);
   }
 }
 
@@ -179,6 +163,43 @@ const WEREWOLF = 29;
 const GOLEM = 30;
 const DEMON = 31;
 
+class Rat extends Monster {
+  constructor(position, game) {
+    super(5, 3, position, ratSprite);
+    this.index = RAT;
+    this.meleeAttackPower = 1;
+    this.meleeAttack = new MeleeAttack(this);
+  }
+}
+
+class Spiders extends Monster {
+  constructor(position, game) {
+    super(8, 3, position, spidersSprite, game);
+    this.index = SPIDERS;
+    this.meleeAttackPower = 2;
+    this.meleeAttack = new MeleeAttack(this);
+  }
+}
+
+class Lizard extends Monster {
+  constructor(position, game) {
+    super(15, 4, position, lizardSprite, game);
+    this.index = LIZARD;
+    this.meleeAttackPower = 4;
+    this.meleeAttack = new MeleeAttack(this);
+  }
+}
+
+class SpiderChampion extends Monster {
+  constructor(position, game) {
+    super(20, 4, position, bigSpiderSprite, game);
+    this.index = SPIDER_CHAMPION;
+    this.meleeAttackPower = 5;
+    this.meleeAttack = new MeleeAttack(this);
+  }
+}
+
+
 const ROGUE = 0;
 const WARLOCK = 1;
 const BERSERKER = 2;
@@ -186,10 +207,3 @@ const ARCHER = 4;
 const KNIGHT = 5;
 const WIZARD = 6;
 const BLACK_MAGE = 7;
-
-function createMonster(type, position, game) {
-  switch(type) {
-    default:
-    throw new console.error("Unknown monster type!");
-  }
-}

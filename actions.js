@@ -68,8 +68,9 @@ class DealMeleeDamage extends Action {
     super(actor);
   }
   perform() {
-    let power = this.actor.meleeAttack.power;
-    let type = this.actor.meleeAttack.type;
+    console.log("dealing melee damage");
+    let power = this.actor.meleeAtkPower;
+    let type = this.actor.meleeAtkType;
     let defense = this.target.physicalDefense;
     let elemDefense = this.target.elementalDefense(type);
     this.target.health((power - defense) * elemDefense);
@@ -86,23 +87,21 @@ class DealMeleeDamage extends Action {
 class MeleeAttack extends Action {
   constructor(actor) {
     super(actor);
-    this.direction = direction;
-    let power = actor.equippedMeleeWeapon.attackPower;
-    let type = actor.equippedMeleeWeapon.type;
-    this.dealDamage = new DealDamage(actor, power, type);
+    this.dealDamage = new DealDamage(this);
   }
   
   set target(target) {
+    console.log("setting melee attack target");
     this.target = target;
   }
 
   perform() {
-    if (target.dodges) {
-      return null;
-    } else {
-      //this.dealDamage.target(target);
+    //if (target.dodges) {
+      //return null;
+    //} else {
+      this.dealDamage.target(this.target);
       return this.dealDamage;
-    }
+    //}
   }
 }
 
@@ -112,7 +111,31 @@ class FindTarget extends Action {
     this.range = actor.range;
     this.map = this.actor.game.map;
   }
+  
+  confirmAction(x, y) {
+    let target = this.map.getEntity(x, y);
+    if (!target) {
+      return null;
+    } else {
+      console.log("found a target, further action");
+      let targetDistance =  this.map.getDistance(this.actor, target);
+      // if target is in range, we can return an attack action,
+      // otherwise we should return a walkaction to get closer.
+      if (this.actor.meleeRange >= targetDistance) {
+        this.actor.meleeAttack.target = target;
+        return this.actor.meleeAttack;
+      } else if (this.actor.projectileRange >= targetDistance) {
+        this.actor.rangeAttack.target = target;
+        return this.actor.rangeAttack;
+      } else {
+        this.actor.setDestination(x, y);
+        return this.actor.walk;
+      }
+    }
+  }
+  
   perform() {
+    console.log("performing find target");
     let radius = 0;
     let pos = this.actor.pos;
     
@@ -120,37 +143,34 @@ class FindTarget extends Action {
       radius = radius + 1;
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y - radius;
-        let target = this.map.getEntity(x, y);
-        if (target === null) {
-          continue;
-        } else {
-          // if target is in range, we can return an attack action,
-          // otherwise we should return a walkaction to get closer.
-          let weaponRange = this.actor.equippedWeapon.range;
+        let action = this.confirmAction(x, y);
+        if (action) {
+          return action;
         }
       }
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y + radius;
-        let target = this.map.findEntity(x, y);
-        if (target === null) {
-          continue;
+        let action = this.confirmAction(x, y);
+        if (action) {
+          return action;
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x - radius;
-        let target = this.map.getEntity(x, y);
-        if (target === null) {
-          continue;
+        let action = this.confirmAction(x, y);
+        if (action) {
+          return action;
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x + radius;
-        let target = this.map.getEntity(x, y);
-        if (target === null) {
-          continue;
+        let action = this.confirmAction(x, y);
+        if (action) {
+          return action;
         }
       }
     }
+    return null;
   }
 }
 
