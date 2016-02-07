@@ -12,10 +12,11 @@
     const TILE_SIZE = 32;
     const PATH_WIDTH = 3;
   </script>
+  <script type="text/javascript" src="definitions.js"></script>
   <script type="text/javascript" src="map.js"></script>
-  <script type="text/javascript" src="game.js"></script>
   <script type="text/javascript" src="actions.js"></script>
   <script type="text/javascript" src="actor.js"></script>
+  <script type="text/javascript" src="game.js"></script>
   <script type="text/javascript" src="ui.js"></script>
   <script>
     "use strict";
@@ -51,13 +52,6 @@
           theGame.nextGameTick += theGame.skipTicks;
         }
         theGame.renderActors();
-        /*
-        if (hero.path !== null) {
-          var path = hero.path;
-          for (let node of path) {
-            gameContext.strokeRect(node.x * TILE_SIZE, node.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-          }
-        }*/
         // update game logic
         theGame.update();
         window.requestAnimationFrame(run);

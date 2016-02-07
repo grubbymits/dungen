@@ -18,7 +18,7 @@ class RestAction extends Action {
   }
   perform() {
     console.log("rest");
-    this.actor.currentEnergy++;
+    this.actor.incrementEnergy();
   }
 }
 
@@ -46,7 +46,7 @@ class WalkAction extends Action {
     
     // May not be able to perform the action, so rest and allow the next actor
     // to take their turn.
-    if (this.actor.currentEnergy < energyRequired) {
+    if (this.actor.energy < energyRequired) {
       return this.rest;
     }
     
@@ -54,8 +54,9 @@ class WalkAction extends Action {
     map.removeEntity(pos);
     map.placeEntity(next);
     this.actor.pos = next;
-    this.actor.currentEnergy -= energyRequired;
-    console.log("currentEnergy = ", this.actor.currentEnergy);
+    this.actor.useEnergy(energyRequired);
+    //this.actor.currentEnergy -= energyRequired;
+    console.log("currentEnergy = ", this.actor.energy);
   }
 
 }
