@@ -35,9 +35,9 @@ class Location {
     this.vec = new Vec(x, y);
   }
   get isBlocking() {
-    if (this.entity) {
-      return this.blocking || this.entity.blocking;
-    }
+    //if (this.entity) {
+      //return this.blocking || this.entity.blocking;
+    //}
     return this.blocking;
   }
   set isBlocking(blocking) {
@@ -68,19 +68,19 @@ class GameMap {
       }
     }
   }
-  
+
   get width() {
     return this.xMax;
   }
-  
+
   get height() {
     return this.yMax;
   }
-  
+
   getDistance(entity0, entity1) {
     return entity0.pos.getCost(entity1.pos);
   }
-  
+
   getNeighbours(vec) {
     var neighbours = [];
     for (let x = vec.x - 1; x < vec.x + 2; x++) {
@@ -99,19 +99,19 @@ class GameMap {
     }
     return neighbours;
   }
-  
+
   getPath(start, goal) {
     console.log("getPath");
     console.log("start = ", start, " goal = ", goal);
-    
+
     // if, somewhere, the click is out range or is a blocked location, ignore it.
     if (this.isOutOfRange(goal.x, goal.y)) {
       return null;
     }
-    if (this.locations[goal.x][goal.y].blocking) {
+    if (this.locations[goal.x][goal.y].isBlocking) {
       return null;
     }
-    
+
     // Adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
     var frontier = [];
     var cameFrom = new Map();
@@ -120,25 +120,25 @@ class GameMap {
     costSoFar.set(start, 0);
     // frontier is a sorted list of locations with their lowest cost
     frontier.push({loc : start, cost : 0});
-   
+
     // breadth-first search
     while (frontier.length > 0) {
       let current = frontier.shift();
-      
+
       // exit early
       if (current.loc == goal) {
         break;
       }
-      
+
       var neighbours = this.getNeighbours(current.loc);
-      
+
       for (let next of neighbours) {
         let newCost = costSoFar.get(current.loc) + current.loc.getCost(next);
-        
+
         if (!costSoFar.has(next) || newCost < costSoFar.get(next)) {
           frontier.push({loc : next, cost : newCost});
           costSoFar.set(next, newCost);
-          
+
           frontier.sort((a, b) => {
             if (a.cost > b.cost) {
               return 1;
@@ -152,11 +152,12 @@ class GameMap {
         }
       }
     }
- 
+
     console.log("now finalise path");
     // finalise the path.
     var current = goal;
     var path = [current];
+    let counter = 0;
     while (current != start) {
       current = cameFrom.get(current);
       path.push(current);
@@ -173,14 +174,14 @@ class GameMap {
       return false;
     }
   }
-  
+
   getLocation(x, y) {
     if (this.isOutOfRange(x, y)) {
       throw "Index out of range:";
     }
     return this.locations[x][y];
   }
-  
+
   isBlocked(x, y) {
     if (this.isOutOfRange(x, y)) {
       return true;
@@ -193,18 +194,19 @@ class GameMap {
   removeEntity(pos) {
     this.locations[pos.x][pos.y].entity = null;
   }
-  
+
   placeEntity(pos, entity) {
+    console.log("entity placed at", pos);
+    console.log(entity);
     this.locations[pos.x][pos.y].entity = entity;
   }
-  
+
   getEntity(x, y) {
     if (this.isOutOfRange(x, y)) {
       return null;
     }
-    var loc = this.locations[x][y];
     // entity maybe null;
-    return loc.entity;
+    return this.locations[x][y].entity;
   }
 
   placeTile(x, y, type, blocking) {

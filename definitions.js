@@ -73,3 +73,8 @@ const ARCHER = 4;
 const KNIGHT = 5;
 const WIZARD = 6;
 const BLACK_MAGE = 7;
+
+const NORMAL = 0;
+const FIRE = 1;
+const ICE = 2;
+const ELECTRIC = 3;

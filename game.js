@@ -5,13 +5,13 @@ class Game {
     console.log("Game.constructor");
     this.actors = [];
     this.context = context;
+    this.level = 1;
     this.isRunning = false;
     this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
     console.log("isRunning = ", this.isRunning);
-    //this.prevTime = (new Date()).getTime();
   }
 
   renderMap() {
@@ -23,7 +23,7 @@ class Game {
       }
     }
   }
-  
+
   createHero(pos, type) {
     if (type == KNIGHT) {
       this.hero = new Hero(30, 6, pos, knightSprite, this);
@@ -31,13 +31,22 @@ class Game {
     this.actors.push(this.hero);
     return this.hero;
   }
-  
+
+  createMonster(pos, type) {
+    if (type == RAT) {
+      this.actors.push(new Rat(pos, this));
+    }
+  }
+
+  placeMonsters(number) {
+  }
+
   renderActors() {
     for (let actor of this.actors) {
       actor.render();
     }
   }
-  
+
   get map() {
     return this.theMap;
   }

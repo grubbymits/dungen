@@ -33,7 +33,7 @@ class WalkAction extends Action {
     let map = this.actor.game.map;
     let pos = this.actor.pos;
     let next = this.actor.nextStep;
-    
+
     var energyRequired = 0;
     if (pos.x == next.x) {
       energyRequired = 2;
@@ -42,21 +42,18 @@ class WalkAction extends Action {
     } else {
       energyRequired = 3;
     }
-    console.log("energy required = ", energyRequired);
-    
+
     // May not be able to perform the action, so rest and allow the next actor
     // to take their turn.
-    if (this.actor.energy < energyRequired) {
-      return this.rest;
+    if (this.actor.currentEnergy < energyRequired) {
+      return this.actor.rest;
     }
-    
+
     this.actor.shiftNextStep();
     map.removeEntity(pos);
-    map.placeEntity(next);
+    map.placeEntity(next, this.actor);
     this.actor.pos = next;
     this.actor.useEnergy(energyRequired);
-    //this.actor.currentEnergy -= energyRequired;
-    console.log("currentEnergy = ", this.actor.energy);
   }
 
 }
@@ -75,7 +72,7 @@ class DealMeleeDamage extends Action {
     let defense = this.target.physicalDefense;
     let elemDefense = this.target.elementalDefense(type);
     this.target.health((power - defense) * elemDefense);
-    
+
     if (this.target.health <= 0) {
       return new KillActor(this.actor, this.target);
     }
@@ -88,9 +85,9 @@ class DealMeleeDamage extends Action {
 class MeleeAttack extends Action {
   constructor(actor) {
     super(actor);
-    this.dealDamage = new DealDamage(this);
+    this.dealDamage = new DealMeleeDamage(actor);
   }
-  
+
   set target(target) {
     console.log("setting melee attack target");
     this.target = target;
@@ -100,8 +97,13 @@ class MeleeAttack extends Action {
     //if (target.dodges) {
       //return null;
     //} else {
-      this.dealDamage.target(this.target);
-      return this.dealDamage;
+    let energyRequired = this.actor.meleeAtkEnergy;
+    if (this.actor.currentEnergy < energyRequired) {
+      return this.actor.rest;
+    }
+    this.dealDamage.target(this.target);
+    this.actor.useEnergy(energyRequired);
+    return this.dealDamage;
     //}
   }
 }
@@ -112,7 +114,7 @@ class FindTarget extends Action {
     this.range = actor.range;
     this.map = this.actor.game.map;
   }
-  
+
   confirmAction(x, y) {
     let target = this.map.getEntity(x, y);
     if (!target) {
@@ -120,6 +122,7 @@ class FindTarget extends Action {
     } else {
       console.log("found a target, further action");
       let targetDistance =  this.map.getDistance(this.actor, target);
+      console.log("targetDistance =", targetDistance);
       // if target is in range, we can return an attack action,
       // otherwise we should return a walkaction to get closer.
       if (this.actor.meleeRange >= targetDistance) {
@@ -134,12 +137,12 @@ class FindTarget extends Action {
       }
     }
   }
-  
+
   perform() {
     console.log("performing find target");
     let radius = 0;
     let pos = this.actor.pos;
-    
+
     while (radius < this.range) {
       radius = radius + 1;
       for (let x = pos.x - radius; x < pos.x + radius; x++) {

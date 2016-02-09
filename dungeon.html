@@ -20,7 +20,7 @@
   <script type="text/javascript" src="ui.js"></script>
   <script>
     "use strict";
-    
+
     function begin() {
       console.log("begin");
 
@@ -36,12 +36,14 @@
       var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
       console.log("theGame = ", theGame);
       theGame.renderMap();
-      
-      
+
+
       var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
       console.log("starting hero at block =", startPos);
       var hero = theGame.createHero(startPos, KNIGHT);
-      
+      var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;
+      theGame.createMonster(ratStart, RAT);
+
       var UI = new Interface(hero);
 
       var run = function() {
@@ -51,6 +53,8 @@
           //Game.map.update();
           theGame.nextGameTick += theGame.skipTicks;
         }
+        gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
+        theGame.renderMap();
         theGame.renderActors();
         // update game logic
         theGame.update();
