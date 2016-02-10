@@ -33,6 +33,10 @@ class WalkAction extends Action {
     let map = this.actor.game.map;
     let pos = this.actor.pos;
     let next = this.actor.nextStep;
+    
+    if (pos.x == next.x && pos.y == next.y) {
+      console.log("first step is current pos!");
+    }
 
     var energyRequired = 0;
     if (pos.x == next.x) {
@@ -69,16 +73,16 @@ class DealMeleeDamage extends Action {
     console.log("dealing melee damage");
     let power = this.actor.meleeAtkPower;
     let type = this.actor.meleeAtkType;
-    let defense = this.target.physicalDefense;
-    let elemDefense = this.target.elementalDefense(type);
-    this.target.health((power - defense) * elemDefense);
+    let defense = this.targetActor.physicalDefense;
+    let elemDefense = 1; //this.targetActor.elementalDefense(type);
+    this.targetActor.reduceHealth((power - defense) * elemDefense);
 
     if (this.target.health <= 0) {
-      return new KillActor(this.actor, this.target);
+      return new KillActor(this.actor, this.targetActor);
     }
   }
   set target(target) {
-    this.target = target;
+    this.targetActor = target;
   }
 }
 
@@ -90,7 +94,7 @@ class MeleeAttack extends Action {
 
   set target(target) {
     console.log("setting melee attack target");
-    this.target = target;
+    this.targetActor = target;
   }
 
   perform() {
@@ -101,10 +105,42 @@ class MeleeAttack extends Action {
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
-    this.dealDamage.target(this.target);
+    this.dealDamage.target = this.targetActor;
     this.actor.useEnergy(energyRequired);
     return this.dealDamage;
     //}
+  }
+}
+
+class Attack extends Action {
+  constructor(actor) {
+    super(actor);
+    this.map = this.actor.game.map;
+  }
+  
+  set target(target) {
+    this.targetActor = target;
+  }
+  
+  perform() {
+    console.log("perform Attack");
+    let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
+    console.log("targetDistance =", targetDistance);
+    // if target is in range, we can return an attack action,
+    // otherwise we should return a walkaction to get closer.
+    if (this.actor.meleeRange >= targetDistance) {
+      this.actor.meleeAttack.target = this.targetActor;
+      console.log("returning melee attack");
+      return this.actor.meleeAttack;
+    } else if (this.actor.projectileRange >= targetDistance) {
+      this.actor.rangeAttack.target = this.targetActor;
+      console.log("returning range attack");
+      return this.actor.rangeAttack;
+    } else {
+      this.actor.setDestination(this.targetActor.pos.x, this.targetActor.pos.y);
+      console.log("returning walk");
+      return this.actor.walk;
+    }
   }
 }
 
@@ -113,29 +149,6 @@ class FindTarget extends Action {
     super(actor);
     this.range = actor.range;
     this.map = this.actor.game.map;
-  }
-
-  confirmAction(x, y) {
-    let target = this.map.getEntity(x, y);
-    if (!target) {
-      return null;
-    } else {
-      console.log("found a target, further action");
-      let targetDistance =  this.map.getDistance(this.actor, target);
-      console.log("targetDistance =", targetDistance);
-      // if target is in range, we can return an attack action,
-      // otherwise we should return a walkaction to get closer.
-      if (this.actor.meleeRange >= targetDistance) {
-        this.actor.meleeAttack.target = target;
-        return this.actor.meleeAttack;
-      } else if (this.actor.projectileRange >= targetDistance) {
-        this.actor.rangeAttack.target = target;
-        return this.actor.rangeAttack;
-      } else {
-        this.actor.setDestination(x, y);
-        return this.actor.walk;
-      }
-    }
   }
 
   perform() {
@@ -147,30 +160,38 @@ class FindTarget extends Action {
       radius = radius + 1;
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y - radius;
-        let action = this.confirmAction(x, y);
-        if (action) {
-          return action;
+        let target = this.map.getEntity(x, y);
+        if (target) {
+          this.actor.attack.target = target;
+          this.actor.nextAction = this.actor.attack;
+          return this.actor.nextAction;
         }
       }
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y + radius;
-        let action = this.confirmAction(x, y);
-        if (action) {
-          return action;
+        let target = this.map.getEntity(x, y);
+        if (target) {
+          this.actor.attack.target = target;
+          this.actor.nextAction = this.actor.attack;
+          return this.actor.nextAction;
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x - radius;
-        let action = this.confirmAction(x, y);
-        if (action) {
-          return action;
+        let target = this.map.getEntity(x, y);
+        if (target) {
+          this.actor.attack.target = target;
+          this.actor.nextAction = this.actor.attack;
+          return this.actor.nextAction;
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x + radius;
-        let action = this.confirmAction(x, y);
-        if (action) {
-          return action;
+        let target = this.map.getEntity(x, y);
+        if (target) {
+          this.actor.attack.target = target;
+          this.actor.nextAction = this.actor.attack;
+          return this.actor.nextAction;
         }
       }
     }

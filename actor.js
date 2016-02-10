@@ -29,6 +29,7 @@ class Actor extends Entity {
     this.maxEnergy = energy;
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
+    this.attack = new Attack(this);
     this.nextAction = null;
     this.destination = new Vec(this.position.x, this.position.y);
     this.currentPath = [];
@@ -60,6 +61,12 @@ class Actor extends Entity {
   set energy(energy) {
     this.currentEnergy = energy;
   }
+  reduceHealth(damage) {
+    this.currentHealth -= damage;
+  }
+  get health() {
+    return this.currentHealth;
+  }
   get nextStep() {
     return this.currentPath[0];
   }
@@ -70,11 +77,21 @@ class Actor extends Entity {
     this.destination = this.game.map.getLocation(x, y).vec;
     this.currentPath = this.game.map.getPath(this.position, this.destination);
   }
+  //setDestination(pos) {
+    //this.destination = pos; //this.game.map.getLocation(x, y).vec;
+    //this.currentPath = this.game.map.getPath(this.position, this.destination);
+  //}
 }
 
 class Hero extends Actor {
   constructor(health, energy, position, sprite, game) {
     super(health, energy, position, sprite, game);
+    this.bodyArmour = 1;
+    this.helmet = 1;
+  }
+  
+  get physicalDefense() {
+    return this.bodyArmour + this.helmet;
   }
 }
 
@@ -101,11 +118,11 @@ class Monster extends Actor {
     this.projectileRange = 0;
   }
   get action() {
-    console.log("monster get action")
-    if (this.destination != this.position && this.currentPath.length != 0) {
-      //console.log("nextAction = walk");
-      this.nextAction = this.walk;
-    } else if (this.currentEnergy <= 0) {
+    console.log("monster get action");
+    if (this.nextAction !== null) {
+      return this.nextAction;
+    }
+    else if (this.currentEnergy <= 0) {
       this.nextAction = this.rest;
     } else {
       this.nextAction = this.findTarget;
