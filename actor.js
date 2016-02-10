@@ -62,6 +62,7 @@ class Actor extends Entity {
     this.currentEnergy = energy;
   }
   reduceHealth(damage) {
+    console.log("reduceHealth", damage);
     this.currentHealth -= damage;
   }
   get health() {
@@ -89,7 +90,7 @@ class Hero extends Actor {
     this.bodyArmour = 1;
     this.helmet = 1;
   }
-  
+
   get physicalDefense() {
     return this.bodyArmour + this.helmet;
   }

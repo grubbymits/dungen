@@ -33,7 +33,7 @@ class WalkAction extends Action {
     let map = this.actor.game.map;
     let pos = this.actor.pos;
     let next = this.actor.nextStep;
-    
+
     if (pos.x == next.x && pos.y == next.y) {
       console.log("first step is current pos!");
     }
@@ -77,7 +77,7 @@ class DealMeleeDamage extends Action {
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
     this.targetActor.reduceHealth((power - defense) * elemDefense);
 
-    if (this.target.health <= 0) {
+    if (this.targetActor.health <= 0) {
       return new KillActor(this.actor, this.targetActor);
     }
   }
@@ -103,6 +103,7 @@ class MeleeAttack extends Action {
     //} else {
     let energyRequired = this.actor.meleeAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
+      console.log("not enough energy to perform MeleeAttack");
       return this.actor.rest;
     }
     this.dealDamage.target = this.targetActor;
@@ -117,11 +118,11 @@ class Attack extends Action {
     super(actor);
     this.map = this.actor.game.map;
   }
-  
+
   set target(target) {
     this.targetActor = target;
   }
-  
+
   perform() {
     console.log("perform Attack");
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
