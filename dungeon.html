@@ -53,6 +53,7 @@
           //Game.map.update();
           theGame.nextGameTick += theGame.skipTicks;
         }
+        gameContext.fillStyle = '#000000';
         gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
         theGame.renderMap();
         theGame.renderActors();

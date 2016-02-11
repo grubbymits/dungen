@@ -93,7 +93,6 @@ class MeleeAttack extends Action {
   }
 
   set target(target) {
-    console.log("setting melee attack target");
     this.targetActor = target;
   }
 
@@ -124,9 +123,7 @@ class Attack extends Action {
   }
 
   perform() {
-    console.log("perform Attack");
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
-    console.log("targetDistance =", targetDistance);
     // if target is in range, we can return an attack action,
     // otherwise we should return a walkaction to get closer.
     if (this.actor.meleeRange >= targetDistance) {

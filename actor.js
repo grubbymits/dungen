@@ -47,6 +47,15 @@ class Actor extends Entity {
     }
     return this.nextAction;
   }
+  render() {
+    this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
+    this.game.context.fillStyle = 'red';
+    let healthBar = (this.currentHealth / this.maxHealth) * TILE_SIZE;
+    this.game.context.fillRect(this.pos.x * TILE_SIZE, (this.pos.y * TILE_SIZE) - 2, healthBar, 1);
+    this.game.context.fillStyle = 'blue';
+    let energyBar = (this.currentEnergy / this.maxEnergy) * TILE_SIZE;
+    this.game.context.fillRect(this.pos.x * TILE_SIZE, (this.pos.y * TILE_SIZE) + 2, energyBar, 1);
+  }
   get path() {
     return this.currentPath;
   }
@@ -62,8 +71,7 @@ class Actor extends Entity {
     this.currentEnergy = energy;
   }
   reduceHealth(damage) {
-    console.log("reduceHealth", damage);
-    this.currentHealth -= damage;
+    this.currentHealth += damage;
   }
   get health() {
     return this.currentHealth;
@@ -146,7 +154,7 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(5, 3, 2,
+    super(5, 4, 2,
           1, NORMAL, 1,
           0, 0, 0,
           1,

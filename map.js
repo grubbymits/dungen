@@ -101,9 +101,6 @@ class GameMap {
   }
 
   getPath(start, goal) {
-    console.log("getPath");
-    console.log("start = ", start, " goal = ", goal);
-
     // if, somewhere, the click is out range or is a blocked location, ignore it.
     if (this.isOutOfRange(goal.x, goal.y)) {
       return null;
