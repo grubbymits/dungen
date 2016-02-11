@@ -34,9 +34,15 @@ class WalkAction extends Action {
     this.currentPath = this.map.getPath(this.actor.position, this.destination);
   }
   perform() {
-    //let map = this.actor.game.map;
+    if (this.currentPath.length == 0) {
+      return;
+    }
     let pos = this.actor.pos;
     let next = this.currentPath[0];
+
+    if (this.currentPath.length == 0) {
+      console.log("path length zero");
+    }
 
     if (pos.x == next.x && pos.y == next.y) {
       console.log("first step is current pos!");
@@ -142,8 +148,9 @@ class Attack extends Action {
       console.log("returning range attack");
       return this.actor.rangeAttack;
     } else {
-      this.actor.setDestination(this.targetActor.pos.x, this.targetActor.pos.y);
+      //this.actor.setDestination(this.targetActor.pos.x, this.targetActor.pos.y);
       console.log("returning walk");
+      this.actor.walk.dest = this.targetActor.pos;
       return this.actor.walk;
     }
   }
@@ -208,6 +215,7 @@ class FindTarget extends Action {
         }
       }
     }
+    this.actor.nextAction = null;
     return null;
   }
 }

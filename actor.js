@@ -38,7 +38,7 @@ class Actor extends Entity {
     this.kind = MONSTER;
   }
   get action() {
-    //console.log("nextAction");
+    console.log("Actor nextAction =", this.nextAction);
     return this.nextAction;
   }
   render() {
@@ -104,6 +104,21 @@ class Hero extends Actor {
     this.kind = HERO;
   }
 
+  get meleeRange() {
+    return 2;
+  }
+  get projectileRange() {
+    return 0;
+  }
+  get meleeAtkPower() {
+    return 2;
+  }
+  get meleeAtkEnergy() {
+    return 1;
+  }
+  get meleeAtkType() {
+    return NORMAL;
+  }
   get physicalDefense() {
     return this.bodyArmour + this.helmet;
   }
@@ -134,10 +149,7 @@ class Monster extends Actor {
   }
   get action() {
     console.log("monster get action");
-    if (this.nextAction !== null) {
-      return this.nextAction;
-    }
-    else if (this.currentEnergy <= 0) {
+    if (this.currentEnergy <= 0) {
       this.nextAction = this.rest;
     } else {
       this.nextAction = this.findTarget;
