@@ -74,6 +74,9 @@ const KNIGHT = 5;
 const WIZARD = 6;
 const BLACK_MAGE = 7;
 
+const MONSTER = 0;
+const HERO = 1;
+
 const NORMAL = 0;
 const FIRE = 1;
 const ICE = 2;

@@ -25,14 +25,18 @@ class RestAction extends Action {
 class WalkAction extends Action {
   constructor(actor) {
     super(actor);
+    this.destination = this.actor.pos;
+    this.currentPath = [];
+    this.map = this.actor.game.map;
   }
   set dest(goal) {
     this.destination = goal;
+    this.currentPath = this.map.getPath(this.actor.position, this.destination);
   }
   perform() {
-    let map = this.actor.game.map;
+    //let map = this.actor.game.map;
     let pos = this.actor.pos;
-    let next = this.actor.nextStep;
+    let next = this.currentPath[0];
 
     if (pos.x == next.x && pos.y == next.y) {
       console.log("first step is current pos!");
@@ -53,11 +57,14 @@ class WalkAction extends Action {
       return this.actor.rest;
     }
 
-    this.actor.shiftNextStep();
-    map.removeEntity(pos);
-    map.placeEntity(next, this.actor);
+    this.currentPath.shift();
+    this.map.removeEntity(pos);
+    this.map.placeEntity(next, this.actor);
     this.actor.pos = next;
     this.actor.useEnergy(energyRequired);
+    if (this.currentPath.length == 0) {
+      this.actor.nextAction = null;
+    }
   }
 
 }
@@ -160,36 +167,44 @@ class FindTarget extends Action {
         let y = pos.y - radius;
         let target = this.map.getEntity(x, y);
         if (target) {
-          this.actor.attack.target = target;
-          this.actor.nextAction = this.actor.attack;
-          return this.actor.nextAction;
+          if (target.kind != this.actor.kind) {
+            this.actor.attack.target = target;
+            this.actor.nextAction = this.actor.attack;
+            return this.actor.nextAction;
+          }
         }
       }
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y + radius;
         let target = this.map.getEntity(x, y);
         if (target) {
-          this.actor.attack.target = target;
-          this.actor.nextAction = this.actor.attack;
-          return this.actor.nextAction;
+          if (target.kind != this.actor.kind) {
+            this.actor.attack.target = target;
+            this.actor.nextAction = this.actor.attack;
+            return this.actor.nextAction;
+          }
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x - radius;
         let target = this.map.getEntity(x, y);
         if (target) {
-          this.actor.attack.target = target;
-          this.actor.nextAction = this.actor.attack;
-          return this.actor.nextAction;
+          if (target.kind != this.actor.kind) {
+            this.actor.attack.target = target;
+            this.actor.nextAction = this.actor.attack;
+            return this.actor.nextAction;
+          }
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x + radius;
         let target = this.map.getEntity(x, y);
         if (target) {
-          this.actor.attack.target = target;
-          this.actor.nextAction = this.actor.attack;
-          return this.actor.nextAction;
+          if (target.kind != this.actor.kind) {
+            this.actor.attack.target = target;
+            this.actor.nextAction = this.actor.attack;
+            return this.actor.nextAction;
+          }
         }
       }
     }

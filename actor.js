@@ -35,16 +35,10 @@ class Actor extends Entity {
     this.currentPath = [];
     this.rangeAttack = null;
     this.meleeAttack = null;
+    this.kind = MONSTER;
   }
   get action() {
     //console.log("nextAction");
-    // If this actor has a destination which it is not at, move toward it.
-    if (this.destination != this.position && this.currentPath.length != 0) {
-      //console.log("nextAction = walk");
-      this.nextAction = this.walk;
-    } else {
-      this.nextAction = null;
-    }
     return this.nextAction;
   }
   render() {
@@ -83,8 +77,18 @@ class Actor extends Entity {
     this.currentPath.shift();
   }
   setDestination(x, y) {
-    this.destination = this.game.map.getLocation(x, y).vec;
-    this.currentPath = this.game.map.getPath(this.position, this.destination);
+    let target = this.game.map.getEntity(x, y);
+    if (target) {
+      if (target.kind != this.kind) {
+        this.attack.target = target;
+        this.nextAction = this.attack;
+        return;
+      }
+    }
+    //this.destination = this.game.map.getLocation(x, y).vec;
+    this.walk.dest = this.game.map.getLocation(x, y).vec;
+    this.nextAction = this.walk;
+    //this.currentPath = this.game.map.getPath(this.position, this.destination);
   }
   //setDestination(pos) {
     //this.destination = pos; //this.game.map.getLocation(x, y).vec;
@@ -97,6 +101,7 @@ class Hero extends Actor {
     super(health, energy, position, sprite, game);
     this.bodyArmour = 1;
     this.helmet = 1;
+    this.kind = HERO;
   }
 
   get physicalDefense() {
@@ -125,6 +130,7 @@ class Monster extends Actor {
     this.physicalDefense = defense;
     this.meleeRange = 2;
     this.projectileRange = 0;
+    this.kind = MONSTER;
   }
   get action() {
     console.log("monster get action");
