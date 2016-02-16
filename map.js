@@ -103,10 +103,13 @@ class GameMap {
   getPath(start, goal) {
     // if, somewhere, the click is out range or is a blocked location, ignore it.
     if (this.isOutOfRange(goal.x, goal.y)) {
-      return null;
+      return [];
     }
     if (this.locations[goal.x][goal.y].isBlocking) {
-      return null;
+      return [];
+    }
+    if (start == goal) {
+      return [];
     }
 
     // Adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
@@ -160,8 +163,13 @@ class GameMap {
       path.push(current);
     }
     path.reverse();
+    // If the destination of the walk was to an entity, return the path to it
+    // and not on top of it.
+    if (this.locations[goal.x][goal.y].entity !== null) {
+      path.pop();
+    }
     console.log("path created: ", path.length);
-    return path.slice(1);
+    return path;
   }
 
   isOutOfRange(x, y) {

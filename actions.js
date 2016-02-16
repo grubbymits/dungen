@@ -68,9 +68,9 @@ class WalkAction extends Action {
     this.map.placeEntity(next, this.actor);
     this.actor.pos = next;
     this.actor.useEnergy(energyRequired);
-    if (this.currentPath.length == 0) {
-      this.actor.nextAction = null;
-    }
+    //if (this.currentPath.length == 0) {
+      //this.actor.nextAction = null;
+    //}
   }
 
 }
@@ -137,6 +137,9 @@ class Attack extends Action {
 
   perform() {
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
+    console.log("perform attack");
+    console.log("target distance =", targetDistance);
+    console.log("meleeRange = ", this.actor.meleeRange);
     // if target is in range, we can return an attack action,
     // otherwise we should return a walkaction to get closer.
     if (this.actor.meleeRange >= targetDistance) {

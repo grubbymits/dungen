@@ -1,0 +1,9 @@
+.buttonContainer{
+    position: relative;
+    top: 40%;
+    left:45%;
+    width:80px;
+}
+.class='but' {
+    float:left;
+}

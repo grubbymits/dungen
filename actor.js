@@ -6,7 +6,7 @@ class Entity {
     this.blocking = blocking;
     this.sprite = sprite;
     this.game = game;
-    console.log("constructing entity");
+    this.game.map.placeEntity(this.position, this);
   }
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
@@ -31,7 +31,7 @@ class Actor extends Entity {
     this.rest = new RestAction(this);
     this.attack = new Attack(this);
     this.nextAction = null;
-    this.destination = new Vec(this.position.x, this.position.y);
+    this.destination = null;//new Vec(this.position.x, this.position.y);
     this.currentPath = [];
     this.rangeAttack = null;
     this.meleeAttack = null;
@@ -79,7 +79,9 @@ class Actor extends Entity {
   setDestination(x, y) {
     let target = this.game.map.getEntity(x, y);
     if (target) {
+      console.log("found entity at destination");
       if (target.kind != this.kind) {
+        console.log("kind is different");
         this.attack.target = target;
         this.nextAction = this.attack;
         return;
