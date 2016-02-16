@@ -169,7 +169,7 @@ class GameMap {
       path.pop();
     }
     console.log("path created: ", path.length);
-    return path;
+    return path.splice(1);
   }
 
   isOutOfRange(x, y) {

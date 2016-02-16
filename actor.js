@@ -30,15 +30,17 @@ class Actor extends Entity {
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.attack = new Attack(this);
+    this.meleeAttack = new MeleeAttack(this);
     this.nextAction = null;
     this.destination = null;//new Vec(this.position.x, this.position.y);
     this.currentPath = [];
     this.rangeAttack = null;
-    this.meleeAttack = null;
+    this.meleeAttackRange = 3;
     this.kind = MONSTER;
   }
   get action() {
-    console.log("Actor nextAction =", this.nextAction);
+    if (this.nextAction !== null)
+      console.log("Actor nextAction =", this.nextAction);
     return this.nextAction;
   }
   render() {
@@ -65,10 +67,13 @@ class Actor extends Entity {
     this.currentEnergy = energy;
   }
   reduceHealth(damage) {
-    this.currentHealth += damage;
+    this.currentHealth -= damage;
   }
   get health() {
     return this.currentHealth;
+  }
+  get meleeRange() {
+    return this.meleeAttackRange;
   }
   get nextStep() {
     return this.currentPath[0];
@@ -78,6 +83,7 @@ class Actor extends Entity {
   }
   setDestination(x, y) {
     let target = this.game.map.getEntity(x, y);
+    console.log("set destination:", x, y);
     if (target) {
       console.log("found entity at destination");
       if (target.kind != this.kind) {
@@ -101,14 +107,11 @@ class Actor extends Entity {
 class Hero extends Actor {
   constructor(health, energy, position, sprite, game) {
     super(health, energy, position, sprite, game);
-    this.bodyArmour = 1;
-    this.helmet = 1;
+    this.bodyArmour = 0.01;
+    this.helmet = 0.01;
     this.kind = HERO;
   }
 
-  get meleeRange() {
-    return 2;
-  }
   get projectileRange() {
     return 0;
   }
@@ -145,15 +148,14 @@ class Monster extends Actor {
     this.rangedAttackType = rangeAtkType;
     this.rangedttackEnergy = rangeAtkEnergy;
     this.physicalDefense = defense;
-    this.meleeRange = 2;
     this.projectileRange = 0;
     this.kind = MONSTER;
   }
   get action() {
     console.log("monster get action");
     if (this.currentEnergy <= 0) {
-      this.nextAction = this.rest;
-    } else {
+      return this.rest;
+    } else if (this.nextAction === null) {
       this.nextAction = this.findTarget;
     }
     return this.nextAction;

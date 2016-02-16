@@ -68,9 +68,9 @@ class WalkAction extends Action {
     this.map.placeEntity(next, this.actor);
     this.actor.pos = next;
     this.actor.useEnergy(energyRequired);
-    //if (this.currentPath.length == 0) {
-      //this.actor.nextAction = null;
-    //}
+    if (this.currentPath.length == 0 && this.actor.nextAction == this) {
+      this.actor.nextAction = null;
+    }
   }
 
 }
@@ -88,7 +88,7 @@ class DealMeleeDamage extends Action {
     let type = this.actor.meleeAtkType;
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
-    this.targetActor.reduceHealth((power - defense) * elemDefense);
+    this.targetActor.reduceHealth((power * defense) * elemDefense);
 
     if (this.targetActor.health <= 0) {
       return new KillActor(this.actor, this.targetActor);
