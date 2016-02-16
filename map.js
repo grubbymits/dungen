@@ -190,10 +190,8 @@ class GameMap {
   isBlocked(x, y) {
     if (this.isOutOfRange(x, y)) {
       return true;
-    } else if (this.locations[x][y].entity) {
-      return this.locations[x][y].entity.isBlocking;
     }
-    return false;
+    return this.locations[x][y].isBlocking;
   }
 
   removeEntity(pos) {
