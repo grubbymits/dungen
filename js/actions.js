@@ -3,6 +3,7 @@
 class Action {
   constructor(actor) {
     this.actor = actor;
+    this.game = this.actor.game;
   }
   set bindActor(actor) {
     this.actor = actor;
@@ -88,10 +89,14 @@ class DealMeleeDamage extends Action {
     let type = this.actor.meleeAtkType;
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
-    this.targetActor.reduceHealth((power * defense) * elemDefense);
+    this.targetActor.reduceHealth((power - (power * defense)) * elemDefense);
+    document.getElementById("hitSound").play();
 
     if (this.targetActor.health <= 0) {
-      return new KillActor(this.actor, this.targetActor);
+      this.actor.increaseExp(this.targetActor.exp);
+      this.game.killActor(this.targetActor);
+      this.targetActor = null;
+      this.actor.nextAction = null;
     }
   }
   set target(target) {

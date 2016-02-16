@@ -69,6 +69,9 @@ class Actor extends Entity {
   reduceHealth(damage) {
     this.currentHealth -= damage;
   }
+  increaseExp(xp) {
+    this.exp += xp;
+  }
   get health() {
     return this.currentHealth;
   }

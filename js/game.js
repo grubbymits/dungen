@@ -7,7 +7,7 @@ class Game {
     this.context = context;
     this.level = 1;
     this.isRunning = false;
-    this.skipTicks = 10000 / 1;
+    this.skipTicks = 1000 / 1;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
@@ -39,6 +39,16 @@ class Game {
   }
 
   placeMonsters(number) {
+  }
+
+  killActor(actor) {
+    for (let index in this.actors) {
+      if (this.actors[index] == actor) {
+        console.log("killing actor, index:", index);
+        delete this.actors[index];
+        this.actors.splice(index, 1);
+      }
+    }
   }
 
   renderActors() {
