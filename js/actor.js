@@ -39,15 +39,13 @@ class Actor extends Entity {
     this.kind = MONSTER;
   }
   get action() {
-    if (this.nextAction !== null)
-      console.log("Actor nextAction =", this.nextAction);
     return this.nextAction;
   }
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
     this.game.context.fillStyle = 'red';
     let healthBar = (this.currentHealth / this.maxHealth) * TILE_SIZE;
-    this.game.context.fillRect(this.pos.x * TILE_SIZE, (this.pos.y * TILE_SIZE) - 2, healthBar, 1);
+    this.game.context.fillRect(this.pos.x * TILE_SIZE, (this.pos.y * TILE_SIZE), healthBar, 1);
     this.game.context.fillStyle = 'blue';
     let energyBar = (this.currentEnergy / this.maxEnergy) * TILE_SIZE;
     this.game.context.fillRect(this.pos.x * TILE_SIZE, (this.pos.y * TILE_SIZE) + 2, energyBar, 1);

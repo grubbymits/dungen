@@ -17,12 +17,13 @@
   <script type="text/javascript" src="js/definitions.js"></script>
   <script type="text/javascript" src="js/actions.js"></script>
   <script type="text/javascript" src="js/map.js"></script>
+  <script type="text/javascript" src="js/sprite.js"></script>
+  <script type="text/javascript" src="js/item.js"></script>
   <script type="text/javascript" src="js/actor.js"></script>
   <script type="text/javascript" src="js/hero.js"></script>
   <script type="text/javascript" src="js/monsters.js"></script>
   <script type="text/javascript" src="js/game.js"></script>
   <script type="text/javascript" src="js/ui.js"></script>
-  <script type="text/javascript" src="js/sprite.js"></script>
   <script>
     "use strict";
 
@@ -34,6 +35,9 @@
       document.body.appendChild(gameCanvas);
       gameCanvas.width = MAP_WIDTH_PIXELS;
       gameCanvas.height = MAP_HEIGHT_PIXELS;
+      gameCanvas.style.position = 'absolute';
+      gameCanvas.style.left = '0px';
+      gameCanvas.style.top = '0px';
       var gameContext = gameCanvas.getContext("2d");
       gameContext.fillStyle = '#000000';
       gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
@@ -58,8 +62,8 @@
           //Game.map.update();
           theGame.nextGameTick += theGame.skipTicks;
         }
-        gameContext.fillStyle = '#000000';
-        gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
+        //gameContext.fillStyle = '#000000';
+        //gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
         theGame.renderMap();
         theGame.renderActors();
         UI.renderHUD();

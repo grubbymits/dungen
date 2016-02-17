@@ -1,3 +1,5 @@
+"use strict";
+
 class Item {
   constructor(name, sprite) {
     this.name = name;
@@ -6,17 +8,31 @@ class Item {
 }
 
 class Weapon extends Item {
-  constructor(name, sprite, power, range, type) {
+  constructor(name, sprite, power, range, energy, type) {
     super(name, sprite);
     this.power = power;
     this.range = range;
     this.type = type;
+    this.energy = energy;
   }
 }
 
 class Armour extends Item {
-  
+  constructor(name, sprite, defense, type) {
+    super(name, sprite);
+    this.defense = defense;
+    this.type = type;
+  }
 }
+
+var basicSword = new Weapon("basic sword", swordSprites[0],
+                            2, 3, 1, NORMAL);
+var basicShield = new Armour("basic shield", shieldSprites[0],
+                             2, NORMAL);
+var basicHelmet = new Armour("basic helmet", helmetSprites[0],
+                             2, NORMAL);
+var basicArmour = new Armour("basic armour", armourSprites[0],
+                             3, NORMAL);
 
 // https://en.wikipedia.org/wiki/List_of_mythological_objects
 // mimung - wudga inherits from his son Wayland the Smith

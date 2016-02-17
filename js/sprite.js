@@ -111,3 +111,41 @@ var cyclopsSprite = new Sprite(spriteSheet, 4, 22, 32, 32);
 var werewolfSprite = new Sprite(spriteSheet, 5, 22, 32, 32);
 var golemSprite = new Sprite(spriteSheet, 6, 22, 32, 32);
 var demonSprite = new Sprite(spriteSheet, 7, 22, 32, 32);
+
+var swordSprites = [ new Sprite(spriteSheet, 0, 7, 32, 32),
+                     new Sprite(spriteSheet, 1, 7, 32, 32),
+                     new Sprite(spriteSheet, 2, 7, 32, 32),
+                     new Sprite(spriteSheet, 3, 7, 32, 32),
+                     new Sprite(spriteSheet, 4, 7, 32, 32),
+                     new Sprite(spriteSheet, 5, 7, 32, 32),
+                     new Sprite(spriteSheet, 6, 7, 32, 32),
+                     new Sprite(spriteSheet, 7, 7, 32, 32),
+                   ];
+
+var armourSprites = [ new Sprite(spriteSheet, 0, 11, 32, 32),
+                      new Sprite(spriteSheet, 1, 11, 32, 32),
+                      new Sprite(spriteSheet, 2, 11, 32, 32),
+                      new Sprite(spriteSheet, 3, 11, 32, 32),
+                      new Sprite(spriteSheet, 4, 11, 32, 32),
+                      new Sprite(spriteSheet, 5, 11, 32, 32),
+                      new Sprite(spriteSheet, 6, 11, 32, 32),
+                      new Sprite(spriteSheet, 7, 11, 32, 32),
+                    ];
+var helmetSprites = [ new Sprite(spriteSheet, 0, 12, 32, 32),
+                      new Sprite(spriteSheet, 1, 12, 32, 32),
+                      new Sprite(spriteSheet, 2, 12, 32, 32),
+                      new Sprite(spriteSheet, 3, 12, 32, 32),
+                      new Sprite(spriteSheet, 4, 12, 32, 32),
+                      new Sprite(spriteSheet, 5, 12, 32, 32),
+                      new Sprite(spriteSheet, 6, 12, 32, 32),
+                      new Sprite(spriteSheet, 7, 12, 32, 32),
+                    ];
+var shieldSprites = [ new Sprite(spriteSheet, 0, 13, 32, 32),
+                      new Sprite(spriteSheet, 1, 13, 32, 32),
+                      new Sprite(spriteSheet, 2, 13, 32, 32),
+                      new Sprite(spriteSheet, 3, 13, 32, 32),
+                      new Sprite(spriteSheet, 4, 13, 32, 32),
+                      new Sprite(spriteSheet, 5, 13, 32, 32),
+                      new Sprite(spriteSheet, 6, 13, 32, 32),
+                      new Sprite(spriteSheet, 7, 13, 32, 32),
+                    ];

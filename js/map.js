@@ -33,6 +33,7 @@ class Location {
     this.entity = entity;
     this.tileType = type;
     this.vec = new Vec(x, y);
+    this.dirty = true;
   }
   get isBlocking() {
     //if (this.entity) {
@@ -196,12 +197,12 @@ class GameMap {
 
   removeEntity(pos) {
     this.locations[pos.x][pos.y].entity = null;
+    this.locations[pos.x][pos.y].dirty = true;
   }
 
   placeEntity(pos, entity) {
-    console.log("entity placed at", pos);
-    console.log(entity);
     this.locations[pos.x][pos.y].entity = entity;
+    this.locations[pos.x][pos.y].dirty = true;
   }
 
   getEntity(x, y) {

@@ -18,8 +18,14 @@ class Game {
     // draw everything
     for (var x = 0; x < this.theMap.xMax; x++) {
       for (var y = 0; y < this.theMap.yMax; y++) {
-        var type = this.map.getLocation(x,y).type;
-        tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
+        let loc = this.map.getLocation(x,y);
+        if (loc.dirty) {
+          this.context.fillStyle = '#000000';
+          this.context.fillRect(x * TILE_SIZE, y *TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          var type = loc.type;
+          tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
+          loc.dirty = false;
+        }
       }
     }
   }
@@ -45,6 +51,7 @@ class Game {
     for (let index in this.actors) {
       if (this.actors[index] == actor) {
         console.log("killing actor, index:", index);
+        this.theMap.removeEntity(this.actors[index].position);
         delete this.actors[index];
         this.actors.splice(index, 1);
       }

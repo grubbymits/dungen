@@ -3,24 +3,48 @@
 class Hero extends Actor {
   constructor(health, energy, position, sprite, game) {
     super(health, energy, position, sprite, game);
-    this.bodyArmour = 0.01;
-    this.helmet = 0.01;
+    this.equipArmour = basicArmour;
+    this.equipHelmet = basicHelmet;
+    this.equipWeapon = basicSword;
+    this.equipShield = basicShield;
+    this.equipArrows = null;
     this.kind = HERO;
+    console.log("HERO:", this.meleeWeapon);
   }
-
+  
+  get armour() {
+    return this.equipArmour;
+  }
+  
+  get helmet() {
+    return this.equipHelmet;
+  }
+  
+  get shield() {
+    return this.equipShield;
+  }
+  
+  get arrows() {
+    return this.equipArrows;
+  }
+  
+  get weapon() {
+    return this.equipWeapon;
+  }
+  
   get projectileRange() {
     return 0;
   }
   get meleeAtkPower() {
-    return 2;
+    return this.equipWeapon.power;
   }
   get meleeAtkEnergy() {
-    return 1;
+    return this.equipWeapon.energy;
   }
   get meleeAtkType() {
-    return NORMAL;
+    return this.equipWeapon.type;
   }
   get physicalDefense() {
-    return this.bodyArmour + this.helmet;
+    return this.equipArmour.defense + this.equipHelmet.defense;
   }
 }

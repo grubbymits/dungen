@@ -56,8 +56,8 @@ class Rat extends Monster {
     super(5, 4, 2,
           1, NORMAL, 1,
           0, 0, 0,
-          0.05,
-          3,
+          5,
+          1,
           position, ratSprite, game);
     this.index = RAT;
   }
@@ -68,8 +68,8 @@ class Spiders extends Monster {
     super(8, 3, 2,
           2, NORMAL, 1,
           0, 0, 0,
-          0.05,
-          4,
+          5,
+          2,
           position, spidersSprite, game);
     this.index = SPIDERS;
     this.meleeAttackPower = 2;
@@ -82,8 +82,8 @@ class Lizard extends Monster {
     super(15, 4, 3,
           2, NORMAL, 1,
           0, 0, 0,
-          0.07,
-          6,
+          7,
+          3,
           position, lizardSprite, game);
     this.index = LIZARD;
     this.meleeAttackPower = 4;
@@ -96,8 +96,8 @@ class SpiderChampion extends Monster {
     super(20, 4, 3,
           3, NORMAL, 2,
           0, 0, 0,
-          0.08,
           8,
+          3,
           position, bigSpiderSprite, game);
     this.index = SPIDER_CHAMPION;
     this.meleeAttackPower = 5;

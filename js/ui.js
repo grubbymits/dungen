@@ -5,15 +5,15 @@ class Interface {
     //this.keysDown = {};
     this.hero = hero;
     
-    var hud = document.createElement("canvas");
-    hud.style.position = 'absolute';
-    hud.style.left = '5px';
-    hud.style.top = '5px';
-    hud.style.width = '256px';
-    hud.style.height = '64px'
-    hud.style.background = "#669999";
-    document.body.appendChild(hud);
-    this.hudContext = hud.getContext("2d");
+    this.hud = document.createElement("canvas");
+    this.hud.style.position = 'absolute';
+    this.hud.width = TILE_SIZE * 4 * UPSCALE_FACTOR;
+    this.hud.height = TILE_SIZE * UPSCALE_FACTOR;
+    this.hud.style.left = '0px';
+    this.hud.style.top = '0px';
+    this.hud.style.background = "rgba(50, 75, 75, 0.8)";
+    document.body.appendChild(this.hud);
+    this.hudContext = this.hud.getContext("2d");
 
     addEventListener("keydown", function(e) {
       //this.keysDown[e.keyCode] = true;
@@ -41,8 +41,25 @@ class Interface {
   }
   
   renderHUD() {
-    this.hero.sprite.render(1, 1,
-                            this.hudContext);
+    var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
+    var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
+    this.hud.style.left = offsetX + 'px';
+    this.hud.style.top = offsetY + 'px';
+    if (this.hero.weapon) {
+      this.hero.weapon.sprite.render(0, 0, this.hudContext);
+    }
+    if (this.hero.shield) {
+      this.hero.shield.sprite.render(1 * TILE_SIZE, 0, this.hudContext);
+    }
+    else if (this.hero.arrows) {
+      this.hero.arrows.sprite.render(1 * TILE_SIZE, 0, this.hudContext);
+    }
+    if (this.hero.armour) {
+      this.hero.armour.sprite.render(2 * TILE_SIZE, 0, this.hudContext);
+    }
+    if (this.hero.helmet) {
+      this.hero.helmet.sprite.render(3 * TILE_SIZE, 0, this.hudContext);
+    }
   }
     
   onClick(event) {
