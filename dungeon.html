@@ -62,6 +62,7 @@
         gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
         theGame.renderMap();
         theGame.renderActors();
+        UI.renderHUD();
         // update game logic
         theGame.update();
         window.requestAnimationFrame(run);

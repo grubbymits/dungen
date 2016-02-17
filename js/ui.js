@@ -4,6 +4,16 @@ class Interface {
   constructor(hero) {
     //this.keysDown = {};
     this.hero = hero;
+    
+    var hud = document.createElement("canvas");
+    hud.style.position = 'absolute';
+    hud.style.left = '5px';
+    hud.style.top = '5px';
+    hud.style.width = '256px';
+    hud.style.height = '64px'
+    hud.style.background = "#669999";
+    document.body.appendChild(hud);
+    this.hudContext = hud.getContext("2d");
 
     addEventListener("keydown", function(e) {
       //this.keysDown[e.keyCode] = true;
@@ -28,6 +38,11 @@ class Interface {
     //addEventListener("keyup", (e) => this.keysDown[e.keyCode] = false, false);
     
     addEventListener("click", this.onClick.bind(this), false);
+  }
+  
+  renderHUD() {
+    this.hero.sprite.render(1, 1,
+                            this.hudContext);
   }
     
   onClick(event) {
