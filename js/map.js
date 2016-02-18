@@ -106,13 +106,15 @@ class GameMap {
     if (this.isOutOfRange(goal.x, goal.y)) {
       return [];
     }
-    if (this.locations[goal.x][goal.y].isBlocking) {
+    if (this.isBlocked(goal) &&
+        this.locations[goal.x][goal.y].entity === null) {
       return [];
     }
     if (start == goal) {
       return [];
     }
 
+    console.log("start:", start, ", goal:", goal);
     // Adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
     var frontier = [];
     var cameFrom = new Map();
@@ -153,6 +155,8 @@ class GameMap {
         }
       }
     }
+    
+    console.log("cameFrom:", cameFrom);
 
     console.log("now finalise path");
     // finalise the path.
@@ -188,11 +192,11 @@ class GameMap {
     return this.locations[x][y];
   }
 
-  isBlocked(x, y) {
-    if (this.isOutOfRange(x, y)) {
+  isBlocked(loc) {
+    if (this.isOutOfRange(loc.x, loc.y)) {
       return true;
     }
-    return this.locations[x][y].isBlocking;
+    return loc.isBlocking;
   }
 
   removeEntity(pos) {
