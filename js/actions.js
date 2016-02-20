@@ -18,7 +18,6 @@ class RestAction extends Action {
     super(actor);
   }
   perform() {
-    console.log("rest");
     this.actor.incrementEnergy();
   }
 }

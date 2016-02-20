@@ -36,7 +36,6 @@ class Actor extends Entity {
     this.currentPath = [];
     this.rangeAttack = null;
     this.meleeAttackRange = 3;
-    this.kind = MONSTER;
   }
   get action() {
     return this.nextAction;
@@ -56,6 +55,8 @@ class Actor extends Entity {
   incrementEnergy() {
     if (this.currentEnergy < this.maxEnergy) {
       this.currentEnergy = this.currentEnergy + 1;
+    } else if (this.nextAction == this.rest) {
+      this.nextAction = null;
     }
   }
   useEnergy(required) {
@@ -97,5 +98,8 @@ class Actor extends Entity {
       this.walk.dest = this.game.map.getLocation(x, y).vec;
       this.nextAction = this.walk;
     }
+  }
+  setRest() {
+    this.nextAction = this.rest;
   }
 }

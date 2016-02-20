@@ -4,7 +4,7 @@ class Interface {
   constructor(hero) {
     //this.keysDown = {};
     this.hero = hero;
-    
+
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'absolute';
     this.hud.width = TILE_SIZE * 4 * UPSCALE_FACTOR;
@@ -36,10 +36,11 @@ class Interface {
       }, false);
 
     //addEventListener("keyup", (e) => this.keysDown[e.keyCode] = false, false);
-    
-    addEventListener("click", this.onClick.bind(this), false);
+
+    document.getElementById("rest_button").addEventListener("click", event => hero.setRest());
+    document.getElementById("gameCanvas").addEventListener("click", this.onClick.bind(this), false);
   }
-  
+
   renderHUD() {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
@@ -61,7 +62,7 @@ class Interface {
       this.hero.helmet.sprite.render(3 * TILE_SIZE, 0, this.hudContext);
     }
   }
-    
+
   onClick(event) {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
