@@ -1,9 +1,9 @@
 "use strict";
 
 class Interface {
-  constructor(hero) {
+  constructor(player) {
     //this.keysDown = {};
-    this.hero = hero;
+    this.player = player;
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'absolute';
@@ -15,33 +15,12 @@ class Interface {
     document.body.appendChild(this.hud);
     this.hudContext = this.hud.getContext("2d");
 
-    addEventListener("keydown", function(e) {
-      //this.keysDown[e.keyCode] = true;
-        switch(e.keyCode){
-          case 37:
-            this.hero.setWalkAction(LEFT);
-            break;
-          case 39:
-            this.hero.setWalkAction(RIGHT);
-            break;
-          case 38:
-            this.hero.setWalkAction(UP);
-            break;
-          case 40:
-            this.hero.setWalkAction(DOWN);
-            break;
-          case 32: e.preventDefault(); break; // Space
-          default: break; // do not block other keys
-        }
-      }, false);
-
-    //addEventListener("keyup", (e) => this.keysDown[e.keyCode] = false, false);
-
-    document.getElementById("rest_button").addEventListener("click", event => hero.setRest());
+    document.getElementById("rest_button").addEventListener("click", event => player.setRest());
     document.getElementById("gameCanvas").addEventListener("click", this.onClick.bind(this), false);
   }
 
   renderHUD() {
+    /*
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
     this.hud.style.left = offsetX + 'px';
@@ -61,6 +40,7 @@ class Interface {
     if (this.hero.helmet) {
       this.hero.helmet.sprite.render(3 * TILE_SIZE, 0, this.hudContext);
     }
+    */
   }
 
   onClick(event) {
@@ -68,6 +48,6 @@ class Interface {
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
     let x = Math.floor((event.clientX + offsetX) / TILE_SIZE);
     let y = Math.floor((event.clientY + offsetY) / TILE_SIZE);
-    this.hero.setDestination(x, y);
+    this.player.setDestination(x, y);
   }
 }

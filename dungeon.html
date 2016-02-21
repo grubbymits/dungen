@@ -7,27 +7,25 @@
 </head>
 <audio id="hitSound" src="res/audio/hit.ogg"></audio>
   <body>
-    <div class="fixed-action-btn" style="bottom: 45px; left: 24px;" id="rest_button">
-    <a class="btn-floating btn-large orange">
-      <i class="large material-icons">update</i>
-    </a>
+    <div class="row">
+     <div class="col s12 m5 l2">
+       <div class="card-panel orange" id="info">
+         <span class="white-text">Begin
+         </span>
+       </div>
+     </div>
+   </div>
+    <div class="fixed-action-btn horizontal click-to-toggle" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large orange">
+        <i class="large material-icons">accessibility</i>
+      </a>
+      <ul>
+        <li><a class="btn-floating orange" id="rest_button"><i class="material-icons">update</i></a></li>
+        <li><a class="btn-floating orange "><i class="material-icons">people</i></a></li>
+        <li><a class="btn-floating orange "><i class="material-icons">security</i></a></li>
+        <li><a class="btn-floating orange "><i class="material-icons">healing</i></a></li>
+      </ul>
     </div>
-    <div class="fixed-action-btn" style="bottom: 115px; left: 24px;" id="player_button">
-    <a class="btn-floating btn-large orange">
-      <i class="large material-icons">accessibility</i>
-    </a>
-    <div class="fixed-action-btn" style="bottom: 185px; left: 24px;" id="group_control">
-    <a class="btn-floating btn-large orange">
-      <i class="large material-icons">people</i>
-    </a>
-    <div class="fixed-action-btn" style="bottom: 255px; left: 24px;">
-    <a class="btn-floating btn-large orange">
-      <i class="large material-icons">person</i>
-    </a>
-    <div class="fixed-action-btn" style="bottom: 325px; left: 24px;" id="health">
-    <a class="btn-floating btn-large red">
-      <i class="large material-icons">favorite</i>
-    </a>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.js"></script>
   <script>
@@ -62,6 +60,7 @@
       gameCanvas.width = MAP_WIDTH_PIXELS;
       gameCanvas.height = MAP_HEIGHT_PIXELS;
       gameCanvas.style.position = 'absolute';
+      gameCanvas.style.zIndex = '-1';
       gameCanvas.style.left = '0px';
       gameCanvas.style.top = '0px';
       var gameContext = gameCanvas.getContext("2d");
@@ -70,31 +69,35 @@
 
       var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
       console.log("theGame = ", theGame);
-      theGame.renderMap();
 
-
-      var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
-      console.log("starting hero at block =", startPos);
-      var hero = theGame.createHero(startPos, KNIGHT);
       var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;
       theGame.createMonster(ratStart, RAT);
 
-      var UI = new Interface(hero);
+      var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
+      var knight = theGame.createHero(startPos, KNIGHT);
+      startPos = theGame.map.getLocation((theGame.map.width / 2)-1, theGame.map.height / 2).vec;
+      var wizard = theGame.createHero(startPos, WIZARD);
+      wizard.follow(knight);
+
+      var player = new Player(knight);
+      var UI = new Interface(player);
+      player.addHero(wizard);
+
 
       var run = function() {
         theGame.isRunning = true;
         // set a maximum game rate
-        while ((new Date()).getTime() > theGame.nextGameTick) {
-          //Game.map.update();
+        if (new Date().getTime() >= theGame.nextGameTick) {
+          theGame.update();
           theGame.nextGameTick += theGame.skipTicks;
         }
         //gameContext.fillStyle = '#000000';
         //gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
         theGame.renderMap();
         theGame.renderActors();
-        UI.renderHUD();
+        //UI.renderHUD();
         // update game logic
-        theGame.update();
+        //theGame.update();
         window.requestAnimationFrame(run);
       };
 

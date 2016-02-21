@@ -88,10 +88,29 @@ class DealMeleeDamage extends Action {
     let type = this.actor.meleeAtkType;
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
-    this.targetActor.reduceHealth((power * (1 / defense)) * (1 / elemDefense));
+    let damage = power * (1 / defense) * (1 / elemDefense);
+    this.targetActor.reduceHealth(damage);
+
     document.getElementById("hitSound").play();
+    let infoBox = document.getElementById("info");
+    if (this.actor.kind == HERO) {
+      infoBox.textContent = "Player attacks " +
+                            ENEMY_NAMES[this.targetActor.index] + " for " +
+                            damage;
+    } else {
+      infoBox.textContent = ENEMY_NAMES[this.actor.index] +
+                            " attacks Player for " + damage;
+    }
 
     if (this.targetActor.health <= 0) {
+      if (this.actor.kind == HERO) {
+        infoBox.textContent = "Player kills " +
+                              ENEMY_NAMES[this.targetActor.index]
+                              + " and gains " + this.targetActor.exp + " exp";
+      } else {
+        infoBox.textContent = ENEMY_NAMES[this.targetActor.index] +
+                              " kills Player";
+      }
       this.actor.increaseExp(this.targetActor.exp);
       this.game.killActor(this.targetActor);
       this.targetActor = null;
@@ -139,6 +158,10 @@ class Attack extends Action {
     this.targetActor = target;
   }
 
+  get target() {
+    return this.targetActor;
+  }
+
   perform() {
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
     console.log("perform attack");
@@ -171,9 +194,13 @@ class FindTarget extends Action {
   }
 
   perform() {
-    console.log("performing find target");
     let radius = 0;
     let pos = this.actor.pos;
+    if (this.actor.range) {
+      this.range = this.actor.range;
+    } else {
+      this.range = this.actor.meleeRange;
+    }
 
     while (radius < this.range) {
       radius = radius + 1;

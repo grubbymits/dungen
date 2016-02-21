@@ -149,3 +149,12 @@ var shieldSprites = [ new Sprite(spriteSheet, 0, 13, 32, 32),
                       new Sprite(spriteSheet, 6, 13, 32, 32),
                       new Sprite(spriteSheet, 7, 13, 32, 32),
                     ];
+var staffSprites = [ new Sprite(spriteSheet, 0, 14, 32, 32),
+                     new Sprite(spriteSheet, 1, 14, 32, 32),
+                     new Sprite(spriteSheet, 2, 14, 32, 32),
+                     new Sprite(spriteSheet, 3, 14, 32, 32),
+                     new Sprite(spriteSheet, 4, 14, 32, 32),
+                     new Sprite(spriteSheet, 5, 14, 32, 32),
+                     new Sprite(spriteSheet, 6, 14, 32, 32),
+                     new Sprite(spriteSheet, 7, 14, 32, 32),
+                    ];

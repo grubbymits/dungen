@@ -27,6 +27,8 @@ class Armour extends Item {
 
 var basicSword = new Weapon("basic sword", swordSprites[0],
                             2, 3, 1, NORMAL);
+var basicStaff = new Weapon("basic staff", staffSprites[0],
+                            2, 15, 2, NORMAL);
 var basicShield = new Armour("basic shield", shieldSprites[0],
                              2, NORMAL);
 var basicHelmet = new Armour("basic helmet", helmetSprites[0],
@@ -43,4 +45,3 @@ var basicArmour = new Armour("basic armour", armourSprites[0],
 // Tyrfing - cursed sword of Odin's grandson
 // Ridill - possessed by a dwarf named Regin
 // Kusanagi - amaterasu sword
-

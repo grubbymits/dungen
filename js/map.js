@@ -114,7 +114,6 @@ class GameMap {
       return [];
     }
 
-    console.log("start:", start, ", goal:", goal);
     // Adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
     var frontier = [];
     var cameFrom = new Map();
@@ -155,10 +154,7 @@ class GameMap {
         }
       }
     }
-    
-    console.log("cameFrom:", cameFrom);
 
-    console.log("now finalise path");
     // finalise the path.
     var current = goal;
     var path = [current];
@@ -173,7 +169,6 @@ class GameMap {
     if (this.locations[goal.x][goal.y].entity !== null) {
       path.pop();
     }
-    console.log("path created: ", path.length);
     return path.splice(1);
   }
 

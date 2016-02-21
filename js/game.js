@@ -7,7 +7,7 @@ class Game {
     this.context = context;
     this.level = 1;
     this.isRunning = false;
-    this.skipTicks = 1000 / 1;
+    this.skipTicks = 1000 / 5;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
@@ -21,7 +21,8 @@ class Game {
         let loc = this.map.getLocation(x,y);
         if (loc.dirty) {
           this.context.fillStyle = '#000000';
-          this.context.fillRect(x * TILE_SIZE, y *TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          this.context.fillRect(x * TILE_SIZE, y * TILE_SIZE,
+                                TILE_SIZE, TILE_SIZE);
           var type = loc.type;
           tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
           loc.dirty = false;
@@ -31,11 +32,14 @@ class Game {
   }
 
   createHero(pos, type) {
+    var hero;
     if (type == KNIGHT) {
-      this.hero = new Hero(30, 6, pos, knightSprite, this);
+      hero = new Knight(30, 6, pos, this);
+    } else if (type == WIZARD) {
+      hero = new Wizard(30, 6, pos, this);
     }
-    this.actors.push(this.hero);
-    return this.hero;
+    this.actors.push(hero);
+    return hero;
   }
 
   createMonster(pos, type) {

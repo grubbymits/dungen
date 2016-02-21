@@ -13,7 +13,6 @@ class Monster extends Actor {
     this.range = range;
     this.rangedAttack = null;
     this.meleeAttack = new MeleeAttack(this);
-    this.findTarget = new FindTarget(this);
     this.meleeAttackPower = meleeAtkPower;
     this.meleeAttackType = meleeAtkType;
     this.meleeAttackEnergy = meleeAtkEnergy;
@@ -25,7 +24,6 @@ class Monster extends Actor {
     this.kind = MONSTER;
   }
   get action() {
-    console.log("monster get action");
     if (this.currentEnergy <= 0) {
       return this.rest;
     } else if (this.nextAction === null) {
@@ -53,7 +51,7 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(5, 4, 2,
+    super(5, 4, 4,
           1, NORMAL, 1,
           0, 0, 0,
           5,

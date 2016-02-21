@@ -30,9 +30,10 @@ class Actor extends Entity {
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.attack = new Attack(this);
+    this.findTarget = new FindTarget(this);
     this.meleeAttack = new MeleeAttack(this);
     this.nextAction = null;
-    this.destination = null;//new Vec(this.position.x, this.position.y);
+    this.destination = null;
     this.currentPath = [];
     this.rangeAttack = null;
     this.meleeAttackRange = 3;
