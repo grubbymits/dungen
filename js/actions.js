@@ -89,7 +89,7 @@ class DealMeleeDamage extends Action {
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
     let damage = power * (1 / defense) * (1 / elemDefense);
-    this.targetActor.reduceHealth(damage);
+    this.targetActor.reduceHealth(this.actor, damage);
 
     document.getElementById("hitSound").play();
     let infoBox = document.getElementById("info");
@@ -189,18 +189,13 @@ class Attack extends Action {
 class FindTarget extends Action {
   constructor(actor) {
     super(actor);
-    this.range = actor.range;
     this.map = this.actor.game.map;
   }
 
   perform() {
     let radius = 0;
     let pos = this.actor.pos;
-    if (this.actor.range) {
-      this.range = this.actor.range;
-    } else {
-      this.range = this.actor.meleeRange;
-    }
+    this.range = this.actor.range;
 
     while (radius < this.range) {
       radius = radius + 1;

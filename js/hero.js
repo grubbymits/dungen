@@ -30,7 +30,8 @@ class Hero extends Actor {
   get meleeAtkType() {
     return this.equipWeapon.type;
   }
-  get meleeRange() {
+  get range() {
+    console.log("weapon:", this.equipWeapon);
     return this.equipWeapon.range;
   }
   get action() {
@@ -80,6 +81,9 @@ class Wizard extends Hero {
     super(health, energy, position, wizardSprite, game);
     this.equipArmour = basicArmour;
     this.equipWeapon = basicStaff;
+  }
+  get physicalDefense() {
+    return this.equipArmour.defense;
   }
 }
 
