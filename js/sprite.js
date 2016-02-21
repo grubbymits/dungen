@@ -112,6 +112,18 @@ var werewolfSprite = new Sprite(spriteSheet, 5, 22, 32, 32);
 var golemSprite = new Sprite(spriteSheet, 6, 22, 32, 32);
 var demonSprite = new Sprite(spriteSheet, 7, 22, 32, 32);
 
+var chestSprites = [ new Sprite(spriteSheet, 0, 4, 32,32 ),
+                     new Sprite(spriteSheet, 1, 5, 32, 32)
+                   ];
+var potionSprites = [ new Sprite(spriteSheet, 0, 5, 32, 32),
+                      new Sprite(spriteSheet, 1, 5, 32, 32),
+                      new Sprite(spriteSheet, 2, 5, 32, 32),
+                      new Sprite(spriteSheet, 3, 5, 32, 32),
+                      new Sprite(spriteSheet, 4, 5, 32, 32),
+                      new Sprite(spriteSheet, 5, 5, 32, 32),
+                      new Sprite(spriteSheet, 6, 5, 32, 32),
+                      new Sprite(spriteSheet, 7, 5, 32, 32),
+                    ];
 var swordSprites = [ new Sprite(spriteSheet, 0, 7, 32, 32),
                      new Sprite(spriteSheet, 1, 7, 32, 32),
                      new Sprite(spriteSheet, 2, 7, 32, 32),
@@ -121,7 +133,15 @@ var swordSprites = [ new Sprite(spriteSheet, 0, 7, 32, 32),
                      new Sprite(spriteSheet, 6, 7, 32, 32),
                      new Sprite(spriteSheet, 7, 7, 32, 32),
                    ];
-
+var axeSprites = [ new Sprite(spriteSheet, 0, 8, 32, 32),
+                   new Sprite(spriteSheet, 1, 8, 32, 32),
+                   new Sprite(spriteSheet, 2, 8, 32, 32),
+                   new Sprite(spriteSheet, 3, 8, 32, 32),
+                   new Sprite(spriteSheet, 4, 8, 32, 32),
+                   new Sprite(spriteSheet, 5, 8, 32, 32),
+                   new Sprite(spriteSheet, 6, 8, 32, 32),
+                   new Sprite(spriteSheet, 7, 8, 32, 32),
+                  ];
 var armourSprites = [ new Sprite(spriteSheet, 0, 11, 32, 32),
                       new Sprite(spriteSheet, 1, 11, 32, 32),
                       new Sprite(spriteSheet, 2, 11, 32, 32),
@@ -157,4 +177,22 @@ var staffSprites = [ new Sprite(spriteSheet, 0, 14, 32, 32),
                      new Sprite(spriteSheet, 5, 14, 32, 32),
                      new Sprite(spriteSheet, 6, 14, 32, 32),
                      new Sprite(spriteSheet, 7, 14, 32, 32),
+                    ];
+var treasureSprites = [ new Sprite(spriteSheet, 0, 15, 32, 32),
+                        new Sprite(spriteSheet, 1, 15, 32, 32),
+                        new Sprite(spriteSheet, 2, 15, 32, 32),
+                        new Sprite(spriteSheet, 3, 15, 32, 32),
+                        new Sprite(spriteSheet, 4, 15, 32, 32),
+                        new Sprite(spriteSheet, 5, 15, 32, 32),
+                        new Sprite(spriteSheet, 6, 15, 32, 32),
+                        new Sprite(spriteSheet, 7, 15, 32, 32),
+                      ];
+var spellSprites = [ new Sprite(spriteSheet, 0, 17, 32, 32),
+                     new Sprite(spriteSheet, 1, 17, 32, 32),
+                     new Sprite(spriteSheet, 2, 17, 32, 32),
+                     new Sprite(spriteSheet, 3, 17, 32, 32),
+                     new Sprite(spriteSheet, 4, 17, 32, 32),
+                     new Sprite(spriteSheet, 5, 17, 32, 32),
+                     new Sprite(spriteSheet, 6, 17, 32, 32),
+                     new Sprite(spriteSheet, 7, 17, 32, 32),
                     ];
