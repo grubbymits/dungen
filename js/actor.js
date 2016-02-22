@@ -7,6 +7,7 @@ class Entity {
     this.sprite = sprite;
     this.game = game;
     this.game.map.placeEntity(this.position, this);
+    console.log("place entity at:", position);
   }
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);

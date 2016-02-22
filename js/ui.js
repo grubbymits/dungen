@@ -5,6 +5,7 @@ class Interface {
     //this.keysDown = {};
     this.player = player;
 
+    /*
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'absolute';
     this.hud.width = TILE_SIZE * 4 * UPSCALE_FACTOR;
@@ -14,6 +15,7 @@ class Interface {
     this.hud.style.background = "rgba(50, 75, 75, 0.8)";
     document.body.appendChild(this.hud);
     this.hudContext = this.hud.getContext("2d");
+    */
 
     document.getElementById("rest_button").addEventListener("click", event => player.setRest());
     document.getElementById("gameCanvas").addEventListener("click", this.onClick.bind(this), false);

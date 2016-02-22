@@ -35,20 +35,18 @@ class Location {
     this.vec = new Vec(x, y);
     this.dirty = true;
   }
-  get isBlocking() {
-    //if (this.entity) {
-      //return this.blocking || this.entity.blocking;
-    //}
+  get isBlocked() {
     return this.blocking;
   }
-  set isBlocking(blocking) {
+  set blocked(blocking) {
     this.blocking = blocking;
   }
-
+  get isOccupied() {
+    return (this.entity !== null);
+  }
   set type(type) {
     this.tileType = type;
   }
-
   get type() {
     return this.tileType;
   }
@@ -69,19 +67,52 @@ class GameMap {
       }
     }
   }
-
+  isOutOfRange(x, y) {
+    if (x < 0 || y < 0 || x > this.xMax || y > this.yMax) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  getLocation(x, y) {
+    if (this.isOutOfRange(x, y)) {
+      throw "Index out of range:";
+    }
+    return this.locations[x][y];
+  }
+  isBlocked(loc) {
+    if (this.isOutOfRange(loc.x, loc.y)) {
+      return true;
+    }
+    return loc.isBlocked;
+  }
+  removeEntity(pos) {
+    this.locations[pos.x][pos.y].entity = null;
+    this.locations[pos.x][pos.y].dirty = true;
+  }
+  placeEntity(pos, entity) {
+    this.locations[pos.x][pos.y].entity = entity;
+    this.locations[pos.x][pos.y].dirty = true;
+  }
+  getEntity(x, y) {
+    if (this.isOutOfRange(x, y)) {
+      return null;
+    }
+    // entity maybe null;
+    return this.locations[x][y].entity;
+  }
   get width() {
     return this.xMax;
   }
-
   get height() {
     return this.yMax;
   }
-
   getDistance(entity0, entity1) {
     return entity0.pos.getCost(entity1.pos);
   }
-
+  vecToLoc(vec) {
+    return this.locations[vec.x][vec.y];
+  }
   getNeighbours(vec) {
     var neighbours = [];
     for (let x = vec.x - 1; x < vec.x + 2; x++) {
@@ -89,10 +120,11 @@ class GameMap {
         if (this.isOutOfRange(x, y)) {
           continue;
         }
-        if (this.locations[x][y].isBlocking) {
+        if (x == vec.x && y == vec.y) {
           continue;
         }
-        if (x == vec.x && y == vec.y) {
+        if (this.locations[x][y].isBlocked ||
+            this.locations[x][y].isOccupied) {
           continue;
         }
         neighbours.push(this.locations[x][y].vec);
@@ -102,16 +134,33 @@ class GameMap {
   }
 
   getPath(start, goal) {
-    // if, somewhere, the click is out range or is a blocked location, ignore it.
+    // ignore if the click is out range, blocked or the current location.
     if (this.isOutOfRange(goal.x, goal.y)) {
       return [];
     }
-    if (this.isBlocked(goal) &&
-        this.locations[goal.x][goal.y].entity === null) {
+    if (this.isBlocked(goal) && !goal.isOccupied) {
       return [];
     }
     if (start == goal) {
       return [];
+    }
+    // if the goal is an entity, make a path to be next to it.
+    if (this.vecToLoc(goal).isOccupied) {
+      let targetNeighbours = this.getNeighbours(goal);
+      let cost = start.getCost(goal);
+      var newGoal = goal;
+      for (let neighbour of targetNeighbours) {
+        if (start.getCost(neighbour) < cost) {
+          newGoal = neighbour;
+          cost = start.getCost(neighbour);
+        }
+      }
+      // Already next to the target
+      if (newGoal == goal) {
+        return [];
+      } else {
+        goal = newGoal;
+      }
     }
 
     // Adapted from http://www.redblobgames.com/pathfinding/a-star/introduction.html
@@ -124,16 +173,14 @@ class GameMap {
     frontier.push({loc : start, cost : 0});
 
     // breadth-first search
+    var current = null;
     while (frontier.length > 0) {
-      let current = frontier.shift();
-
+      current = frontier.shift();
       // exit early
       if (current.loc == goal) {
         break;
       }
-
       var neighbours = this.getNeighbours(current.loc);
-
       for (let next of neighbours) {
         let newCost = costSoFar.get(current.loc) + current.loc.getCost(next);
 
@@ -154,6 +201,9 @@ class GameMap {
         }
       }
     }
+    if (current.loc != goal) {
+      throw("Path not found to target!");
+    }
 
     // finalise the path.
     var current = goal;
@@ -164,53 +214,9 @@ class GameMap {
       path.push(current);
     }
     path.reverse();
-    // If the destination of the walk was to an entity, return the path to it
-    // and not on top of it.
-    if (this.locations[goal.x][goal.y].entity !== null) {
-      path.pop();
-    }
     return path.splice(1);
   }
 
-  isOutOfRange(x, y) {
-    if (x < 0 || y < 0 || x > this.xMax || y > this.yMax) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  getLocation(x, y) {
-    if (this.isOutOfRange(x, y)) {
-      throw "Index out of range:";
-    }
-    return this.locations[x][y];
-  }
-
-  isBlocked(loc) {
-    if (this.isOutOfRange(loc.x, loc.y)) {
-      return true;
-    }
-    return loc.isBlocking;
-  }
-
-  removeEntity(pos) {
-    this.locations[pos.x][pos.y].entity = null;
-    this.locations[pos.x][pos.y].dirty = true;
-  }
-
-  placeEntity(pos, entity) {
-    this.locations[pos.x][pos.y].entity = entity;
-    this.locations[pos.x][pos.y].dirty = true;
-  }
-
-  getEntity(x, y) {
-    if (this.isOutOfRange(x, y)) {
-      return null;
-    }
-    // entity maybe null;
-    return this.locations[x][y].entity;
-  }
 
   placeTile(x, y, type, blocking) {
     // Check for out-of-bounds
@@ -218,7 +224,7 @@ class GameMap {
       return;
     } else {
       this.locations[x][y].type = type;
-      this.locations[x][y].isBlocking = blocking;
+      this.locations[x][y].blocked = blocking;
       if (type == PATH && y > 1 && this.locations[x][y-1].type != PATH) {
         this.locations[x][y-1].type = WALL;
         this.locations[x][y-1].isBlocking = true;

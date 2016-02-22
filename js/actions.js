@@ -40,14 +40,6 @@ class WalkAction extends Action {
     let pos = this.actor.pos;
     let next = this.currentPath[0];
 
-    if (this.currentPath.length == 0) {
-      console.log("path length zero");
-    }
-
-    if (pos.x == next.x && pos.y == next.y) {
-      console.log("first step is current pos!");
-    }
-
     var energyRequired = 0;
     if (pos.x == next.x) {
       energyRequired = 2;
@@ -92,6 +84,7 @@ class DealMeleeDamage extends Action {
     this.targetActor.reduceHealth(this.actor, damage);
 
     document.getElementById("hitSound").play();
+    /*
     let infoBox = document.getElementById("info");
     if (this.actor.kind == HERO) {
       infoBox.textContent = "Player attacks " +
@@ -100,9 +93,10 @@ class DealMeleeDamage extends Action {
     } else {
       infoBox.textContent = ENEMY_NAMES[this.actor.index] +
                             " attacks Player for " + damage;
-    }
+    }*/
 
     if (this.targetActor.health <= 0) {
+      /*
       if (this.actor.kind == HERO) {
         infoBox.textContent = "Player kills " +
                               ENEMY_NAMES[this.targetActor.index]
@@ -110,7 +104,7 @@ class DealMeleeDamage extends Action {
       } else {
         infoBox.textContent = ENEMY_NAMES[this.targetActor.index] +
                               " kills Player";
-      }
+      }*/
       this.actor.increaseExp(this.targetActor.exp);
       this.game.killActor(this.targetActor);
       this.targetActor = null;
