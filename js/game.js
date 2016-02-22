@@ -73,10 +73,11 @@ class Game {
   }
 
   update() {
-    for (let actor of this.actors) {
-      let action = actor.action;
+    for (let actor in this.actors) {
+      let action = this.actors[actor].action;
       // this will only work if each non-player character always selects
-      // a move (ie, restAction)
+      // a move (ie, restAction) and the players are the first elements of
+      // the actors array;
       if (!action) {
         return false;
       }

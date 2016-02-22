@@ -43,9 +43,13 @@ class Monster extends Actor {
   get meleeAtkType() {
     return this.meleeAttackType;
   }
-  reduceHealth(damage) {
+  reduceHealth(enemy, damage) {
     console.log("dealing", damage, "to", ENEMY_NAMES[this.index]);
     this.currentHealth -= damage;
+    console.log(ENEMY_NAMES[this.index],"health now:", this.currentHealth);
+    this.setAttack(enemy);
+    // set dirty so the health bar is redrawn
+    this.game.map.setDirty(this.position);
   }
 }
 
@@ -54,7 +58,7 @@ class Rat extends Monster {
     super(5, 4, 4,
           1, NORMAL, 1,
           0, 0, 0,
-          5,
+          1,
           1,
           position, ratSprite, game);
     this.index = RAT;

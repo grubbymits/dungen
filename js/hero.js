@@ -31,7 +31,6 @@ class Hero extends Actor {
     return this.equipWeapon.type;
   }
   get range() {
-    console.log("weapon:", this.equipWeapon);
     return this.equipWeapon.range;
   }
   get action() {
@@ -47,6 +46,16 @@ class Hero extends Actor {
       }
     }
     return this.nextAction;
+  }
+  reduceHealth(enemy, damage) {
+    console.log(ENEMY_NAMES[enemy.index], "attacking hero for ", damage);
+    this.currentHealth -= damage;
+    console.log("hero health:", this.currentHealth);
+    this.game.map.setDirty(this.position);
+    if (this.isFollowing) {
+      this.setAttack(enemy);
+      this.nextAction = this.attack;
+    }
   }
 
   follow(leader) {

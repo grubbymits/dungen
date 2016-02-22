@@ -67,10 +67,6 @@ class Actor extends Entity {
   set energy(energy) {
     this.currentEnergy = energy;
   }
-  reduceHealth(actor, damage) {
-    this.currentHealth -= damage;
-    this.setDestination(actor.position.x, actor.position.y);
-  }
   increaseExp(xp) {
     this.exp += xp;
   }
@@ -104,5 +100,9 @@ class Actor extends Entity {
   }
   setRest() {
     this.nextAction = this.rest;
+  }
+  setAttack(target) {
+    this.attack.target = target;
+    this.nextAction = this.attack;
   }
 }

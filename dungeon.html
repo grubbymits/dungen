@@ -63,8 +63,6 @@
       var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
       console.log("theGame = ", theGame);
 
-      var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;
-      theGame.createMonster(ratStart, RAT);
 
       var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
       var knight = theGame.createHero(startPos, KNIGHT);
@@ -76,6 +74,8 @@
       var UI = new Interface(player);
       player.addHero(wizard);
 
+      var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;
+      theGame.createMonster(ratStart, RAT);
 
       var run = function() {
         theGame.isRunning = true;

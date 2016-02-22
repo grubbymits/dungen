@@ -101,6 +101,9 @@ class GameMap {
     // entity maybe null;
     return this.locations[x][y].entity;
   }
+  setDirty(pos) {
+    this.locations[pos.x][pos.y].dirty = true;
+  }
   get width() {
     return this.xMax;
   }
