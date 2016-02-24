@@ -35,8 +35,10 @@ class Game {
     var hero;
     if (type == KNIGHT) {
       hero = new Knight(30, 6, pos, this);
-    } else if (type == WIZARD) {
-      hero = new Wizard(30, 6, pos, this);
+    } else if (type == MAGE) {
+      hero = new Mage(30, 6, pos, this);
+    } else {
+      throw("Hero type unrecognised!");
     }
     this.actors.push(hero);
     return hero;

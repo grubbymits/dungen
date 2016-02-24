@@ -85,9 +85,10 @@ class Knight extends Hero {
   }
 }
 
-class Wizard extends Hero {
+class Mage extends Hero {
   constructor(health, energy, position, game) {
     super(health, energy, position, wizardSprite, game);
+    console.log("creating mage");
     this.equipArmour = basicArmour;
     this.equipWeapon = basicStaff;
   }

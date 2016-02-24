@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Dungen</title>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -42,6 +43,17 @@
   <script type="text/javascript" src="js/ui.js"></script>
   <script>
     "use strict";
+    var searchString = window.location.search.substring(1);
+    var variableArray = searchString.split('&');
+    var type = variableArray[0].split('=')[1];
+    var playerType = KNIGHT;
+    if (type == 'mage') {
+      playerType = MAGE;
+    } else if (type == 'rogue') {
+      playerType = ROGUE;
+    } else if (type == 'archer') {
+      playerType = ARCHER;
+    }
 
     function begin() {
       console.log("begin");
@@ -65,14 +77,14 @@
 
 
       var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
-      var knight = theGame.createHero(startPos, KNIGHT);
-      startPos = theGame.map.getLocation((theGame.map.width / 2)-1, theGame.map.height / 2).vec;
-      var wizard = theGame.createHero(startPos, WIZARD);
-      wizard.follow(knight);
+      var knight = theGame.createHero(startPos, playerType);
+      //startPos = theGame.map.getLocation((theGame.map.width / 2)-1, theGame.map.height / 2).vec;
+      //var wizard = theGame.createHero(startPos, WIZARD);
+      //wizard.follow(knight);
 
       var player = new Player(knight);
       var UI = new Interface(player);
-      player.addHero(wizard);
+      //player.addHero(wizard);
 
       var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;
       theGame.createMonster(ratStart, RAT);

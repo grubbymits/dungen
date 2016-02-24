@@ -71,7 +71,7 @@ const WARLOCK = 1;
 const BERSERKER = 2;
 const ARCHER = 4;
 const KNIGHT = 5;
-const WIZARD = 6;
+const MAGE = 6;
 const BLACK_MAGE = 7;
 
 const MONSTER = 0;
