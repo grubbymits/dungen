@@ -8,6 +8,8 @@
 </head>
 
   <body>
+    <audio src="res/audio/music/01-adventures.ogg" autoplay></audio>
+    <audio data-src="res/audio/music/02-eclipse.ogg"></audio>
     <audio id="hitSound" src="res/audio/hit.ogg"></audio>
     <div class="fixed-action-btn horizontal click-to-toggle" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large orange">
@@ -22,15 +24,6 @@
     </div>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.js"></script>
-  <script>
-    "use strict";
-
-    const UPSCALE_FACTOR = 1;
-    const MAP_WIDTH_PIXELS = 1280;
-    const MAP_HEIGHT_PIXELS = 896;
-    const TILE_SIZE = 32;
-    const PATH_WIDTH = 3;
-  </script>
   <script type="text/javascript" src="js/definitions.js"></script>
   <script type="text/javascript" src="js/actions.js"></script>
   <script type="text/javascript" src="js/map.js"></script>
@@ -89,11 +82,33 @@
       var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;
       theGame.createMonster(ratStart, RAT);
 
+      function *generator() {
+        while(true) {
+          for (let actor in theGame.actors) {
+            let action = theGame.actors[actor].action;
+            console.log("update, actor:", actor);
+            // this will only work if each non-player character always selects
+            // a move (ie, restAction) and the players are the first elements of
+            // the actors array;
+            if (!action) {
+              yield false;
+            }
+            while(action) {
+              action = action.perform();
+              yield true;
+            }
+          }
+        }
+      }
+
+      var updater = generator();
+
       var run = function() {
         theGame.isRunning = true;
         // set a maximum game rate
         if (new Date().getTime() >= theGame.nextGameTick) {
-          theGame.update();
+          updater.next();
+          console.log(updater.next().value);
           theGame.nextGameTick += theGame.skipTicks;
         }
         //gameContext.fillStyle = '#000000';
@@ -105,6 +120,7 @@
         //theGame.update();
         window.requestAnimationFrame(run);
       };
+
 
       run();
     }

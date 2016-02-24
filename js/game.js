@@ -77,6 +77,7 @@ class Game {
   update() {
     for (let actor in this.actors) {
       let action = this.actors[actor].action;
+      console.log("update, actor:", actor);
       // this will only work if each non-player character always selects
       // a move (ie, restAction) and the players are the first elements of
       // the actors array;

@@ -32,6 +32,12 @@ const ENEMY_NAMES = [ "Rat",
                       "Werewolf",
                       "Golem",
                       "Demon" ];
+                      
+const UPSCALE_FACTOR = 1;
+const MAP_WIDTH_PIXELS = 1280;
+const MAP_HEIGHT_PIXELS = 896;
+const TILE_SIZE = 32;
+const PATH_WIDTH = 3;
 
 const RAT = 0;
 const SPIDERS = 1;
