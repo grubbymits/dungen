@@ -3,7 +3,11 @@
 class Hero extends Actor {
   constructor(health, energy, position, sprite, game) {
     super(health, energy, position, sprite, game);
+    this.equipWeapon = null;
+    this.equipArmour = null;
+    this.equipShield = null;
     this.equipArrows = null;
+    
     this.kind = HERO;
     this.isFollowing = false;
     this.leader = null;
@@ -17,6 +21,15 @@ class Hero extends Actor {
   }
   get weapon() {
     return this.equipWeapon;
+  }
+  get shield() {
+    return this.equipShield;
+  }
+  get helmet() {
+    return this.equipHelmet;
+  }
+  get ring() {
+    return this.equipRing;
   }
   get projectileRange() {
     return 0;
@@ -32,6 +45,16 @@ class Hero extends Actor {
   }
   get range() {
     return this.equipWeapon.range;
+  }
+  get physicalDefense() {
+    var total = 0;
+    if (this.equipArmour) {
+      total += this.equipArmour.defense;
+    }
+    if (this.equipHelmet) {
+      total += this.equipHelmet.defense;
+    }
+    return total;
   }
   get action() {
     if (this.isFollowing) {
@@ -74,15 +97,6 @@ class Knight extends Hero {
     this.equipWeapon = basicSword;
     this.equipShield = basicShield;
   }
-  get helmet() {
-    return this.equipHelmet;
-  }
-  get shield() {
-    return this.equipShield;
-  }
-  get physicalDefense() {
-    return this.equipArmour.defense + this.equipHelmet.defense;
-  }
 }
 
 class Mage extends Hero {
@@ -91,9 +105,11 @@ class Mage extends Hero {
     console.log("creating mage");
     this.equipArmour = basicArmour;
     this.equipWeapon = basicStaff;
+    this.equipCrystalBall = crystalBall;
+    //this.equipRing = basicRing;
   }
-  get physicalDefense() {
-    return this.equipArmour.defense;
+  get magicBall() {
+    return this.equipCrystalBall;
   }
 }
 

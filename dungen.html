@@ -13,12 +13,13 @@
     <audio id="hitSound" src="res/audio/hit.ogg"></audio>
     <div class="fixed-action-btn horizontal click-to-toggle" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large orange">
-        <i class="large material-icons">accessibility</i>
+        <i class="large material-icons">gamepad</i>
       </a>
       <ul>
-        <li><a class="btn-floating orange" id="rest_button"><i class="material-icons">update</i></a></li>
+        <li><a class="btn-floating orange" id="hud_button"><i class="material-icons">accessibility</i></a></li>
         <li><a class="btn-floating orange "><i class="material-icons">people</i></a></li>
-        <li><a class="btn-floating orange "><i class="material-icons">security</i></a></li>
+        <li><a class="btn-floating orange" id="rest_button"><i class="material-icons">update</i></a></li>
+        <li><a class="btn-floating orange" ><i class="material-icons">security</i></a></li>
         <li><a class="btn-floating orange "><i class="material-icons">healing</i></a></li>
       </ul>
     </div>
@@ -72,7 +73,7 @@
       var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
       var knight = theGame.createHero(startPos, playerType);
       //startPos = theGame.map.getLocation((theGame.map.width / 2)-1, theGame.map.height / 2).vec;
-      //var wizard = theGame.createHero(startPos, WIZARD);
+      //var wizard = theGame.createHero(startPos, MAGE);
       //wizard.follow(knight);
 
       var player = new Player(knight);
@@ -115,7 +116,9 @@
         //gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
         theGame.renderMap();
         theGame.renderActors();
-        //UI.renderHUD();
+        if (UI.hudVisible) {
+          UI.renderHUD();
+        }
         // update game logic
         //theGame.update();
         window.requestAnimationFrame(run);

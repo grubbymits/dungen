@@ -36,6 +36,7 @@ var basicHelmet = new Armour("basic helmet", helmetSprites[0],
 var basicArmour = new Armour("basic armour", armourSprites[0],
                              3, NORMAL);
 
+var crystalBall = new Item("crystal ball", crystalBallSprite);
 
 var swords = [ new Weapon("first sword",    swordSprites[0], 2, 3, 1, NORMAL),
                new Weapon("second sword",   swordSprites[1], 4, 3, 2, NORMAL),

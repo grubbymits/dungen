@@ -196,3 +196,5 @@ var spellSprites = [ new Sprite(spriteSheet, 0, 17, 32, 32),
                      new Sprite(spriteSheet, 6, 17, 32, 32),
                      new Sprite(spriteSheet, 7, 17, 32, 32),
                     ];
+                    
+var crystalBallSprite = new Sprite(spriteSheet, 7, 18, 32, 32);
