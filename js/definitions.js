@@ -34,8 +34,8 @@ const ENEMY_NAMES = [ "Rat",
                       "Demon" ];
                       
 const UPSCALE_FACTOR = 1;
-const MAP_WIDTH_PIXELS = 1280;
-const MAP_HEIGHT_PIXELS = 896;
+const MAP_WIDTH_PIXELS = 2560;
+const MAP_HEIGHT_PIXELS = 2560;
 const TILE_SIZE = 32;
 const PATH_WIDTH = 3;
 

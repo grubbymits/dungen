@@ -28,6 +28,7 @@
   <script type="text/javascript" src="js/definitions.js"></script>
   <script type="text/javascript" src="js/actions.js"></script>
   <script type="text/javascript" src="js/map.js"></script>
+  <script type="text/javascript" src="js/gen.js"></script>
   <script type="text/javascript" src="js/sprite.js"></script>
   <script type="text/javascript" src="js/item.js"></script>
   <script type="text/javascript" src="js/actor.js"></script>
@@ -68,6 +69,11 @@
 
       var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
       console.log("theGame = ", theGame);
+      var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
+                                    MAP_HEIGHT_PIXELS / TILE_SIZE, 0, 0);
+      mapGen.placeRooms(12);
+      mapGen.drawRooms(gameContext);
+      return;
 
 
       var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
