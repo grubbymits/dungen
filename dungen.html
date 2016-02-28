@@ -72,6 +72,7 @@
       var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
                                     MAP_HEIGHT_PIXELS / TILE_SIZE, 0, 0);
       mapGen.placeRooms(12);
+      mapGen.createGraph();
       mapGen.drawRooms(gameContext);
       return;
 
