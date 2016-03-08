@@ -12,6 +12,9 @@ class Hero extends Actor {
     this.isFollowing = false;
     this.leader = null;
     this.nextAction = null;
+    this.lvl = 1;
+    this.currentExp = 0;
+    this.expToNextLvl = 2;
   }
   get armour() {
     return this.equipArmour;
@@ -72,14 +75,19 @@ class Hero extends Actor {
     return this.nextAction;
   }
   reduceHealth(enemy, damage) {
-    console.log(ENEMY_NAMES[enemy.index], "attacking hero for ", damage);
     this.currentHealth -= damage;
-    console.log("hero health:", this.currentHealth);
     this.game.map.setDirty(this.position);
     this.currentSprite = this.damageSprite;
     if (this.isFollowing) {
       this.setAttack(enemy);
       this.nextAction = this.attack;
+    }
+  }
+  increaseExp(exp) {
+    this.currentExp += exp;
+    if (this.currentExp >= this.expToNextLvl) {
+      this.lvl++;
+      this.expToNextLvl *= 1.5;
     }
   }
 

@@ -58,7 +58,7 @@ class Monster extends Actor {
 class Rat extends Monster {
   constructor(position, game) {
     super(5, 4, 4,
-          1, NORMAL, 1,
+          6, NORMAL, 1,
           0, 0, 0,
           1,
           1,
@@ -70,7 +70,7 @@ class Rat extends Monster {
 class Spiders extends Monster {
   constructor(position, game) {
     super(8, 3, 2,
-          2, NORMAL, 1,
+          7, NORMAL, 1,
           0, 0, 0,
           5,
           2,
@@ -84,7 +84,7 @@ class Spiders extends Monster {
 class Lizard extends Monster {
   constructor(position, game) {
     super(15, 4, 3,
-          2, NORMAL, 1,
+          8, NORMAL, 1,
           0, 0, 0,
           7,
           3,
@@ -98,7 +98,7 @@ class Lizard extends Monster {
 class SpiderChampion extends Monster {
   constructor(position, game) {
     super(20, 4, 3,
-          3, NORMAL, 2,
+          10, NORMAL, 2,
           0, 0, 0,
           8,
           3,

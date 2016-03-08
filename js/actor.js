@@ -30,6 +30,9 @@ class Actor extends Entity {
     this.maxHealth = health;
     this.currentEnergy = energy;
     this.maxEnergy = energy;
+    this.meleeAttackRange = 3;
+    this.level = 1;
+    
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.attack = new Attack(this);
@@ -39,8 +42,6 @@ class Actor extends Entity {
     this.destination = null;
     this.currentPath = [];
     this.rangeAttack = null;
-    this.meleeAttackRange = 3;
-    this.level = 1;
   }
   get action() {
     //this.currentSprite = this.sprite;
