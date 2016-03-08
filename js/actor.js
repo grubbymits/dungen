@@ -40,6 +40,7 @@ class Actor extends Entity {
     this.currentPath = [];
     this.rangeAttack = null;
     this.meleeAttackRange = 3;
+    this.level = 1;
   }
   get action() {
     //this.currentSprite = this.sprite;
@@ -87,11 +88,8 @@ class Actor extends Entity {
   }
   setDestination(x, y) {
     let target = this.game.map.getEntity(x, y);
-    console.log("set destination:", x, y);
     if (target) {
-      console.log("found entity at destination");
       if (target.kind != this.kind) {
-        console.log("kind is different");
         this.attack.target = target;
         this.nextAction = this.attack;
         return;

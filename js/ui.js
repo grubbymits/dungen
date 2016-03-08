@@ -27,13 +27,18 @@ class Interface {
   }
 
   renderHUD() {
+    var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
+    var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
+    this.hudContext.fillStyle = "rgba(50, 75, 75, 0.8)";
+    this.hudContext.fillRect(0, 0, this.hud.width, this.hud.height);
+
     for (let i in this.player.heroes) {
       let hero = this.player.heroes[i];
       let offsetX = TILE_SIZE;
       let offsetY = TILE_SIZE + (TILE_SIZE * 2 * i);
-      
-      hero.sprite.render(TILE_SIZE, offsetY, this.hudContext);
-      
+
+      hero.sprite.render(offsetX, offsetY, this.hudContext);
+
       if (hero.weapon) {
         hero.weapon.sprite.render(offsetX + 2 * TILE_SIZE, offsetY, this.hudContext);
       }
@@ -49,6 +54,18 @@ class Interface {
       if (hero.helmet) {
         hero.helmet.sprite.render(offsetX + 8 * TILE_SIZE, offsetY, this.hudContext);
       }
+      this.hudContext.font = "16px Droid Sans";
+      this.hudContext.fillStyle = "green";
+      this.hudContext.textAlign = "left";
+      this.hudContext.fillText("Lvl:" + hero.level,
+                               offsetX + 11 * TILE_SIZE,
+                               offsetY);
+      this.hudContext.fillText("Health:" + hero.currentHealth + "/" + hero.maxHealth,
+                               offsetX + 11 * TILE_SIZE,
+                               offsetY + TILE_SIZE);
+      this.hudContext.fillText("Energy:" + hero.currentEnergy + "/" + hero.maxEnergy,
+                               offsetX + 11 * TILE_SIZE,
+                               offsetY + 2 * TILE_SIZE);
     }
   }
 
@@ -59,7 +76,7 @@ class Interface {
     let y = Math.floor((event.clientY + offsetY) / TILE_SIZE);
     this.player.setDestination(x, y);
   }
-  
+
   controlHUD(event) {
     if (!this.hudVisible) {
       this.hud.style.visibility = 'visible';
