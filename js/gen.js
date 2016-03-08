@@ -200,7 +200,7 @@ class MapGenerator {
     // any of those line intersect the path between the parent and child.
     let dx = child.pos.x - parent.pos.x;
     let dy = child.pos.y - parent.pos.y;
-    
+
   }
   refineGraph() {
     // For each connection, check whether it intersects a different room(s)
@@ -215,7 +215,6 @@ class MapGenerator {
           if (intersect == parent || intersect == child) {
             continue;
           }
-          if (intersect.)
         }
       }
     }

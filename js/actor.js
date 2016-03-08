@@ -22,8 +22,10 @@ class Entity {
 }
 
 class Actor extends Entity {
-  constructor(health, energy, position, sprite, game) {
+  constructor(health, energy, position, sprite, damageSprite, game) {
     super(position, true, sprite, game);
+    this.damageSprite = damageSprite;
+    this.currentSprite = this.sprite;
     this.currentHealth = health;
     this.maxHealth = health;
     this.currentEnergy = energy;
@@ -40,10 +42,11 @@ class Actor extends Entity {
     this.meleeAttackRange = 3;
   }
   get action() {
-    return this.nextAction;
+    //this.currentSprite = this.sprite;
+    //return this.nextAction;
   }
   render() {
-    this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
+    this.currentSprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
     this.game.context.fillStyle = 'red';
     let healthBar = (this.currentHealth / this.maxHealth) * TILE_SIZE;
     this.game.context.fillRect(this.pos.x * TILE_SIZE, (this.pos.y * TILE_SIZE), healthBar, 1);

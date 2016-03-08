@@ -75,7 +75,6 @@ class DealMeleeDamage extends Action {
     super(actor);
   }
   perform() {
-    console.log("dealing melee damage");
     let power = this.actor.meleeAtkPower;
     let type = this.actor.meleeAtkType;
     let defense = this.targetActor.physicalDefense;
@@ -132,7 +131,6 @@ class MeleeAttack extends Action {
     //} else {
     let energyRequired = this.actor.meleeAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
-      console.log("not enough energy to perform MeleeAttack");
       return this.actor.rest;
     }
     this.dealDamage.target = this.targetActor;

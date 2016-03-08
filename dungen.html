@@ -71,19 +71,19 @@
       console.log("theGame = ", theGame);
       var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
                                     MAP_HEIGHT_PIXELS / TILE_SIZE, 0, 0);
-      mapGen.placeRooms(12);
-      mapGen.createGraph();
-      mapGen.drawRooms(gameContext);
-      return;
+      //mapGen.placeRooms(12);
+      //mapGen.createGraph();
+      //mapGen.drawRooms(gameContext);
+      //return;
 
 
       var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
-      var knight = theGame.createHero(startPos, playerType);
+      var character = theGame.createHero(startPos, playerType);
       //startPos = theGame.map.getLocation((theGame.map.width / 2)-1, theGame.map.height / 2).vec;
       //var wizard = theGame.createHero(startPos, MAGE);
       //wizard.follow(knight);
 
-      var player = new Player(knight);
+      var player = new Player(character);
       var UI = new Interface(player);
       //player.addHero(wizard);
 
@@ -91,20 +91,23 @@
       theGame.createMonster(ratStart, RAT);
 
       function *generator() {
+        let actor = 0;
         while(true) {
-          for (let actor in theGame.actors) {
-            let action = theGame.actors[actor].action;
-            console.log("update, actor:", actor);
-            // this will only work if each non-player character always selects
-            // a move (ie, restAction) and the players are the first elements of
-            // the actors array;
-            if (!action) {
-              yield false;
-            }
-            while(action) {
-              action = action.perform();
-              yield true;
-            }
+          let updateActor = false;
+          let action = theGame.actors[actor].action;
+          // this will only work if each non-player character always selects
+          // a move (ie, restAction) and the players are the first elements of
+          // the actors array;
+          if (!action) {
+            yield false;
+          }
+          while(action) {
+            action = action.perform();
+            yield true;
+            updateActor = true;
+          }
+          if (updateActor) {
+            actor = (actor + 1) % theGame.actors.length;
           }
         }
       }
@@ -118,16 +121,12 @@
           updater.next();
           console.log(updater.next().value);
           theGame.nextGameTick += theGame.skipTicks;
+          theGame.renderMap();
+          theGame.renderActors();
         }
-        //gameContext.fillStyle = '#000000';
-        //gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
-        theGame.renderMap();
-        theGame.renderActors();
         if (UI.hudVisible) {
           UI.renderHUD();
         }
-        // update game logic
-        //theGame.update();
         window.requestAnimationFrame(run);
       };
 

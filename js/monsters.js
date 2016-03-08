@@ -6,8 +6,8 @@ class Monster extends Actor {
               rangeAtkPower, rangeAtkType, rangeAtkEnergy,
               defense,
               xp,
-              position, sprite, game) {
-    super(health, energy, position, sprite, game);
+              position, sprite, damageSprite, game) {
+    super(health, energy, position, sprite, damageSprite, game);
     this.level = this.game.level;
     this.exp = xp * this.level;
     this.range = range;
@@ -24,6 +24,7 @@ class Monster extends Actor {
     this.kind = MONSTER;
   }
   get action() {
+    this.currentSprite = this.sprite;
     if (this.currentEnergy <= 0) {
       return this.rest;
     } else if (this.nextAction === null) {
@@ -48,6 +49,7 @@ class Monster extends Actor {
     this.currentHealth -= damage;
     console.log(ENEMY_NAMES[this.index],"health now:", this.currentHealth);
     this.setAttack(enemy);
+    this.currentSprite = this.damageSprite;
     // set dirty so the health bar is redrawn
     this.game.map.setDirty(this.position);
   }
@@ -60,7 +62,7 @@ class Rat extends Monster {
           0, 0, 0,
           1,
           1,
-          position, ratSprite, game);
+          position, ratSprite, damageRatSprite, game);
     this.index = RAT;
   }
 }
@@ -72,7 +74,7 @@ class Spiders extends Monster {
           0, 0, 0,
           5,
           2,
-          position, spidersSprite, game);
+          position, spidersSprite, damageSpidersSprite, game);
     this.index = SPIDERS;
     this.meleeAttackPower = 2;
     this.meleeAttack = new MeleeAttack(this);
@@ -86,7 +88,7 @@ class Lizard extends Monster {
           0, 0, 0,
           7,
           3,
-          position, lizardSprite, game);
+          position, lizardSprite, damageLizardSprite, game);
     this.index = LIZARD;
     this.meleeAttackPower = 4;
     this.meleeAttack = new MeleeAttack(this);
@@ -100,7 +102,7 @@ class SpiderChampion extends Monster {
           0, 0, 0,
           8,
           3,
-          position, bigSpiderSprite, game);
+          position, bigSpiderSprite, damageBigSpiderSprite, game);
     this.index = SPIDER_CHAMPION;
     this.meleeAttackPower = 5;
     this.meleeAttack = new MeleeAttack(this);

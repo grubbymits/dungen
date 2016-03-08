@@ -9,7 +9,7 @@ const STAFF_OFFEST = 14;
 const PLAYER_OFFSET = 18;
 const ENEMY_OFFSET = 19;
 
-const TOTAL_NUM_SHEETS = 1;
+const TOTAL_NUM_SHEETS = 2;
 
 SpriteSheet.totalLoaded = 0;
 SpriteSheet.prototype.image;
@@ -22,7 +22,7 @@ function SpriteSheet(name) {
   this.image.addEventListener('load', this.onLoad);
 
   if (name) {
-    this.image.src = name + ".png";
+    this.image.src = "res/img/" + name + ".png";
     this.name = name;
   }
   else {
@@ -67,6 +67,7 @@ class Sprite {
 }
 
 var spriteSheet = new SpriteSheet('tileset');
+var redSpriteSheet = new SpriteSheet('tileset-red');
 var tileSprites = [ new Sprite(spriteSheet, 1, 1, 32, 32),
                     new Sprite(spriteSheet, 1, 0, 32, 32),
                     new Sprite(spriteSheet, 2, 2, 32, 32)];
@@ -78,6 +79,42 @@ var archerSprite = new Sprite(spriteSheet, 4, 18, 32, 32);
 var knightSprite = new Sprite(spriteSheet, 5, 18, 32, 32);
 var wizardSprite = new Sprite(spriteSheet, 6, 18, 32, 32);
 var blackMageSprite = new Sprite(spriteSheet, 7, 18, 32, 32);
+
+var damageKnightSprite = new Sprite(redSpriteSheet, 5, 18, 32, 32);
+var damageWizardSprite = new Sprite(redSpriteSheet, 6, 18, 32, 32);
+
+var damageRatSprite = new Sprite(redSpriteSheet, 0, 19, 32, 32);
+var damageSpidersSprite = new Sprite(redSpriteSheet, 1, 19, 32, 32);
+var damageLizardSprite = new Sprite(redSpriteSheet, 2, 19, 32, 32);
+var damageBigSpiderSprite = new Sprite(redSpriteSheet, 3, 19, 32, 32);
+var damageToadSprite = new Sprite(redSpriteSheet, 4, 19, 32, 32);
+var damageScarabSprite = new Sprite(redSpriteSheet, 5, 19, 32, 32);
+var damageCentipedeSprite = new Sprite(redSpriteSheet, 6, 19, 32, 32);
+var damageSerpentSprite = new Sprite(redSpriteSheet, 7, 19, 32, 32);
+var damageMushroomSprite = new Sprite(redSpriteSheet, 0, 20, 32, 32);
+var damageRabbitSprite = new Sprite(redSpriteSheet, 1, 20, 32, 32);
+var damageBatSprite = new Sprite(redSpriteSheet, 2, 20, 32, 32);
+var damageBigBatSprite = new Sprite(redSpriteSheet, 3, 20, 32, 32);
+var damageSnakeSprite = new Sprite(redSpriteSheet, 4, 20, 32, 32);
+var damageWolfSprite = new Sprite(redSpriteSheet, 5, 20, 32, 32);
+var damageBoarSprite = new Sprite(redSpriteSheet, 6, 20, 32, 32);
+var damageBearSprite = new Sprite(redSpriteSheet, 7, 20, 32, 32);
+var damageSlimesSprite = new Sprite(redSpriteSheet, 0, 21, 32, 32);
+var damageBigSlimeSprite = new Sprite(redSpriteSheet, 1, 21, 32, 32);
+var damageScorpionSprite = new Sprite(redSpriteSheet, 2, 21, 32, 32);
+var damageKrakenSprite = new Sprite(redSpriteSheet, 3, 21, 32, 32);
+var damageVampireSprite = new Sprite(redSpriteSheet, 4, 21, 32, 32);
+var damageMummySprite = new Sprite(redSpriteSheet, 5, 21, 32, 32);
+var damageWraithSprite = new Sprite(redSpriteSheet, 6, 21, 32, 32);
+var damageCarabiaSprite = new Sprite(redSpriteSheet, 7, 21, 32, 32);
+var damageGoblinSprite = new Sprite(redSpriteSheet, 0, 22, 32, 32);
+var damageZombieSprite = new Sprite(redSpriteSheet, 1, 22, 32, 32);
+var damageUndeadSprite = new Sprite(redSpriteSheet, 2, 22, 32, 32);
+var damageOrcSprite = new Sprite(redSpriteSheet, 3, 22, 32, 32);
+var damagecyclopsSprite = new Sprite(redSpriteSheet, 4, 22, 32, 32);
+var damageWerewolfSprite = new Sprite(redSpriteSheet, 5, 22, 32, 32);
+var damageGolemSprite = new Sprite(redSpriteSheet, 6, 22, 32, 32);
+var damageDemonSprite = new Sprite(redSpriteSheet, 7, 22, 32, 32);
 
 var ratSprite = new Sprite(spriteSheet, 0, 19, 32, 32);
 var spidersSprite = new Sprite(spriteSheet, 1, 19, 32, 32);
@@ -196,5 +233,5 @@ var spellSprites = [ new Sprite(spriteSheet, 0, 17, 32, 32),
                      new Sprite(spriteSheet, 6, 17, 32, 32),
                      new Sprite(spriteSheet, 7, 17, 32, 32),
                     ];
-                    
+
 var crystalBallSprite = new Sprite(spriteSheet, 7, 18, 32, 32);
