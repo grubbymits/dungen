@@ -32,12 +32,21 @@ const ENEMY_NAMES = [ "Rat",
                       "Werewolf",
                       "Golem",
                       "Demon" ];
-                      
+
 const UPSCALE_FACTOR = 1;
 const MAP_WIDTH_PIXELS = 2560;
 const MAP_HEIGHT_PIXELS = 2560;
 const TILE_SIZE = 32;
 const PATH_WIDTH = 3;
+
+const CEILING = 0;
+const PATH = 1;
+const WALL = 2;
+const NORTH = 0;
+const EAST = 1;
+const SOUTH = 2;
+const WEST= 3;
+const MAX_DIRECTION = 4;
 
 const RAT = 0;
 const SPIDERS = 1;
@@ -82,6 +91,7 @@ const BLACK_MAGE = 7;
 
 const MONSTER = 0;
 const HERO = 1;
+const OBJECT = 2;
 
 const NORMAL = 0;
 const FIRE = 1;

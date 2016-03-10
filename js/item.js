@@ -56,3 +56,65 @@ var swords = [ new Weapon("first sword",    swordSprites[0], 2, 3, 1, NORMAL),
 // Tyrfing - cursed sword of Odin's grandson
 // Ridill - possessed by a dwarf named Regin
 // Kusanagi - amaterasu sword
+
+class Chest extends Entity {
+  constructor(position, game) {
+    super(position, true, chestSprites[0], OBJECT, game);
+  }
+  pickTreasure() {
+    // treasure, there are 4 types
+    type = Math.random();
+    if (type < 0.5) {
+
+    } else if (type < 0.75) {
+
+    } else if (type < 0.88) {
+
+    } else {
+
+    }
+  }
+  pickPotion() {
+    // potion, there are 8 types.
+  }
+  pickEquipment() {
+    // equipment, there are 10 types including spells and jewelry.
+    type = Math.random();
+    if (type < 0.1) {
+
+    } else if (type < 0.2) {
+
+    } else if (type < 0.3) {
+
+    } else if (type < 0.4) {
+
+    } else if (type < 0.5) {
+
+    } else if (type < 0.6) {
+
+    } else if (type < 0.7) {
+
+    } else if (type < 0.8) {
+
+    } else if (type < 0.9) {
+
+    } else {
+
+    }
+  }
+  interact(actor) {
+    this.sprite = chestSprites[1];
+    // randomly choose contained item, its normally going to be a potion or
+    // treasure and for weapons and armour it is more likely to be a lesser
+    // item rather than the best of its class.
+    let type = Math.random();
+    let item = null;
+    if (type < 0.333) {
+      item = this.pickTreasure();
+    } else if (type < 0.667) {
+      item = this.pickPotion();
+    } else {
+      item = this.pickEquipment();
+    }
+  }
+}

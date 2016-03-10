@@ -19,7 +19,7 @@ class Game {
     for (var x = 0; x < this.theMap.xMax; x++) {
       for (var y = 0; y < this.theMap.yMax; y++) {
         let loc = this.map.getLocation(x,y);
-        if (loc.dirty) {
+        if (loc.dirty && loc.type != PATH) {
           this.context.fillStyle = '#000000';
           this.context.fillRect(x * TILE_SIZE, y * TILE_SIZE,
                                 TILE_SIZE, TILE_SIZE);

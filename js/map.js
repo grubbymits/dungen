@@ -1,14 +1,5 @@
 "use strict";
 
-const CEILING = 0;
-const PATH = 1;
-const WALL = 2;
-const NORTH = 0;
-const EAST = 1;
-const SOUTH = 2;
-const WEST= 3;
-const MAX_DIRECTION = 4;
-
 class Vec {
   constructor(x, y) {
     this.x = x;

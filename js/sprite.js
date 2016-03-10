@@ -69,7 +69,7 @@ class Sprite {
 var spriteSheet = new SpriteSheet('tileset');
 var redSpriteSheet = new SpriteSheet('tileset-red');
 var tileSprites = [ new Sprite(spriteSheet, 1, 1, 32, 32),
-                    new Sprite(spriteSheet, 1, 0, 32, 32),
+                    new Sprite(spriteSheet, 0, 1, 32, 32),
                     new Sprite(spriteSheet, 2, 2, 32, 32)];
 
 var rogueSprite = new Sprite(spriteSheet, 0, 18, 32, 32);

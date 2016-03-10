@@ -80,30 +80,11 @@ class DealMeleeDamage extends Action {
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
     let damage = Math.round(power * (1 / defense)); //* (1 / elemDefense);
-    this.targetActor.reduceHealth(this.actor, damage);
 
+    this.targetActor.reduceHealth(this.actor, damage);
     document.getElementById("hitSound").play();
-    /*
-    let infoBox = document.getElementById("info");
-    if (this.actor.kind == HERO) {
-      infoBox.textContent = "Player attacks " +
-                            ENEMY_NAMES[this.targetActor.index] + " for " +
-                            damage;
-    } else {
-      infoBox.textContent = ENEMY_NAMES[this.actor.index] +
-                            " attacks Player for " + damage;
-    }*/
 
     if (this.targetActor.health <= 0) {
-      /*
-      if (this.actor.kind == HERO) {
-        infoBox.textContent = "Player kills " +
-                              ENEMY_NAMES[this.targetActor.index]
-                              + " and gains " + this.targetActor.exp + " exp";
-      } else {
-        infoBox.textContent = ENEMY_NAMES[this.targetActor.index] +
-                              " kills Player";
-      }*/
       if (this.actor.increaseExp !== null) {
         console.log("increaseExp by", this.targetActor.exp);
         this.actor.increaseExp(this.targetActor.exp);
@@ -159,22 +140,15 @@ class Attack extends Action {
 
   perform() {
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
-    console.log("perform attack");
-    console.log("target distance =", targetDistance);
-    console.log("meleeRange = ", this.actor.meleeRange);
     // if target is in range, we can return an attack action,
     // otherwise we should return a walkaction to get closer.
     if (this.actor.meleeRange >= targetDistance) {
       this.actor.meleeAttack.target = this.targetActor;
-      console.log("returning melee attack");
       return this.actor.meleeAttack;
     } else if (this.actor.projectileRange >= targetDistance) {
       this.actor.rangeAttack.target = this.targetActor;
-      console.log("returning range attack");
       return this.actor.rangeAttack;
     } else {
-      //this.actor.setDestination(this.targetActor.pos.x, this.targetActor.pos.y);
-      console.log("returning walk");
       this.actor.walk.dest = this.targetActor.pos;
       return this.actor.walk;
     }
@@ -244,25 +218,14 @@ class FindTarget extends Action {
   }
 }
 
-class Spell {
-  constructor(type, range, radius, mana) {
-    this.type = type;
-    this.range = range;
-    this.radius = radius;
-    this.mana = mana;
-  }
-}
-
-class CastSpell extends Action {
+class Interact extends Action {
   constructor(actor) {
     super(actor);
   }
-}
-
-class CastRangedSpell extends Action {
-
-}
-
-class RadialSpell extends Action {
-
+  bindObject(obj) {
+    this.obj = obj;
+  }
+  perform() {
+    this.obj.interact(this.actor);
+  }
 }

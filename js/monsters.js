@@ -7,7 +7,7 @@ class Monster extends Actor {
               defense,
               xp,
               position, sprite, damageSprite, game) {
-    super(health, energy, position, sprite, damageSprite, game);
+    super(health, energy, position, sprite, damageSprite, MONSTER, game);
     this.level = this.game.level;
     this.exp = xp * this.level;
     this.range = range;
@@ -21,7 +21,6 @@ class Monster extends Actor {
     this.rangedttackEnergy = rangeAtkEnergy;
     this.physicalDefense = defense;
     this.projectileRange = 0;
-    this.kind = MONSTER;
   }
   get action() {
     this.currentSprite = this.sprite;

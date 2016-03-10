@@ -1,10 +1,11 @@
 "use strict";
 
 class Entity {
-  constructor(position, blocking, sprite, game) {
+  constructor(position, blocking, sprite, kind, game) {
     this.position = position;
     this.blocking = blocking;
     this.sprite = sprite;
+    this.kind = kind;
     this.game = game;
     this.game.map.placeEntity(this.position, this);
     console.log("place entity at:", position);
@@ -12,7 +13,6 @@ class Entity {
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
   }
-
   get pos() {
     return this.position;
   }
@@ -22,8 +22,8 @@ class Entity {
 }
 
 class Actor extends Entity {
-  constructor(health, energy, position, sprite, damageSprite, game) {
-    super(position, true, sprite, game);
+  constructor(health, energy, position, sprite, damageSprite, kind, game) {
+    super(position, true, sprite, kind, game);
     this.damageSprite = damageSprite;
     this.currentSprite = this.sprite;
     this.currentHealth = health;
@@ -32,7 +32,7 @@ class Actor extends Entity {
     this.maxEnergy = energy;
     this.meleeAttackRange = 3;
     this.level = 1;
-    
+
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.attack = new Attack(this);

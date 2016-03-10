@@ -2,13 +2,12 @@
 
 class Hero extends Actor {
   constructor(health, energy, position, sprite, damageSprite, game) {
-    super(health, energy, position, sprite, damageSprite, game);
+    super(health, energy, position, sprite, damageSprite, HERO, game);
     this.equipWeapon = null;
     this.equipArmour = null;
     this.equipShield = null;
     this.equipArrows = null;
 
-    this.kind = HERO;
     this.isFollowing = false;
     this.leader = null;
     this.nextAction = null;
