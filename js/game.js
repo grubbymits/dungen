@@ -7,7 +7,7 @@ class Game {
     this.context = context;
     this.level = 1;
     this.isRunning = false;
-    this.skipTicks = 1000 / 5;
+    this.skipTicks = 1000 / 10;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
@@ -46,16 +46,37 @@ class Game {
     this.actors.push(hero);
     return hero;
   }
-
   createMonster(pos, type) {
+    console.log("create monster of type:", type, "at", pos);
+    let monster = null;
     if (type == RAT) {
-      this.actors.push(new Rat(pos, this));
+      monster = new Rat(pos, this);
+    }
+    else if (type == SPIDERS) {
+      monster = new Spiders(pos, this);
+    }
+    else if (type == LIZARD) {
+      monster = new Lizard(pos, this);
+    }
+    else if (type == SPIDER_CHAMPION) {
+      monster = new SpiderChampion(pos, this);
+    }
+    this.actors.push(monster);
+    this.theMap.placeEntity(pos, monster);
+  }
+  placeMonsters(number) {
+    var monsters = 0;
+    while (monsters < number) {
+      let x = getBoundedRandom(1, this.theMap.xMax);
+      let y = getBoundedRandom(1, this.theMap.yMax);
+      let loc = this.theMap.getLocation(x, y);
+      if (!loc.isBlocked && !loc.isOccupied) {
+        type = getBoundedRandom(RAT, TOAD);
+        this.createMonster(loc.vec, type);
+        monsters++;
+      }
     }
   }
-
-  placeMonsters(number) {
-  }
-
   killActor(actor) {
     for (let index in this.actors) {
       if (this.actors[index] == actor) {

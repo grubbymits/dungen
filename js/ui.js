@@ -32,13 +32,13 @@ class Interface {
     //this.hudContext.fillStyle = "rgba(50, 75, 75, 0.8)";
     this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
-    this.hudContext.fillStyle = "green";
+    this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
 
     for (let i in this.player.heroes) {
       let hero = this.player.heroes[i];
-      let offsetX = TILE_SIZE;
-      let offsetY = TILE_SIZE + (TILE_SIZE * 2 * i);
+      let offsetX = TILE_SIZE * UPSCALE_FACTOR;
+      let offsetY = TILE_SIZE + (TILE_SIZE * 2 * i) * UPSCALE_FACTOR;
 
       hero.sprite.render(offsetX, offsetY, this.hudContext);
 
@@ -58,26 +58,26 @@ class Interface {
         hero.helmet.sprite.render(offsetX + 8 * TILE_SIZE, offsetY, this.hudContext);
       }
       this.hudContext.fillText("Lvl: " + hero.level,
-                               offsetX + 11 * TILE_SIZE,
+                               offsetX + 11 * TILE_SIZE * UPSCALE_FACTOR,
                                offsetY);
       this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
-                               offsetX + 11 * TILE_SIZE,
-                               offsetY + TILE_SIZE);
+                               offsetX + 11 * TILE_SIZE * UPSCALE_FACTOR,
+                               offsetY + TILE_SIZE * UPSCALE_FACTOR);
       this.hudContext.fillText("Health: " + hero.currentHealth + "/" + hero.maxHealth,
-                               offsetX + 11 * TILE_SIZE,
-                               offsetY + 2 * TILE_SIZE);
+                               offsetX + 11 * TILE_SIZE * UPSCALE_FACTOR,
+                               offsetY + 2 * TILE_SIZE * UPSCALE_FACTOR);
       this.hudContext.fillText("Energy: " + hero.currentEnergy + "/" + hero.maxEnergy,
-                               offsetX + 11 * TILE_SIZE,
-                               offsetY + 3 * TILE_SIZE);
+                               offsetX + 11 * TILE_SIZE * UPSCALE_FACTOR,
+                               offsetY + 3 * TILE_SIZE * UPSCALE_FACTOR);
       this.hudContext.fillText("Strength: " + hero.strength,
-                               offsetX + 11 * TILE_SIZE,
-                               offsetY + 4 * TILE_SIZE);
+                               offsetX + 11 * TILE_SIZE * UPSCALE_FACTOR,
+                               offsetY + 4 * TILE_SIZE * UPSCALE_FACTOR);
       this.hudContext.fillText("Agility: " + hero.agility,
-                               offsetX + 11 * TILE_SIZE,
-                               offsetY + 5 * TILE_SIZE);
+                               offsetX + 11 * TILE_SIZE * UPSCALE_FACTOR,
+                               offsetY + 5 * TILE_SIZE * UPSCALE_FACTOR);
       this.hudContext.fillText("Wisdom: " + hero.wisdom,
-                               offsetX + 11 * TILE_SIZE,
-                               offsetY + 6 * TILE_SIZE);
+                               offsetX + 11 * TILE_SIZE * UPSCALE_FACTOR,
+                               offsetY + 6 * TILE_SIZE * UPSCALE_FACTOR);
     }
   }
 

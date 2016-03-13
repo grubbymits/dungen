@@ -210,8 +210,6 @@ class GameMap {
     path.reverse();
     return path.splice(1);
   }
-
-
   placeTile(x, y, type, blocking) {
     // Check for out-of-bounds
     if (this.isOutOfRange(x, y)) {

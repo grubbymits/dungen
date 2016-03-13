@@ -68,10 +68,10 @@ class Rat extends Monster {
 
 class Spiders extends Monster {
   constructor(position, game) {
-    super(8, 3, 2,
+    super(8, 3, 3,
           7, NORMAL, 1,
           0, 0, 0,
-          5,
+          1,
           2,
           position, spidersSprite, damageSpidersSprite, game);
     this.index = SPIDERS;
@@ -82,10 +82,10 @@ class Spiders extends Monster {
 
 class Lizard extends Monster {
   constructor(position, game) {
-    super(15, 4, 3,
+    super(15, 4, 4,
           8, NORMAL, 1,
           0, 0, 0,
-          7,
+          3,
           3,
           position, lizardSprite, damageLizardSprite, game);
     this.index = LIZARD;

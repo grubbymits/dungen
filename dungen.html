@@ -28,6 +28,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.js"></script>
   <script type="text/javascript" src="js/definitions.js"></script>
+  <script type="text/javascript" src="js/util.js"></script>
   <script type="text/javascript" src="js/actions.js"></script>
   <script type="text/javascript" src="js/map.js"></script>
   <script type="text/javascript" src="js/gen.js"></script>
@@ -89,17 +90,13 @@
 
       var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
       var character = theGame.createHero(startPos, playerType);
-      //startPos = theGame.map.getLocation((theGame.map.width / 2)-1, theGame.map.height / 2).vec;
-      //var wizard = theGame.createHero(startPos, MAGE);
-      //wizard.follow(knight);
 
       var player = new Player(character);
       var UI = new Interface(player);
       theGame.addPlayer(player);
       //player.addHero(wizard);
 
-      var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;
-      theGame.createMonster(ratStart, RAT);
+      theGame.placeMonsters(10);
 
       function *generator() {
         let actor = 0;
