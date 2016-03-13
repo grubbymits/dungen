@@ -11,7 +11,6 @@ class Game {
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
-    console.log("isRunning = ", this.isRunning);
   }
 
   renderMap() {
@@ -19,10 +18,12 @@ class Game {
     for (var x = 0; x < this.theMap.xMax; x++) {
       for (var y = 0; y < this.theMap.yMax; y++) {
         let loc = this.map.getLocation(x,y);
-        if (loc.dirty && loc.type != PATH) {
+        if (loc.dirty) {
           this.context.fillStyle = '#000000';
-          this.context.fillRect(x * TILE_SIZE, y * TILE_SIZE,
-                                TILE_SIZE, TILE_SIZE);
+          this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
+                                y * TILE_SIZE * UPSCALE_FACTOR,
+                                TILE_SIZE * UPSCALE_FACTOR,
+                                TILE_SIZE * UPSCALE_FACTOR);
           var type = loc.type;
           tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
           loc.dirty = false;
@@ -30,7 +31,9 @@ class Game {
       }
     }
   }
-
+  addPlayer(player) {
+    this.player = player;
+  }
   createHero(pos, type) {
     var hero;
     if (type == KNIGHT) {
@@ -74,6 +77,7 @@ class Game {
     return this.theMap;
   }
 
+  /*
   update() {
     for (let actor in this.actors) {
       let action = this.actors[actor].action;
@@ -90,4 +94,5 @@ class Game {
     }
     return true;
   }
+  */
 }

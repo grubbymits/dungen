@@ -1,8 +1,12 @@
 "use strict";
 
 class Hero extends Actor {
-  constructor(health, energy, position, sprite, damageSprite, game) {
+  constructor(health, energy, strength, agility, wisdom,
+              position, sprite, damageSprite, game) {
     super(health, energy, position, sprite, damageSprite, HERO, game);
+    this.strength = strength;
+    this.agility = agility;
+    this.wisdom = wisdom;
     this.equipWeapon = null;
     this.equipArmour = null;
     this.equipShield = null;
@@ -100,20 +104,22 @@ class Hero extends Actor {
 
 class Knight extends Hero {
   constructor(health, energy, position, game) {
-    super(health, energy, position, knightSprite, damageKnightSprite, game);
-    this.equipArmour = basicArmour;
-    this.equipHelmet = basicHelmet;
-    this.equipWeapon = basicSword;
-    this.equipShield = basicShield;
+    super(health, energy, 10, 5, 3,
+          position, knightSprite, damageKnightSprite, game);
+    this.equipArmour = armours[ARMOUR0];
+    this.equipHelmet = helmets[HELMET0];
+    this.equipWeapon = swords[SWORD0];
+    this.equipShield = shields[SHIELD0];
   }
 }
 
 class Mage extends Hero {
   constructor(health, energy, position, game) {
-    super(health, energy, position, wizardSprite, damageMageSprite, game);
+    super(health, energy, 3, 5, 10,
+          position, wizardSprite, damageMageSprite, game);
     console.log("creating mage");
-    this.equipArmour = basicArmour;
-    this.equipWeapon = basicStaff;
+    this.equipArmour = armours[ARMOUR0];
+    this.equipWeapon = staffs[STAFF0];
     this.equipCrystalBall = crystalBall;
     //this.equipRing = basicRing;
   }

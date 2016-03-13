@@ -1,30 +1,66 @@
 "use strict";
 
 class Item {
-  constructor(name, sprite) {
-    this.name = name;
-    this.sprite = sprite;
+  constructor(type, subtype) {
+    this.type = type;
+    this.subtype = subtype;
+  }
+  get name() {
+    switch(this.type) {
+      case POTION:
+        return POTION_NAMES[this.subtype];
+      case SWORD:
+        return SWORD_NAMES[this.subtype];
+      case HELMET:
+        return HELMET_NAMES[this.subtype];
+      case ARMOUR:
+        return ARMOUR_NAMES[this.subtype];
+      case SHIELD:
+        return SHIELD_NAMES[this.subtype];
+      case STAFF:
+        return STAFF_NAMES[this.subtype];
+      case AXE:
+        return AXE_NAMES[this.subtype];
+    }
+  }
+  get sprite() {
+    switch(this.type) {
+      case POTION:
+        return potionSprites[this.subtype];
+      case SWORD:
+        return swordSprites[this.subtype];
+      case HELMET:
+        return helmetSprites[this.subtype];
+      case ARMOUR:
+        return armourSprites[this.subtype];
+      case SHIELD:
+        return shieldSprites[this.subtype];
+      case STAFF:
+        return staffSprites[this.subtype];
+      case AXE:
+        return axeSprites[this.subtype];
+    }
   }
 }
 
 class Weapon extends Item {
-  constructor(name, sprite, power, range, energy, type) {
-    super(name, sprite);
+  constructor(type, subtype, power, range, energy, elemType) {
+    super(type, subtype);
     this.power = power;
     this.range = range;
-    this.type = type;
+    this.elemType = elemType;
     this.energy = energy;
   }
 }
 
 class Armour extends Item {
-  constructor(name, sprite, defense, type) {
-    super(name, sprite);
+  constructor(type, subtype, defense, elemType) {
+    super(type, subtype);
     this.defense = defense;
-    this.type = type;
+    this.elemType = elemType;
   }
 }
-
+/*
 var basicSword = new Weapon("basic sword", swordSprites[0],
                             2, 3, 1, NORMAL);
 var basicStaff = new Weapon("basic staff", staffSprites[0],
@@ -35,17 +71,55 @@ var basicHelmet = new Armour("basic helmet", helmetSprites[0],
                              2, NORMAL);
 var basicArmour = new Armour("basic armour", armourSprites[0],
                              3, NORMAL);
+*/
 
 var crystalBall = new Item("crystal ball", crystalBallSprite);
 
-var swords = [ new Weapon("first sword",    swordSprites[0], 2, 3, 1, NORMAL),
-               new Weapon("second sword",   swordSprites[1], 4, 3, 2, NORMAL),
-               new Weapon("third sword",    swordSprites[2], 6, 3, 2, NORMAL),
-               new Weapon("fourth sword",   swordSprites[3], 10, 3, 3, NORMAL),
-               new Weapon("fifth sword",    swordSprites[4], 15, 3, 3, NORMAL),
-               new Weapon("sixth sword",    swordSprites[5], 20, 3, 4, NORMAL),
-               new Weapon("seventh sword",  swordSprites[6], 24, 3, 4, NORMAL),
-               new Weapon("eigth sword",    swordSprites[6], 30, 3, 5, NORMAL),
+var armours = [ new Armour(ARMOUR, ARMOUR0, 3, NORMAL),
+                new Armour(ARMOUR, ARMOUR1, 5, NORMAL),
+                new Armour(ARMOUR, ARMOUR2, 7, NORMAL),
+                new Armour(ARMOUR, ARMOUR3, 9, FIRE),
+                new Armour(ARMOUR, ARMOUR4, 11, NORMAL),
+                new Armour(ARMOUR, ARMOUR5, 13, ICE),
+                new Armour(ARMOUR, ARMOUR6, 15, NORMAL),
+                new Armour(ARMOUR, ARMOUR7, 17, ELECTRIC),
+              ];
+var helmets = [ new Armour(HELMET, HELMET0, 2, NORMAL),
+                new Armour(HELMET, HELMET1, 4, NORMAL),
+                new Armour(HELMET, HELMET2, 6, NORMAL),
+                new Armour(HELMET, HELMET3, 8, FIRE),
+                new Armour(HELMET, HELMET4, 10, NORMAL),
+                new Armour(HELMET, HELMET5, 12, ICE),
+                new Armour(HELMET, HELMET6, 14, NORMAL),
+                new Armour(HELMET, HELMET7, 16, ELECTRIC),
+              ];
+var shields = [ new Armour(SHIELD, SHIELD0, 2, NORMAL),
+                new Armour(SHIELD, SHIELD1, 4, NORMAL),
+                new Armour(SHIELD, SHIELD2, 6, NORMAL),
+                new Armour(SHIELD, SHIELD3, 8, FIRE),
+                new Armour(SHIELD, SHIELD4, 10, NORMAL),
+                new Armour(SHIELD, SHIELD5, 12, ICE),
+                new Armour(SHIELD, SHIELD6, 14, NORMAL),
+                new Armour(SHIELD, SHIELD7, 16, ELECTRIC),
+              ];
+var staffs = [ new Weapon(STAFF, STAFF0, 2, 3, 1, FIRE),
+               new Weapon(STAFF, STAFF1, 4, 3, 2, ICE),
+               new Weapon(STAFF, STAFF2, 6, 3, 2, ELECTRIC),
+               new Weapon(STAFF, STAFF3, 10, 3, 3, FIRE),
+               new Weapon(STAFF, STAFF4, 15, 3, 3, ICE),
+               new Weapon(STAFF, STAFF5, 20, 3, 4, ELECTRIC),
+               new Weapon(STAFF, STAFF6, 24, 3, 4, FIRE),
+               new Weapon(STAFF, STAFF7, 30, 3, 5, ICE),
+             ];
+
+var swords = [ new Weapon(SWORD, SWORD0, 2, 3, 1, NORMAL),
+               new Weapon(SWORD, SWORD1, 4, 3, 2, NORMAL),
+               new Weapon(SWORD, SWORD2, 6, 3, 2, NORMAL),
+               new Weapon(SWORD, SWORD3, 10, 3, 3, NORMAL),
+               new Weapon(SWORD, SWORD4, 15, 3, 3, NORMAL),
+               new Weapon(SWORD, SWORD5, 20, 3, 4, NORMAL),
+               new Weapon(SWORD, SWORD6, 24, 3, 4, NORMAL),
+               new Weapon(SWORD, SWORD7, 30, 3, 5, NORMAL),
              ];
 // https://en.wikipedia.org/wiki/List_of_mythological_objects
 // mimung - wudga inherits from his son Wayland the Smith
@@ -57,64 +131,18 @@ var swords = [ new Weapon("first sword",    swordSprites[0], 2, 3, 1, NORMAL),
 // Ridill - possessed by a dwarf named Regin
 // Kusanagi - amaterasu sword
 
-class Chest extends Entity {
-  constructor(position, game) {
-    super(position, true, chestSprites[0], OBJECT, game);
-  }
-  pickTreasure() {
-    // treasure, there are 4 types
-    type = Math.random();
-    if (type < 0.5) {
-
-    } else if (type < 0.75) {
-
-    } else if (type < 0.88) {
-
-    } else {
-
-    }
-  }
-  pickPotion() {
-    // potion, there are 8 types.
-  }
-  pickEquipment() {
-    // equipment, there are 10 types including spells and jewelry.
-    type = Math.random();
-    if (type < 0.1) {
-
-    } else if (type < 0.2) {
-
-    } else if (type < 0.3) {
-
-    } else if (type < 0.4) {
-
-    } else if (type < 0.5) {
-
-    } else if (type < 0.6) {
-
-    } else if (type < 0.7) {
-
-    } else if (type < 0.8) {
-
-    } else if (type < 0.9) {
-
-    } else {
-
-    }
-  }
-  interact(actor) {
-    this.sprite = chestSprites[1];
-    // randomly choose contained item, its normally going to be a potion or
-    // treasure and for weapons and armour it is more likely to be a lesser
-    // item rather than the best of its class.
-    let type = Math.random();
-    let item = null;
-    if (type < 0.333) {
-      item = this.pickTreasure();
-    } else if (type < 0.667) {
-      item = this.pickPotion();
-    } else {
-      item = this.pickEquipment();
-    }
+class Potion extends Item {
+  constructor(kind) {
+    super(POTION_NAMES[kind], potionSprites[kind]);
   }
 }
+
+var potions = [ new Potion(BASIC_HEALTH_POTION),
+                new Potion(ENERGY_POTION),
+                new Potion(DEFENSE_POTION),
+                new Potion(BIG_HEALTH_POTION),
+                new Potion(AGILITY_POTION),
+                new Potion(STRENGTH_POTION),
+                new Potion(WISDOM_POTION),
+                new Potion(INVINCIBILITY_POTION),
+              ];

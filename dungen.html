@@ -67,15 +67,15 @@
       } else if (gameCanvas.mozRequestFullScreen) {
         gameCanvas.mozRequestFullScreen();
       }
-      gameCanvas.width = MAP_WIDTH_PIXELS;
-      gameCanvas.height = MAP_HEIGHT_PIXELS;
+      gameCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
+      gameCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
       gameCanvas.style.position = 'absolute';
       gameCanvas.style.zIndex = '-1';
       gameCanvas.style.left = '0px';
       gameCanvas.style.top = '0px';
       var gameContext = gameCanvas.getContext("2d");
       gameContext.fillStyle = '#000000';
-      gameContext.fillRect(0, 0, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
+      gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
       var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
       console.log("theGame = ", theGame);
@@ -95,6 +95,7 @@
 
       var player = new Player(character);
       var UI = new Interface(player);
+      theGame.addPlayer(player);
       //player.addHero(wizard);
 
       var ratStart = theGame.map.getLocation(theGame.map.width / 4, theGame.map.height / 4).vec;

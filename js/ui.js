@@ -69,14 +69,23 @@ class Interface {
       this.hudContext.fillText("Energy: " + hero.currentEnergy + "/" + hero.maxEnergy,
                                offsetX + 11 * TILE_SIZE,
                                offsetY + 3 * TILE_SIZE);
+      this.hudContext.fillText("Strength: " + hero.strength,
+                               offsetX + 11 * TILE_SIZE,
+                               offsetY + 4 * TILE_SIZE);
+      this.hudContext.fillText("Agility: " + hero.agility,
+                               offsetX + 11 * TILE_SIZE,
+                               offsetY + 5 * TILE_SIZE);
+      this.hudContext.fillText("Wisdom: " + hero.wisdom,
+                               offsetX + 11 * TILE_SIZE,
+                               offsetY + 6 * TILE_SIZE);
     }
   }
 
   onClick(event) {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
-    let x = Math.floor((event.clientX + offsetX) / TILE_SIZE);
-    let y = Math.floor((event.clientY + offsetY) / TILE_SIZE);
+    let x = Math.floor((event.clientX + offsetX) / TILE_SIZE / UPSCALE_FACTOR);
+    let y = Math.floor((event.clientY + offsetY) / TILE_SIZE / UPSCALE_FACTOR);
     this.player.setDestination(x, y);
   }
 

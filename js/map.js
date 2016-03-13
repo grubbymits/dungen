@@ -57,6 +57,7 @@ class GameMap {
         this.locations[x][y] = new Location(true, null, CEILING, x, y);
       }
     }
+    console.log("constructed and initialised GameMap");
   }
   isOutOfRange(x, y) {
     if (x < 0 || y < 0 || x > this.xMax || y > this.yMax) {
@@ -200,9 +201,8 @@ class GameMap {
     }
 
     // finalise the path.
-    var current = goal;
+    current = goal;
     var path = [current];
-    let counter = 0;
     while (current != start) {
       current = cameFrom.get(current);
       path.push(current);
