@@ -21,9 +21,18 @@ class Interface {
     document.body.appendChild(this.hud);
     this.hudContext = this.hud.getContext("2d");
 
+    document.getElementById("centre_camera").addEventListener("click", this.centreCamera.bind(this), false);
     document.getElementById("rest_button").addEventListener("click", event => player.setRest());
     document.getElementById("hud_button").addEventListener("click", this.controlHUD.bind(this), false);
-    document.getElementById("gameCanvas").addEventListener("click", this.onClick.bind(this), false);
+    document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
+  }
+
+  centreCamera(event) {
+    let x = this.player.currentHero.pos.x * TILE_SIZE * UPSCALE_FACTOR;
+    let y = this.player.currentHero.pos.y * TILE_SIZE * UPSCALE_FACTOR;
+    x -= window.innerWidth / 2;
+    y -= window.innerHeight / 2;
+    window.scrollTo(x, y);
   }
 
   renderHUD() {
@@ -81,7 +90,7 @@ class Interface {
     }
   }
 
-  onClick(event) {
+  onCanvasClick(event) {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
     let x = Math.floor((event.clientX + offsetX) / TILE_SIZE / UPSCALE_FACTOR);
