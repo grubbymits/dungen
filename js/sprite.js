@@ -49,10 +49,10 @@ SpriteSheet.prototype.isReady = function() {
 class Sprite {
   constructor(spriteSheet, offsetX, offsetY, width, height) {
     this.spriteSheet = spriteSheet;
-    this.offsetX = offsetX * width;
-    this.offsetY = offsetY * height;
-    this.width = width;
-    this.height = height;
+    this.offsetX = offsetX * TILE_SIZE;
+    this.offsetY = offsetY * TILE_SIZE;
+    this.width = TILE_SIZE;
+    this.height = TILE_SIZE;
   }
 
   render(desX, desY, context) {
@@ -66,8 +66,8 @@ class Sprite {
   }
 }
 
-var spriteSheet = new SpriteSheet('tileset');
-var redSpriteSheet = new SpriteSheet('tileset-red');
+var spriteSheet = new SpriteSheet('tileset-green-64');
+var redSpriteSheet = new SpriteSheet('tileset-red-64');
 var tileSprites = [ new Sprite(spriteSheet, 1, 1, 32, 32),
                     new Sprite(spriteSheet, 7, 0, 32, 32),
                     new Sprite(spriteSheet, 2, 2, 32, 32)];
