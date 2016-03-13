@@ -42,6 +42,8 @@ class Interface {
     this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
+    this.hud.style.left = (window.innerWidth / 2) + offsetX + "px";
+    this.hud.style.top = (window.innerHeight / 2) + offsetY + "px";
     this.hudContext.textAlign = "left";
 
     for (let i in this.player.heroes) {
