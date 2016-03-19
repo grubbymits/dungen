@@ -15,9 +15,9 @@ class Hero extends Actor {
     this.isFollowing = false;
     this.leader = null;
     this.nextAction = null;
-    this.lvl = 1;
+    this.level = 1;
     this.currentExp = 0;
-    this.expToNextLvl = 2;
+    this.expToNextLvl = 4;
   }
   get armour() {
     return this.equipArmour;
@@ -88,9 +88,11 @@ class Hero extends Actor {
   }
   increaseExp(exp) {
     this.currentExp += exp;
+    console.log("increase exp by", exp);
     if (this.currentExp >= this.expToNextLvl) {
-      this.lvl++;
-      this.expToNextLvl *= 1.5;
+      this.level++;
+      this.expToNextLvl = Math.round(this.expToNextLvl * 2);
+      console.log("level up");
     }
   }
 

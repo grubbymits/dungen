@@ -8,8 +8,8 @@ class Interface {
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'absolute';
-    this.hud.width = TILE_SIZE * 10 * UPSCALE_FACTOR;
-    this.hud.height = TILE_SIZE * 15 * UPSCALE_FACTOR;
+    this.hud.width = TILE_SIZE * 8 * UPSCALE_FACTOR;
+    this.hud.height = TILE_SIZE * 10 * UPSCALE_FACTOR;
     this.hud.style.left = '50%';
     this.hud.style.top = '50%';
     //this.hud.style.bottom = '0px';
@@ -42,7 +42,8 @@ class Interface {
     this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
-    if (window.innerWidth * 2 >= this.hud.width) {
+    if (window.innerWidth >= this.hud.width &&
+        window.innerHeight >= this.hud.height ) {
       this.hud.style.left = (window.innerWidth / 2) + offsetX + "px";
       this.hud.style.top = (window.innerHeight / 2) + offsetY + "px";
     } else {
@@ -55,7 +56,7 @@ class Interface {
       let hero = this.player.heroes[i];
       let offsetX = TILE_SIZE * UPSCALE_FACTOR;
       let offsetY = TILE_SIZE + (TILE_SIZE * 2 * i) * UPSCALE_FACTOR;
-      let spacing = TILE_SIZE / 2;
+      let spacing = (TILE_SIZE / 4) + 8;
 
       hero.sprite.render(offsetX, offsetY, this.hudContext);
 
