@@ -7,6 +7,9 @@ class Item {
   }
   get name() {
     switch(this.type) {
+      default:
+        console.log("unhandled item type");
+        return null;
       case POTION:
         return POTION_NAMES[this.subtype];
       case SWORD:
@@ -25,6 +28,9 @@ class Item {
   }
   get sprite() {
     switch(this.type) {
+      default:
+        console.log("unhandled item type");
+        return null;
       case POTION:
         return potionSprites[this.subtype];
       case SWORD:
@@ -121,6 +127,7 @@ var swords = [ new Weapon(SWORD, SWORD0, 2, 3, 1, NORMAL),
                new Weapon(SWORD, SWORD6, 24, 3, 4, NORMAL),
                new Weapon(SWORD, SWORD7, 30, 3, 5, NORMAL),
              ];
+             
 // https://en.wikipedia.org/wiki/List_of_mythological_objects
 // mimung - wudga inherits from his son Wayland the Smith
 // skofnung - sword of Hrolf Kraki

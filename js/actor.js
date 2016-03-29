@@ -29,13 +29,13 @@ class Chest extends Entity {
     // treasure, there are 4 types
     type = Math.random();
     if (type < 0.5) {
-
+      // small coins
     } else if (type < 0.75) {
-
+      // large coins
     } else if (type < 0.88) {
-
+      // pearls
     } else {
-
+      // gem stone
     }
   }
   pickPotion() {
@@ -62,27 +62,36 @@ class Chest extends Entity {
   pickEquipment() {
     // equipment, there are 10 types including spells and jewelry.
     type = Math.random();
+    let itemArray = null;
+    let itemType = 0;
     if (type < 0.1) {
-
+      itemArray = armours;
+      itemType = ARMOUR;
     } else if (type < 0.2) {
-
+      itemArray = helmets;
+      itemType = HELMET;
     } else if (type < 0.3) {
-
+      itemArray = shields;
+      itemType = SHIELD;
     } else if (type < 0.4) {
-
+      itemArray = swords;
+      itemType = SWORD;
     } else if (type < 0.5) {
-
+      itemArray = axes;
     } else if (type < 0.6) {
-
+      itemArray = staffs
     } else if (type < 0.7) {
-
+      // projectiles
     } else if (type < 0.8) {
-
+      // spells
     } else if (type < 0.9) {
-
+      // jewelry
     } else {
-
+      // ammunition
     }
+    // TODO more rare items need to become less rare as the game progresses and
+    // actually rare at the start!
+    itemArray[getBoundedRandom(itemArray.length, 0)];
   }
   interact(actor) {
     this.sprite = chestSprites[1];
@@ -98,6 +107,7 @@ class Chest extends Entity {
     } else {
       item = this.pickEquipment();
     }
+    this.game.player.addItem(item);
   }
 }
 

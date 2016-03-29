@@ -135,9 +135,17 @@ class Player {
   constructor(hero) {
     this.currentHero = hero;
     this.heroes = [hero];
+    this.items = new Map();
   }
   addHero(hero) {
     this.heroes.push(hero);
+  }
+  addItem(item) {
+    let number = 1;
+    if (this.items.has(item)) {
+      number += this.items.get(item);
+    }
+    this.items.set(item, number);
   }
   setDestination(x, y) {
     this.currentHero.setDestination(x, y);
