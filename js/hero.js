@@ -112,6 +112,7 @@ class Knight extends Hero {
     this.equipHelmet = helmets[HELMET0];
     this.equipWeapon = swords[SWORD0];
     this.equipShield = shields[SHIELD0];
+    this.meleeSound = document.getElementById("meleeWooshSound");
   }
 }
 

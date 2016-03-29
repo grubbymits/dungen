@@ -8,6 +8,8 @@ class Interface {
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'absolute';
+    this.desiredScreenWidth = TILE_SIZE * 6 * UPSCALE_FACTOR;
+    this.desiredScreenHeight = TILE_SIZE * 10 * UPSCALE_FACTOR;
     this.hud.width = TILE_SIZE * 8 * UPSCALE_FACTOR;
     this.hud.height = TILE_SIZE * 10 * UPSCALE_FACTOR;
     this.hud.style.left = '50%';
@@ -38,20 +40,40 @@ class Interface {
   renderHUD() {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
-    //this.hudContext.fillStyle = "rgba(50, 75, 75, 0.8)";
+    console.log("hud, offsetX:", offsetX);
+    console.log("hud, offsetY:", offsetY);
+    var isSmallScreen = true; //this.desiredHUDWidth > window.innerWidth ? true : false;
+    // if the screen is large, we could make the HUD two or three tiles wider.
+    
     this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
-    if (window.innerWidth >= this.hud.width &&
-        window.innerHeight >= this.hud.height ) {
-      this.hud.style.left = (window.innerWidth / 2) + offsetX + "px";
-      this.hud.style.top = (window.innerHeight / 2) + offsetY + "px";
-    } else {
-      this.hud.style.left = offsetX + "px";
-      this.hud.style.top = offsetY + "px";
-    }
     this.hudContext.textAlign = "left";
-
+    this.hud.style.left = offsetX + "px";
+    this.hud.style.top = offsetY + "px";
+    
+    if (window.innerWidth >= this.desiredScreenWidth) {
+      this.hud.width = this.desiredScreenWidth;
+      if (window.innerWidth >= this.desiredScreenWidth * 2) {
+        this.hud.style.left = (window.innerWidth / 2) + offsetX + "px";
+      } else {
+        this.hud.style.left = (this.hud.width / 2) + offsetX + "px";
+      }
+    } else {
+      this.hud.width = window.innerWidth;
+    }
+    
+    if (window.innerHeight >= this.desiredScreenHeight) {
+      this.hud.height = this.desiredScreenHeight;
+      if (window.innerWidth >= this.desiredScreenWidth * 2) {
+        this.hud.style.top = (window.innerHeight / 2) + offsetY + "px";
+      } else {
+        this.hud.style.top = (this.hud.height / 2) + offsetY + "px";
+      }
+    } else {
+      this.hud.height = window.innerHeight;
+    }
+    
     for (let i in this.player.heroes) {
       let hero = this.player.heroes[i];
       let offsetX = TILE_SIZE * UPSCALE_FACTOR;
@@ -75,27 +97,24 @@ class Interface {
       if (hero.helmet) {
         hero.helmet.sprite.render(offsetX + 8 * spacing, offsetY, this.hudContext);
       }
-      this.hudContext.fillText("Lvl: " + hero.level,
-                               offsetX + 11 * spacing * UPSCALE_FACTOR,
-                               offsetY);
+      if (isSmallScreen) {
+        offsetY += TILE_SIZE * UPSCALE_FACTOR + (TILE_SIZE / 4);
+      } else {
+        offsetX = offsetX + 11 * spacing * UPSCALE_FACTOR;
+      }
+      this.hudContext.fillText("Lvl: " + hero.level, offsetX, offsetY);
       this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
-                               offsetX + 11 * spacing * UPSCALE_FACTOR,
-                               offsetY + spacing * UPSCALE_FACTOR);
+                               offsetX, offsetY + spacing * UPSCALE_FACTOR);
       this.hudContext.fillText("Health: " + hero.currentHealth + "/" + hero.maxHealth,
-                               offsetX + 11 * spacing * UPSCALE_FACTOR,
-                               offsetY + 2 * spacing * UPSCALE_FACTOR);
+                               offsetX, offsetY + 2 * spacing * UPSCALE_FACTOR);
       this.hudContext.fillText("Energy: " + hero.currentEnergy + "/" + hero.maxEnergy,
-                               offsetX + 11 * spacing * UPSCALE_FACTOR,
-                               offsetY + 3 * spacing * UPSCALE_FACTOR);
+                               offsetX, offsetY + 3 * spacing * UPSCALE_FACTOR);
       this.hudContext.fillText("Strength: " + hero.strength,
-                               offsetX + 11 * spacing * UPSCALE_FACTOR,
-                               offsetY + 4 * spacing * UPSCALE_FACTOR);
+                               offsetX, offsetY + 4 * spacing * UPSCALE_FACTOR);
       this.hudContext.fillText("Agility: " + hero.agility,
-                               offsetX + 11 * spacing * UPSCALE_FACTOR,
-                               offsetY + 5 * spacing * UPSCALE_FACTOR);
+                               offsetX, offsetY + 5 * spacing * UPSCALE_FACTOR);
       this.hudContext.fillText("Wisdom: " + hero.wisdom,
-                               offsetX + 11 * spacing * UPSCALE_FACTOR,
-                               offsetY + 6 * spacing * UPSCALE_FACTOR);
+                               offsetX, offsetY + 6 * spacing * UPSCALE_FACTOR);
     }
   }
 

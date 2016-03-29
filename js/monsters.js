@@ -21,6 +21,7 @@ class Monster extends Actor {
     this.rangedttackEnergy = rangeAtkEnergy;
     this.physicalDefense = defense;
     this.projectileRange = 0;
+    this.meleeSound = document.getElementById("punchSound");
   }
   get action() {
     this.currentSprite = this.sprite;

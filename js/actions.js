@@ -89,6 +89,7 @@ class DealMeleeDamage extends Action {
         console.log("increaseExp by", this.targetActor.exp);
         this.actor.increaseExp(this.targetActor.exp);
       }
+      document.getElementById("dieSound").play();
       this.game.killActor(this.targetActor);
       this.targetActor = null;
       this.actor.nextAction = null;
@@ -117,6 +118,7 @@ class MeleeAttack extends Action {
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
+    this.actor.meleeSound.play();
     this.dealDamage.target = this.targetActor;
     this.actor.useEnergy(energyRequired);
     return this.dealDamage;

@@ -15,6 +15,9 @@
     <audio src="res/audio/music/01-adventures.ogg" autoplay></audio>
     <audio data-src="res/audio/music/02-eclipse.ogg"></audio>
     <audio id="hitSound" src="res/audio/hit.ogg"></audio>
+    <audio id="meleeWooshSound" src="res/audio/melee_woosh.ogg"></audio>
+    <audio id="punchSound" src="res/audio/punch.ogg"></audio>
+    <audio id="dieSound" src="res/audio/enemy_die.ogg"></audio>
     <div class="fixed-action-btn vertical click-to-toggle" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large orange">
         <i class="large material-icons">gamepad</i>
@@ -96,6 +99,7 @@
 
       var player = new Player(character);
       var UI = new Interface(player);
+      UI.centreCamera(null);
       theGame.addPlayer(player);
       //player.addHero(wizard);
 
