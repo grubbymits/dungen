@@ -25,6 +25,7 @@
       <ul>
         <li><a class="btn-floating orange" id="centre_camera"><i class="material-icons">filter_center_focus</i></a></li>
         <li><a class="btn-floating orange" id="hud_button"><i class="material-icons">accessibility</i></a></li>
+        <li><a class="btn-floating orange" id="items_button"><i class="material-icons">grid_on</i></a></li>
         <li><a class="btn-floating orange "><i class="material-icons">people</i></a></li>
         <li><a class="btn-floating orange" id="rest_button"><i class="material-icons">update</i></a></li>
         <li><a class="btn-floating orange" ><i class="material-icons">security</i></a></li>
@@ -139,9 +140,7 @@
           theGame.renderMap();
           theGame.renderActors();
         }
-        if (UI.hudVisible) {
-          UI.renderHUD();
-        }
+        UI.renderHUD();
         window.requestAnimationFrame(run);
       };
 

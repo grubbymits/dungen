@@ -134,11 +134,30 @@ class Mage extends Hero {
 class Player {
   constructor(hero) {
     this.currentHero = hero;
-    this.heroes = [hero];
+    this.heroes = [];
     this.items = new Map();
+    this.addHero(hero);
   }
   addHero(hero) {
     this.heroes.push(hero);
+    if (hero.armour) {
+      this.addItem(hero.armour);
+    }
+    if (hero.helmet) {
+      this.addItem(hero.helmet);
+    }
+    if (hero.weapon) {
+      this.addItem(hero.weapon);
+    }
+    if (hero.shield) {
+      this.addItem(hero.shield);
+    }
+    if (hero.arrows) {
+      this.addItem(hero.arrows);
+    }
+    if (hero.ring) {
+      this.addItem(hero.ring);
+    }
   }
   addItem(item) {
     let number = 1;
@@ -146,6 +165,7 @@ class Player {
       number += this.items.get(item);
     }
     this.items.set(item, number);
+    console.log(this.items);
   }
   setDestination(x, y) {
     this.currentHero.setDestination(x, y);

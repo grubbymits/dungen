@@ -5,6 +5,7 @@ class Interface {
     //this.keysDown = {};
     this.player = player;
     this.hudVisible = false;
+    this.itemMenuVisible = false;
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'absolute';
@@ -26,6 +27,7 @@ class Interface {
     document.getElementById("centre_camera").addEventListener("click", this.centreCamera.bind(this), false);
     document.getElementById("rest_button").addEventListener("click", event => player.setRest());
     document.getElementById("hud_button").addEventListener("click", this.controlHUD.bind(this), false);
+    document.getElementById("items_button").addEventListener("click", this.controlItemMenu.bind(this), false);
     document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
   }
 
@@ -37,18 +39,13 @@ class Interface {
     window.scrollTo(x, y);
   }
 
-  renderHUD() {
+  initMenu() {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
-    console.log("hud, offsetX:", offsetX);
-    console.log("hud, offsetY:", offsetY);
     var isSmallScreen = true; //this.desiredHUDWidth > window.innerWidth ? true : false;
     // if the screen is large, we could make the HUD two or three tiles wider.
     
     this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
-    this.hudContext.font = "16px Droid Sans";
-    this.hudContext.fillStyle = "orange";
-    this.hudContext.textAlign = "left";
     this.hud.style.left = offsetX + "px";
     this.hud.style.top = offsetY + "px";
     
@@ -73,6 +70,34 @@ class Interface {
     } else {
       this.hud.height = window.innerHeight;
     }
+  }
+  renderItemMenu() {
+    this.initMenu();
+    this.hudContext.font = "16px Droid Sans";
+    this.hudContext.fillStyle = "orange";
+    this.hudContext.textAlign = "left";
+    let x = TILE_SIZE * UPSCALE_FACTOR;
+    let y = TILE_SIZE * UPSCALE_FACTOR;
+    for (let item of this.player.items.keys()) {
+      let number = this.player.items.get(item);
+      item.sprite.render(x, y, this.hudContext);
+      this.hudContext.fillText(item.name + " : " + number, x * 2, y + TILE_SIZE * UPSCALE_FACTOR / 2);
+      y += TILE_SIZE * UPSCALE_FACTOR;
+    }
+  }
+  renderHUD() {
+    if (this.hudVisible) {
+      this.renderTeamMenu();
+    } else if (this.itemMenuVisible) {
+      this.renderItemMenu();
+    }
+  }
+  
+  renderTeamMenu() {
+    this.initMenu();
+    this.hudContext.font = "16px Droid Sans";
+    this.hudContext.fillStyle = "orange";
+    this.hudContext.textAlign = "left";
     
     for (let i in this.player.heroes) {
       let hero = this.player.heroes[i];
@@ -97,11 +122,8 @@ class Interface {
       if (hero.helmet) {
         hero.helmet.sprite.render(offsetX + 8 * spacing, offsetY, this.hudContext);
       }
-      if (isSmallScreen) {
-        offsetY += TILE_SIZE * UPSCALE_FACTOR + (TILE_SIZE / 4);
-      } else {
-        offsetX = offsetX + 11 * spacing * UPSCALE_FACTOR;
-      }
+      
+      offsetY += TILE_SIZE * UPSCALE_FACTOR + (TILE_SIZE / 4);
       this.hudContext.fillText("Lvl: " + hero.level, offsetX, offsetY);
       this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
                                offsetX, offsetY + spacing * UPSCALE_FACTOR);
@@ -130,9 +152,21 @@ class Interface {
     if (!this.hudVisible) {
       this.hud.style.visibility = 'visible';
       this.hudVisible = true;
+      this.itemMenuVisible = false;
     } else {
       this.hud.style.visibility = 'hidden';
       this.hudVisible = false;
+    }
+  }
+  
+  controlItemMenu(event) {
+    if (!this.itemMenuVisible) {
+      this.hud.style.visibility = 'visible';
+      this.itemMenuVisible = true;
+      this.hudVisible = false;
+    } else {
+      this.hud.style.visibility = 'hidden';
+      this.itemMenuVisible = false;
     }
   }
 }
