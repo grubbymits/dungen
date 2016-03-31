@@ -19,11 +19,18 @@ class Entity {
   set pos(pos) {
     this.position = pos;
   }
+  interact(actor) {
+    return null;
+  }
+  get isInteractable() {
+    return false;
+  }
 }
 
 class Chest extends Entity {
   constructor(position, game) {
     super(position, true, chestSprites[0], OBJECT, game);
+    this.open = false;
   }
   pickTreasure() {
     // treasure, there are 4 types
@@ -37,6 +44,7 @@ class Chest extends Entity {
     } else {
       // gem stone
     }
+    return null;
   }
   pickPotion() {
     // potion, there are 8 types.
@@ -89,12 +97,19 @@ class Chest extends Entity {
     } else {
       // ammunition
     }
+    if (itemArray === null) {
+      return null;
+    }
     // TODO more rare items need to become less rare as the game progresses and
     // actually rare at the start!
-    itemArray[getBoundedRandom(itemArray.length, 0)];
+    return itemArray[getBoundedRandom(itemArray.length, 0)];
+  }
+  get isInteractable() {
+    return !this.open;
   }
   interact(actor) {
     this.sprite = chestSprites[1];
+    this.open = true;
     // randomly choose contained item, its normally going to be a potion or
     // treasure and for weapons and armour it is more likely to be a lesser
     // item rather than the best of its class.
@@ -106,6 +121,10 @@ class Chest extends Entity {
       item = this.pickPotion();
     } else {
       item = this.pickEquipment();
+    }
+    if (item === null) {
+      console.log("item is null");
+      return;
     }
     this.game.player.addItem(item);
   }
@@ -181,7 +200,13 @@ class Actor extends Entity {
   setDestination(x, y) {
     let target = this.game.map.getEntity(x, y);
     if (target) {
-      if (target.kind != this.kind) {
+      if (target.kind == OBJECT) {
+        if (target.isInteractable) {
+          target.interact(this);
+          return;
+        }
+      }
+      else if (target.kind != this.kind) {
         this.attack.target = target;
         this.nextAction = this.attack;
         return;

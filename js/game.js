@@ -77,6 +77,18 @@ class Game {
       }
     }
   }
+  placeChests(number) {
+    var chests = 0;
+    while (chests < number) {
+      let x = getBoundedRandom(1, this.theMap.xMax);
+      let y = getBoundedRandom(1, this.theMap.yMax);
+      let loc = this.theMap.getLocation(x, y);
+      if (!loc.isBlocked && !loc.isOccupied) {
+        this.actors.push(new Chest(loc.vec, this));
+        chests++;
+      }
+    }
+  }
   killActor(actor) {
     for (let index in this.actors) {
       if (this.actors[index] == actor) {

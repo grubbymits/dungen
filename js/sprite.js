@@ -149,8 +149,8 @@ var werewolfSprite = new Sprite(spriteSheet, 5, 22, 32, 32);
 var golemSprite = new Sprite(spriteSheet, 6, 22, 32, 32);
 var demonSprite = new Sprite(spriteSheet, 7, 22, 32, 32);
 
-var chestSprites = [ new Sprite(spriteSheet, 0, 4, 32,32 ),
-                     new Sprite(spriteSheet, 1, 5, 32, 32)
+var chestSprites = [ new Sprite(spriteSheet, 0, 4, 32, 32),
+                     new Sprite(spriteSheet, 1, 4, 32, 32)
                    ];
 var potionSprites = [ new Sprite(spriteSheet, 0, 5, 32, 32),
                       new Sprite(spriteSheet, 1, 5, 32, 32),
