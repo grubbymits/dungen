@@ -69,7 +69,7 @@ const ARMOUR_NAMES = [ "first armour",
                       "seventh armour",
                       "eighth armour"
                     ];
-const SHIELD_NAMES = [ "first sheild",
+const SHIELD_NAMES = [ "first shield",
                       "second shield",
                       "third shield",
                       "fourth shield",

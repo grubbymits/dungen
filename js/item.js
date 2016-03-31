@@ -127,7 +127,7 @@ var swords = [ new Weapon(SWORD, SWORD0, 2, 3, 1, NORMAL),
                new Weapon(SWORD, SWORD6, 24, 3, 4, NORMAL),
                new Weapon(SWORD, SWORD7, 30, 3, 5, NORMAL),
              ];
-             
+
 // https://en.wikipedia.org/wiki/List_of_mythological_objects
 // mimung - wudga inherits from his son Wayland the Smith
 // skofnung - sword of Hrolf Kraki
@@ -140,7 +140,7 @@ var swords = [ new Weapon(SWORD, SWORD0, 2, 3, 1, NORMAL),
 
 class Potion extends Item {
   constructor(kind) {
-    super(POTION_NAMES[kind], potionSprites[kind]);
+    super(POTION, kind);
   }
 }
 
