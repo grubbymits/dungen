@@ -12,7 +12,7 @@
 </head>
 
   <body>
-    <audio src="res/audio/music/01-adventures.ogg" autoplay></audio>
+    <audio src="res/audio/music/01-adventures.ogg" id="music-01" autoplay></audio>
     <audio data-src="res/audio/music/02-eclipse.ogg"></audio>
     <audio id="hitSound" src="res/audio/hit.ogg"></audio>
     <audio id="meleeWooshSound" src="res/audio/melee_woosh.ogg"></audio>
@@ -148,13 +148,20 @@
       }
 
       var updater = generator();
+      var music = document.getElementById("music-01");
 
       var run = function() {
         theGame.isRunning = true;
         if (!document.hasFocus()) {
           theGame.isRunning = false;
+          if (!music.paused) {
+            music.pause();
+          }
         }
         if (theGame.isRunning) {
+          if (music.paused) {
+            music.play();
+          }
           // set a maximum game rate
           if (new Date().getTime() >= theGame.nextGameTick) {
             updater.next();
