@@ -136,10 +136,9 @@
         // set a maximum game rate
         if (new Date().getTime() >= theGame.nextGameTick) {
           updater.next();
-          console.log(updater.next().value);
           theGame.nextGameTick += theGame.skipTicks;
           theGame.renderMap();
-          theGame.renderActors();
+          theGame.renderEntities();
         }
         UI.renderHUD();
         window.requestAnimationFrame(run);

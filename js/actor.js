@@ -208,13 +208,13 @@ class Actor extends Entity {
           target.interact(this);
           return;
         }
-      }
-      else if (target.kind != this.kind) {
+      } else if (target.kind != this.kind) {
         this.attack.target = target;
         this.nextAction = this.attack;
         return;
       }
     } else if (!this.game.map.isBlocked(x, y)) {
+      console.log("destination set to: ", x, y);
       this.walk.dest = this.game.map.getLocation(x, y).vec;
       this.nextAction = this.walk;
     }

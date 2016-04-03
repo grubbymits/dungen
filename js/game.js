@@ -4,6 +4,7 @@ class Game {
   constructor(context, width, height) {
     console.log("Game.constructor");
     this.actors = [];
+    this.objects = [];
     this.context = context;
     this.level = 1;
     this.isRunning = false;
@@ -84,7 +85,7 @@ class Game {
       let y = getBoundedRandom(1, this.theMap.yMax);
       let loc = this.theMap.getLocation(x, y);
       if (!loc.isBlocked && !loc.isOccupied) {
-        this.actors.push(new Chest(loc.vec, this));
+        this.objects.push(new Chest(loc.vec, this));
         chests++;
       }
     }
@@ -100,9 +101,12 @@ class Game {
     }
   }
 
-  renderActors() {
+  renderEntities() {
     for (let actor of this.actors) {
       actor.render();
+    }
+    for (let object of this.objects) {
+      object.render();
     }
   }
 

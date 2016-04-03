@@ -162,7 +162,18 @@ class FindTarget extends Action {
     super(actor);
     this.map = this.actor.game.map;
   }
-
+  findAndAttack(x, y) {
+    let target = this.map.getEntity(x, y);
+    if (target) {
+      if (target.kind != this.actor.kind &&
+          target.kind != OBJECT) {
+        this.actor.attack.target = target;
+        this.actor.nextAction = this.actor.attack;
+        return this.actor.nextAction;
+      }
+    }
+    return null;
+  }
   perform() {
     let radius = 0;
     let pos = this.actor.pos;
@@ -172,46 +183,30 @@ class FindTarget extends Action {
       radius = radius + 1;
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y - radius;
-        let target = this.map.getEntity(x, y);
-        if (target) {
-          if (target.kind != this.actor.kind) {
-            this.actor.attack.target = target;
-            this.actor.nextAction = this.actor.attack;
-            return this.actor.nextAction;
-          }
+        let action = this.findAndAttack(x, y);
+        if (action !== null) {
+          return action;
         }
       }
       for (let x = pos.x - radius; x < pos.x + radius; x++) {
         let y = pos.y + radius;
-        let target = this.map.getEntity(x, y);
-        if (target) {
-          if (target.kind != this.actor.kind) {
-            this.actor.attack.target = target;
-            this.actor.nextAction = this.actor.attack;
-            return this.actor.nextAction;
-          }
+        let action = this.findAndAttack(x, y);
+        if (action !== null) {
+          return action;
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x - radius;
-        let target = this.map.getEntity(x, y);
-        if (target) {
-          if (target.kind != this.actor.kind) {
-            this.actor.attack.target = target;
-            this.actor.nextAction = this.actor.attack;
-            return this.actor.nextAction;
-          }
+        let action = this.findAndAttack(x, y);
+        if (action !== null) {
+          return action;
         }
       }
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         let x = pos.x + radius;
-        let target = this.map.getEntity(x, y);
-        if (target) {
-          if (target.kind != this.actor.kind) {
-            this.actor.attack.target = target;
-            this.actor.nextAction = this.actor.attack;
-            return this.actor.nextAction;
-          }
+        let action = this.findAndAttack(x, y);
+        if (action !== null) {
+          return action;
         }
       }
     }
