@@ -41,7 +41,7 @@ class Hero extends Actor {
     return 0;
   }
   get meleeAtkPower() {
-    return this.equipWeapon.power;
+    return this.equipWeapon.power + this.strength;
   }
   get meleeAtkEnergy() {
     return this.equipWeapon.energy;
@@ -92,6 +92,10 @@ class Hero extends Actor {
     if (this.currentExp >= this.expToNextLvl) {
       this.level++;
       this.expToNextLvl = Math.round(this.expToNextLvl * 2);
+      this.maxHealth += 2;
+      this.currentHealth = this.maxHealth;
+      this.maxEnergy++;
+      this.currentEnergy = this.maxEnergy;
       console.log("level up");
     }
   }
@@ -106,7 +110,7 @@ class Hero extends Actor {
 
 class Knight extends Hero {
   constructor(health, energy, position, game) {
-    super(health, energy, 10, 5, 3,
+    super(health, energy, 4, 3, 2,
           position, knightSprite, damageKnightSprite, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -118,7 +122,7 @@ class Knight extends Hero {
 
 class Mage extends Hero {
   constructor(health, energy, position, game) {
-    super(health, energy, 3, 5, 10,
+    super(health, energy, 2, 3, 4,
           position, wizardSprite, damageMageSprite, game);
     console.log("creating mage");
     this.equipArmour = armours[ARMOUR0];

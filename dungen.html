@@ -133,14 +133,19 @@
 
       var run = function() {
         theGame.isRunning = true;
-        // set a maximum game rate
-        if (new Date().getTime() >= theGame.nextGameTick) {
-          updater.next();
-          theGame.nextGameTick += theGame.skipTicks;
-          theGame.renderMap();
-          theGame.renderEntities();
+        if (!document.hasFocus()) {
+          theGame.isRunning = false;
         }
-        UI.renderHUD();
+        if (theGame.isRunning) {
+          // set a maximum game rate
+          if (new Date().getTime() >= theGame.nextGameTick) {
+            updater.next();
+            theGame.nextGameTick += theGame.skipTicks;
+            theGame.renderMap();
+            theGame.renderEntities();
+          }
+          UI.renderHUD();
+        }
         window.requestAnimationFrame(run);
       };
 
