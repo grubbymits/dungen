@@ -35,6 +35,10 @@ class Game {
   addPlayer(player) {
     this.player = player;
   }
+  addTextEvent(string, pos) {
+    this.player.UI.addEvent(new TextEvent(this.context, new Date().getTime(),
+                                          pos, string));
+  }
   createHero(pos, type) {
     var hero;
     if (type == KNIGHT) {

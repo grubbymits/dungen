@@ -83,11 +83,16 @@ class Interface {
     // - level up
     for (let i in this.events) {
       let event = this.events[i];
+      console.log("event:", event);
       if (!event.isFinished()) {
         event.render();
       } else {
         this.player.game.map.setDirty(event.pos);
         let pos = new Vec(event.pos.x, event.pos.y - 1);
+        this.player.game.map.setDirty(pos);
+        pos.x++;
+        this.player.game.map.setDirty(pos);
+        pos.x++;
         this.player.game.map.setDirty(pos);
         delete this.events[i];
         this.events.splice(i, 1);

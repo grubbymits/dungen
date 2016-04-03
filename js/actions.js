@@ -86,6 +86,8 @@ class DealMeleeDamage extends Action {
 
     if (this.targetActor.health <= 0) {
       if (this.actor.increaseExp !== null) {
+        this.game.addTextEvent(this.targetActor.exp + " xp",
+                               this.targetActor.pos);
         this.actor.game.player.increaseExp(this.targetActor.exp);
       }
       document.getElementById("dieSound").play();
@@ -156,6 +158,34 @@ class Attack extends Action {
   }
 }
 
+class Interact extends Action {
+  constructor(actor) {
+    super(actor);
+    this.map = this.actor.game.map;
+    this.targetObject = null;
+  }
+  set target(target) {
+    this.targetObject = target;
+  }
+  get target() {
+    return this.targetObject;
+  }
+  perform() {
+    if (!this.targetObject.isInteractable) {
+      this.actor.nextAction = null;
+      return;
+    }
+    let targetDistance =  this.map.getDistance(this.actor, this.targetObject);
+    if (this.actor.meleeRange >= targetDistance) {
+      this.targetObject.interact(this.actor);
+      return null;
+    } else {
+      this.actor.walk.dest = this.targetObject.pos;
+      return this.actor.walk;
+    }
+  }
+}
+
 class FindTarget extends Action {
   constructor(actor) {
     super(actor);
@@ -211,17 +241,5 @@ class FindTarget extends Action {
     }
     this.actor.nextAction = null;
     return null;
-  }
-}
-
-class Interact extends Action {
-  constructor(actor) {
-    super(actor);
-  }
-  bindObject(obj) {
-    this.obj = obj;
-  }
-  perform() {
-    this.obj.interact(this.actor);
   }
 }

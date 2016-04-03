@@ -129,6 +129,7 @@ class Chest extends Entity {
       console.log("item is null");
       return;
     }
+    this.game.addTextEvent(item.name, this.position);
     this.game.player.addItem(item);
   }
 }
@@ -150,6 +151,7 @@ class Actor extends Entity {
     this.attack = new Attack(this);
     this.findTarget = new FindTarget(this);
     this.meleeAttack = new MeleeAttack(this);
+    this.interact = new Interact(this);
     this.nextAction = null;
     this.destination = null;
     this.currentPath = [];
@@ -205,7 +207,8 @@ class Actor extends Entity {
     if (target) {
       if (target.kind == OBJECT) {
         if (target.isInteractable) {
-          target.interact(this);
+          this.interact.target = target;
+          this.nextAction = this.interact;
           return;
         }
       } else if (target.kind != this.kind) {
