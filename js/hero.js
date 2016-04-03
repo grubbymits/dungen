@@ -88,7 +88,6 @@ class Hero extends Actor {
   }
   increaseExp(exp) {
     this.currentExp += exp;
-    console.log("increase exp by", exp);
     if (this.currentExp >= this.expToNextLvl) {
       this.level++;
       this.expToNextLvl = Math.round(this.expToNextLvl * 2);
@@ -97,6 +96,7 @@ class Hero extends Actor {
       this.maxEnergy++;
       this.currentEnergy = this.maxEnergy;
       console.log("level up");
+      return true;
     }
   }
 
@@ -138,9 +138,22 @@ class Mage extends Hero {
 class Player {
   constructor(hero) {
     this.currentHero = hero;
+    this.game = hero.game;
     this.heroes = [];
     this.items = new Map();
     this.addHero(hero);
+  }
+  increaseExp(exp) {
+    console.log("increase exp by:", exp);
+    for (let hero of this.heroes) {
+      if (hero.increaseExp(exp)) {
+        this.UI.addEvent(new TextEvent(this.game.context, new Date().getTime(),
+                                       hero.pos, "lvl up!"));
+      }
+    }
+  }
+  addUI(UI) {
+    this.UI = UI;
   }
   addHero(hero) {
     this.heroes.push(hero);

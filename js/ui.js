@@ -1,9 +1,42 @@
 "use strict";
 
+class UIEvent {
+  constructor(context, start, millisecs, pos) {
+    this.context = context;
+    this.startTime = start;
+    console.log("construct event, pos: ", pos);
+    this.endTime = this.startTime + millisecs;
+    this.position = pos;
+    this.x = pos.x * TILE_SIZE * UPSCALE_FACTOR;
+    this.y = pos.y * TILE_SIZE * UPSCALE_FACTOR;
+  }
+  get pos() {
+    return this.position;
+  }
+  isFinished() {
+    return (new Date().getTime() >= this.endTime);
+  }
+}
+
+class TextEvent extends UIEvent {
+  constructor(context, start, pos, text) {
+    super(context, start, 1000, pos);
+    this.string = text;
+  }
+  render() {
+    console.log("render TextEvent at:", this.x, this.y);
+    this.context.font = "16px Droid Sans";
+    this.context.fillStyle = "orange";
+    this.context.fillText(this.string, this.x, this.y);
+  }
+}
+
 class Interface {
   constructor(player) {
     //this.keysDown = {};
     this.player = player;
+    this.player.addUI(this);
+    this.events = [];
     this.hudVisible = false;
     this.itemMenuVisible = false;
 
@@ -31,6 +64,10 @@ class Interface {
     document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
   }
 
+  addEvent(event) {
+    this.events.push(event);
+  }
+
   centreCamera(event) {
     let x = this.player.currentHero.pos.x * TILE_SIZE * UPSCALE_FACTOR;
     let y = this.player.currentHero.pos.y * TILE_SIZE * UPSCALE_FACTOR;
@@ -39,16 +76,35 @@ class Interface {
     window.scrollTo(x, y);
   }
 
+  renderInfo() {
+    // Draw text onto the canvas for ~1 second to inform the player of changes.
+    // - chest contents
+    // - exp gain
+    // - level up
+    for (let i in this.events) {
+      let event = this.events[i];
+      if (!event.isFinished()) {
+        event.render();
+      } else {
+        this.player.game.map.setDirty(event.pos);
+        let pos = new Vec(event.pos.x, event.pos.y - 1);
+        this.player.game.map.setDirty(pos);
+        delete this.events[i];
+        this.events.splice(i, 1);
+      }
+    }
+  }
+
   initMenu() {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
     var isSmallScreen = true; //this.desiredHUDWidth > window.innerWidth ? true : false;
     // if the screen is large, we could make the HUD two or three tiles wider.
-    
+
     this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hud.style.left = offsetX + "px";
     this.hud.style.top = offsetY + "px";
-    
+
     if (window.innerWidth >= this.desiredScreenWidth) {
       this.hud.width = this.desiredScreenWidth;
       if (window.innerWidth >= this.desiredScreenWidth * 2) {
@@ -59,7 +115,7 @@ class Interface {
     } else {
       this.hud.width = window.innerWidth;
     }
-    
+
     if (window.innerHeight >= this.desiredScreenHeight) {
       this.hud.height = this.desiredScreenHeight;
       if (window.innerWidth >= this.desiredScreenWidth * 2) {
@@ -92,13 +148,13 @@ class Interface {
       this.renderItemMenu();
     }
   }
-  
+
   renderTeamMenu() {
     this.initMenu();
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
-    
+
     for (let i in this.player.heroes) {
       let hero = this.player.heroes[i];
       let offsetX = TILE_SIZE * UPSCALE_FACTOR;
@@ -122,7 +178,7 @@ class Interface {
       if (hero.helmet) {
         hero.helmet.sprite.render(offsetX + 8 * spacing, offsetY, this.hudContext);
       }
-      
+
       offsetY += TILE_SIZE * UPSCALE_FACTOR + (TILE_SIZE / 4);
       this.hudContext.fillText("Lvl: " + hero.level, offsetX, offsetY);
       this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
@@ -158,7 +214,7 @@ class Interface {
       this.hudVisible = false;
     }
   }
-  
+
   controlItemMenu(event) {
     if (!this.itemMenuVisible) {
       this.hud.style.visibility = 'visible';

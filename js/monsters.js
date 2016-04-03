@@ -101,7 +101,7 @@ class SpiderChampion extends Monster {
           10, NORMAL, 2,
           0, 0, 0,
           8,
-          3,
+          5,
           position, bigSpiderSprite, damageBigSpiderSprite, game);
     this.index = SPIDER_CHAMPION;
     this.meleeAttackPower = 5;

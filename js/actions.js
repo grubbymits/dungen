@@ -86,8 +86,7 @@ class DealMeleeDamage extends Action {
 
     if (this.targetActor.health <= 0) {
       if (this.actor.increaseExp !== null) {
-        console.log("increaseExp by", this.targetActor.exp);
-        this.actor.increaseExp(this.targetActor.exp);
+        this.actor.game.player.increaseExp(this.targetActor.exp);
       }
       document.getElementById("dieSound").play();
       this.game.killActor(this.targetActor);
