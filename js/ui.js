@@ -83,12 +83,13 @@ class Interface {
     // - level up
     for (let i in this.events) {
       let event = this.events[i];
-      console.log("event:", event);
       if (!event.isFinished()) {
         event.render();
       } else {
         this.player.game.map.setDirty(event.pos);
-        let pos = new Vec(event.pos.x, event.pos.y - 1);
+        let pos = new Vec(event.pos.x - 1, event.pos.y - 1);
+        this.player.game.map.setDirty(pos);
+        pos.x++;
         this.player.game.map.setDirty(pos);
         pos.x++;
         this.player.game.map.setDirty(pos);
@@ -98,6 +99,14 @@ class Interface {
         this.events.splice(i, 1);
       }
     }
+  }
+
+  levelUp() {
+    let buttons = document.getElementById("levelUpButtons");
+    buttons.style.visibility = "visible";
+    //let strength = document.getElementById("strength");
+    //strength.style.left = window.innerWidth / 2 + "px";
+    //strength.disabled = false;
   }
 
   initMenu() {

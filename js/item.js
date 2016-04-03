@@ -128,6 +128,16 @@ var swords = [ new Weapon(SWORD, SWORD0, 2, 3, 1, NORMAL),
                new Weapon(SWORD, SWORD7, 30, 3, 5, NORMAL),
              ];
 
+var axes = [ new Weapon(AXE, AXE0, 3, 3, 2, NORMAL),
+               new Weapon(AXE, AXE1, 5, 3, 3, NORMAL),
+               new Weapon(AXE, AXE2, 7, 3, 3, NORMAL),
+               new Weapon(AXE, AXE3, 12, 3, 4, NORMAL),
+               new Weapon(AXE, AXE4, 17, 3, 4, NORMAL),
+               new Weapon(AXE, AXE5, 22, 3, 5, NORMAL),
+               new Weapon(AXE, AXE6, 28, 3, 5, NORMAL),
+               new Weapon(AXE, AXE7, 34, 3, 6, NORMAL),
+             ];
+
 // https://en.wikipedia.org/wiki/List_of_mythological_objects
 // mimung - wudga inherits from his son Wayland the Smith
 // skofnung - sword of Hrolf Kraki
