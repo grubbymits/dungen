@@ -24,7 +24,6 @@ class TextEvent extends UIEvent {
     this.string = text;
   }
   render() {
-    console.log("render TextEvent at:", this.x, this.y);
     this.context.font = "16px Droid Sans";
     this.context.fillStyle = "orange";
     this.context.fillText(this.string, this.x, this.y);
@@ -34,8 +33,10 @@ class TextEvent extends UIEvent {
 class Interface {
   constructor(player) {
     //this.keysDown = {};
+    this.game = player.game;
     this.player = player;
     this.player.addUI(this);
+    this.heroToLevelUp = null;
     this.events = [];
     this.hudVisible = false;
     this.itemMenuVisible = false;
@@ -56,12 +57,17 @@ class Interface {
     this.hud.style.background = "rgba(50, 75, 75, 0.7)";
     document.body.appendChild(this.hud);
     this.hudContext = this.hud.getContext("2d");
+    this.lvlUpButtons = document.getElementById("levelUpButtons");
 
     document.getElementById("centre_camera").addEventListener("click", this.centreCamera.bind(this), false);
     document.getElementById("rest_button").addEventListener("click", event => player.setRest());
     document.getElementById("hud_button").addEventListener("click", this.controlHUD.bind(this), false);
     document.getElementById("items_button").addEventListener("click", this.controlItemMenu.bind(this), false);
     document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
+    
+    document.getElementById("wisdom").addEventListener("click", this.increaseWisdom.bind(this), false);
+    document.getElementById("agility").addEventListener("click", this.increaseAgility.bind(this), false);
+    document.getElementById("strength").addEventListener("click", this.increaseStrength.bind(this), false);
   }
 
   addEvent(event) {
@@ -101,14 +107,32 @@ class Interface {
     }
   }
 
-  levelUp() {
-    let buttons = document.getElementById("levelUpButtons");
-    buttons.style.visibility = "visible";
+  levelUp(hero) {
+    this.lvlUpButtons.style.visibility = "visible";
+    this.heroToLevelUp = hero;
     //let strength = document.getElementById("strength");
     //strength.style.left = window.innerWidth / 2 + "px";
     //strength.disabled = false;
   }
-
+  increaseAgility() {
+    if (this.heroToLevelUp !== null) {
+      this.heroToLevelUp.agility++;
+      this.lvlUpButtons.style.visibility = "hidden";
+    }
+  }
+  increaseStrength() {
+    if (this.heroToLevelUp !== null) {
+      this.heroToLevelUp.strength++;
+      this.lvlUpButtons.style.visibility = "hidden";
+    }
+  }
+  increaseWisdom() {
+    if (this.heroToLevelUp !== null) {
+      this.heroToLevelUp.wisdom++;
+      this.lvlUpButtons.style.visibility = "hidden";
+    }
+  }
+  
   initMenu() {
     var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
     var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;

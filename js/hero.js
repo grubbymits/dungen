@@ -149,7 +149,7 @@ class Player {
       if (hero.increaseExp(exp)) {
         this.UI.addEvent(new TextEvent(this.game.context, new Date().getTime(),
                                        hero.pos, "lvl up!"));
-        this.UI.levelUp();
+        this.UI.levelUp(hero);
       }
     }
   }
