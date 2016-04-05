@@ -136,7 +136,8 @@ class Chest extends Entity {
 }
 
 class Actor extends Entity {
-  constructor(health, energy, position, sprite, damageSprite, kind, game) {
+  constructor(health, energy,
+              position, sprite, damageSprite, kind, game) {
     super(position, true, sprite, kind, game);
     this.damageSprite = damageSprite;
     this.currentSprite = this.sprite;
@@ -146,6 +147,7 @@ class Actor extends Entity {
     this.maxEnergy = energy;
     this.meleeAttackRange = 3;
     this.level = 1;
+
 
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
@@ -179,8 +181,10 @@ class Actor extends Entity {
     return this.currentPath;
   }
   incrementEnergy() {
-    if (this.currentEnergy < this.maxEnergy) {
-      this.currentEnergy = this.currentEnergy + 1;
+    if (this.currentEnergy < this.maxEnergy - 1) {
+      this.currentEnergy = this.currentEnergy + 2;
+    } else if (this.currentEnergy < this.maxEnergy) {
+      this.currentEnergy++;
     } else if (this.nextAction == this.rest) {
       this.nextAction = null;
     }

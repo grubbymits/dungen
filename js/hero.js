@@ -3,14 +3,16 @@
 class Hero extends Actor {
   constructor(health, energy, strength, agility, wisdom,
               position, sprite, damageSprite, game) {
-    super(health, energy, position, sprite, damageSprite, HERO, game);
-    this.strength = strength;
-    this.agility = agility;
-    this.wisdom = wisdom;
+    super(health, energy,
+          position, sprite, damageSprite, HERO, game);
     this.equipWeapon = null;
     this.equipArmour = null;
     this.equipShield = null;
     this.equipArrows = null;
+    
+    this.strength = strength;
+    this.agility = agility;
+    this.wisdom = wisdom;
 
     this.isFollowing = false;
     this.leader = null;
@@ -41,10 +43,10 @@ class Hero extends Actor {
     return 0;
   }
   get meleeAtkPower() {
-    return this.equipWeapon.power + this.strength;
+    return Math.round(this.equipWeapon.power * this.strength / MAX_STRENGTH);
   }
   get meleeAtkEnergy() {
-    return this.equipWeapon.energy;
+    return Math.round(this.equipWeapon.energy * MAX_AGILITY / this.agility);
   }
   get meleeAtkType() {
     return this.equipWeapon.type;
@@ -109,8 +111,8 @@ class Hero extends Actor {
 }
 
 class Knight extends Hero {
-  constructor(health, energy, position, game) {
-    super(health, energy, 4, 3, 2,
+  constructor(position, game) {
+    super(30, 15, 14, 12, 10,
           position, knightSprite, damageKnightSprite, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -121,8 +123,8 @@ class Knight extends Hero {
 }
 
 class Mage extends Hero {
-  constructor(health, energy, position, game) {
-    super(health, energy, 2, 3, 4,
+  constructor(position, game) {
+    super(30, 15, 10, 12, 14,
           position, wizardSprite, damageMageSprite, game);
     console.log("creating mage");
     this.equipArmour = armours[ARMOUR0];

@@ -1,13 +1,12 @@
 "use strict";
 
 class Monster extends Actor {
-  constructor(health, energy, range,
+  constructor(health, energy,
+              defense, range, xp,
               meleeAtkPower, meleeAtkType, meleeAtkEnergy,
-              rangeAtkPower, rangeAtkType, rangeAtkEnergy,
-              defense,
-              xp,
               position, sprite, damageSprite, game) {
-    super(health, energy, position, sprite, damageSprite, MONSTER, game);
+    super(health, energy,
+          position, sprite, damageSprite, MONSTER, game);
     this.level = this.game.level;
     this.exp = xp * this.level;
     this.range = range;
@@ -16,9 +15,9 @@ class Monster extends Actor {
     this.meleeAttackPower = meleeAtkPower;
     this.meleeAttackType = meleeAtkType;
     this.meleeAttackEnergy = meleeAtkEnergy;
-    this.rangedAttackPower = rangeAtkPower;
-    this.rangedAttackType = rangeAtkType;
-    this.rangedttackEnergy = rangeAtkEnergy;
+    this.rangedAttackPower = 0;
+    this.rangedAttackType = 0;
+    this.rangedttackEnergy = 0;
     this.physicalDefense = defense;
     this.projectileRange = 0;
     this.meleeSound = document.getElementById("punchSound");
@@ -57,11 +56,9 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(10, 4, 4,
-          6, NORMAL, 1,
-          0, 0, 0,
-          1,
-          1,
+    super(10, 4,          // health, energy
+          1, 3, 1,        // defense, range, xp
+          6, NORMAL, 1,   // atkPower, atkType, atkEnergy
           position, ratSprite, damageRatSprite, game);
     this.index = RAT;
   }
@@ -69,11 +66,9 @@ class Rat extends Monster {
 
 class Spiders extends Monster {
   constructor(position, game) {
-    super(10, 4, 3,
+    super(10, 4,
+          1, 3, 2,
           7, NORMAL, 1,
-          0, 0, 0,
-          1,
-          2,
           position, spidersSprite, damageSpidersSprite, game);
     this.index = SPIDERS;
     this.meleeAttackPower = 2;
@@ -83,11 +78,9 @@ class Spiders extends Monster {
 
 class Lizard extends Monster {
   constructor(position, game) {
-    super(15, 4, 4,
+    super(15, 4,
+          3, 4, 3,
           8, NORMAL, 1,
-          0, 0, 0,
-          3,
-          3,
           position, lizardSprite, damageLizardSprite, game);
     this.index = LIZARD;
     this.meleeAttackPower = 4;
@@ -97,11 +90,9 @@ class Lizard extends Monster {
 
 class SpiderChampion extends Monster {
   constructor(position, game) {
-    super(20, 4, 3,
+    super(20, 4,
+          8, 4, 5,
           10, NORMAL, 2,
-          0, 0, 0,
-          8,
-          5,
           position, bigSpiderSprite, damageBigSpiderSprite, game);
     this.index = SPIDER_CHAMPION;
     this.meleeAttackPower = 5;

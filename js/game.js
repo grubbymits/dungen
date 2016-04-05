@@ -42,9 +42,9 @@ class Game {
   createHero(pos, type) {
     var hero;
     if (type == KNIGHT) {
-      hero = new Knight(30, 6, pos, this);
+      hero = new Knight(pos, this);
     } else if (type == MAGE) {
-      hero = new Mage(30, 6, pos, this);
+      hero = new Mage(pos, this);
     } else {
       throw("Hero type unrecognised!");
     }
