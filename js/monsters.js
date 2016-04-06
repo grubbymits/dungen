@@ -58,7 +58,7 @@ class Rat extends Monster {
   constructor(position, game) {
     super(10, 4,          // health, energy
           1, 3, 1,        // defense, range, xp
-          6, NORMAL, 1,   // atkPower, atkType, atkEnergy
+          8, NORMAL, 2,   // atkPower, atkType, atkEnergy
           position, ratSprite, damageRatSprite, game);
     this.index = RAT;
   }
@@ -68,22 +68,20 @@ class Spiders extends Monster {
   constructor(position, game) {
     super(10, 4,
           1, 3, 2,
-          7, NORMAL, 1,
+          9, NORMAL, 2,
           position, spidersSprite, damageSpidersSprite, game);
     this.index = SPIDERS;
-    this.meleeAttackPower = 2;
     this.meleeAttack = new MeleeAttack(this);
   }
 }
 
 class Lizard extends Monster {
   constructor(position, game) {
-    super(15, 4,
-          3, 4, 3,
-          8, NORMAL, 1,
+    super(15, 5,
+          2, 4, 3,
+          10, NORMAL, 2,
           position, lizardSprite, damageLizardSprite, game);
     this.index = LIZARD;
-    this.meleeAttackPower = 4;
     this.meleeAttack = new MeleeAttack(this);
   }
 }
@@ -95,7 +93,6 @@ class SpiderChampion extends Monster {
           10, NORMAL, 2,
           position, bigSpiderSprite, damageBigSpiderSprite, game);
     this.index = SPIDER_CHAMPION;
-    this.meleeAttackPower = 5;
     this.meleeAttack = new MeleeAttack(this);
   }
 }

@@ -79,7 +79,7 @@ class DealMeleeDamage extends Action {
     let type = this.actor.meleeAtkType;
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
-    let damage = Math.round(power * (1 / defense)); //* (1 / elemDefense);
+    let damage = Math.round(power / defense);
 
     this.targetActor.reduceHealth(this.actor, damage);
     document.getElementById("hitSound").play();

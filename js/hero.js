@@ -9,7 +9,7 @@ class Hero extends Actor {
     this.equipArmour = null;
     this.equipShield = null;
     this.equipArrows = null;
-    
+
     this.strength = strength;
     this.agility = agility;
     this.wisdom = wisdom;
@@ -80,6 +80,7 @@ class Hero extends Actor {
     return this.nextAction;
   }
   reduceHealth(enemy, damage) {
+    console.log("reduce hero health by:", damage);
     this.currentHealth -= damage;
     this.game.map.setDirty(this.position);
     this.currentSprite = this.damageSprite;
@@ -146,7 +147,6 @@ class Player {
     this.addHero(hero);
   }
   increaseExp(exp) {
-    console.log("increase exp by:", exp);
     for (let hero of this.heroes) {
       if (hero.increaseExp(exp)) {
         this.UI.addEvent(new TextEvent(this.game.context, new Date().getTime(),
