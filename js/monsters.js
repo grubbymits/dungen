@@ -32,10 +32,10 @@ class Monster extends Actor {
     return this.nextAction;
   }
   get meleeAtkPower() {
-    return this.meleeAttackPower + (this.level * this.meleeAttackPower * 0.05);
+    return this.meleeAttackPower; //+ (this.level * this.meleeAttackPower * 0.05);
   }
   get rangedAtkPower() {
-    return this.rangedAttackPower + (this.level * this.meleeAttackPower * 0.05);
+    return this.rangedAttackPower; //+ (this.level * this.meleeAttackPower * 0.05);
   }
   get meleeAtkEnergy() {
     return this.meleeAttackEnergy;
@@ -56,9 +56,9 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(10, 4,          // health, energy
-          1, 3, 1,        // defense, range, xp
-          8, NORMAL, 2,   // atkPower, atkType, atkEnergy
+    super(18, 4,          // health, energy
+          10, 3, 5,        // defense, range, xp
+          1.5, NORMAL, 2,   // atkPower, atkType, atkEnergy
           position, ratSprite, damageRatSprite, game);
     this.index = RAT;
   }
@@ -66,9 +66,9 @@ class Rat extends Monster {
 
 class Spiders extends Monster {
   constructor(position, game) {
-    super(10, 4,
-          1, 3, 2,
-          9, NORMAL, 2,
+    super(20, 4,
+          11, 3, 6,
+          1.5, NORMAL, 2,
           position, spidersSprite, damageSpidersSprite, game);
     this.index = SPIDERS;
     this.meleeAttack = new MeleeAttack(this);
@@ -77,9 +77,9 @@ class Spiders extends Monster {
 
 class Lizard extends Monster {
   constructor(position, game) {
-    super(15, 5,
-          2, 4, 3,
-          10, NORMAL, 2,
+    super(30, 5,
+          13, 4, 8,
+          2, NORMAL, 2,
           position, lizardSprite, damageLizardSprite, game);
     this.index = LIZARD;
     this.meleeAttack = new MeleeAttack(this);
@@ -88,9 +88,9 @@ class Lizard extends Monster {
 
 class SpiderChampion extends Monster {
   constructor(position, game) {
-    super(20, 4,
-          8, 4, 5,
-          10, NORMAL, 2,
+    super(40, 4,
+          13, 4, 10,
+          2.5, NORMAL, 2,
           position, bigSpiderSprite, damageBigSpiderSprite, game);
     this.index = SPIDER_CHAMPION;
     this.meleeAttack = new MeleeAttack(this);

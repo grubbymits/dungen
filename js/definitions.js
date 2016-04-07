@@ -244,3 +244,4 @@ const ELECTRIC = 3;
 const MAX_STRENGTH = 50;
 const MAX_AGILITY = 50;
 const MAX_WISDOM = 50;
+const MAX_DEFENSE = 50;
