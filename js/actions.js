@@ -83,7 +83,7 @@ class DealMeleeDamage extends Action {
     let damage = Math.round(power * MAX_DEFENSE / defense);
 
     this.targetActor.reduceHealth(this.actor, damage);
-    document.getElementById("hitSound").play();
+    this.game.audio.hit();
 
     if (this.targetActor.health <= 0) {
       if (this.actor.increaseExp !== null) {
@@ -91,7 +91,7 @@ class DealMeleeDamage extends Action {
                                this.targetActor.pos);
         this.actor.game.player.increaseExp(this.targetActor.exp);
       }
-      document.getElementById("dieSound").play();
+      this.game.audio.die();
       this.game.killActor(this.targetActor);
       this.targetActor = null;
       this.actor.nextAction = null;
@@ -120,7 +120,7 @@ class MeleeAttack extends Action {
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
-    this.actor.meleeSound.play();
+    this.game.audio.playAttack(this.actor);
     this.dealDamage.target = this.targetActor;
     this.actor.useEnergy(energyRequired);
     return this.dealDamage;

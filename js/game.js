@@ -12,6 +12,7 @@ class Game {
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
+    this.audio = new Audio(this);
   }
 
   renderMap() {
@@ -116,6 +117,14 @@ class Game {
 
   get map() {
     return this.theMap;
+  }
+  pause() {
+    this.isRunning = false;
+    this.audio.pauseMusic();
+  }
+  play() {
+    this.isRunning = true;
+    this.audio.playMusic();
   }
 
   /*

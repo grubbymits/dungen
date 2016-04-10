@@ -123,14 +123,13 @@ class Knight extends Hero {
     this.equipHelmet = helmets[HELMET0];
     this.equipWeapon = swords[SWORD0];
     this.equipShield = shields[SHIELD0];
-    this.meleeSound = document.getElementById("meleeWooshSound");
   }
 }
 
 class Mage extends Hero {
   constructor(position, game) {
     super(50, 15, 10, 12, 14,
-          position, wizardSprite, damageMageSprite, game);
+          position, mageSprite, damageMageSprite, game);
     console.log("creating mage");
     this.equipArmour = armours[ARMOUR0];
     this.equipWeapon = staffs[STAFF0];

@@ -69,20 +69,12 @@ function begin() {
 
     // Generator object to control the flow and order of play
     var updater = generator();
-    var music = document.getElementById("music-01");
 
     var run = function() {
-      theGame.isRunning = true;
       if (!document.hasFocus()) {
-        theGame.isRunning = false;
-        if (!music.paused) {
-          music.pause();
-        }
-      }
-      if (theGame.isRunning) {
-        if (music.paused) {
-          music.play();
-        }
+        theGame.pause();
+      } else {
+        theGame.play();
         // set a maximum game rate
         if (new Date().getTime() >= theGame.nextGameTick) {
           updater.next();
@@ -96,4 +88,4 @@ function begin() {
       window.requestAnimationFrame(run);
     };
     run();
-    }
+  }

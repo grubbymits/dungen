@@ -11,40 +11,35 @@ const ENEMY_OFFSET = 19;
 
 const TOTAL_NUM_SHEETS = 2;
 
-SpriteSheet.totalLoaded = 0;
-SpriteSheet.prototype.image;
-SpriteSheet.prototype.name;
-SpriteSheet.prototype.ready;
+var loadedSpriteSheets = 0;
 
-function SpriteSheet(name) {
-  this.image = new Image();
-  this.ready = false;
-  this.image.addEventListener('load', this.onLoad);
+class SpriteSheet {
+  constructor(name) {
+    this.image = new Image();
+    this.ready = false;
+    this.image.addEventListener('load', this.onLoad);
 
-  if (name) {
-    this.image.src = "res/img/" + name + ".png";
-    this.name = name;
+    if (name) {
+      this.image.src = "res/img/" + name + ".png";
+      this.name = name;
+    }
+    else {
+      throw new Error("No filename passed");
+    }
+    console.log("load", name);
   }
-  else {
-    // TODO needs to throw error
-    throw new Error("No filename passed");
+  onLoad() {
+    console.log("SpriteSheet.onLoad: ", this.name);
+    this.ready = true;
+    loadedSpriteSheets++;
+    if (loadedSpriteSheets == TOTAL_NUM_SHEETS) {
+      begin();
+    }
   }
-  console.log("load", name);
+  get isReady() {
+    return this.ready;
+  }
 }
-
-SpriteSheet.prototype.onLoad = function() {
-  console.log("SpriteSheet.onLoad: ", this.name);
-  this.ready = true;
-  SpriteSheet.totalLoaded++;
-  if (SpriteSheet.totalLoaded == TOTAL_NUM_SHEETS) {
-    begin();
-  }
-};
-
-SpriteSheet.prototype.isReady = function() {
-  //console.log("Sprite.isReady", this.ready);
-  return this.ready;
-};
 
 class Sprite {
   constructor(spriteSheet, offsetX, offsetY, width, height) {
@@ -77,11 +72,11 @@ var warlockSprite = new Sprite(spriteSheet, 1, 18, 32, 32);
 var berserkerSprite = new Sprite(spriteSheet, 2, 18, 32, 32);
 var archerSprite = new Sprite(spriteSheet, 4, 18, 32, 32);
 var knightSprite = new Sprite(spriteSheet, 5, 18, 32, 32);
-var wizardSprite = new Sprite(spriteSheet, 6, 18, 32, 32);
+var mageSprite = new Sprite(spriteSheet, 6, 18, 32, 32);
 var blackMageSprite = new Sprite(spriteSheet, 7, 18, 32, 32);
 
 var damageKnightSprite = new Sprite(redSpriteSheet, 5, 18, 32, 32);
-var damageWizardSprite = new Sprite(redSpriteSheet, 6, 18, 32, 32);
+var damageMageSprite = new Sprite(redSpriteSheet, 6, 18, 32, 32);
 
 var damageRatSprite = new Sprite(redSpriteSheet, 0, 19, 32, 32);
 var damageSpidersSprite = new Sprite(redSpriteSheet, 1, 19, 32, 32);

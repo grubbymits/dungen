@@ -26,6 +26,26 @@ class Item {
         return AXE_NAMES[this.subtype];
     }
   }
+  get sound() {
+    switch(this.type) {
+      default:
+        console.log("unhandled item type");
+        return null;
+      case SWORD:
+      case AXE:
+        return slashAttackSound;
+      case STAFF:
+        if (type == ELECTRIC) {
+          return electricMagicSound;
+        } else if (type == FIRE) {
+          return fireMagicSound;
+        } else if (type == ICE) {
+          return iceMagicSound;
+        } else {
+          return normalMagicSound;
+        }
+    }
+  }
   get sprite() {
     switch(this.type) {
       default:
@@ -108,7 +128,7 @@ var shields = [ new Armour(SHIELD, SHIELD0, 2, NORMAL),
                 new Armour(SHIELD, SHIELD6, 14, NORMAL),
                 new Armour(SHIELD, SHIELD7, 16, ELECTRIC),
               ];
-var staffs = [ new Weapon(STAFF, STAFF0, 10, 3, 1, FIRE),
+var staffs = [ new Weapon(STAFF, STAFF0, 10, 6, 1, FIRE),
                new Weapon(STAFF, STAFF1, 20, 3, 2, ICE),
                new Weapon(STAFF, STAFF2, 30, 3, 2, ELECTRIC),
                new Weapon(STAFF, STAFF3, 50, 3, 3, FIRE),
