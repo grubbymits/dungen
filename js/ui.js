@@ -213,7 +213,7 @@ class Interface {
     this.statsContext.fillStyle = "orange";
     this.statsContext.textAlign = "center";
     this.statsContext.fillText("HP: " + hero.currentHealth + "/" + hero.maxHealth,
-                               32, 32);
+                               48, 32);
     this.statsContext.fillText("EP: " + hero.currentEnergy + "/" + hero.maxEnergy,
                                128, 32);
     
