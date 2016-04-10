@@ -42,18 +42,14 @@ class Interface {
     this.itemMenuVisible = false;
 
     this.hud = document.createElement("canvas");
-    this.hud.style.position = 'absolute';
+    this.hud.style.position = 'fixed';
     this.desiredScreenWidth = TILE_SIZE * 6 * UPSCALE_FACTOR;
     this.desiredScreenHeight = TILE_SIZE * 10 * UPSCALE_FACTOR;
-    this.hud.width = TILE_SIZE * 8 * UPSCALE_FACTOR;
+    this.hud.width = TILE_SIZE * 6 * UPSCALE_FACTOR;
     this.hud.height = TILE_SIZE * 10 * UPSCALE_FACTOR;
-    this.hud.style.left = '50%';
-    this.hud.style.top = '50%';
-    //this.hud.style.bottom = '0px';
-    //this.hud.style.top = '0px';
-    //this.hud.style.margin = 'auto';
+    this.hud.style.left = '0px';
+    this.hud.style.top = '0px';
     this.hud.style.visibility = 'hidden';
-    this.hud.style.transform = 'translate(-50%, -50%)';
     this.hud.style.background = "rgba(50, 75, 75, 0.7)";
     document.body.appendChild(this.hud);
     this.hudContext = this.hud.getContext("2d");
@@ -145,40 +141,8 @@ class Interface {
     }
   }
   
-  initMenu() {
-    var offsetY = document.documentElement.scrollTop || document.body.scrollTop;
-    var offsetX = document.documentElement.scrollLeft || document.body.scrollLeft;
-    var isSmallScreen = true; //this.desiredHUDWidth > window.innerWidth ? true : false;
-    // if the screen is large, we could make the HUD two or three tiles wider.
-
-    this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
-    this.hud.style.left = offsetX + "px";
-    this.hud.style.top = offsetY + "px";
-
-    if (window.innerWidth >= this.desiredScreenWidth) {
-      this.hud.width = this.desiredScreenWidth;
-      if (window.innerWidth >= this.desiredScreenWidth * 2) {
-        this.hud.style.left = (window.innerWidth / 2) + offsetX + "px";
-      } else {
-        this.hud.style.left = (this.hud.width / 2) + offsetX + "px";
-      }
-    } else {
-      this.hud.width = window.innerWidth;
-    }
-
-    if (window.innerHeight >= this.desiredScreenHeight) {
-      this.hud.height = this.desiredScreenHeight;
-      if (window.innerWidth >= this.desiredScreenWidth * 2) {
-        this.hud.style.top = (window.innerHeight / 2) + offsetY + "px";
-      } else {
-        this.hud.style.top = (this.hud.height / 2) + offsetY + "px";
-      }
-    } else {
-      this.hud.height = window.innerHeight;
-    }
-  }
   renderItemMenu() {
-    this.initMenu();
+    this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
@@ -191,26 +155,8 @@ class Interface {
       y += TILE_SIZE * UPSCALE_FACTOR;
     }
   }
-  renderHUD() {
-    if (this.hudVisible) {
-      this.renderTeamMenu();
-    } else if (this.itemMenuVisible) {
-      this.renderItemMenu();
-    }
-    let hero = this.player.currentHero;
-    this.statsContext.clearRect(0, 0, this.stats.width, this.stats.height);
-    this.statsContext.font = "16px Droid Sans";
-    this.statsContext.fillStyle = "orange";
-    this.statsContext.textAlign = "center";
-    this.statsContext.fillText("HP: " + hero.currentHealth + "/" + hero.maxHealth,
-                               32, 32);
-    this.statsContext.fillText("EP: " + hero.currentEnergy + "/" + hero.maxEnergy,
-                               128, 32);
-    
-  }
-
   renderTeamMenu() {
-    this.initMenu();
+    this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
@@ -254,6 +200,23 @@ class Interface {
       this.hudContext.fillText("Wisdom: " + hero.wisdom,
                                offsetX, offsetY + 6 * spacing * UPSCALE_FACTOR);
     }
+  }
+  renderHUD() {
+    if (this.hudVisible) {
+      this.renderTeamMenu();
+    } else if (this.itemMenuVisible) {
+      this.renderItemMenu();
+    }
+    let hero = this.player.currentHero;
+    this.statsContext.clearRect(0, 0, this.stats.width, this.stats.height);
+    this.statsContext.font = "16px Droid Sans";
+    this.statsContext.fillStyle = "orange";
+    this.statsContext.textAlign = "center";
+    this.statsContext.fillText("HP: " + hero.currentHealth + "/" + hero.maxHealth,
+                               32, 32);
+    this.statsContext.fillText("EP: " + hero.currentEnergy + "/" + hero.maxEnergy,
+                               128, 32);
+    
   }
 
   onCanvasClick(event) {
