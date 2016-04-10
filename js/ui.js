@@ -58,13 +58,14 @@ class Interface {
     document.getElementById("centre_camera").addEventListener("click", this.centreCamera.bind(this), false);
     document.getElementById("rest_button").addEventListener("click", event => player.setRest());
     document.getElementById("hud_button").addEventListener("click", this.controlHUD.bind(this), false);
-    document.getElementById("items_button").addEventListener("click", this.controlItemMenu.bind(this), false);
     document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
-    
+
     document.getElementById("wisdom").addEventListener("click", this.increaseWisdom.bind(this), false);
     document.getElementById("agility").addEventListener("click", this.increaseAgility.bind(this), false);
     document.getElementById("strength").addEventListener("click", this.increaseStrength.bind(this), false);
-    
+
+    this.hud.addEventListener("click", this.equipMenu.bind(this), false);
+
     this.stats = document.createElement("canvas");
     this.stats.style.position = "fixed";
     this.stats.style.left = '0px';
@@ -140,7 +141,67 @@ class Interface {
       this.lvlUpButtons.style.visibility = "hidden";
     }
   }
-  
+  controller(event) {
+    let x = event.clientX;
+    let y = event.clientY;
+    if (this.state == STATS) {
+
+    } else if (y > TILE_SIZE && y < TILE_SIZE * 2 &&
+              x > TILE_SIZE && x < TILE_SIZE * 6) {
+      let type = 0;
+      if (x < TILE_SIZE * 2) {
+        type = this.player.primary.type;
+      } else if (x < TILE_SIZE * 3) {
+        type = this.player.secondary.type;
+      } else if (x < TILE_SIZE * 4) {
+        type = ARMOUR;
+      } else if (x < TILE_SIZE * 5) {
+        type = HELMET;
+      } else {
+        console.error("unhandled item type");
+      }
+
+      this.renderEquipMenu(type);
+    }
+  }
+  renderEquipMenu(type) {
+    this.state = EQUIP;
+    let items;
+    switch(type) {
+      case ARMOUR:
+      items = this.player.armours;
+      break;
+      case HELMET:
+      items = this.player.helmets;
+      break;
+      case SHIELD:
+      items = this.player.shields;
+      break;
+      case SWORD:
+      items = this.player.swords;
+      break;
+      case STAFF:
+      items = this.player.staffs;
+      break;
+      case AXE:
+      items = this.player.axes;
+      break;
+    }
+    let x = TILE_SIZE * UPSCALE_FACTOR;
+    let y = 3 * TILE_SIZE * UPSCALE_FACTOR;
+    this.hudContext.clearRect(x, y, this.hud.width, this.hud.height);
+    this.hudContext.font = "16px Droid Sans";
+    this.hudContext.fillStyle = "orange";
+    this.hudContext.textAlign = "left";
+    for (let item of items.keys()) {
+      let number = items.get(item);
+      console.log("draw ", item.name, " x, y, number:", x, y, number);
+      item.sprite.render(x, y, this.hudContext);
+      this.hudContext.fillText(item.name + " : " + number, x * 2, y + TILE_SIZE * UPSCALE_FACTOR / 2);
+      y += TILE_SIZE * UPSCALE_FACTOR;
+    }
+  }
+  /*
   renderItemMenu() {
     this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
@@ -154,9 +215,9 @@ class Interface {
       this.hudContext.fillText(item.name + " : " + number, x * 2, y + TILE_SIZE * UPSCALE_FACTOR / 2);
       y += TILE_SIZE * UPSCALE_FACTOR;
     }
-  }
+  }*/
   renderTeamMenu() {
-    this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
+    this.hudContext.clearRect(0, 0, this.hud.width, 3 * TILE_SIZE);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
@@ -185,6 +246,7 @@ class Interface {
         hero.helmet.sprite.render(offsetX + 8 * spacing, offsetY, this.hudContext);
       }
 
+      /*
       offsetY += TILE_SIZE * UPSCALE_FACTOR + (TILE_SIZE / 4);
       this.hudContext.fillText("Lvl: " + hero.level, offsetX, offsetY);
       this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
@@ -199,13 +261,12 @@ class Interface {
                                offsetX, offsetY + 5 * spacing * UPSCALE_FACTOR);
       this.hudContext.fillText("Wisdom: " + hero.wisdom,
                                offsetX, offsetY + 6 * spacing * UPSCALE_FACTOR);
+                               */
     }
   }
   renderHUD() {
     if (this.hudVisible) {
       this.renderTeamMenu();
-    } else if (this.itemMenuVisible) {
-      this.renderItemMenu();
     }
     let hero = this.player.currentHero;
     this.statsContext.clearRect(0, 0, this.stats.width, this.stats.height);
@@ -216,7 +277,7 @@ class Interface {
                                48, 32);
     this.statsContext.fillText("EP: " + hero.currentEnergy + "/" + hero.maxEnergy,
                                128, 32);
-    
+
   }
 
   onCanvasClick(event) {

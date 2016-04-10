@@ -39,6 +39,14 @@ class Hero extends Actor {
   get ring() {
     return this.equipRing;
   }
+  get primary() {
+    return this.weapon;
+  }
+  get secondary() {
+    if (this.equipShield !=== null) {
+      return this.shield;
+    }
+  }
   get projectileRange() {
     return 0;
   }
@@ -146,7 +154,11 @@ class Player {
     this.currentHero = hero;
     this.game = hero.game;
     this.heroes = [];
-    this.items = new Map();
+    this.shields = new Map();
+    this.helmets = new Map();
+    this.armours = new Map();
+    this.swords = new Map();
+    this.staffs = new Map();
     this.addHero(hero);
   }
   increaseExp(exp) {
@@ -184,11 +196,31 @@ class Player {
   }
   addItem(item) {
     let number = 1;
-    if (this.items.has(item)) {
-      number += this.items.get(item);
+    let items;
+    switch(item.type) {
+      case ARMOUR:
+      items = this.armours;
+      break;
+      case HELMET:
+      items = this.helmets;
+      break;
+      case SHIELD:
+      items = this.shields;
+      break;
+      case SWORD:
+      items = this.swords;
+      break;
+      case STAFF:
+      items = this.staffs;
+      break;
+      case AXE:
+      items = this.axes;
+      break;
     }
-    this.items.set(item, number);
-    console.log(this.items);
+    if (items.has(item)) {
+      number += items.get(item);
+    }
+    items.set(item, number);
   }
   setDestination(x, y) {
     this.currentHero.setDestination(x, y);
