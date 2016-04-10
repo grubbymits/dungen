@@ -26,7 +26,16 @@ class Audio {
   constructor(game) {
     this.game = game;
     this.musicArray = [ new Song("01-adventures"),
-                        new Song("02-eclipse")
+                        new Song("02-eclipse"),
+                        new Song("05-Firefight"),
+                        new Song("06-Inanimate"),
+                        new Song("07-Seven"),
+                        new Song("09-Laser"),
+                        new Song("11-RinseRepeat"),
+                        new Song("12-Convergence"),
+                        new Song("13-Remember"),
+                        new Song("15-Ultraviolet"),
+                        new Song("16-AllThingsEnd")
                       ];
     for (let track of this.musicArray) {
       track.audio.addEventListener("ended", this.playNextSong.bind(this));
