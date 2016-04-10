@@ -28,7 +28,13 @@ class Audio {
     this.musicArray = [ new Song("01-adventures"),
                         new Song("02-eclipse")
                       ];
+    for (let track of this.musicArray) {
+      track.audio.addEventListener("ended", this.playNextSong.bind(this));
+    }
     this.currentSong = this.musicArray[0];
+    this.currentIndex = 0;
+    this.currentSong.audio.autoplay = true;
+    
     this.slashAttackSound = new SoundEffect("melee_woosh");
     this.hitSound = new SoundEffect("hit");
     this.punchSound = new SoundEffect("punch");
@@ -39,9 +45,15 @@ class Audio {
     this.iceMagicSound = new SoundEffect("freeze");
     this.electricMagicSound = new SoundEffect("Bolt2");
   }
-  
+  playNextSong() {
+    console.log("play next song");
+    this.currentIndex = (this.currentIndex) + 1 % this.musicArray.length;
+    this.currentSong = this.musicArray[this.currentIndex];
+    this.currentSong.audio.currentTime = 0;
+    this.currentSong.play();
+  }
   playMusic() {
-    if (this.currentSong.paused) {
+    if (!this.currentSong.playing) {
       this.currentSong.play();
     }
   }
