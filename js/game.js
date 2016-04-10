@@ -76,7 +76,7 @@ class Game {
       let y = getBoundedRandom(1, this.theMap.yMax);
       let loc = this.theMap.getLocation(x, y);
       if (!loc.isBlocked && !loc.isOccupied) {
-        type = getBoundedRandom(RAT, TOAD);
+        let type = getBoundedRandom(RAT, TOAD);
         this.createMonster(loc.vec, type);
         monsters++;
       }
