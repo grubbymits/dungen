@@ -68,6 +68,18 @@ class Interface {
     document.getElementById("wisdom").addEventListener("click", this.increaseWisdom.bind(this), false);
     document.getElementById("agility").addEventListener("click", this.increaseAgility.bind(this), false);
     document.getElementById("strength").addEventListener("click", this.increaseStrength.bind(this), false);
+    
+    this.stats = document.createElement("canvas");
+    this.stats.style.position = "fixed";
+    this.stats.style.left = '0px';
+    this.stats.style.bottom = '0px';
+    this.stats.style.visibility = 'visible';
+    this.stats.style.zIndex = '4';
+    this.stats.style.background = "rgba(50, 75, 75, 0.7)";
+    this.stats.width = 3 * TILE_SIZE;
+    this.stats.height = TILE_SIZE;
+    document.body.appendChild(this.stats);
+    this.statsContext = this.stats.getContext("2d");
   }
 
   addEvent(event) {
@@ -185,6 +197,16 @@ class Interface {
     } else if (this.itemMenuVisible) {
       this.renderItemMenu();
     }
+    let hero = this.player.currentHero;
+    this.statsContext.clearRect(0, 0, this.stats.width, this.stats.height);
+    this.statsContext.font = "16px Droid Sans";
+    this.statsContext.fillStyle = "orange";
+    this.statsContext.textAlign = "center";
+    this.statsContext.fillText("HP: " + hero.currentHealth + "/" + hero.maxHealth,
+                               32, 32);
+    this.statsContext.fillText("EP: " + hero.currentEnergy + "/" + hero.maxEnergy,
+                               128, 32);
+    
   }
 
   renderTeamMenu() {

@@ -93,7 +93,7 @@ class Hero extends Actor {
     }
   }
   increaseExp(exp) {
-    let nextExpLevel = Math.round(this.currentExp * 1.5);
+    let nextExpLevel = this.currentExp + Math.round(this.currentExp * 1.5);
     this.currentExp += exp;
     if (this.currentExp >= this.expToNextLvl) {
       this.level++;
