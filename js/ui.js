@@ -64,7 +64,7 @@ class Interface {
     document.getElementById("agility").addEventListener("click", this.increaseAgility.bind(this), false);
     document.getElementById("strength").addEventListener("click", this.increaseStrength.bind(this), false);
 
-    this.hud.addEventListener("click", this.equipMenu.bind(this), false);
+    this.hud.addEventListener("click", this.controller.bind(this), false);
 
     this.stats = document.createElement("canvas");
     this.stats.style.position = "fixed";
@@ -142,20 +142,22 @@ class Interface {
     }
   }
   controller(event) {
-    let x = event.clientX;
-    let y = event.clientY;
-    if (this.state == STATS) {
-
-    } else if (y > TILE_SIZE && y < TILE_SIZE * 2 &&
-              x > TILE_SIZE && x < TILE_SIZE * 6) {
+    let x = Math.floor(event.clientX / TILE_SIZE);
+    let y = Math.floor(event.clientY / TILE_SIZE);
+    // Whatever state the UI is in, if the items are clicked
+    // at the top, the equip menu for that item type needs
+    // to be presented.
+    if (y == 1 && x > 1 && x < 6) {
       let type = 0;
-      if (x < TILE_SIZE * 2) {
-        type = this.player.primary.type;
-      } else if (x < TILE_SIZE * 3) {
-        type = this.player.secondary.type;
-      } else if (x < TILE_SIZE * 4) {
+      let hero = this.player.currentHero;
+      console.log("x:",x);
+      if (x == 2) {
+        type = hero.primary.type;
+      } else if (x == 3) {
+        type = hero.secondary.type;
+      } else if (x == 4) {
         type = ARMOUR;
-      } else if (x < TILE_SIZE * 5) {
+      } else if (x == 5) {
         type = HELMET;
       } else {
         console.error("unhandled item type");
@@ -226,24 +228,24 @@ class Interface {
       let hero = this.player.heroes[i];
       let offsetX = TILE_SIZE * UPSCALE_FACTOR;
       let offsetY = TILE_SIZE + (TILE_SIZE * 2 * i) * UPSCALE_FACTOR;
-      let spacing = (TILE_SIZE / 4) + 8;
+      let spacing = TILE_SIZE;//(TILE_SIZE / 4) + 8;
 
       hero.sprite.render(offsetX, offsetY, this.hudContext);
 
       if (hero.weapon) {
-        hero.weapon.sprite.render(offsetX + 2 * spacing, offsetY, this.hudContext);
+        hero.weapon.sprite.render(offsetX + 1 * spacing, offsetY, this.hudContext);
       }
       if (hero.shield) {
-        hero.shield.sprite.render(offsetX + 4 * spacing, offsetY, this.hudContext);
+        hero.shield.sprite.render(offsetX + 2 * spacing, offsetY, this.hudContext);
       }
       else if (hero.arrows) {
-        hero.arrows.sprite.render(offsetX + 4 * spacing, offsetY, this.hudContext);
+        hero.arrows.sprite.render(offsetX + 2 * spacing, offsetY, this.hudContext);
       }
       if (hero.armour) {
-        hero.armour.sprite.render(offsetX + 6 * spacing, offsetY, this.hudContext);
+        hero.armour.sprite.render(offsetX + 3 * spacing, offsetY, this.hudContext);
       }
       if (hero.helmet) {
-        hero.helmet.sprite.render(offsetX + 8 * spacing, offsetY, this.hudContext);
+        hero.helmet.sprite.render(offsetX + 4 * spacing, offsetY, this.hudContext);
       }
 
       /*

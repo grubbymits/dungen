@@ -43,7 +43,7 @@ class Hero extends Actor {
     return this.weapon;
   }
   get secondary() {
-    if (this.equipShield !=== null) {
+    if (this.equipShield !== null) {
       return this.shield;
     }
   }
