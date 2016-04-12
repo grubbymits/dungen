@@ -40,6 +40,9 @@ function begin() {
 
     var player = new Player(character);
     var UI = new Interface(player);
+    player.addItem(armours[1]);
+    player.addItem(helmets[2]);
+    player.addItem(swords[3]);
     UI.centreCamera(null);
     theGame.addPlayer(player);
     theGame.placeMonsters(10);

@@ -121,6 +121,22 @@ class Hero extends Actor {
     this.walk.dest = this.leader.position;
     this.nextAction = this.walk;
   }
+  equipItem(item) {
+    switch(item.type) {
+      case ARMOUR:
+      return this.equipArmour = item;
+      break;
+      case HELMET:
+      return this.equipHelmet = item;
+      break;
+      case SHIELD:
+      return this.equipShield = item;
+      break;
+      case SWORD:
+      return this.equipWeapon = item;
+      break;
+    }
+  }
 }
 
 class Knight extends Hero {
@@ -159,6 +175,8 @@ class Player {
     this.armours = new Map();
     this.swords = new Map();
     this.staffs = new Map();
+    this.axes = new Map();
+    this.potions = new Map();
     this.addHero(hero);
   }
   increaseExp(exp) {
@@ -198,6 +216,9 @@ class Player {
     let number = 1;
     let items;
     switch(item.type) {
+      default:
+      console.error("unhandled item type in Player.addItem");
+      break;
       case ARMOUR:
       items = this.armours;
       break;
@@ -215,6 +236,9 @@ class Player {
       break;
       case AXE:
       items = this.axes;
+      break;
+      case POTION:
+      items = this.potions;
       break;
     }
     if (items.has(item)) {

@@ -248,3 +248,4 @@ const MAX_DEFENSE = 50;
 
 const STATS = 0;
 const EQUIP = 1;
+const TEAM = 2;

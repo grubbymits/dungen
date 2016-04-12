@@ -40,6 +40,10 @@ class Interface {
     this.events = [];
     this.hudVisible = false;
     this.itemMenuVisible = false;
+    this.state = { menu: STATS,
+                   hero: this.player.currentHero,
+                   itemType: ARMOUR,
+                   items: [] };
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'fixed';
@@ -141,66 +145,83 @@ class Interface {
       this.lvlUpButtons.style.visibility = "hidden";
     }
   }
+  getItems(type) {
+    switch(type) {
+      default:
+      console.error("unhandled item type:", type);
+      case ARMOUR:
+      return this.player.armours;
+      break;
+      case HELMET:
+      return this.player.helmets;
+      break;
+      case SHIELD:
+      return this.player.shields;
+      break;
+      case SWORD:
+      return this.player.swords;
+      break;
+      case STAFF:
+      return this.player.staffs;
+      break;
+      case AXE:
+      return this.player.axes;
+      break;
+    }
+  }
   controller(event) {
     let x = Math.floor(event.clientX / TILE_SIZE);
     let y = Math.floor(event.clientY / TILE_SIZE);
-    // Whatever state the UI is in, if the items are clicked
-    // at the top, the equip menu for that item type needs
-    // to be presented.
-    if (y == 1 && x > 1 && x < 6) {
-      let type = 0;
-      let hero = this.player.currentHero;
+    console.log("controller state:", this.state);
+    console.log("x, y:", x, y);
+    if (x == 1 && y == 1) {
+      // Choose character
+      this.state.menu = TEAM;
+    } else if (y == 1 && x > 1 && x < 6) {
+      // Whatever state the UI is in, if the items are clicked
+      // at the top, the equip menu for that item type needs
+      // to be presented.
       console.log("x:",x);
       if (x == 2) {
-        type = hero.primary.type;
+        this.state.itemType = this.state.hero.primary.type;
       } else if (x == 3) {
-        type = hero.secondary.type;
+        this.state.itemType = this.state.hero.secondary.type;
       } else if (x == 4) {
-        type = ARMOUR;
+        this.state.itemType = ARMOUR;
       } else if (x == 5) {
-        type = HELMET;
+        this.state.itemType = HELMET;
       } else {
         console.error("unhandled item type");
       }
-
-      this.renderEquipMenu(type);
+      this.renderEquipMenu();
+    } else if (this.state.menu == EQUIP && y > 3) {
+      // The item list begins at y == 3 and will contain a maximum of
+      // 8 elements / rows.
+      if (y < this.state.items.length + 3) {
+        let item = this.state.items[y-3];
+        this.state.hero.equipItem(item);
+      }
     }
   }
-  renderEquipMenu(type) {
-    this.state = EQUIP;
-    let items;
-    switch(type) {
-      case ARMOUR:
-      items = this.player.armours;
-      break;
-      case HELMET:
-      items = this.player.helmets;
-      break;
-      case SHIELD:
-      items = this.player.shields;
-      break;
-      case SWORD:
-      items = this.player.swords;
-      break;
-      case STAFF:
-      items = this.player.staffs;
-      break;
-      case AXE:
-      items = this.player.axes;
-      break;
-    }
+  renderEquipMenu() {
+    this.state.menu = EQUIP;
+    this.state.items = [];
     let x = TILE_SIZE * UPSCALE_FACTOR;
     let y = 3 * TILE_SIZE * UPSCALE_FACTOR;
     this.hudContext.clearRect(x, y, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
+
+    let items = this.getItems(this.state.itemType);
+    console.log("items:", items);
     for (let item of items.keys()) {
       let number = items.get(item);
       console.log("draw ", item.name, " x, y, number:", x, y, number);
       item.sprite.render(x, y, this.hudContext);
       this.hudContext.fillText(item.name + " : " + number, x * 2, y + TILE_SIZE * UPSCALE_FACTOR / 2);
       y += TILE_SIZE * UPSCALE_FACTOR;
+      this.state.items.push(item);
     }
   }
   /*
