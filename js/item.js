@@ -138,9 +138,9 @@ var staffs = [ new Weapon(STAFF, STAFF0, 10, 6, 1, FIRE),
                new Weapon(STAFF, STAFF7, 150, 3, 5, ICE),
              ];
 
-var swords = [ new Weapon(SWORD, SWORD0, 10, 3, 1, NORMAL),
-               new Weapon(SWORD, SWORD1, 20, 3, 2, NORMAL),
-               new Weapon(SWORD, SWORD2, 30, 3, 2, NORMAL),
+var swords = [ new Weapon(SWORD, SWORD0, 20, 3, 1, NORMAL),
+               new Weapon(SWORD, SWORD1, 30, 3, 2, NORMAL),
+               new Weapon(SWORD, SWORD2, 40, 3, 2, NORMAL),
                new Weapon(SWORD, SWORD3, 50, 3, 3, NORMAL),
                new Weapon(SWORD, SWORD4, 75, 3, 3, NORMAL),
                new Weapon(SWORD, SWORD5, 100, 3, 4, NORMAL),

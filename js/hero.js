@@ -141,7 +141,7 @@ class Hero extends Actor {
 
 class Knight extends Hero {
   constructor(position, game) {
-    super(60, 15, 14, 12, 10,
+    super(60, 15, 20, 15, 10,
           position, knightSprite, damageKnightSprite, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -152,7 +152,7 @@ class Knight extends Hero {
 
 class Mage extends Hero {
   constructor(position, game) {
-    super(50, 15, 10, 12, 14,
+    super(60, 15, 10, 15, 20,
           position, mageSprite, damageMageSprite, game);
     console.log("creating mage");
     this.equipArmour = armours[ARMOUR0];

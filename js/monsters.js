@@ -56,8 +56,8 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(18, 4,          // health, energy
-          10, 3, 5,        // defense, range, xp
+    super(40, 4,          // health, energy
+          15, 3, 5,        // defense, range, xp
           1.5, NORMAL, 2,   // atkPower, atkType, atkEnergy
           position, ratSprite, damageRatSprite, game);
     this.index = RAT;
@@ -66,8 +66,8 @@ class Rat extends Monster {
 
 class Spiders extends Monster {
   constructor(position, game) {
-    super(20, 4,
-          11, 3, 6,
+    super(44, 4,
+          15, 3, 6,
           1.5, NORMAL, 2,
           position, spidersSprite, damageSpidersSprite, game);
     this.index = SPIDERS;
@@ -77,8 +77,8 @@ class Spiders extends Monster {
 
 class Lizard extends Monster {
   constructor(position, game) {
-    super(30, 5,
-          13, 4, 8,
+    super(60, 5,
+          18, 4, 8,
           2, NORMAL, 2,
           position, lizardSprite, damageLizardSprite, game);
     this.index = LIZARD;
@@ -88,8 +88,8 @@ class Lizard extends Monster {
 
 class SpiderChampion extends Monster {
   constructor(position, game) {
-    super(40, 4,
-          13, 4, 10,
+    super(70, 4,
+          20, 4, 10,
           2.5, NORMAL, 2,
           position, bigSpiderSprite, damageBigSpiderSprite, game);
     this.index = SPIDER_CHAMPION;
