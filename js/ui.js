@@ -165,8 +165,6 @@ class Interface {
   controller(event) {
     let x = Math.floor(event.clientX / TILE_SIZE);
     let y = Math.floor(event.clientY / TILE_SIZE);
-    console.log("controller state:", this.state);
-    console.log("x, y:", x, y);
     if (x == 0 && y == 0) {
       // Choose character
       this.state.menu = TEAM;
@@ -174,7 +172,6 @@ class Interface {
       // Whatever state the UI is in, if the items are clicked
       // at the top, the equip menu for that item type needs
       // to be presented.
-      console.log("x:",x);
       if (x == 1) {
         this.state.itemType = this.state.hero.primary.type;
       } else if (x == 2) {
@@ -207,7 +204,6 @@ class Interface {
     this.hudContext.textAlign = "left";
 
     let items = this.getItems(this.state.itemType);
-    console.log("items:", items);
     for (let item of items.keys()) {
       let number = items.get(item);
       item.sprite.render(x, y, this.hudContext);
@@ -265,21 +261,18 @@ class Interface {
     this.hudContext.fillText("Defense: " + hero.physicalDefense,
                                offsetX, offsetY + 4 * spacing * UPSCALE_FACTOR);
   }
-  renderInfo() {
-    this.renderCurrentCharacter();
-    switch(this.state.menu) {
-      case STATS:
-      case TEAM:
-        this.renderCurrentStats();
-        break;
-      case EQUIP:
-        this.renderEquipMenu();
-        break;
-    }
-  }
   renderHUD() {
     if (this.hudVisible) {
-      this.renderInfo();
+      this.renderCurrentCharacter();
+      switch(this.state.menu) {
+        case STATS:
+        case TEAM:
+          this.renderCurrentStats();
+          break;
+        case EQUIP:
+          this.renderEquipMenu();
+          break;
+      }
     }
     let hero = this.player.currentHero;
     this.statsContext.clearRect(0, 0, this.stats.width, this.stats.height);
