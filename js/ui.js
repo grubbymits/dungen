@@ -47,10 +47,8 @@ class Interface {
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'fixed';
-    this.desiredScreenWidth = TILE_SIZE * 6 * UPSCALE_FACTOR;
-    this.desiredScreenHeight = TILE_SIZE * 10 * UPSCALE_FACTOR;
-    this.hud.width = TILE_SIZE * 6 * UPSCALE_FACTOR;
-    this.hud.height = TILE_SIZE * 10 * UPSCALE_FACTOR;
+    this.hud.width = TILE_SIZE * 5 * UPSCALE_FACTOR;
+    this.hud.height = TILE_SIZE * 11 * UPSCALE_FACTOR;
     this.hud.style.left = '0px';
     this.hud.style.top = '0px';
     this.hud.style.visibility = 'hidden';
@@ -149,24 +147,19 @@ class Interface {
     switch(type) {
       default:
       console.error("unhandled item type:", type);
+      break;
       case ARMOUR:
       return this.player.armours;
-      break;
       case HELMET:
       return this.player.helmets;
-      break;
       case SHIELD:
       return this.player.shields;
-      break;
       case SWORD:
       return this.player.swords;
-      break;
       case STAFF:
       return this.player.staffs;
-      break;
       case AXE:
       return this.player.axes;
-      break;
     }
   }
   controller(event) {
@@ -174,31 +167,31 @@ class Interface {
     let y = Math.floor(event.clientY / TILE_SIZE);
     console.log("controller state:", this.state);
     console.log("x, y:", x, y);
-    if (x == 1 && y == 1) {
+    if (x == 0 && y == 0) {
       // Choose character
       this.state.menu = TEAM;
-    } else if (y == 1 && x > 1 && x < 6) {
+    } else if (y == 0 && x > 0 && x < 5) {
       // Whatever state the UI is in, if the items are clicked
       // at the top, the equip menu for that item type needs
       // to be presented.
       console.log("x:",x);
-      if (x == 2) {
+      if (x == 1) {
         this.state.itemType = this.state.hero.primary.type;
-      } else if (x == 3) {
+      } else if (x == 2) {
         this.state.itemType = this.state.hero.secondary.type;
-      } else if (x == 4) {
+      } else if (x == 3) {
         this.state.itemType = ARMOUR;
-      } else if (x == 5) {
+      } else if (x == 4) {
         this.state.itemType = HELMET;
       } else {
         console.error("unhandled item type");
       }
       this.renderEquipMenu();
-    } else if (this.state.menu == EQUIP && y > 3) {
+    } else if (this.state.menu == EQUIP && y > 2) {
       // The item list begins at y == 3 and will contain a maximum of
       // 8 elements / rows.
-      if (y < this.state.items.length + 3) {
-        let item = this.state.items[y-3];
+      if (y < this.state.items.length + 2) {
+        let item = this.state.items[y-2];
         this.state.hero.equipItem(item);
       }
     }
@@ -206,8 +199,8 @@ class Interface {
   renderEquipMenu() {
     this.state.menu = EQUIP;
     this.state.items = [];
-    let x = TILE_SIZE * UPSCALE_FACTOR;
-    let y = 3 * TILE_SIZE * UPSCALE_FACTOR;
+    let x = 0; //TILE_SIZE * UPSCALE_FACTOR;
+    let y = 2 * TILE_SIZE * UPSCALE_FACTOR;
     this.hudContext.clearRect(x, y, this.hud.width, this.hud.height);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
@@ -217,9 +210,8 @@ class Interface {
     console.log("items:", items);
     for (let item of items.keys()) {
       let number = items.get(item);
-      console.log("draw ", item.name, " x, y, number:", x, y, number);
       item.sprite.render(x, y, this.hudContext);
-      this.hudContext.fillText(item.name + " : " + number, x * 2, y + TILE_SIZE * UPSCALE_FACTOR / 2);
+      this.hudContext.fillText(item.name + " : " + number, TILE_SIZE, y + TILE_SIZE * UPSCALE_FACTOR / 2);
       y += TILE_SIZE * UPSCALE_FACTOR;
       this.state.items.push(item);
     }
@@ -233,8 +225,8 @@ class Interface {
     this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
     let hero = this.state.hero;
-    let offsetX = TILE_SIZE * UPSCALE_FACTOR;
-    let offsetY = TILE_SIZE * 1 * UPSCALE_FACTOR;
+    let offsetX = 0; //TILE_SIZE * UPSCALE_FACTOR;
+    let offsetY = 0; //TILE_SIZE * 1 * UPSCALE_FACTOR;
     let spacing = TILE_SIZE;
     hero.sprite.render(offsetX, offsetY, this.hudContext);
     hero.primary.sprite.render(offsetX + 1 * spacing, offsetY, this.hudContext);
@@ -245,8 +237,8 @@ class Interface {
     }
   }
   renderCurrentStats() {
-    let offsetX = TILE_SIZE * UPSCALE_FACTOR;
-    let offsetY = 3 * TILE_SIZE * UPSCALE_FACTOR;
+    let offsetX = TILE_SIZE / 4; //* UPSCALE_FACTOR;
+    let offsetY = 2 * TILE_SIZE * UPSCALE_FACTOR;
     let spacing = TILE_SIZE;
     let hero = this.state.hero;
     
