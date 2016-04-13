@@ -224,72 +224,70 @@ class Interface {
       this.state.items.push(item);
     }
   }
-  /*
-  renderItemMenu() {
-    this.hudContext.clearRect(0, 0, this.hud.width, this.hud.height);
-    this.hudContext.font = "16px Droid Sans";
-    this.hudContext.fillStyle = "orange";
-    this.hudContext.textAlign = "left";
-    let x = TILE_SIZE * UPSCALE_FACTOR;
-    let y = TILE_SIZE * UPSCALE_FACTOR;
-    for (let item of this.player.items.keys()) {
-      let number = this.player.items.get(item);
-      item.sprite.render(x, y, this.hudContext);
-      this.hudContext.fillText(item.name + " : " + number, x * 2, y + TILE_SIZE * UPSCALE_FACTOR / 2);
-      y += TILE_SIZE * UPSCALE_FACTOR;
-    }
-  }*/
-  renderTeamMenu() {
+  renderTeamList() {
+    
+  }
+  renderCurrentCharacter() {
     this.hudContext.clearRect(0, 0, this.hud.width, 3 * TILE_SIZE);
     this.hudContext.font = "16px Droid Sans";
     this.hudContext.fillStyle = "orange";
     this.hudContext.textAlign = "left";
-
-    for (let i in this.player.heroes) {
-      let hero = this.player.heroes[i];
-      let offsetX = TILE_SIZE * UPSCALE_FACTOR;
-      let offsetY = TILE_SIZE + (TILE_SIZE * 2 * i) * UPSCALE_FACTOR;
-      let spacing = TILE_SIZE;//(TILE_SIZE / 4) + 8;
-
-      hero.sprite.render(offsetX, offsetY, this.hudContext);
-
-      if (hero.weapon) {
-        hero.weapon.sprite.render(offsetX + 1 * spacing, offsetY, this.hudContext);
-      }
-      if (hero.shield) {
-        hero.shield.sprite.render(offsetX + 2 * spacing, offsetY, this.hudContext);
-      }
-      else if (hero.arrows) {
-        hero.arrows.sprite.render(offsetX + 2 * spacing, offsetY, this.hudContext);
-      }
-      if (hero.armour) {
-        hero.armour.sprite.render(offsetX + 3 * spacing, offsetY, this.hudContext);
-      }
-      if (hero.helmet) {
-        hero.helmet.sprite.render(offsetX + 4 * spacing, offsetY, this.hudContext);
-      }
-
-      /*
-      offsetY += TILE_SIZE * UPSCALE_FACTOR + (TILE_SIZE / 4);
-      this.hudContext.fillText("Lvl: " + hero.level, offsetX, offsetY);
-      this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
+    let hero = this.state.hero;
+    let offsetX = TILE_SIZE * UPSCALE_FACTOR;
+    let offsetY = TILE_SIZE * 1 * UPSCALE_FACTOR;
+    let spacing = TILE_SIZE;
+    hero.sprite.render(offsetX, offsetY, this.hudContext);
+    hero.primary.sprite.render(offsetX + 1 * spacing, offsetY, this.hudContext);
+    hero.secondary.sprite.render(offsetX + 2 * spacing, offsetY, this.hudContext);
+    hero.armour.sprite.render(offsetX + 3 * spacing, offsetY, this.hudContext);
+    if (hero.helmet) {
+      hero.helmet.sprite.render(offsetX + 4 * spacing, offsetY, this.hudContext);
+    }
+  }
+  renderCurrentStats() {
+    let offsetX = TILE_SIZE * UPSCALE_FACTOR;
+    let offsetY = 3 * TILE_SIZE * UPSCALE_FACTOR;
+    let spacing = TILE_SIZE;
+    let hero = this.state.hero;
+    
+    this.hudContext.font = "16px Droid Sans";
+    this.hudContext.fillStyle = "orange";
+    this.hudContext.textAlign = "left";
+    
+    this.hudContext.clearRect(0, offsetY, this.hud.width, this.hud.height);
+    this.hudContext.fillText("Lvl: " + hero.level, offsetX, offsetY);
+    this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
+                               offsetX, offsetY + spacing * UPSCALE_FACTOR / 2);
+    this.hudContext.fillText("Health: " + hero.currentHealth + "/" + hero.maxHealth,
                                offsetX, offsetY + spacing * UPSCALE_FACTOR);
-      this.hudContext.fillText("Health: " + hero.currentHealth + "/" + hero.maxHealth,
+    this.hudContext.fillText("Energy: " + hero.currentEnergy + "/" + hero.maxEnergy,
+                               offsetX, offsetY + 3/2 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Strength: " + hero.strength,
                                offsetX, offsetY + 2 * spacing * UPSCALE_FACTOR);
-      this.hudContext.fillText("Energy: " + hero.currentEnergy + "/" + hero.maxEnergy,
+    this.hudContext.fillText("Agility: " + hero.agility,
+                               offsetX, offsetY + 5/2 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Wisdom: " + hero.wisdom,
                                offsetX, offsetY + 3 * spacing * UPSCALE_FACTOR);
-      this.hudContext.fillText("Strength: " + hero.strength,
+    this.hudContext.fillText("Attack: " + hero.meleeAtkPower,
+                               offsetX, offsetY + 7/2 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Defense: " + hero.physicalDefense,
                                offsetX, offsetY + 4 * spacing * UPSCALE_FACTOR);
-      this.hudContext.fillText("Agility: " + hero.agility,
-                               offsetX, offsetY + 5 * spacing * UPSCALE_FACTOR);
-      this.hudContext.fillText("Wisdom: " + hero.wisdom,
-                               offsetX, offsetY + 6 * spacing * UPSCALE_FACTOR);
-                               */
+  }
+  renderInfo() {
+    this.renderCurrentCharacter();
+    switch(this.state.menu) {
+      case STATS:
+      case TEAM:
+        this.renderCurrentStats();
+        break;
+      case EQUIP:
+        this.renderEquipMenu();
+        break;
     }
   }
   renderHUD() {
     if (this.hudVisible) {
-      this.renderTeamMenu();
+      this.renderInfo();
     }
     let hero = this.player.currentHero;
     this.statsContext.clearRect(0, 0, this.stats.width, this.stats.height);
