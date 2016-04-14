@@ -35,12 +35,12 @@ const ENEMY_NAMES = [ "Rat",
 
 const POTION_NAMES = [ "Basic Health Potion",
                        "Energy Potion",
+                       "Health Potion",
                        "Defense Potion",
-                       "Big Health Potion",
                        "Agility Potion",
                        "Strength Potion",
                        "Wisdom Potion",
-                       "Invincibility Potion"
+                       "Big Health Potion"
                       ];
 const SWORD_NAMES = [ "first sword",
                       "second sword",
@@ -105,6 +105,8 @@ const SHIELD = 3;
 const ARMOUR = 4;
 const HELMET = 5;
 const POTION = 6;
+const SCROLL = 7;
+const BOW = 8;
 
 // Item subtypes
 const SWORD0 = 0;
@@ -143,6 +145,15 @@ const SHIELD5 = 5;
 const SHIELD6 = 6;
 const SHIELD7 = 7;
 
+const SCROLL0 = 0;
+const SCROLL1 = 1;
+const SCROLL2 = 2;
+const SCROLL3 = 3;
+const SCROLL4 = 4;
+const SCROLL5 = 5;
+const SCROLL6 = 6;
+const SCROLL7 = 7;
+
 const STAFF0 = 0;
 const STAFF1 = 1;
 const STAFF2 = 2;
@@ -161,15 +172,21 @@ const AXE5 = 5;
 const AXE6 = 6;
 const AXE7 = 7;
 
+const BOW0 = 0;
+const BOW1 = 1;
+const BOW2 = 2;
+const BOW3 = 3;
+const BOW4 = 4;
+
 // Potions
 const BASIC_HEALTH_POTION = 0;
 const ENERGY_POTION = 1;
-const DEFENSE_POTION = 2;
-const BIG_HEALTH_POTION = 3;
+const HEALTH_POTION = 2;
+const DEFENSE_POTION = 3;
 const AGILITY_POTION = 4;
 const STRENGTH_POTION = 5;
 const WISDOM_POTION = 6;
-const INVINCIBILITY_POTION = 7;
+const BIG_HEALTH_POTION = 7;
 
 const UPSCALE_FACTOR = 1;
 const MAP_WIDTH_PIXELS = 2560;

@@ -184,7 +184,7 @@ class Interface {
         console.error("unhandled item type");
       }
       this.renderEquipMenu();
-    } else if (this.state.menu == EQUIP && y > 2) {
+    } else if (this.state.menu == EQUIP && y > 1) {
       // The item list begins at y == 3 and will contain a maximum of
       // 8 elements / rows.
       if (y < this.state.items.length + 2) {
@@ -208,6 +208,17 @@ class Interface {
       let number = items.get(item);
       item.sprite.render(x, y, this.hudContext);
       this.hudContext.fillText(item.name + " : " + number, TILE_SIZE, y + TILE_SIZE * UPSCALE_FACTOR / 2);
+      if (item.type == SWORD ||
+          item.type == AXE ||
+          item.type == BOW ||
+          item.type == STAFF) {
+        this.hudContext.fillText("ATK: " + item.power + ", RNG: " + item.range + ", EP: " + item.energy,
+                                 TILE_SIZE, y + TILE_SIZE);
+      } else if (item.type == ARMOUR ||
+                 item.type == HELMET ||
+                 item.type == SHIELD) {
+        this.hudContext.fillText("DEF: " + item.defense, TILE_SIZE, y + TILE_SIZE);
+      }
       y += TILE_SIZE * UPSCALE_FACTOR;
       this.state.items.push(item);
     }

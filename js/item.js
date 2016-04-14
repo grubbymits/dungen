@@ -86,20 +86,53 @@ class Armour extends Item {
     this.elemType = elemType;
   }
 }
-/*
-var basicSword = new Weapon("basic sword", swordSprites[0],
-                            2, 3, 1, NORMAL);
-var basicStaff = new Weapon("basic staff", staffSprites[0],
-                            2, 15, 2, NORMAL);
-var basicShield = new Armour("basic shield", shieldSprites[0],
-                             2, NORMAL);
-var basicHelmet = new Armour("basic helmet", helmetSprites[0],
-                             2, NORMAL);
-var basicArmour = new Armour("basic armour", armourSprites[0],
-                             3, NORMAL);
-*/
+class Potion extends Item {
+  constructor(kind, strength, duration) {
+    super(POTION, kind);
+    this.strength = strength;
+    this.duration = duration;
+  }
+  use(actor) {
+    // for potions which have a duration of multiple turns, we need to assign
+    // an effect on the actor, which will take effect immediately and for the
+    // this.duration - 1 turns. The effect can then be triggered on the actor
+    // when their next action is calculated.
+    switch(this.subtype) {
+      case BASIC_HEALTH_POTION:
+      case HEALTH_POTION:
+      case BIG_HEALTH_POTION:
+        break;
+      case ENERGY_POTION:
+        break;
+      case DEFENSE_POTION:
+        break;
+      case AGILITY_POTION:
+        break;
+      case STRENGTH_POTION:
+        break;
+      case WISDOM_POTION:
+        break;
+    }
+  }
+}
 
-var crystalBall = new Item("crystal ball", crystalBallSprite);
+class Scroll extends Item {
+  constructor(kind) {
+    super(SCROLL, kind);
+  }
+  use(actor) {
+    
+  }
+}
+var potions = [ new Potion(BASIC_HEALTH_POTION, 40, 1),
+                new Potion(ENERGY_POTION, 15, 1),
+                new Potion(HEALTH_POTION, 80, 1),
+                new Potion(DEFENSE_POTION, 15, 4),
+                new Potion(AGILITY_POTION, 15, 4),
+                new Potion(STRENGTH_POTION, 15, 4),
+                new Potion(WISDOM_POTION, 15, 4),
+                new Potion(BIG_HEALTH_POTION, 120, 1)
+              ];
 
 var armours = [ new Armour(ARMOUR, ARMOUR0, 8, NORMAL),
                 new Armour(ARMOUR, ARMOUR1, 10, NORMAL),
@@ -157,6 +190,13 @@ var axes = [ new Weapon(AXE, AXE0, 3, 3, 2, NORMAL),
                new Weapon(AXE, AXE6, 28, 3, 5, NORMAL),
                new Weapon(AXE, AXE7, 34, 3, 6, NORMAL),
              ];
+             
+var bows = [ new Weapon(BOW, BOW0, 25, 8, 2, NORMAL),
+             new Weapon(BOW, BOW1, 40, 7, 3, NORMAL),
+             new Weapon(BOW, BOW2, 50, 8, 3, NORMAL),
+             new Weapon(BOW, BOW3, 65, 7, 4, NORMAL),
+             new Weapon(BOW, BOW4, 75, 8, 4, NORMAL)
+           ];
 
 // https://en.wikipedia.org/wiki/List_of_mythological_objects
 // mimung - wudga inherits from his son Wayland the Smith
@@ -168,18 +208,23 @@ var axes = [ new Weapon(AXE, AXE0, 3, 3, 2, NORMAL),
 // Ridill - possessed by a dwarf named Regin
 // Kusanagi - amaterasu sword
 
-class Potion extends Item {
-  constructor(kind) {
-    super(POTION, kind);
-  }
-}
 
-var potions = [ new Potion(BASIC_HEALTH_POTION),
-                new Potion(ENERGY_POTION),
-                new Potion(DEFENSE_POTION),
-                new Potion(BIG_HEALTH_POTION),
-                new Potion(AGILITY_POTION),
-                new Potion(STRENGTH_POTION),
-                new Potion(WISDOM_POTION),
-                new Potion(INVINCIBILITY_POTION),
+var potions = [ new Potion(BASIC_HEALTH_POTION, 40, 1),
+                new Potion(ENERGY_POTION, 15, 1),
+                new Potion(HEALTH_POTION, 80, 1),
+                new Potion(DEFENSE_POTION, 15, 4),
+                new Potion(AGILITY_POTION, 15, 4),
+                new Potion(STRENGTH_POTION, 15, 4),
+                new Potion(WISDOM_POTION, 15, 4),
+                new Potion(BIG_HEALTH_POTION, 120, 1),
+              ];
+
+var scrolls = [ new Scroll(SCROLL0),
+                new Scroll(SCROLL1),
+                new Scroll(SCROLL2),
+                new Scroll(SCROLL3),
+                new Scroll(SCROLL4),
+                new Scroll(SCROLL5),
+                new Scroll(SCROLL6),
+                new Scroll(SCROLL7),
               ];

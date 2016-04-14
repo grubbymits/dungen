@@ -59,7 +59,7 @@ class Hero extends Actor {
   get meleeAtkType() {
     return this.equipWeapon.type;
   }
-  get range() {
+  get attackRange() {
     return this.equipWeapon.range;
   }
   get physicalDefense() {
@@ -157,7 +157,6 @@ class Mage extends Hero {
     console.log("creating mage");
     this.equipArmour = armours[ARMOUR0];
     this.equipWeapon = staffs[STAFF0];
-    this.equipCrystalBall = crystalBall;
     //this.equipRing = basicRing;
   }
   get magicBall() {

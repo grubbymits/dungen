@@ -53,20 +53,20 @@ class Chest extends Entity {
     let type = Math.random();
     if (type < 0.25) {
       return potions[BASIC_HEALTH_POTION];
-    } else if (type < 0.5) {
+    } else if (type < 0.4) {
       return potions[ENERGY_POTION];
+    } else if (type < 0.55) {
+      return potions[HEALTH_POTION];
     } else if (type < 0.65) {
       return potions[DEFENSE_POTION];
-    } else if (type < 0.8) {
-      return potions[BIG_HEALTH_POTION];
-    } else if (type < 0.85) {
+    } else if (type < 0.75) {
       return potions[AGILITY_POTION];
-    } else if (type < 0.9) {
+    } else if (type < 0.85) {
       return potions[STRENGTH_POTION];
     } else if (type < 0.95) {
       return potions[WISDOM_POTION];
     } else {
-      return potions[INVINCIBILITY_POTION];
+      return potions[BIG_HEALTH_POTION];
     }
   }
   pickEquipment() {
@@ -77,24 +77,20 @@ class Chest extends Entity {
     let itemType = 0;
     if (type < 0.1) {
       itemArray = armours;
-      //itemType = ARMOUR;
     } else if (type < 0.2) {
       itemArray = helmets;
-      //itemType = HELMET;
     } else if (type < 0.3) {
       itemArray = shields;
-      //itemType = SHIELD;
     } else if (type < 0.4) {
       itemArray = swords;
-      //itemType = SWORD;
     } else if (type < 0.5) {
       itemArray = axes;
     } else if (type < 0.6) {
-      itemArray = staffs
+      itemArray = staffs;
     } else if (type < 0.7) {
-      // projectiles
+      itemArray = bows;
     } else if (type < 0.8) {
-      // spells
+      itemArray = scrolls;
     } else if (type < 0.9) {
       // jewelry
     } else {
@@ -198,7 +194,7 @@ class Actor extends Entity {
   get health() {
     return this.currentHealth;
   }
-  get meleeRange() {
+  get attackRange() {
     return this.meleeAttackRange;
   }
   get nextStep() {

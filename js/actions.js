@@ -146,7 +146,7 @@ class Attack extends Action {
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
     // if target is in range, we can return an attack action,
     // otherwise we should return a walkaction to get closer.
-    if (this.actor.meleeRange >= targetDistance) {
+    if (this.actor.attackRange >= targetDistance) {
       this.actor.meleeAttack.target = this.targetActor;
       return this.actor.meleeAttack;
     } else if (this.actor.projectileRange >= targetDistance) {
@@ -177,7 +177,7 @@ class Interact extends Action {
       return;
     }
     let targetDistance =  this.map.getDistance(this.actor, this.targetObject);
-    if (this.actor.meleeRange >= targetDistance) {
+    if (this.actor.attackRange >= targetDistance) {
       this.targetObject.interact(this.actor);
       return null;
     } else {
