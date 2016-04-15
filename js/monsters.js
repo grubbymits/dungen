@@ -1,26 +1,22 @@
 "use strict";
 
 class Monster extends Actor {
-  constructor(health, energy,
+  constructor(health, energy, index,
               defense, range, xp,
-              meleeAtkPower, meleeAtkType, meleeAtkEnergy,
-              position, sprite, damageSprite, game) {
-    super(health, energy,
-          position, sprite, damageSprite, MONSTER, game);
+              atkPower, atkType, atkEnergy,
+              position, game) {
+    super(health, energy, position,
+          monsterSprites[index], monsterDamageSprites[index],
+          MONSTER, game);
     this.level = this.game.level;
+    this.index = index;
     this.exp = xp * this.level;
     this.range = range;
-    this.rangedAttack = null;
-    this.meleeAttack = new MeleeAttack(this);
-    this.meleeAttackPower = meleeAtkPower;
-    this.meleeAttackType = meleeAtkType;
-    this.meleeAttackEnergy = meleeAtkEnergy;
-    this.rangedAttackPower = 0;
-    this.rangedAttackType = 0;
-    this.rangedttackEnergy = 0;
+    this.attackPower = atkPower;
+    this.attackType = atkType;
+    this.attackEnergy = atkEnergy;
     this.physicalDefense = defense;
-    this.projectileRange = 0;
-    this.meleeSound = document.getElementById("punchSound");
+    //this.meleeSound = document.getElementById("punchSound");
   }
   get action() {
     this.currentSprite = this.sprite;
@@ -31,17 +27,14 @@ class Monster extends Actor {
     }
     return this.nextAction;
   }
-  get meleeAtkPower() {
-    return this.meleeAttackPower; //+ (this.level * this.meleeAttackPower * 0.05);
+  get atkPower() {
+    return this.attackPower; //+ (this.level * this.meleeAttackPower * 0.05);
   }
-  get rangedAtkPower() {
-    return this.rangedAttackPower; //+ (this.level * this.meleeAttackPower * 0.05);
+  get atkEnergy() {
+    return this.attackEnergy;
   }
-  get meleeAtkEnergy() {
-    return this.meleeAttackEnergy;
-  }
-  get meleeAtkType() {
-    return this.meleeAttackType;
+  get atkType() {
+    return this.attackType;
   }
   reduceHealth(enemy, damage) {
     console.log("dealing", damage, "to", ENEMY_NAMES[this.index]);
@@ -56,43 +49,36 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(40, 4,          // health, energy
+    super(40, 4, RAT,          // health, energy
           15, 3, 5,        // defense, range, xp
           1.5, NORMAL, 2,   // atkPower, atkType, atkEnergy
-          position, ratSprite, damageRatSprite, game);
-    this.index = RAT;
+          position, game);
   }
 }
 
 class Spiders extends Monster {
   constructor(position, game) {
-    super(44, 4,
+    super(44, 4, SPIDERS,
           15, 3, 6,
           1.5, NORMAL, 2,
-          position, spidersSprite, damageSpidersSprite, game);
-    this.index = SPIDERS;
-    this.meleeAttack = new MeleeAttack(this);
+          position, game);
   }
 }
 
 class Lizard extends Monster {
   constructor(position, game) {
-    super(60, 5,
+    super(60, 5, LIZARD,
           18, 4, 8,
           2, NORMAL, 2,
-          position, lizardSprite, damageLizardSprite, game);
-    this.index = LIZARD;
-    this.meleeAttack = new MeleeAttack(this);
+          position, game);
   }
 }
 
 class SpiderChampion extends Monster {
   constructor(position, game) {
-    super(70, 4,
+    super(70, 4, SPIDER_CHAMPION,
           20, 4, 10,
           2.5, NORMAL, 2,
-          position, bigSpiderSprite, damageBigSpiderSprite, game);
-    this.index = SPIDER_CHAMPION;
-    this.meleeAttack = new MeleeAttack(this);
+          position, game);
   }
 }
