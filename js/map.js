@@ -57,7 +57,6 @@ class GameMap {
         this.locations[x][y] = new Location(true, null, CEILING, x, y);
       }
     }
-    console.log("constructed and initialised GameMap");
   }
   isOutOfRange(x, y) {
     if (x < 0 || y < 0 || x > this.xMax || y > this.yMax) {
@@ -225,7 +224,6 @@ class GameMap {
   }
 
   generate() {
-    console.log("GameMap.generate");
     for (let x = 4; x < this.xMax - 4; x++) {
       for (let y = 4; y < this.yMax - 4; y++) {
         this.placeTile(x, y, PATH, false);

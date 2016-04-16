@@ -50,17 +50,20 @@ class Hero extends Actor {
   get projectileRange() {
     return 0;
   }
-  get meleeAtkPower() {
+  get primaryAtkPower() {
     return Math.round(this.equipWeapon.power * this.strength / MAX_STRENGTH);
   }
-  get meleeAtkEnergy() {
+  get primaryAtkEnergy() {
     return Math.round(this.equipWeapon.energy * MAX_AGILITY / this.agility);
   }
-  get meleeAtkType() {
+  get primaryAtkType() {
     return this.equipWeapon.type;
   }
-  get attackRange() {
+  get primaryAtkRange() {
     return this.equipWeapon.range;
+  }
+  get secondaryAtkRange() {
+    return 0;
   }
   get physicalDefense() {
     var total = 0;

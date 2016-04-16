@@ -27,14 +27,20 @@ class Monster extends Actor {
     }
     return this.nextAction;
   }
-  get atkPower() {
+  get primaryAtkPower() {
     return this.attackPower; //+ (this.level * this.meleeAttackPower * 0.05);
   }
-  get atkEnergy() {
+  get primaryAtkEnergy() {
     return this.attackEnergy;
   }
-  get atkType() {
+  get primaryAtkType() {
     return this.attackType;
+  }
+  get primaryAtkRange() {
+    return 3;
+  }
+  get secondaryAtkRange() {
+    return 0;
   }
   reduceHealth(enemy, damage) {
     console.log("dealing", damage, "to", ENEMY_NAMES[this.index]);

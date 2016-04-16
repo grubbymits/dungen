@@ -53,7 +53,6 @@ class Game {
     return hero;
   }
   createMonster(pos, type) {
-    console.log("create monster of type:", type, "at", pos);
     let monster = null;
     if (type == RAT) {
       monster = new Rat(pos, this);

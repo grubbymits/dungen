@@ -9,7 +9,7 @@ class Action {
     this.actor = actor;
   }
   perform() {
-
+    return null;
   }
 }
 
@@ -75,8 +75,8 @@ class DealMeleeDamage extends Action {
     super(actor);
   }
   perform() {
-    let power = this.actor.meleeAtkPower;
-    let type = this.actor.meleeAtkType;
+    let power = this.actor.primaryAtkPower;
+    let type = this.actor.primaryAtkType;
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
     console.log("defense = ", defense, ", attack = ", power);
@@ -116,7 +116,7 @@ class MeleeAttack extends Action {
     //if (target.dodges) {
       //return null;
     //} else {
-    let energyRequired = this.actor.meleeAtkEnergy;
+    let energyRequired = this.actor.primaryAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
@@ -146,10 +146,10 @@ class Attack extends Action {
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
     // if target is in range, we can return an attack action,
     // otherwise we should return a walkaction to get closer.
-    if (this.actor.attackRange >= targetDistance) {
+    if (this.actor.primaryAtkRange >= targetDistance) {
       this.actor.meleeAttack.target = this.targetActor;
       return this.actor.meleeAttack;
-    } else if (this.actor.projectileRange >= targetDistance) {
+    } else if (this.actor.secondaryAtkRange >= targetDistance) {
       this.actor.rangeAttack.target = this.targetActor;
       return this.actor.rangeAttack;
     } else {
@@ -177,7 +177,7 @@ class Interact extends Action {
       return;
     }
     let targetDistance =  this.map.getDistance(this.actor, this.targetObject);
-    if (this.actor.attackRange >= targetDistance) {
+    if (this.actor.primaryAtkRange >= targetDistance) {
       this.targetObject.interact(this.actor);
       return null;
     } else {

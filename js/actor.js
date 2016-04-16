@@ -8,7 +8,6 @@ class Entity {
     this.kind = kind;
     this.game = game;
     this.game.map.placeEntity(this.position, this);
-    console.log("place entity at:", position);
   }
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
@@ -141,7 +140,7 @@ class Actor extends Entity {
     this.maxHealth = health;
     this.currentEnergy = energy;
     this.maxEnergy = energy;
-    this.meleeAttackRange = 3;
+    //this.meleeAttackRange = 3;
     this.level = 1;
 
 
@@ -157,8 +156,8 @@ class Actor extends Entity {
     this.rangeAttack = null;
   }
   get action() {
-    //this.currentSprite = this.sprite;
-    //return this.nextAction;
+    // needs to be implemented differently for heros and monsters atm
+    return null;
   }
   render() {
     this.currentSprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
@@ -193,9 +192,6 @@ class Actor extends Entity {
   }
   get health() {
     return this.currentHealth;
-  }
-  get attackRange() {
-    return this.meleeAttackRange;
   }
   get nextStep() {
     return this.currentPath[0];
