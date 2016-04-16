@@ -81,8 +81,12 @@ var tileSprites = [ new Sprite(greenSpriteSheet, 1, 1, 32, 32),
                     
 var heroSprites = [];
 var damageHeroSprites = [];
+var frozenHeroSprites = [];
+var shockedHeroSprites = [];
 var monsterSprites = [];
 var monsterDamageSprites = [];
+var frozenMonsterSprites = [];
+var shockedMonsterSprites = [];
 var swordSprites = [];
 var fireSwordSprites = [];
 var iceSwordSprites = [];
@@ -106,6 +110,8 @@ for (let y = MONSTER_OFFSET; y < (MONSTER_OFFSET + 4); ++y) {
   for (let x = 0; x < 8; ++x) {
     monsterSprites.push(new Sprite(greenSpriteSheet, x, y));
     monsterDamageSprites.push(new Sprite(redSpriteSheet, x, y));
+    frozenMonsterSprites.push(new Sprite(blueSpriteSheet, x, y));
+    shockedMonsterSprites.push(new Sprite(yellowSpriteSheet, x, y));
   }
 }
 for (let x = 0; x < 8; ++x) {
@@ -133,6 +139,8 @@ for (let x = 0; x < 8; ++x) {
   
   heroSprites.push(new Sprite(greenSpriteSheet, x, HERO_OFFSET));
   damageHeroSprites.push(new Sprite(redSpriteSheet, x, HERO_OFFSET));
+  frozenHeroSprites.push(new Sprite(blueSpriteSheet, x, HERO_OFFSET));
+  shockedHeroSprites.push(new Sprite(yellowSpriteSheet, x, HERO_OFFSET));
 }
 var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4),
                      new Sprite(greenSpriteSheet, 1, 4)

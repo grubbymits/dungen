@@ -8,7 +8,7 @@ class Item {
   get name() {
     switch(this.type) {
       default:
-        console.log("unhandled item type");
+        console.log("unhandled item type in Item.name");
         return null;
       case POTION:
         return POTION_NAMES[this.subtype];
@@ -24,12 +24,14 @@ class Item {
         return STAFF_NAMES[this.subtype];
       case AXE:
         return AXE_NAMES[this.subtype];
+      case TREASURE:
+        return TREASURE_NAMES[this.subtype];
     }
   }
   get sound() {
     switch(this.type) {
       default:
-        console.log("unhandled item type");
+        console.log("unhandled item type in Item.sound");
         return null;
       case SWORD:
       case AXE:
@@ -49,7 +51,7 @@ class Item {
   get sprite() {
     switch(this.type) {
       default:
-        console.log("unhandled item type");
+        console.log("unhandled item type in Item.sprite");
         return null;
       case POTION:
         return potionSprites[this.subtype];
@@ -65,6 +67,8 @@ class Item {
         return staffSprites[this.subtype];
       case AXE:
         return axeSprites[this.subtype];
+      case TREASURE:
+        return treasureSprites[this.subtype];
     }
   }
 }
@@ -113,6 +117,12 @@ class Potion extends Item {
       case WISDOM_POTION:
         break;
     }
+  }
+}
+class Treasure extends Item {
+  constructor(kind, value) {
+    super(TREASURE, kind);
+    this.value = value;
   }
 }
 
@@ -216,8 +226,18 @@ var potions = [ new Potion(BASIC_HEALTH_POTION, 40, 1),
                 new Potion(AGILITY_POTION, 15, 4),
                 new Potion(STRENGTH_POTION, 15, 4),
                 new Potion(WISDOM_POTION, 15, 4),
-                new Potion(BIG_HEALTH_POTION, 120, 1),
+                new Potion(BIG_HEALTH_POTION, 120, 1)
               ];
+              
+var treasures = [ new Treasure(TREASURE0, 50),
+                  new Treasure(TREASURE1, 75),
+                  new Treasure(TREASURE2, 100),
+                  new Treasure(TREASURE3, 125),
+                  new Treasure(TREASURE4, 150),
+                  new Treasure(TREASURE5, 175),
+                  new Treasure(TREASURE6, 200),
+                  new Treasure(TREASURE7, 225)
+                ];
 
 var scrolls = [ new Scroll(SCROLL0),
                 new Scroll(SCROLL1),
@@ -226,5 +246,5 @@ var scrolls = [ new Scroll(SCROLL0),
                 new Scroll(SCROLL4),
                 new Scroll(SCROLL5),
                 new Scroll(SCROLL6),
-                new Scroll(SCROLL7),
+                new Scroll(SCROLL7)
               ];

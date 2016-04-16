@@ -35,16 +35,25 @@ class Chest extends Entity {
     console.log("pickTreasure");
     // treasure, there are 4 types
     let type = Math.random();
-    if (type < 0.5) {
-      // small coins
-    } else if (type < 0.75) {
-      // large coins
-    } else if (type < 0.88) {
-      // pearls
+    let index = TREASURE0;
+    if (type < 0.25) {
+      index = TREASURE0;
+    } else if (type < 0.4) {
+      index = TREASURE1;
+    } else if (type < 0.54) {
+      index = TREASURE2;
+    } else if (type < 0.66) {
+      index = TREASURE3;
+    } else if (type < 0.77) {
+      index = TREASURE4;
+    } else if (type < 0.87) {
+      index = TREASURE5;
+    } else if (type < 0.96) {
+      index = TREASURE6;
     } else {
-      // gem stone
+      index = TREASURE7;
     }
-    return null;
+    return treasures[index];
   }
   pickPotion() {
     console.log("pickPotion");

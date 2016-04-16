@@ -42,6 +42,15 @@ const POTION_NAMES = [ "Basic Health Potion",
                        "Wisdom Potion",
                        "Big Health Potion"
                       ];
+const TREASURE_NAMES = ["Small coins",
+                        "Large coins",
+                        "Pearls",
+                        "Gemstone",
+                        "Small ring",
+                        "Large ring",
+                        "Small necklace",
+                        "Large necklace"
+                        ];
 const SWORD_NAMES = [ "first sword",
                       "second sword",
                       "third sword",
@@ -96,6 +105,15 @@ const AXE_NAMES = [ "first axe",
                     "seventh axe",
                     "eighth axe"
                   ];
+const PROJECTILE_NAMES = [ "small bombs",
+                           "medium bomb",
+                           "large bomb",
+                           "light arrows",
+                           "medium arrows",
+                           "heavy arrows",
+                           "light bolts",
+                           "heavy bolts"
+                         ];
 
 // Item types
 const SWORD = 0;
@@ -107,6 +125,7 @@ const HELMET = 5;
 const POTION = 6;
 const SCROLL = 7;
 const BOW = 8;
+const TREASURE = 9;
 
 // Item subtypes
 const SWORD0 = 0;
@@ -177,6 +196,15 @@ const BOW1 = 1;
 const BOW2 = 2;
 const BOW3 = 3;
 const BOW4 = 4;
+
+const TREASURE0 = 0;
+const TREASURE1 = 1;
+const TREASURE2 = 2;
+const TREASURE3 = 3;
+const TREASURE4 = 4;
+const TREASURE5 = 5;
+const TREASURE6 = 6;
+const TREASURE7 = 7;
 
 // Potions
 const BASIC_HEALTH_POTION = 0;

@@ -179,6 +179,7 @@ class Player {
     this.staffs = new Map();
     this.axes = new Map();
     this.potions = new Map();
+    this.treasure = new Map();
     this.addHero(hero);
   }
   increaseExp(exp) {
@@ -241,6 +242,9 @@ class Player {
       break;
       case POTION:
       items = this.potions;
+      break;
+      case TREASURE:
+      items = this.treasure;
       break;
     }
     if (items.has(item)) {
