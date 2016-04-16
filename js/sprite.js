@@ -1,13 +1,18 @@
 "use strict";
 
+const POTION_OFFSET = 5;
+const SPELL_OFFSET = 6;
 const SWORD_OFFSET = 7;
 const AXE_OFFSET = 8;
+const BOW_OFFSET = 9;
+const PROJECTILE_OFFSET = 10;
 const ARMOUR_OFFSET = 11;
 const HELMET_OFFSET = 12;
 const SHIELD_OFFSET = 13;
-const STAFF_OFFEST = 14;
+const STAFF_OFFSET = 14;
+const TREASURE_OFFSET = 15;
 const PLAYER_OFFSET = 18;
-const ENEMY_OFFSET = 19;
+const MONSTER_OFFSET = 19;
 
 const TOTAL_NUM_SHEETS = 3;
 
@@ -42,7 +47,7 @@ class SpriteSheet {
 }
 
 class Sprite {
-  constructor(spriteSheet, offsetX, offsetY, width, height) {
+  constructor(spriteSheet, offsetX, offsetY) {
     this.spriteSheet = spriteSheet;
     this.offsetX = offsetX * TILE_SIZE;
     this.offsetY = offsetY * TILE_SIZE;
@@ -63,6 +68,8 @@ class Sprite {
 
 var greenSpriteSheet = new SpriteSheet('tileset-green-64');
 var redSpriteSheet = new SpriteSheet('tileset-red-64');
+var blueSpriteSheet = new SpriteSheet('tileset-blue-64');
+var yellowSpriteSheet = new SpriteSheet('tileset-yellow-64');
 var uiSpriteSheet = new SpriteSheet('ui');
 
 var targetSprite = new Sprite(uiSpriteSheet, 0, 0);
@@ -83,189 +90,56 @@ var blackMageSprite = new Sprite(greenSpriteSheet, 7, 18, 32, 32);
 var damageKnightSprite = new Sprite(redSpriteSheet, 5, 18, 32, 32);
 var damageMageSprite = new Sprite(redSpriteSheet, 6, 18, 32, 32);
 
-var monsterSprites = [ new Sprite(greenSpriteSheet, 0, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 1, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 2, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 3, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 4, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 5, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 6, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 7, 19, 32, 32),
-                       new Sprite(greenSpriteSheet, 0, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 1, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 2, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 3, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 4, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 5, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 6, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 7, 20, 32, 32),
-                       new Sprite(greenSpriteSheet, 0, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 1, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 2, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 3, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 4, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 5, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 6, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 7, 21, 32, 32),
-                       new Sprite(greenSpriteSheet, 0, 22, 32, 32),
-                       new Sprite(greenSpriteSheet, 1, 22, 32, 32),
-                       new Sprite(greenSpriteSheet, 2, 22, 32, 32),
-                       new Sprite(greenSpriteSheet, 3, 22, 32, 32),
-                       new Sprite(greenSpriteSheet, 4, 22, 32, 32),
-                       new Sprite(greenSpriteSheet, 5, 22, 32, 32),
-                       new Sprite(greenSpriteSheet, 6, 22, 32, 32),
-                       new Sprite(greenSpriteSheet, 7, 22, 32, 32)
-                      ];
-var monsterDamageSprites = [ new Sprite(redSpriteSheet, 0, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 1, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 2, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 3, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 4, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 5, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 6, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 7, 19, 32, 32),
-                             new Sprite(redSpriteSheet, 0, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 1, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 2, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 3, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 4, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 5, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 6, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 7, 20, 32, 32),
-                             new Sprite(redSpriteSheet, 0, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 1, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 2, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 3, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 4, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 5, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 6, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 7, 21, 32, 32),
-                             new Sprite(redSpriteSheet, 0, 22, 32, 32),
-                             new Sprite(redSpriteSheet, 1, 22, 32, 32),
-                             new Sprite(redSpriteSheet, 2, 22, 32, 32),
-                             new Sprite(redSpriteSheet, 3, 22, 32, 32),
-                             new Sprite(redSpriteSheet, 4, 22, 32, 32),
-                             new Sprite(redSpriteSheet, 5, 22, 32, 32),
-                             new Sprite(redSpriteSheet, 6, 22, 32, 32),
-                             new Sprite(redSpriteSheet, 7, 22, 32, 32)
-                            ];
-/*
-var ratSprite = new Sprite(greenSpriteSheet, 0, 19, 32, 32);
-var spidersSprite = new Sprite(greenSpriteSheet, 1, 19, 32, 32);
-var lizardSprite = new Sprite(greenSpriteSheet, 2, 19, 32, 32);
-var bigSpiderSprite = new Sprite(greenSpriteSheet, 3, 19, 32, 32);
-var toadSprite = new Sprite(greenSpriteSheet, 4, 19, 32, 32);
-var scarabSprite = new Sprite(greenSpriteSheet, 5, 19, 32, 32);
-var centipedeSprite = new Sprite(greenSpriteSheet, 6, 19, 32, 32);
-var serpentSprite = new Sprite(greenSpriteSheet, 7, 19, 32, 32);
-var mushroomSprite = new Sprite(greenSpriteSheet, 0, 20, 32, 32);
-var rabbitSprite = new Sprite(greenSpriteSheet, 1, 20, 32, 32);
-var batSprite = new Sprite(greenSpriteSheet, 2, 20, 32, 32);
-var bigBatSprite = new Sprite(greenSpriteSheet, 3, 20, 32, 32);
-var snakeSprite = new Sprite(greenSpriteSheet, 4, 20, 32, 32);
-var wolfSprite = new Sprite(greenSpriteSheet, 5, 20, 32, 32);
-var boarSprite = new Sprite(greenSpriteSheet, 6, 20, 32, 32);
-var bearSprite = new Sprite(greenSpriteSheet, 7, 20, 32, 32);
-var slimesSprite = new Sprite(greenSpriteSheet, 0, 21, 32, 32);
-var bigSlimeSprite = new Sprite(greenSpriteSheet, 1, 21, 32, 32);
-var scorpionSprite = new Sprite(greenSpriteSheet, 2, 21, 32, 32);
-var krakenSprite = new Sprite(greenSpriteSheet, 3, 21, 32, 32);
-var vampireSprite = new Sprite(greenSpriteSheet, 4, 21, 32, 32);
-var mummySprite = new Sprite(greenSpriteSheet, 5, 21, 32, 32);
-var wraithSprite = new Sprite(greenSpriteSheet, 6, 21, 32, 32);
-var carabiaSprite = new Sprite(greenSpriteSheet, 7, 21, 32, 32);
-var goblinSprite = new Sprite(greenSpriteSheet, 0, 22, 32, 32);
-var zombieSprite = new Sprite(greenSpriteSheet, 1, 22, 32, 32);
-var undeadSprite = new Sprite(greenSpriteSheet, 2, 22, 32, 32);
-var orcSprite = new Sprite(greenSpriteSheet, 3, 22, 32, 32);
-var cyclopsSprite = new Sprite(greenSpriteSheet, 4, 22, 32, 32);
-var werewolfSprite = new Sprite(greenSpriteSheet, 5, 22, 32, 32);
-var golemSprite = new Sprite(greenSpriteSheet, 6, 22, 32, 32);
-var demonSprite = new Sprite(greenSpriteSheet, 7, 22, 32, 32);
-*/
-var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4, 32, 32),
-                     new Sprite(greenSpriteSheet, 1, 4, 32, 32)
-                   ];
-var potionSprites = [ new Sprite(greenSpriteSheet, 0, 5, 32, 32),
-                      new Sprite(greenSpriteSheet, 1, 5, 32, 32),
-                      new Sprite(greenSpriteSheet, 2, 5, 32, 32),
-                      new Sprite(greenSpriteSheet, 3, 5, 32, 32),
-                      new Sprite(greenSpriteSheet, 4, 5, 32, 32),
-                      new Sprite(greenSpriteSheet, 5, 5, 32, 32),
-                      new Sprite(greenSpriteSheet, 6, 5, 32, 32),
-                      new Sprite(greenSpriteSheet, 7, 5, 32, 32),
-                    ];
-var swordSprites = [ new Sprite(greenSpriteSheet, 0, 7, 32, 32),
-                     new Sprite(greenSpriteSheet, 1, 7, 32, 32),
-                     new Sprite(greenSpriteSheet, 2, 7, 32, 32),
-                     new Sprite(greenSpriteSheet, 3, 7, 32, 32),
-                     new Sprite(greenSpriteSheet, 4, 7, 32, 32),
-                     new Sprite(greenSpriteSheet, 5, 7, 32, 32),
-                     new Sprite(greenSpriteSheet, 6, 7, 32, 32),
-                     new Sprite(greenSpriteSheet, 7, 7, 32, 32),
-                   ];
-var axeSprites = [ new Sprite(greenSpriteSheet, 0, 8, 32, 32),
-                   new Sprite(greenSpriteSheet, 1, 8, 32, 32),
-                   new Sprite(greenSpriteSheet, 2, 8, 32, 32),
-                   new Sprite(greenSpriteSheet, 3, 8, 32, 32),
-                   new Sprite(greenSpriteSheet, 4, 8, 32, 32),
-                   new Sprite(greenSpriteSheet, 5, 8, 32, 32),
-                   new Sprite(greenSpriteSheet, 6, 8, 32, 32),
-                   new Sprite(greenSpriteSheet, 7, 8, 32, 32),
-                  ];
-var armourSprites = [ new Sprite(greenSpriteSheet, 0, 11, 32, 32),
-                      new Sprite(greenSpriteSheet, 1, 11, 32, 32),
-                      new Sprite(greenSpriteSheet, 2, 11, 32, 32),
-                      new Sprite(greenSpriteSheet, 3, 11, 32, 32),
-                      new Sprite(greenSpriteSheet, 4, 11, 32, 32),
-                      new Sprite(greenSpriteSheet, 5, 11, 32, 32),
-                      new Sprite(greenSpriteSheet, 6, 11, 32, 32),
-                      new Sprite(greenSpriteSheet, 7, 11, 32, 32),
-                    ];
-var helmetSprites = [ new Sprite(greenSpriteSheet, 0, 12, 32, 32),
-                      new Sprite(greenSpriteSheet, 1, 12, 32, 32),
-                      new Sprite(greenSpriteSheet, 2, 12, 32, 32),
-                      new Sprite(greenSpriteSheet, 3, 12, 32, 32),
-                      new Sprite(greenSpriteSheet, 4, 12, 32, 32),
-                      new Sprite(greenSpriteSheet, 5, 12, 32, 32),
-                      new Sprite(greenSpriteSheet, 6, 12, 32, 32),
-                      new Sprite(greenSpriteSheet, 7, 12, 32, 32),
-                    ];
-var shieldSprites = [ new Sprite(greenSpriteSheet, 0, 13, 32, 32),
-                      new Sprite(greenSpriteSheet, 1, 13, 32, 32),
-                      new Sprite(greenSpriteSheet, 2, 13, 32, 32),
-                      new Sprite(greenSpriteSheet, 3, 13, 32, 32),
-                      new Sprite(greenSpriteSheet, 4, 13, 32, 32),
-                      new Sprite(greenSpriteSheet, 5, 13, 32, 32),
-                      new Sprite(greenSpriteSheet, 6, 13, 32, 32),
-                      new Sprite(greenSpriteSheet, 7, 13, 32, 32),
-                    ];
-var staffSprites = [ new Sprite(greenSpriteSheet, 0, 14, 32, 32),
-                     new Sprite(greenSpriteSheet, 1, 14, 32, 32),
-                     new Sprite(greenSpriteSheet, 2, 14, 32, 32),
-                     new Sprite(greenSpriteSheet, 3, 14, 32, 32),
-                     new Sprite(greenSpriteSheet, 4, 14, 32, 32),
-                     new Sprite(greenSpriteSheet, 5, 14, 32, 32),
-                     new Sprite(greenSpriteSheet, 6, 14, 32, 32),
-                     new Sprite(greenSpriteSheet, 7, 14, 32, 32),
-                    ];
-var treasureSprites = [ new Sprite(greenSpriteSheet, 0, 15, 32, 32),
-                        new Sprite(greenSpriteSheet, 1, 15, 32, 32),
-                        new Sprite(greenSpriteSheet, 2, 15, 32, 32),
-                        new Sprite(greenSpriteSheet, 3, 15, 32, 32),
-                        new Sprite(greenSpriteSheet, 4, 15, 32, 32),
-                        new Sprite(greenSpriteSheet, 5, 15, 32, 32),
-                        new Sprite(greenSpriteSheet, 6, 15, 32, 32),
-                        new Sprite(greenSpriteSheet, 7, 15, 32, 32),
-                      ];
-var spellSprites = [ new Sprite(greenSpriteSheet, 0, 17, 32, 32),
-                     new Sprite(greenSpriteSheet, 1, 17, 32, 32),
-                     new Sprite(greenSpriteSheet, 2, 17, 32, 32),
-                     new Sprite(greenSpriteSheet, 3, 17, 32, 32),
-                     new Sprite(greenSpriteSheet, 4, 17, 32, 32),
-                     new Sprite(greenSpriteSheet, 5, 17, 32, 32),
-                     new Sprite(greenSpriteSheet, 6, 17, 32, 32),
-                     new Sprite(greenSpriteSheet, 7, 17, 32, 32),
-                    ];
+var monsterSprites = [];
+var monsterDamageSprites = [];
+var swordSprites = [];
+var fireSwordSprites = [];
+var iceSwordSprites = [];
+var electricSwordSprites = [];
+var axeSprites = [];
+var fireAxeSprites = [];
+var iceAxeSprites = [];
+var electricAxeSprites = [];
+var staffSprites = [];
+var fireStaffSprites = [];
+var iceStaffSprites = [];
+var electricStaffSprites = [];
+var armourSprites = [];
+var helmetSprites = [];
+var shieldSprites = [];
+var spellSprites = [];
+var potionSprites = [];
+var treasureSprites = [];
 
-var crystalBallSprite = new Sprite(greenSpriteSheet, 7, 18, 32, 32);
+for (let y = MONSTER_OFFSET; y < (MONSTER_OFFSET + 4); ++y) {
+  for (let x = 0; x < 8; ++x) {
+    monsterSprites.push(new Sprite(greenSpriteSheet, x, y));
+    monsterDamageSprites.push(new Sprite(redSpriteSheet, x, y));
+  }
+}
+for (let x = 0; x < 8; ++x) {
+  swordSprites.push(new Sprite(greenSpriteSheet, x, SWORD_OFFSET));
+  fireSwordSprites.push(new Sprite(redSpriteSheet, x, SWORD_OFFSET));
+  iceSwordSprites.push(new Sprite(blueSpriteSheet, x, SWORD_OFFSET));
+  electricSwordSprites.push(new Sprite(yellowSpriteSheet, x, SWORD_OFFSET));
+  
+  axeSprites.push(new Sprite(greenSpriteSheet, x, AXE_OFFSET));
+  fireAxeSprites.push(new Sprite(redSpriteSheet, x, AXE_OFFSET));
+  iceAxeSprites.push(new Sprite(blueSpriteSheet, x, AXE_OFFSET));
+  electricAxeSprites.push(new Sprite(yellowSpriteSheet, x, AXE_OFFSET));
+  
+  staffSprites.push(new Sprite(greenSpriteSheet, x, STAFF_OFFSET));
+  fireStaffSprites.push(new Sprite(redSpriteSheet, x, STAFF_OFFSET));
+  iceStaffSprites.push(new Sprite(blueSpriteSheet, x, STAFF_OFFSET));
+  electricStaffSprites.push(new Sprite(yellowSpriteSheet, x, STAFF_OFFSET));
+  
+  armourSprites.push(new Sprite(greenSpriteSheet, x, ARMOUR_OFFSET));
+  helmetSprites.push(new Sprite(greenSpriteSheet, x, HELMET_OFFSET));
+  shieldSprites.push(new Sprite(greenSpriteSheet, x, SHIELD_OFFSET));
+  spellSprites.push(new Sprite(greenSpriteSheet, x, SPELL_OFFSET));
+  potionSprites.push(new Sprite(greenSpriteSheet, x, POTION_OFFSET));
+  treasureSprites.push(new Sprite(greenSpriteSheet, x, TREASURE_OFFSET));
+}
+var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4),
+                     new Sprite(greenSpriteSheet, 1, 4)
+                   ];
