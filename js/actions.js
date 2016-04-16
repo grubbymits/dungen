@@ -79,11 +79,9 @@ class DealMeleeDamage extends Action {
     let type = this.actor.primaryAtkType;
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
-    console.log("defense = ", defense, ", attack = ", power);
     let damage = Math.round(power * MAX_DEFENSE / defense);
 
     this.targetActor.reduceHealth(this.actor, damage);
-    this.game.audio.hit();
 
     if (this.targetActor.health <= 0) {
       if (this.actor.increaseExp !== null) {
@@ -95,6 +93,10 @@ class DealMeleeDamage extends Action {
       this.game.killActor(this.targetActor);
       this.targetActor = null;
       this.actor.nextAction = null;
+    } else {
+      this.game.audio.hit();
+      this.game.addTextEvent(" -" + damage, this.targetActor.pos);
+      
     }
   }
   set target(target) {
@@ -135,6 +137,7 @@ class Attack extends Action {
   }
 
   set target(target) {
+    this.game.addGraphicEvent(targetSprite, target.pos);
     this.targetActor = target;
   }
 
@@ -166,6 +169,7 @@ class Interact extends Action {
     this.targetObject = null;
   }
   set target(target) {
+    this.game.addGraphicEvent(targetSprite, target.pos);
     this.targetObject = target;
   }
   get target() {

@@ -40,6 +40,10 @@ class Game {
     this.player.UI.addEvent(new TextEvent(this.context, new Date().getTime(),
                                           pos, string));
   }
+  addGraphicEvent(sprite, pos) {
+    this.player.UI.addEvent(new GraphicEvent(this.context, new Date().getTime(),
+                                             pos, sprite));
+  }
   createHero(pos, type) {
     var hero;
     if (type == KNIGHT) {

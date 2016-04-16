@@ -30,6 +30,16 @@ class TextEvent extends UIEvent {
   }
 }
 
+class GraphicEvent extends UIEvent {
+  constructor(context, start, pos, sprite) {
+    super(context, start, 1000, pos);
+    this.sprite = sprite;
+  }
+  render() {
+    this.sprite.render(this.x, this.y, this.context);
+  }
+}
+
 class Interface {
   constructor(player) {
     //this.keysDown = {};
@@ -76,7 +86,7 @@ class Interface {
     this.stats.style.zIndex = '4';
     this.stats.style.background = "rgba(50, 75, 75, 0.7)";
     this.stats.width = 3 * TILE_SIZE;
-    this.stats.height = TILE_SIZE;
+    this.stats.height = TILE_SIZE / 2;
     document.body.appendChild(this.stats);
     this.statsContext = this.stats.getContext("2d");
   }
@@ -291,9 +301,9 @@ class Interface {
     this.statsContext.fillStyle = "orange";
     this.statsContext.textAlign = "center";
     this.statsContext.fillText("HP: " + hero.currentHealth + "/" + hero.maxHealth,
-                               48, 32);
+                               48, 24);
     this.statsContext.fillText("EP: " + hero.currentEnergy + "/" + hero.maxEnergy,
-                               128, 32);
+                               128, 24);
 
   }
 

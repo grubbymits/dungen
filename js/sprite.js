@@ -9,7 +9,7 @@ const STAFF_OFFEST = 14;
 const PLAYER_OFFSET = 18;
 const ENEMY_OFFSET = 19;
 
-const TOTAL_NUM_SHEETS = 2;
+const TOTAL_NUM_SHEETS = 3;
 
 var loadedSpriteSheets = 0;
 
@@ -63,6 +63,11 @@ class Sprite {
 
 var greenSpriteSheet = new SpriteSheet('tileset-green-64');
 var redSpriteSheet = new SpriteSheet('tileset-red-64');
+var uiSpriteSheet = new SpriteSheet('ui');
+
+var targetSprite = new Sprite(uiSpriteSheet, 0, 0);
+var currentActorSprite = new Sprite(uiSpriteSheet, 1, 0);
+
 var tileSprites = [ new Sprite(greenSpriteSheet, 1, 1, 32, 32),
                     new Sprite(greenSpriteSheet, 7, 0, 32, 32),
                     new Sprite(greenSpriteSheet, 2, 2, 32, 32)];
