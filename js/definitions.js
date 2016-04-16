@@ -239,9 +239,9 @@ const GOLEM = 30;
 const DEMON = 31;
 
 // Hero types
-const ROGUE = 0;
 const WARLOCK = 1;
 const BERSERKER = 2;
+const ROGUE = 3;
 const ARCHER = 4;
 const KNIGHT = 5;
 const MAGE = 6;

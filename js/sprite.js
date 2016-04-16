@@ -11,7 +11,7 @@ const HELMET_OFFSET = 12;
 const SHIELD_OFFSET = 13;
 const STAFF_OFFSET = 14;
 const TREASURE_OFFSET = 15;
-const PLAYER_OFFSET = 18;
+const HERO_OFFSET = 18;
 const MONSTER_OFFSET = 19;
 
 const TOTAL_NUM_SHEETS = 3;
@@ -78,18 +78,9 @@ var currentActorSprite = new Sprite(uiSpriteSheet, 1, 0);
 var tileSprites = [ new Sprite(greenSpriteSheet, 1, 1, 32, 32),
                     new Sprite(greenSpriteSheet, 7, 0, 32, 32),
                     new Sprite(greenSpriteSheet, 2, 2, 32, 32)];
-
-var rogueSprite = new Sprite(greenSpriteSheet, 0, 18, 32, 32);
-var warlockSprite = new Sprite(greenSpriteSheet, 1, 18, 32, 32);
-var berserkerSprite = new Sprite(greenSpriteSheet, 2, 18, 32, 32);
-var archerSprite = new Sprite(greenSpriteSheet, 4, 18, 32, 32);
-var knightSprite = new Sprite(greenSpriteSheet, 5, 18, 32, 32);
-var mageSprite = new Sprite(greenSpriteSheet, 6, 18, 32, 32);
-var blackMageSprite = new Sprite(greenSpriteSheet, 7, 18, 32, 32);
-
-var damageKnightSprite = new Sprite(redSpriteSheet, 5, 18, 32, 32);
-var damageMageSprite = new Sprite(redSpriteSheet, 6, 18, 32, 32);
-
+                    
+var heroSprites = [];
+var damageHeroSprites = [];
 var monsterSprites = [];
 var monsterDamageSprites = [];
 var swordSprites = [];
@@ -139,6 +130,9 @@ for (let x = 0; x < 8; ++x) {
   spellSprites.push(new Sprite(greenSpriteSheet, x, SPELL_OFFSET));
   potionSprites.push(new Sprite(greenSpriteSheet, x, POTION_OFFSET));
   treasureSprites.push(new Sprite(greenSpriteSheet, x, TREASURE_OFFSET));
+  
+  heroSprites.push(new Sprite(greenSpriteSheet, x, HERO_OFFSET));
+  damageHeroSprites.push(new Sprite(redSpriteSheet, x, HERO_OFFSET));
 }
 var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4),
                      new Sprite(greenSpriteSheet, 1, 4)
