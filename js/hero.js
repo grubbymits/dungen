@@ -182,13 +182,28 @@ class Rogue extends Hero {
 
 class Archer extends Hero {
   constructor(position, game) {
-    super(60, 15, 15, 20, 10,
-          position, ROGUE, game);
+    super(60, 15, 13, 22, 10,
+          position, ARCHER, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
     this.equipPrimary = bows[BOW0];
-    this.equipSecondary = arrows[ARROW0];
+    this.equipSecondary = arrows[ARROWS0];
   }
+  get primaryAtkPower() {
+    return Math.round((this.equipPrimary.power + this.equipSecondary.power) *
+                      this.strength / MAX_STRENGTH);
+  }
+  get primaryAtkEnergy() {
+    return Math.round((this.equipPrimary.energy + this.equipSecondary.energy) *
+                      MAX_AGILITY / this.agility);
+  }
+  /*
+  get primaryAtkType() {
+    return this.equipPrimary.type;
+  }
+  get primaryAtkRange() {
+    return this.equipPrimary.range;
+  }*/
 }
 
 class Player {

@@ -116,7 +116,19 @@ const PROJECTILE_NAMES = [ "small bombs",
                          ];
 const THROWING_NAMES = ["Small Shuriken",
                         "Large Shuriken",
-                        "Throwing Knives"];
+                        "Throwing Knives"
+                       ];
+const BOW_NAMES = ["First bow",
+                   "Second bow",
+                   "Third bow",
+                   "Light crossbow",
+                   "Heavy crossbow"
+                   ];
+                   
+const ARROW_NAMES = ["Light arrows",
+                     "Medium arrows",
+                     "Heavy arrows"
+                    ];
 
 // Item types
 const SWORD = 0;

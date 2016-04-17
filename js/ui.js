@@ -174,6 +174,8 @@ class Interface {
       return this.player.throwing;
       case BOW:
       return this.player.bows;
+      case ARROWS:
+      return this.player.arrows;
     }
   }
   controller(event) {
@@ -225,7 +227,9 @@ class Interface {
       if (item.type == SWORD ||
           item.type == AXE ||
           item.type == BOW ||
-          item.type == STAFF) {
+          item.type == STAFF ||
+          item.type == THROWING ||
+          item.type == ARROWS) {
         this.hudContext.fillText("ATK: " + item.power + ", RNG: " + item.range + ", EP: " + item.energy,
                                  TILE_SIZE, y + TILE_SIZE);
       } else if (item.type == ARMOUR ||

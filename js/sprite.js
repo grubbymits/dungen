@@ -104,6 +104,10 @@ var bowSprites = [];
 var fireBowSprites = [];
 var iceBowSprites = [];
 var electricBowSprites = [];
+var arrowSprites = [];
+var fireArrowSprites = [];
+var iceArrowSprites = [];
+var electricArrowSprites = [];
 var throwingSprites = [];
 var fireThrowingSprites = [];
 var iceThrowingSprites = [];
@@ -136,6 +140,10 @@ for (let x = 3; x < 8; ++x) {
   fireBowSprites.push(new Sprite(redSpriteSheet, x, BOW_OFFSET));
   iceBowSprites.push(new Sprite(blueSpriteSheet, x, BOW_OFFSET));
   electricBowSprites.push(new Sprite(yellowSpriteSheet, x, BOW_OFFSET));
+  arrowSprites.push(new Sprite(greenSpriteSheet, x, PROJECTILE_OFFSET));
+  fireArrowSprites.push(new Sprite(redSpriteSheet, x, PROJECTILE_OFFSET));
+  iceArrowSprites.push(new Sprite(blueSpriteSheet, x, PROJECTILE_OFFSET));
+  electricArrowSprites.push(new Sprite(yellowSpriteSheet, x, PROJECTILE_OFFSET));
 }
 
 for (let x = 0; x < 8; ++x) {

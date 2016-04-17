@@ -26,8 +26,10 @@ class Item {
         return AXE_NAMES[this.subtype];
       case THROWING:
         return THROWING_NAMES[this.subtype];
-      case BOWS:
+      case BOW:
         return BOW_NAMES[this.subtype];
+      case ARROWS:
+        return ARROW_NAMES[this.subtype];
       case TREASURE:
         return TREASURE_NAMES[this.subtype];
     }
@@ -75,6 +77,8 @@ class Item {
         return throwingSprites[this.subtype];
       case BOW:
         return bowSprites[this.subtype];
+      case ARROWS:
+        return arrowSprites[this.subtype];
       case TREASURE:
         return treasureSprites[this.subtype];
     }
@@ -209,16 +213,16 @@ var axes = [ new Weapon(AXE, AXE0, 3, 3, 2, NORMAL),
                new Weapon(AXE, AXE7, 34, 3, 6, NORMAL),
              ];
              
-var bows = [ new Weapon(BOW, BOW0, 25, 8, 2, NORMAL),
-             new Weapon(BOW, BOW1, 40, 7, 3, NORMAL),
-             new Weapon(BOW, BOW2, 50, 8, 3, NORMAL),
-             new Weapon(BOW, BOW3, 65, 7, 4, NORMAL),
-             new Weapon(BOW, BOW4, 75, 8, 4, NORMAL)
+var bows = [ new Weapon(BOW, BOW0, 20, 9, 1, NORMAL),
+             new Weapon(BOW, BOW1, 30, 8, 2, NORMAL),
+             new Weapon(BOW, BOW2, 40, 9, 2, NORMAL),
+             new Weapon(BOW, BOW3, 50, 8, 3, NORMAL),
+             new Weapon(BOW, BOW4, 75, 9, 3, NORMAL)
            ];
 
-var arrows = [ new Weapon(ARROWS, ARROWS0, 10, 8, 2, NORMAL),
-               new Weapon(ARROWS, ARROWS1, 16, 7, 3, NORMAL),
-               new Weapon(ARROWS, ARROWS2, 22, 8, 3, NORMAL)
+var arrows = [ new Weapon(ARROWS, ARROWS0, 10, 8, 1, NORMAL),
+               new Weapon(ARROWS, ARROWS1, 16, 7, 1, NORMAL),
+               new Weapon(ARROWS, ARROWS2, 22, 8, 1, NORMAL)
              ];
              
 var throwing = [ new Weapon(THROWING, THROWING0, 10, 8, 1, NORMAL),
