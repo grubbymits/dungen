@@ -39,10 +39,16 @@ function begin() {
     var character = theGame.createHero(startPos, playerType);
 
     var player = new Player(character);
+    startPos = theGame.map.getLocation(1 + theGame.map.width / 2, theGame.map.height / 2).vec;
+    var archer = theGame.createHero(startPos, ARCHER);
+    archer.follow(character);
+    startPos = theGame.map.getLocation(1 + theGame.map.width / 2, 1 + theGame.map.height / 2).vec;
+    var rogue = theGame.createHero(startPos, ROGUE);
+    rogue.follow(character);
+    player.addHero(archer);
+    player.addHero(rogue);
     var UI = new Interface(player);
-    player.addItem(armours[1]);
-    player.addItem(helmets[2]);
-    player.addItem(swords[3]);
+    
     UI.centreCamera(null);
     theGame.addPlayer(player);
     theGame.placeMonsters(10);

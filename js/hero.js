@@ -208,6 +208,7 @@ class Archer extends Hero {
 
 class Player {
   constructor(hero) {
+    this.startingHero = hero;
     this.currentHero = hero;
     this.game = hero.game;
     this.heroes = [];

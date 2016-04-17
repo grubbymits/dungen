@@ -46,7 +46,7 @@ class Interface {
     this.game = player.game;
     this.player = player;
     this.player.addUI(this);
-    this.heroToLevelUp = null;
+    this.heroesToLevelUp = [];
     this.events = [];
     this.hudVisible = false;
     this.itemMenuVisible = false;
@@ -68,6 +68,7 @@ class Interface {
     this.lvlUpButtons = document.getElementById("levelUpButtons");
 
     document.getElementById("centre_camera").addEventListener("click", this.centreCamera.bind(this), false);
+    document.getElementById("team_button").addEventListener("click", this.partyControl.bind(this), false);
     document.getElementById("rest_button").addEventListener("click", event => player.setRest());
     document.getElementById("hud_button").addEventListener("click", this.controlHUD.bind(this), false);
     document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
@@ -102,6 +103,11 @@ class Interface {
     y -= window.innerHeight / 2;
     window.scrollTo(x, y);
   }
+  
+  partyControl(event) {
+    // The player can either control just the starting character or the whole team.
+    // When controlling just the main character, the other hero's follow the leader.
+  }
 
   renderInfo() {
     // Draw text onto the canvas for ~1 second to inform the player of changes.
@@ -130,27 +136,33 @@ class Interface {
 
   levelUp(hero) {
     this.lvlUpButtons.style.visibility = "visible";
-    this.heroToLevelUp = hero;
-    //let strength = document.getElementById("strength");
-    //strength.style.left = window.innerWidth / 2 + "px";
-    //strength.disabled = false;
+    this.heroesToLevelUp.push(hero);
   }
   increaseAgility() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.agility++;
-      this.lvlUpButtons.style.visibility = "hidden";
+    if (this.heroesToLevelUp.length !== 0) {
+      var hero = this.heroesToLevelUp.pop();
+      hero.agility++;
+      if (this.heroesToLevelUp.length == 0) {
+        this.lvlUpButtons.style.visibility = "hidden";
+      }
     }
   }
   increaseStrength() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.strength++;
-      this.lvlUpButtons.style.visibility = "hidden";
+    if (this.heroesToLevelUp.length !== 0) {
+      var hero = this.heroesToLevelUp.pop();
+      hero.strength++;
+      if (this.heroesToLevelUp.length == 0) {
+        this.lvlUpButtons.style.visibility = "hidden";
+      }
     }
   }
   increaseWisdom() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.wisdom++;
-      this.lvlUpButtons.style.visibility = "hidden";
+    if (this.heroesToLevelUp.length !== 0) {
+      var hero = this.heroesToLevelUp.pop();
+      hero.wisdom++;
+      if (this.heroesToLevelUp.length == 0) {
+        this.lvlUpButtons.style.visibility = "hidden";
+      }
     }
   }
   getItems(type) {
