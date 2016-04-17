@@ -151,7 +151,7 @@ class Mage extends Hero {
           position, MAGE, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipPrimary = staffs[STAFF0];
-    this.equipSecondary = scrolls[SCROLL0];
+    this.equipSecondary = spells[SPELL0];
     //this.equipRing = basicRing;
   }
 }
@@ -220,6 +220,7 @@ class Player {
     this.bows = new Map();
     this.arrows = new Map();
     this.throwing = new Map();
+    this.spells = new Map();
     this.potions = new Map();
     this.treasure = new Map();
     this.addHero(hero);
@@ -283,6 +284,9 @@ class Player {
       break;
       case BOW:
       items = this.bows;
+      break;
+      case SPELL:
+      items = this.spells;
       break;
       case POTION:
       items = this.potions;

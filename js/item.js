@@ -30,6 +30,8 @@ class Item {
         return BOW_NAMES[this.subtype];
       case ARROWS:
         return ARROW_NAMES[this.subtype];
+      case SPELL:
+        return SPELL_NAMES[this.subtype];
       case TREASURE:
         return TREASURE_NAMES[this.subtype];
     }
@@ -79,6 +81,8 @@ class Item {
         return bowSprites[this.subtype];
       case ARROWS:
         return arrowSprites[this.subtype];
+      case SPELL:
+        return spellSprites[this.subtype];
       case TREASURE:
         return treasureSprites[this.subtype];
     }
@@ -138,9 +142,9 @@ class Treasure extends Item {
   }
 }
 
-class Scroll extends Item {
+class Spell extends Item {
   constructor(kind) {
-    super(SCROLL, kind);
+    super(SPELL, kind);
   }
   use(actor) {
     
@@ -261,12 +265,12 @@ var treasures = [ new Treasure(TREASURE0, 50),
                   new Treasure(TREASURE7, 225)
                 ];
 
-var scrolls = [ new Scroll(SCROLL0),
-                new Scroll(SCROLL1),
-                new Scroll(SCROLL2),
-                new Scroll(SCROLL3),
-                new Scroll(SCROLL4),
-                new Scroll(SCROLL5),
-                new Scroll(SCROLL6),
-                new Scroll(SCROLL7)
+var spells = [ new Spell(SPELL0),
+                new Spell(SPELL1),
+                new Spell(SPELL2),
+                new Spell(SPELL3),
+                new Spell(SPELL4),
+                new Spell(SPELL5),
+                new Spell(SPELL6),
+                new Spell(SPELL7)
               ];

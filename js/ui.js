@@ -176,6 +176,8 @@ class Interface {
       return this.player.bows;
       case ARROWS:
       return this.player.arrows;
+      case SPELL:
+      return this.player.spells;
     }
   }
   controller(event) {

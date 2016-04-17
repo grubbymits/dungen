@@ -129,6 +129,13 @@ const ARROW_NAMES = ["Light arrows",
                      "Medium arrows",
                      "Heavy arrows"
                     ];
+const SPELL_NAMES = ["First scroll",
+                      "Second scroll",
+                      "Third scroll",
+                      "Fourth scroll",
+                      "Fifth scroll",
+                      "Sixth scroll",
+                      "Seventh scroll"];
 
 // Item types
 const SWORD = 0;
@@ -143,6 +150,7 @@ const BOW = 8;
 const TREASURE = 9;
 const THROWING = 10;
 const ARROWS = 11;
+const SPELL = 12;
 
 // Item subtypes
 const SWORD0 = 0;
@@ -181,14 +189,14 @@ const SHIELD5 = 5;
 const SHIELD6 = 6;
 const SHIELD7 = 7;
 
-const SCROLL0 = 0;
-const SCROLL1 = 1;
-const SCROLL2 = 2;
-const SCROLL3 = 3;
-const SCROLL4 = 4;
-const SCROLL5 = 5;
-const SCROLL6 = 6;
-const SCROLL7 = 7;
+const SPELL0 = 0;
+const SPELL1 = 1;
+const SPELL2 = 2;
+const SPELL3 = 3;
+const SPELL4 = 4;
+const SPELL5 = 5;
+const SPELL6 = 6;
+const SPELL7 = 7;
 
 const STAFF0 = 0;
 const STAFF1 = 1;
