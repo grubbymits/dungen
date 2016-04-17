@@ -84,9 +84,9 @@ function begin() {
           theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
           theGame.renderMap();
           theGame.renderEntities();
+          UI.renderInfo();
+          UI.renderHUD();
         }
-        UI.renderInfo();
-        UI.renderHUD();
       }
       window.requestAnimationFrame(run);
     };

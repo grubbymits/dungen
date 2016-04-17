@@ -50,6 +50,10 @@ class Game {
       hero = new Knight(pos, this);
     } else if (type == MAGE) {
       hero = new Mage(pos, this);
+    } else if (type == ROGUE) {
+      hero = new Rogue(pos, this);
+    } else if (type == ARCHER) {
+      hero = new Archer(pos, this);
     } else {
       throw("Hero type unrecognised!");
     }

@@ -6,10 +6,10 @@ class Hero extends Actor {
     super(health, energy, position,
           heroSprites[subtype], damageHeroSprites[subtype],
           HERO, game);
-    this.equipWeapon = null;
+    this.equipPrimary = null;
+    this.equipSecondary = null;
     this.equipArmour = null;
-    this.equipShield = null;
-    this.equipArrows = null;
+    this.equipHelmet = null;
     
 
     this.strength = strength;
@@ -27,15 +27,6 @@ class Hero extends Actor {
   get armour() {
     return this.equipArmour;
   }
-  get arrows() {
-    return this.equipArrows;
-  }
-  get weapon() {
-    return this.equipWeapon;
-  }
-  get shield() {
-    return this.equipShield;
-  }
   get helmet() {
     return this.equipHelmet;
   }
@@ -43,30 +34,22 @@ class Hero extends Actor {
     return this.equipRing;
   }
   get primary() {
-    return this.weapon;
+    return this.equipPrimary;
   }
   get secondary() {
-    if (this.equipShield !== null) {
-      return this.shield;
-    }
-  }
-  get projectileRange() {
-    return 0;
+    return this.equipSecondary;
   }
   get primaryAtkPower() {
-    return Math.round(this.equipWeapon.power * this.strength / MAX_STRENGTH);
+    return Math.round(this.equipPrimary.power * this.strength / MAX_STRENGTH);
   }
   get primaryAtkEnergy() {
-    return Math.round(this.equipWeapon.energy * MAX_AGILITY / this.agility);
+    return Math.round(this.equipPrimary.energy * MAX_AGILITY / this.agility);
   }
   get primaryAtkType() {
-    return this.equipWeapon.type;
+    return this.equipPrimary.type;
   }
   get primaryAtkRange() {
-    return this.equipWeapon.range;
-  }
-  get secondaryAtkRange() {
-    return 0;
+    return this.equipPrimary.range;
   }
   get physicalDefense() {
     var total = 0;
@@ -76,8 +59,8 @@ class Hero extends Actor {
     if (this.equipHelmet) {
       total += this.equipHelmet.defense;
     }
-    if (this.equipShield) {
-      total += this.equipShield.defense;
+    if (this.equipSecondary.type == SHIELD) {
+      total += this.equipSecondary.defense;
     }
     return total;
   }
@@ -136,10 +119,16 @@ class Hero extends Actor {
       return this.equipHelmet = item;
       break;
       case SHIELD:
-      return this.equipShield = item;
+      case ARROWS:
+      case THROWING:
+      case SCROLL:
+      return this.equipSecondary = item;
       break;
       case SWORD:
-      return this.equipWeapon = item;
+      case AXE:
+      case BOW:
+      case STAFF:
+      return this.equipPrimary = item;
       break;
     }
   }
@@ -151,8 +140,8 @@ class Knight extends Hero {
           position, KNIGHT, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
-    this.equipWeapon = swords[SWORD0];
-    this.equipShield = shields[SHIELD0];
+    this.equipPrimary = swords[SWORD0];
+    this.equipSecondary = shields[SHIELD0];
   }
 }
 
@@ -160,10 +149,45 @@ class Mage extends Hero {
   constructor(position, game) {
     super(60, 15, 10, 15, 20,
           position, MAGE, game);
-    console.log("creating mage");
     this.equipArmour = armours[ARMOUR0];
-    this.equipWeapon = staffs[STAFF0];
+    this.equipPrimary = staffs[STAFF0];
+    this.equipSecondary = scrolls[SCROLL0];
     //this.equipRing = basicRing;
+  }
+}
+
+class Rogue extends Hero {
+  constructor(position, game) {
+    super(60, 15, 15, 20, 10,
+          position, ROGUE, game);
+    this.equipArmour = armours[ARMOUR0];
+    this.equipHelmet = helmets[HELMET0];
+    this.equipPrimary = swords[SWORD0];
+    this.equipSecondary = throwing[THROWING0];
+    this.secondaryAttack = new SecondaryAttack(this);
+  }
+  get secondaryAtkPower() {
+    return Math.round(this.equipSecondary.power * this.strength / MAX_STRENGTH);
+  }
+  get secondaryAtkEnergy() {
+    return Math.round(this.equipSecondary.energy * MAX_AGILITY / this.agility);
+  }
+  get secondaryAtkType() {
+    return this.equipSecondary.type;
+  }
+  get secondaryAtkRange() {
+    return this.equipSecondary.range;
+  }
+}
+
+class Archer extends Hero {
+  constructor(position, game) {
+    super(60, 15, 15, 20, 10,
+          position, ROGUE, game);
+    this.equipArmour = armours[ARMOUR0];
+    this.equipHelmet = helmets[HELMET0];
+    this.equipPrimary = bows[BOW0];
+    this.equipSecondary = arrows[ARROW0];
   }
 }
 
@@ -178,6 +202,9 @@ class Player {
     this.swords = new Map();
     this.staffs = new Map();
     this.axes = new Map();
+    this.bows = new Map();
+    this.arrows = new Map();
+    this.throwing = new Map();
     this.potions = new Map();
     this.treasure = new Map();
     this.addHero(hero);
@@ -196,20 +223,13 @@ class Player {
   }
   addHero(hero) {
     this.heroes.push(hero);
+    this.addItem(hero.primary);
+    this.addItem(hero.secondary);
     if (hero.armour) {
       this.addItem(hero.armour);
     }
     if (hero.helmet) {
       this.addItem(hero.helmet);
-    }
-    if (hero.weapon) {
-      this.addItem(hero.weapon);
-    }
-    if (hero.shield) {
-      this.addItem(hero.shield);
-    }
-    if (hero.arrows) {
-      this.addItem(hero.arrows);
     }
     if (hero.ring) {
       this.addItem(hero.ring);
@@ -239,6 +259,15 @@ class Player {
       break;
       case AXE:
       items = this.axes;
+      break;
+      case ARROWS:
+      items = this.arrows;
+      break;
+      case THROWING:
+      items = this.throwing;
+      break;
+      case BOW:
+      items = this.bows;
       break;
       case POTION:
       items = this.potions;

@@ -114,6 +114,9 @@ const PROJECTILE_NAMES = [ "small bombs",
                            "light bolts",
                            "heavy bolts"
                          ];
+const THROWING_NAMES = ["Small Shuriken",
+                        "Large Shuriken",
+                        "Throwing Knives"];
 
 // Item types
 const SWORD = 0;
@@ -126,6 +129,8 @@ const POTION = 6;
 const SCROLL = 7;
 const BOW = 8;
 const TREASURE = 9;
+const THROWING = 10;
+const ARROWS = 11;
 
 // Item subtypes
 const SWORD0 = 0;
@@ -205,6 +210,14 @@ const TREASURE4 = 4;
 const TREASURE5 = 5;
 const TREASURE6 = 6;
 const TREASURE7 = 7;
+
+const THROWING0 = 0;
+const THROWING1 = 1;
+const THROWING2 = 2;
+
+const ARROWS0 = 0;
+const ARROWS1 = 1;
+const ARROWS2 = 2;
 
 // Potions
 const BASIC_HEALTH_POTION = 0;

@@ -4,6 +4,7 @@ const POTION_OFFSET = 5;
 const SPELL_OFFSET = 6;
 const SWORD_OFFSET = 7;
 const AXE_OFFSET = 8;
+const THROWING_OFFSET = 9;
 const BOW_OFFSET = 9;
 const PROJECTILE_OFFSET = 10;
 const ARMOUR_OFFSET = 11;
@@ -99,6 +100,14 @@ var staffSprites = [];
 var fireStaffSprites = [];
 var iceStaffSprites = [];
 var electricStaffSprites = [];
+var bowSprites = [];
+var fireBowSprites = [];
+var iceBowSprites = [];
+var electricBowSprites = [];
+var throwingSprites = [];
+var fireThrowingSprites = [];
+var iceThrowingSprites = [];
+var electricThrowingSprites = [];
 var armourSprites = [];
 var helmetSprites = [];
 var shieldSprites = [];
@@ -114,6 +123,21 @@ for (let y = MONSTER_OFFSET; y < (MONSTER_OFFSET + 4); ++y) {
     shockedMonsterSprites.push(new Sprite(yellowSpriteSheet, x, y));
   }
 }
+
+for (let x = 0; x < 3; ++x) {
+  throwingSprites.push(new Sprite(greenSpriteSheet, x, THROWING_OFFSET));
+  fireThrowingSprites.push(new Sprite(redSpriteSheet, x, THROWING_OFFSET));
+  iceThrowingSprites.push(new Sprite(blueSpriteSheet, x, THROWING_OFFSET));
+  electricThrowingSprites.push(new Sprite(yellowSpriteSheet, x, THROWING_OFFSET));
+}
+
+for (let x = 3; x < 8; ++x) {
+  bowSprites.push(new Sprite(greenSpriteSheet, x, BOW_OFFSET));
+  fireBowSprites.push(new Sprite(redSpriteSheet, x, BOW_OFFSET));
+  iceBowSprites.push(new Sprite(blueSpriteSheet, x, BOW_OFFSET));
+  electricBowSprites.push(new Sprite(yellowSpriteSheet, x, BOW_OFFSET));
+}
+
 for (let x = 0; x < 8; ++x) {
   swordSprites.push(new Sprite(greenSpriteSheet, x, SWORD_OFFSET));
   fireSwordSprites.push(new Sprite(redSpriteSheet, x, SWORD_OFFSET));

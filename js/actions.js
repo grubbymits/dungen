@@ -70,13 +70,14 @@ class WalkAction extends Action {
 // Performing an attack action will return the attack attempt (eg swingweapon)
 // Whether it connects depends on the actor and the target.
 // DealDamage is the final action which determines how much damage is dealt.
-class DealMeleeDamage extends Action {
-  constructor(actor) {
+class DealDamage extends Action {
+  constructor(actor, attack) {
     super(actor);
+    this.attack = attack;
   }
   perform() {
-    let power = this.actor.primaryAtkPower;
-    let type = this.actor.primaryAtkType;
+    let power = this.attack.power;
+    let type = this.attack.type;
     let defense = this.targetActor.physicalDefense;
     let elemDefense = 1; //this.targetActor.elementalDefense(type);
     let damage = Math.round(power * MAX_DEFENSE / defense);
@@ -96,7 +97,6 @@ class DealMeleeDamage extends Action {
     } else {
       this.game.audio.hit();
       this.game.addTextEvent(" -" + damage, this.targetActor.pos);
-      
     }
   }
   set target(target) {
@@ -104,14 +104,22 @@ class DealMeleeDamage extends Action {
   }
 }
 
-class MeleeAttack extends Action {
+class PrimaryAttack extends Action {
   constructor(actor) {
     super(actor);
-    this.dealDamage = new DealMeleeDamage(actor);
+    this.dealDamage = new DealDamage(actor, this);
   }
 
   set target(target) {
     this.targetActor = target;
+  }
+  
+  get range() {
+    return this.actor.primaryAtkRange;
+  }
+  
+  get power() {
+    return this.actor.primaryAtkPower;
   }
 
   perform() {
@@ -119,6 +127,40 @@ class MeleeAttack extends Action {
       //return null;
     //} else {
     let energyRequired = this.actor.primaryAtkEnergy;
+    if (this.actor.currentEnergy < energyRequired) {
+      return this.actor.rest;
+    }
+    this.game.audio.playAttack(this.actor);
+    this.dealDamage.target = this.targetActor;
+    this.actor.useEnergy(energyRequired);
+    return this.dealDamage;
+    //}
+  }
+}
+
+class SecondaryAttack extends Action {
+  constructor(actor) {
+    super(actor);
+    this.dealDamage = new DealDamage(actor, this);
+  }
+
+  set target(target) {
+    this.targetActor = target;
+  }
+  
+  get range() {
+    return this.actor.secondaryAtkRange;
+  }
+  
+  get power() {
+    return this.actor.secondaryAtkPower;
+  }
+
+  perform() {
+    //if (target.dodges) {
+      //return null;
+    //} else {
+    let energyRequired = this.actor.secondaryAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
@@ -149,12 +191,13 @@ class Attack extends Action {
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
     // if target is in range, we can return an attack action,
     // otherwise we should return a walkaction to get closer.
-    if (this.actor.primaryAtkRange >= targetDistance) {
-      this.actor.meleeAttack.target = this.targetActor;
-      return this.actor.meleeAttack;
-    } else if (this.actor.secondaryAtkRange >= targetDistance) {
-      this.actor.rangeAttack.target = this.targetActor;
-      return this.actor.rangeAttack;
+    if (this.actor.primaryAttack.range >= targetDistance) {
+      this.actor.primaryAttack.target = this.targetActor;
+      return this.actor.primaryAttack;
+    } else if (this.actor.secondaryAttack !== null &&
+               this.actor.secondaryAttack.range >= targetDistance) {
+      this.actor.secondaryAttack.target = this.targetActor;
+      return this.actor.secondaryAttack;
     } else {
       this.actor.walk.dest = this.targetActor.pos;
       return this.actor.walk;

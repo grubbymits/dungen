@@ -24,6 +24,10 @@ class Item {
         return STAFF_NAMES[this.subtype];
       case AXE:
         return AXE_NAMES[this.subtype];
+      case THROWING:
+        return THROWING_NAMES[this.subtype];
+      case BOWS:
+        return BOW_NAMES[this.subtype];
       case TREASURE:
         return TREASURE_NAMES[this.subtype];
     }
@@ -67,6 +71,10 @@ class Item {
         return staffSprites[this.subtype];
       case AXE:
         return axeSprites[this.subtype];
+      case THROWING:
+        return throwingSprites[this.subtype];
+      case BOW:
+        return bowSprites[this.subtype];
       case TREASURE:
         return treasureSprites[this.subtype];
     }
@@ -207,6 +215,16 @@ var bows = [ new Weapon(BOW, BOW0, 25, 8, 2, NORMAL),
              new Weapon(BOW, BOW3, 65, 7, 4, NORMAL),
              new Weapon(BOW, BOW4, 75, 8, 4, NORMAL)
            ];
+
+var arrows = [ new Weapon(ARROWS, ARROWS0, 10, 8, 2, NORMAL),
+               new Weapon(ARROWS, ARROWS1, 16, 7, 3, NORMAL),
+               new Weapon(ARROWS, ARROWS2, 22, 8, 3, NORMAL)
+             ];
+             
+var throwing = [ new Weapon(THROWING, THROWING0, 10, 8, 1, NORMAL),
+                 new Weapon(THROWING, THROWING1, 16, 8, 2, NORMAL),
+                 new Weapon(THROWING, THROWING2, 22, 8, 2, NORMAL)
+               ];
 
 // https://en.wikipedia.org/wiki/List_of_mythological_objects
 // mimung - wudga inherits from his son Wayland the Smith

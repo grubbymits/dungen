@@ -73,7 +73,7 @@ class Audio {
   }
   playAttack(actor) {
     if (actor.kind == HERO) {
-      let weapon = actor.weapon;
+      let weapon = actor.primary;
       switch(weapon.type) {
         case AXE:
         case SWORD:

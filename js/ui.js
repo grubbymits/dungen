@@ -170,6 +170,10 @@ class Interface {
       return this.player.staffs;
       case AXE:
       return this.player.axes;
+      case THROWING:
+      return this.player.throwing;
+      case BOW:
+      return this.player.bows;
     }
   }
   controller(event) {

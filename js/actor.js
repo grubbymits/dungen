@@ -157,7 +157,8 @@ class Actor extends Entity {
     this.rest = new RestAction(this);
     this.attack = new Attack(this);
     this.findTarget = new FindTarget(this);
-    this.meleeAttack = new MeleeAttack(this);
+    this.primaryAttack = new PrimaryAttack(this);
+    this.secondaryAttack = null;
     this.interact = new Interact(this);
     this.nextAction = null;
     this.destination = null;
