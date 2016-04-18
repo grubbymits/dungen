@@ -54,6 +54,8 @@ class Game {
       hero = new Rogue(pos, this);
     } else if (type == ARCHER) {
       hero = new Archer(pos, this);
+    } else if (type == WARLOCK) {
+      hero = new Warlock(pos, this);
     } else {
       throw("Hero type unrecognised!");
     }

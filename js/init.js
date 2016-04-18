@@ -26,13 +26,15 @@ function begin() {
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
   var type = variableArray[0].split('=')[1];
-  var playerType = KNIGHT;
+  var playerType = WARLOCK;
   if (type == 'mage') {
     playerType = MAGE;
   } else if (type == 'rogue') {
     playerType = ROGUE;
   } else if (type == 'archer') {
     playerType = ARCHER;
+  } else if (type == 'warlock') {
+    playerType = WARLOCK;
   }
 
     var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;

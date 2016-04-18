@@ -1,7 +1,8 @@
 "use strict";
 
 class Hero extends Actor {
-  constructor(health, energy, strength, agility, wisdom,
+  constructor(health, energy,
+              strength, agility, wisdom, will, endurance,
               position, subtype, game) {
     super(health, energy, position,
           heroSprites[subtype], damageHeroSprites[subtype],
@@ -15,6 +16,8 @@ class Hero extends Actor {
     this.strength = strength;
     this.agility = agility;
     this.wisdom = wisdom;
+    this.will = will;
+    this.endurance = endurance;
     this.subtype = subtype;
 
     this.isFollowing = false;
@@ -136,7 +139,8 @@ class Hero extends Actor {
 
 class Knight extends Hero {
   constructor(position, game) {
-    super(60, 15, 20, 15, 10,
+    super(60, 15,
+          22, 14, 7, 10, 17,     // 70
           position, KNIGHT, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -147,18 +151,26 @@ class Knight extends Hero {
 
 class Mage extends Hero {
   constructor(position, game) {
-    super(60, 15, 10, 15, 20,
+    super(60, 15,
+          9, 13, 22, 17, 9,
           position, MAGE, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipPrimary = staffs[STAFF0];
     this.equipSecondary = spells[SPELL0];
     //this.equipRing = basicRing;
   }
+  get primaryAtkPower() {
+    return Math.round(this.equipPrimary.power * this.wisdom / MAX_WISDOM);
+  }
+  get primaryAtkEnergy() {
+    return Math.round(this.equipPrimary.energy * MAX_WILL / this.will);
+  }
 }
 
 class Rogue extends Hero {
   constructor(position, game) {
-    super(60, 15, 15, 20, 10,
+    super(60, 15,
+          15, 20, 10, 14, 11,
           position, ROGUE, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -182,7 +194,8 @@ class Rogue extends Hero {
 
 class Archer extends Hero {
   constructor(position, game) {
-    super(60, 15, 13, 22, 10,
+    super(60, 15,
+          13, 22, 9, 11, 15,
           position, ARCHER, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -197,13 +210,18 @@ class Archer extends Hero {
     return Math.round((this.equipPrimary.energy + this.equipSecondary.energy) *
                       MAX_AGILITY / this.agility);
   }
-  /*
-  get primaryAtkType() {
-    return this.equipPrimary.type;
+}
+
+class Warlock extends Hero {
+  constructor(position, game) {
+    super(60, 15,
+          18, 9, 13, 15, 15,
+          position, WARLOCK, game);
+    this.equipPrimary = axes[AXE0];
+    this.equipSecondary = spells[SPELL0];
+    this.equipArmour = armours[ARMOUR0];
+    this.equipHelmet = helmets[HELMET0];
   }
-  get primaryAtkRange() {
-    return this.equipPrimary.range;
-  }*/
 }
 
 class Player {

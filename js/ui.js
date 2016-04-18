@@ -283,14 +283,20 @@ class Interface {
                                offsetX, offsetY + 3/2 * spacing * UPSCALE_FACTOR);
     this.hudContext.fillText("Strength: " + hero.strength,
                                offsetX, offsetY + 2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Agility: " + hero.agility,
+    this.hudContext.fillText("Endurance: " + hero.will,
                                offsetX, offsetY + 5/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Wisdom: " + hero.wisdom,
+    this.hudContext.fillText("Agility: " + hero.agility,
                                offsetX, offsetY + 3 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Attack: " + hero.primaryAtkPower,
+    this.hudContext.fillText("Wisdom: " + hero.wisdom,
                                offsetX, offsetY + 7/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Defense: " + hero.physicalDefense,
+    this.hudContext.fillText("Will: " + hero.will,
                                offsetX, offsetY + 4 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Attack: " + hero.primaryAtkPower,
+                               offsetX, offsetY + 9/2 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Attack Energy: " + hero.primaryAtkEnergy,
+                               offsetX, offsetY + 5 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Defense: " + hero.physicalDefense,
+                               offsetX, offsetY + 11/2 * spacing * UPSCALE_FACTOR);
   }
   renderHUD() {
     if (this.hudVisible) {
