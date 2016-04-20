@@ -26,6 +26,7 @@ function begin() {
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
   var type = variableArray[0].split('=')[1];
+  var playerType = HERO;
   if (type == 'mage') {
     playerType = MAGE;
   } else if (type == 'rogue') {
