@@ -106,32 +106,33 @@ class Armour extends Item {
     this.elemType = elemType;
   }
 }
+
 class Potion extends Item {
-  constructor(kind, strength, duration) {
+  constructor(kind) {
     super(POTION, kind);
-    this.strength = strength;
-    this.duration = duration;
   }
-  use(actor) {
+  get effect() {
     // for potions which have a duration of multiple turns, we need to assign
     // an effect on the actor, which will take effect immediately and for the
     // this.duration - 1 turns. The effect can then be triggered on the actor
     // when their next action is calculated.
     switch(this.subtype) {
       case BASIC_HEALTH_POTION:
+        return new HealEffect(30, 1);
       case HEALTH_POTION:
+        return new new HealEffect(30, 2);
       case BIG_HEALTH_POTION:
-        break;
+        return new HealEffect(75, 1);
+      case REGENERATION_POTION:
+        return new HealEffect(20, 6);
+      case BASIC_ENERGY_POTION:
+        return new RestoreEnergyEffect(8, 1);
       case ENERGY_POTION:
-        break;
-      case DEFENSE_POTION:
-        break;
-      case AGILITY_POTION:
-        break;
-      case STRENGTH_POTION:
-        break;
-      case WISDOM_POTION:
-        break;
+        return new RestoreEnergyEffect(16, 1);
+      case BIG_ENERGY_POTION:
+        return new RestoreEnergyEffect(32, 1);
+      case ENERGISE_POTION:
+        return new RestoreEnergyEffect(8, 6);
     }
   }
 }
@@ -150,14 +151,14 @@ class Spell extends Item {
     
   }
 }
-var potions = [ new Potion(BASIC_HEALTH_POTION, 40, 1),
-                new Potion(ENERGY_POTION, 15, 1),
-                new Potion(HEALTH_POTION, 80, 1),
-                new Potion(DEFENSE_POTION, 15, 4),
-                new Potion(AGILITY_POTION, 15, 4),
-                new Potion(STRENGTH_POTION, 15, 4),
-                new Potion(WISDOM_POTION, 15, 4),
-                new Potion(BIG_HEALTH_POTION, 120, 1)
+var potions = [ new Potion(BASIC_HEALTH_POTION),
+                new Potion(BASIC_ENERGY_POTION),
+                new Potion(HEALTH_POTION),
+                new Potion(ENERGY_POTION),
+                new Potion(BIG_HEALTH_POTION),
+                new Potion(BIG_ENERGY_POTION),
+                new Potion(REGENERATION_POTION),
+                new Potion(ENERGISE_POTION)
               ];
 
 var armours = [ new Armour(ARMOUR, ARMOUR0, 8, NORMAL),
@@ -246,13 +247,13 @@ var throwing = [ new Weapon(THROWING, THROWING0, 10, 8, 1, NORMAL),
 
 
 var potions = [ new Potion(BASIC_HEALTH_POTION, 40, 1),
-                new Potion(ENERGY_POTION, 15, 1),
+                new Potion(BASIC_ENERGY_POTION, 15, 1),
                 new Potion(HEALTH_POTION, 80, 1),
-                new Potion(DEFENSE_POTION, 15, 4),
-                new Potion(AGILITY_POTION, 15, 4),
-                new Potion(STRENGTH_POTION, 15, 4),
-                new Potion(WISDOM_POTION, 15, 4),
-                new Potion(BIG_HEALTH_POTION, 120, 1)
+                new Potion(ENERGY_POTION, 15, 4),
+                new Potion(BIG_HEALTH_POTION, 15, 4),
+                new Potion(BIG_ENERGY_POTION, 15, 4),
+                new Potion(REGENERATION_POTION, 15, 4),
+                new Potion(ENERGISE_POTION, 120, 1)
               ];
               
 var treasures = [ new Treasure(TREASURE0, 50),

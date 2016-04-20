@@ -69,6 +69,7 @@ class Interface {
 
     document.getElementById("centre_camera").addEventListener("click", this.centreCamera.bind(this), false);
     document.getElementById("rest_button").addEventListener("click", event => player.setRest());
+    document.getElementById("heal_button").addEventListener("click", event => player.healHero());
     document.getElementById("hud_button").addEventListener("click", this.controlHUD.bind(this), false);
     document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
 

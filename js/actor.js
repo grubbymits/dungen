@@ -151,6 +151,7 @@ class Actor extends Entity {
     this.maxEnergy = energy;
     //this.meleeAttackRange = 3;
     this.level = 1;
+    this.id = 0;
 
 
     this.walk = new WalkAction(this);
@@ -171,18 +172,6 @@ class Actor extends Entity {
   }
   render() {
     this.currentSprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
-    /*
-    this.game.context.fillStyle = 'red';
-    let healthBar = (this.currentHealth / this.maxHealth) * TILE_SIZE * UPSCALE_FACTOR;
-    this.game.context.fillRect(this.pos.x * TILE_SIZE * UPSCALE_FACTOR,
-                               this.pos.y * TILE_SIZE * UPSCALE_FACTOR,
-                               healthBar, 1 * UPSCALE_FACTOR);
-    this.game.context.fillStyle = 'blue';
-    let energyBar = (this.currentEnergy / this.maxEnergy) * TILE_SIZE * UPSCALE_FACTOR;
-    this.game.context.fillRect(this.pos.x * TILE_SIZE * UPSCALE_FACTOR,
-                               this.pos.y * TILE_SIZE * UPSCALE_FACTOR + 2,
-                               energyBar, 1 * UPSCALE_FACTOR);
-    */
   }
   get path() {
     return this.currentPath;
@@ -237,5 +226,8 @@ class Actor extends Entity {
   setAttack(target) {
     this.attack.target = target;
     this.nextAction = this.attack;
+  }
+  applyEffect(effect) {
+    this.game.addEffect(this, effect);
   }
 }

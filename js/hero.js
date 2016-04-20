@@ -26,6 +26,7 @@ class Hero extends Actor {
     this.level = 1;
     this.currentExp = 0;
     this.expToNextLvl = 15;
+    this.id = 1;
   }
   get armour() {
     return this.equipArmour;
@@ -82,8 +83,8 @@ class Hero extends Actor {
     }
     return this.nextAction;
   }
+  
   reduceHealth(enemy, damage) {
-    console.log("reduce hero health by:", damage);
     this.currentHealth -= damage;
     this.game.map.setDirty(this.position);
     this.currentSprite = this.damageSprite;
@@ -92,6 +93,15 @@ class Hero extends Actor {
       this.nextAction = this.attack;
     }
   }
+  
+  increaseHealth(amount) {
+    console.log("increase health by:", amount);
+    this.currentHealth += amount;
+    if (this.currentHealth > this.maxHealth) {
+      this.currentHealth = this.maxHealth;
+    }
+  }
+  
   increaseExp(exp) {
     let nextExpLevel = this.currentExp + Math.round(this.currentExp * 1.5);
     this.currentExp += exp;
@@ -325,5 +335,14 @@ class Player {
     for (let hero of this.heroes) {
       hero.setRest();
     }
+  }
+  healHero() {
+    console.log("heal hero:", this.currentHero);
+    // This function is called from a click event on the heal button.
+    // This is a quick shortcut to healing, instead of using the menu,
+    // So we need to choose the smallest potion that is going to heal
+    // the current hero.
+    let potion = potions[0];
+    this.game.addEffect(this.currentHero, potion.effect);
   }
 }

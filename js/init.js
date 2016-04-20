@@ -45,6 +45,7 @@ function begin() {
     player.addItem(armours[1]);
     player.addItem(helmets[2]);
     player.addItem(swords[3]);
+    player.addItem(potions[0]);
     UI.centreCamera(null);
     theGame.addPlayer(player);
     theGame.placeMonsters(10);
@@ -54,13 +55,12 @@ function begin() {
       let actor = 0;
       while(true) {
         let updateActor = false;
-        let action = theGame.actors[actor].action;
-        // this will only work if each non-player character always selects
-        // a move (ie, restAction) and the players are the first elements of
-        // the actors array;
-        if (!action) {
-          yield false;
+        let action = theGame.getAction(actor);
+        
+        if (action) {
+          theGame.applyEffects(actor);
         }
+        
         while(action) {
           action = action.perform();
           yield true;
@@ -69,6 +69,7 @@ function begin() {
         if (updateActor) {
           actor = (actor + 1) % theGame.actors.length;
         }
+        yield;
       }
     }
 

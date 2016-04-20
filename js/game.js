@@ -4,6 +4,7 @@ class Game {
   constructor(context, width, height) {
     console.log("Game.constructor");
     this.actors = [];
+    this.currentEffects = new Map();
     this.objects = [];
     this.context = context;
     this.level = 1;
@@ -33,17 +34,21 @@ class Game {
       }
     }
   }
+  
   addPlayer(player) {
     this.player = player;
   }
+  
   addTextEvent(string, pos) {
     this.player.UI.addEvent(new TextEvent(this.context, new Date().getTime(),
                                           pos, string));
   }
+  
   addGraphicEvent(sprite, pos) {
     this.player.UI.addEvent(new GraphicEvent(this.context, new Date().getTime(),
                                              pos, sprite));
   }
+  
   createHero(pos, type) {
     var hero;
     if (type == KNIGHT) {
@@ -60,8 +65,10 @@ class Game {
       throw("Hero type unrecognised!");
     }
     this.actors.push(hero);
+    this.currentEffects.set(hero, []);
     return hero;
   }
+  
   createMonster(pos, type) {
     let monster = null;
     if (type == RAT) {
@@ -77,8 +84,10 @@ class Game {
       monster = new SpiderChampion(pos, this);
     }
     this.actors.push(monster);
+    this.currentEffects.set(monster, []);
     this.theMap.placeEntity(pos, monster);
   }
+  
   placeMonsters(number) {
     var monsters = 0;
     while (monsters < number) {
@@ -92,6 +101,7 @@ class Game {
       }
     }
   }
+  
   placeChests(number) {
     var chests = 0;
     while (chests < number) {
@@ -104,6 +114,7 @@ class Game {
       }
     }
   }
+  
   killActor(actor) {
     for (let index in this.actors) {
       if (this.actors[index] == actor) {
@@ -111,6 +122,26 @@ class Game {
         this.theMap.removeEntity(this.actors[index].position);
         delete this.actors[index];
         this.actors.splice(index, 1);
+      }
+    }
+  }
+  
+  getAction(actor) {
+    return this.actors[actor].action;
+  }
+  
+  addEffect(actor, effect) {
+    this.currentEffects.get(actor).push(effect);
+  }
+  
+  applyEffects(index) {
+    let actor = this.actors[index];
+    let effects = this.currentEffects.get(actor);
+    for (let i in effects) {
+      let expired = effects[i].cause(actor);
+      if (expired) {
+        delete this.currentEffects.get(actor)[i];
+        this.currentEffects.get(actor).splice(i, 1);
       }
     }
   }
@@ -127,31 +158,14 @@ class Game {
   get map() {
     return this.theMap;
   }
+  
   pause() {
     this.isRunning = false;
     this.audio.pauseMusic();
   }
+  
   play() {
     this.isRunning = true;
     this.audio.playMusic();
   }
-
-  /*
-  update() {
-    for (let actor in this.actors) {
-      let action = this.actors[actor].action;
-      console.log("update, actor:", actor);
-      // this will only work if each non-player character always selects
-      // a move (ie, restAction) and the players are the first elements of
-      // the actors array;
-      if (!action) {
-        return false;
-      }
-      while(action) {
-        action = action.perform();
-      }
-    }
-    return true;
-  }
-  */
 }

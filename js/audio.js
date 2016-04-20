@@ -53,6 +53,7 @@ class Audio {
     this.fireMagicSound = new SoundEffect("fire1");
     this.iceMagicSound = new SoundEffect("freeze");
     this.electricMagicSound = new SoundEffect("Bolt2");
+    this.cureSound = new SoundEffect("cure");
   }
   playNextSong() {
     console.log("play next song");
@@ -122,6 +123,9 @@ class Audio {
   }
   electricMagic() {
     this.electricMagicSound.play();
+  }
+  cure() {
+    this.cureSound.play();
   }
 }
 
