@@ -26,7 +26,6 @@ function begin() {
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
   var type = variableArray[0].split('=')[1];
-  var playerType = WARLOCK;
   if (type == 'mage') {
     playerType = MAGE;
   } else if (type == 'rogue') {
@@ -42,9 +41,6 @@ function begin() {
 
     var player = new Player(character);
     var UI = new Interface(player);
-    player.addItem(armours[1]);
-    player.addItem(helmets[2]);
-    player.addItem(swords[3]);
     player.addItem(potions[0]);
     UI.centreCamera(null);
     theGame.addPlayer(player);
