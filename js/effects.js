@@ -36,3 +36,44 @@ class RestoreEnergy extends Effect {
     return false;
   }
 }
+
+class BurnEffect extends Effect {
+  constructor(strength, duration) {
+    super(strength, duration);
+  }
+  cause(hero) {
+    hero.reduceHealth(this.strength);
+    --this.duration;
+    if (this.duration === 0) {
+      return true;
+    }
+    return false;
+  }
+}
+
+class PoisonEffect extends Effect {
+  constructor(strength, duration) {
+    super(strength, duration);
+  }
+  cause(hero) {
+    hero.reduceHealth(this.strength);
+    --this.duration;
+    if (this.duration === 0) {
+      return true;
+    }
+    return false;
+  }
+}
+
+class FreezeEffect extends Effect {
+  constructor(strength, duration) {
+    super(strength, duration);
+  }
+  cause(hero) {
+    --this.duration;
+    if (this.duration === 0) {
+      return true;
+    }
+    return false;
+  }
+}
