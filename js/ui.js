@@ -284,7 +284,7 @@ class Interface {
                                offsetX, offsetY + 3/2 * spacing * UPSCALE_FACTOR);
     this.hudContext.fillText("Strength: " + hero.strength,
                                offsetX, offsetY + 2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Endurance: " + hero.will,
+    this.hudContext.fillText("Endurance: " + hero.endurance,
                                offsetX, offsetY + 5/2 * spacing * UPSCALE_FACTOR);
     this.hudContext.fillText("Agility: " + hero.agility,
                                offsetX, offsetY + 3 * spacing * UPSCALE_FACTOR);

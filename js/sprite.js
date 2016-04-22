@@ -35,7 +35,6 @@ class SpriteSheet {
     console.log("load", name);
   }
   onLoad() {
-    console.log("SpriteSheet.onLoad: ", this.name);
     this.ready = true;
     loadedSpriteSheets++;
     if (loadedSpriteSheets == TOTAL_NUM_SHEETS) {

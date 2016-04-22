@@ -19,6 +19,13 @@ class Hero extends Actor {
     this.will = will;
     this.endurance = endurance;
     this.subtype = subtype;
+    
+    this.maxHealth += Math.floor(this.maxHealth * (this.endurance / MAX_ENDURANCE));
+    this.maxEnergy += Math.floor(this.maxEnergy * (this.endurance / MAX_ENDURANCE) +
+                                 this.maxEnergy * (this.will / MAX_WILL));
+    this.currentHealth = this.maxHealth;
+    this.currentEnergy = this.maxEnergy;
+    
 
     this.isFollowing = false;
     this.leader = null;
@@ -114,11 +121,11 @@ class Hero extends Actor {
     if (this.currentExp >= this.expToNextLvl) {
       this.level++;
       this.expToNextLvl = nextExpLevel;
-      this.maxHealth += 3;
+      this.maxHealth += Math.floor(MAX_HEALTH_INC * (this.endurance / MAX_ENDURANCE));
+      this.maxEnergy += Math.floor(MAX_ENERGY_INC * (this.endurance / MAX_ENDURANCE) +
+                                   MAX_ENERGY_INC * (this.will / MAX_WILL));
       this.currentHealth = this.maxHealth;
-      this.maxEnergy++;
       this.currentEnergy = this.maxEnergy;
-      console.log("level up");
       return true;
     }
   }
@@ -156,7 +163,7 @@ class Hero extends Actor {
 
 class Knight extends Hero {
   constructor(position, game) {
-    super(60, 15,
+    super(50, 15,
           22, 14, 7, 10, 17,     // 70
           position, KNIGHT, game);
     this.equipArmour = armours[ARMOUR0];
@@ -168,7 +175,7 @@ class Knight extends Hero {
 
 class Mage extends Hero {
   constructor(position, game) {
-    super(60, 15,
+    super(50, 15,
           9, 13, 22, 17, 9,
           position, MAGE, game);
     this.equipArmour = armours[ARMOUR0];
@@ -186,7 +193,7 @@ class Mage extends Hero {
 
 class Rogue extends Hero {
   constructor(position, game) {
-    super(60, 15,
+    super(50, 15,
           15, 20, 10, 14, 11,
           position, ROGUE, game);
     this.equipArmour = armours[ARMOUR0];
@@ -211,7 +218,7 @@ class Rogue extends Hero {
 
 class Archer extends Hero {
   constructor(position, game) {
-    super(60, 15,
+    super(50, 15,
           13, 22, 9, 11, 15,
           position, ARCHER, game);
     this.equipArmour = armours[ARMOUR0];
@@ -231,7 +238,7 @@ class Archer extends Hero {
 
 class Warlock extends Hero {
   constructor(position, game) {
-    super(60, 15,
+    super(50, 15,
           18, 9, 13, 15, 15,
           position, WARLOCK, game);
     this.equipPrimary = axes[AXE0];

@@ -322,7 +322,11 @@ const ELECTRIC = 3;
 const MAX_STRENGTH = 50;
 const MAX_AGILITY = 50;
 const MAX_WISDOM = 50;
+const MAX_ENDURANCE = 50;
+const MAX_WILL = 50;
 const MAX_DEFENSE = 50;
+const MAX_HEALTH_INC = 15;
+const MAX_ENERGY_INC = 10;
 
 const STATS = 0;
 const EQUIP = 1;

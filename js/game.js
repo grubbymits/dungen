@@ -9,7 +9,7 @@ class Game {
     this.context = context;
     this.level = 1;
     this.isRunning = false;
-    this.skipTicks = 1000 / 10;
+    this.skipTicks = 1000 / 20;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
