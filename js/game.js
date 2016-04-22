@@ -53,14 +53,19 @@ class Game {
     var hero;
     if (type == KNIGHT) {
       hero = new Knight(pos, this);
+      console.log("adding knight");
     } else if (type == MAGE) {
       hero = new Mage(pos, this);
+      console.log("adding mage");
     } else if (type == ROGUE) {
       hero = new Rogue(pos, this);
+      console.log("adding rogue");
     } else if (type == ARCHER) {
       hero = new Archer(pos, this);
+      console.log("adding archer");
     } else if (type == WARLOCK) {
       hero = new Warlock(pos, this);
+      console.log("adding warlock");
     } else {
       throw("Hero type unrecognised!");
     }
@@ -131,6 +136,7 @@ class Game {
   }
   
   addEffect(actor, effect) {
+    console.log("addEffect:", effect);
     this.currentEffects.get(actor).push(effect);
   }
   

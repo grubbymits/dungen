@@ -60,23 +60,23 @@ const SWORD_NAMES = [ "first sword",
                       "seventh sword",
                       "eighth sword"
                     ];
-const HELMET_NAMES = [ "first helmet",
+const HELMET_NAMES = [ "Simple Helm",
                       "second helmet",
-                      "third helmet",
-                      "fourth helmet",
-                      "fifth helmet",
+                      "Coppergate helmet",
+                      "Gallic",
+                      "Great Helm",
                       "sixth helmet",
                       "seventh helmet",
                       "eighth helmet"
                     ];
-const ARMOUR_NAMES = [ "first armour",
-                      "second armour",
-                      "third armour",
-                      "fourth armour",
+const ARMOUR_NAMES = [ "Leather Shirt",
+                      "Chain Mail",
+                      "Scaled Armour",
+                      "Breast Plate",
                       "fifth armour",
                       "sixth armour",
-                      "seventh armour",
-                      "eighth armour"
+                      "Heavy",
+                      "Full Heavy"
                     ];
 const SHIELD_NAMES = [ "first shield",
                       "second shield",

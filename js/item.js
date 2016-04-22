@@ -108,34 +108,33 @@ class Armour extends Item {
 }
 
 class Potion extends Item {
-  constructor(kind) {
+  constructor(kind, strength, duration) {
     super(POTION, kind);
-  }
-  get effect() {
-    // for potions which have a duration of multiple turns, we need to assign
-    // an effect on the actor, which will take effect immediately and for the
-    // this.duration - 1 turns. The effect can then be triggered on the actor
-    // when their next action is calculated.
-    switch(this.subtype) {
-      case BASIC_HEALTH_POTION:
-        return new HealEffect(30, 1);
-      case HEALTH_POTION:
-        return new new HealEffect(30, 2);
-      case BIG_HEALTH_POTION:
-        return new HealEffect(75, 1);
-      case REGENERATION_POTION:
-        return new HealEffect(20, 6);
-      case BASIC_ENERGY_POTION:
-        return new RestoreEnergyEffect(8, 1);
-      case ENERGY_POTION:
-        return new RestoreEnergyEffect(16, 1);
-      case BIG_ENERGY_POTION:
-        return new RestoreEnergyEffect(32, 1);
-      case ENERGISE_POTION:
-        return new RestoreEnergyEffect(8, 6);
-    }
+    this.strength = strength;
+    this.duration = duration;
   }
 }
+
+class HealthPotion extends Potion {
+  constructor(kind, strength, duration) {
+    super(kind, strength, duration);
+  }
+  
+  get effect() {
+    return new HealEffect(this.strength, this.duration);
+  }
+}
+
+class EnergyPotion extends Potion {
+  constructor(kind, strength, duration) {
+    super(kind, strength, duration);
+  }
+  
+  get effect() {
+    return new RestoreEnergyEffect(this.strength, this.duration);
+  }
+}
+
 class Treasure extends Item {
   constructor(kind, value) {
     super(TREASURE, kind);
@@ -151,14 +150,14 @@ class Spell extends Item {
     
   }
 }
-var potions = [ new Potion(BASIC_HEALTH_POTION),
-                new Potion(BASIC_ENERGY_POTION),
-                new Potion(HEALTH_POTION),
-                new Potion(ENERGY_POTION),
-                new Potion(BIG_HEALTH_POTION),
-                new Potion(BIG_ENERGY_POTION),
-                new Potion(REGENERATION_POTION),
-                new Potion(ENERGISE_POTION)
+var potions = [ new HealthPotion(BASIC_HEALTH_POTION, 30, 1),
+                new EnergyPotion(BASIC_ENERGY_POTION, 8, 1),
+                new HealthPotion(HEALTH_POTION, 30, 2),
+                new EnergyPotion(ENERGY_POTION, 16, 1),
+                new HealthPotion(BIG_HEALTH_POTION, 75, 1),
+                new EnergyPotion(BIG_ENERGY_POTION, 32, 1),
+                new HealthPotion(REGENERATION_POTION, 20, 6),
+                new EnergyPotion(ENERGISE_POTION, 8, 6)
               ];
 
 var armours = [ new Armour(ARMOUR, ARMOUR0, 8, NORMAL),
@@ -246,16 +245,6 @@ var throwing = [ new Weapon(THROWING, THROWING0, 10, 8, 1, NORMAL),
 // Kusanagi - amaterasu sword
 
 
-var potions = [ new Potion(BASIC_HEALTH_POTION, 40, 1),
-                new Potion(BASIC_ENERGY_POTION, 15, 1),
-                new Potion(HEALTH_POTION, 80, 1),
-                new Potion(ENERGY_POTION, 15, 4),
-                new Potion(BIG_HEALTH_POTION, 15, 4),
-                new Potion(BIG_ENERGY_POTION, 15, 4),
-                new Potion(REGENERATION_POTION, 15, 4),
-                new Potion(ENERGISE_POTION, 120, 1)
-              ];
-              
 var treasures = [ new Treasure(TREASURE0, 50),
                   new Treasure(TREASURE1, 75),
                   new Treasure(TREASURE2, 100),

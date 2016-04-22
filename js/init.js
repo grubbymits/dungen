@@ -26,7 +26,7 @@ function begin() {
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
   var type = variableArray[0].split('=')[1];
-  var playerType = HERO;
+  var playerType = KNIGHT;
   if (type == 'mage') {
     playerType = MAGE;
   } else if (type == 'rogue') {
@@ -43,6 +43,8 @@ function begin() {
     var player = new Player(character);
     var UI = new Interface(player);
     player.addItem(potions[0]);
+    player.addItem(potions[2]);
+    player.addItem(potions[4]);
     UI.centreCamera(null);
     theGame.addPlayer(player);
     theGame.placeMonsters(10);

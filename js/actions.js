@@ -291,3 +291,16 @@ class FindTarget extends Action {
     return null;
   }
 }
+
+class TakePotion extends Action {
+  constructor(actor) {
+    super(actor);
+  }
+  set potion(potion) {
+    this.effect = potion.effect;
+  }
+  perform() {
+    this.game.addEffect(this.actor, this.effect);
+    this.actor.nextAction = null;
+  }
+}

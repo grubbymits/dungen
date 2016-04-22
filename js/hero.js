@@ -23,6 +23,7 @@ class Hero extends Actor {
     this.isFollowing = false;
     this.leader = null;
     this.nextAction = null;
+    this.healAction = new TakePotion(this);
     this.level = 1;
     this.currentExp = 0;
     this.expToNextLvl = 15;
@@ -84,6 +85,11 @@ class Hero extends Actor {
     return this.nextAction;
   }
   
+  takePotion(potion) {
+    this.healAction.potion = potion;
+    this.nextAction = this.healAction;
+  }
+  
   reduceHealth(enemy, damage) {
     this.currentHealth -= damage;
     this.game.map.setDirty(this.position);
@@ -123,6 +129,7 @@ class Hero extends Actor {
     this.walk.dest = this.leader.position;
     this.nextAction = this.walk;
   }
+  
   equipItem(item) {
     switch(item.type) {
       case ARMOUR:
@@ -336,13 +343,35 @@ class Player {
       hero.setRest();
     }
   }
+  
+  comparePotions(a, b) {
+    return a.strength - b.strength;
+  }
+  
   healHero() {
-    console.log("heal hero:", this.currentHero);
     // This function is called from a click event on the heal button.
     // This is a quick shortcut to healing, instead of using the menu,
     // So we need to choose the smallest potion that is going to heal
     // the current hero.
     let potion = potions[0];
-    this.game.addEffect(this.currentHero, potion.effect);
+    let healthRequired = this.currentHero.maxHealth - this.currentHero.currentHealth;
+    let candidates = [];
+    
+    for (let potion of this.potions.keys()) {
+      console.log("potion:", potion);
+      let type = potion.subtype;
+      if (type == BASIC_HEALTH_POTION ||
+          type == HEALTH_POTION ||
+          type == BIG_HEALTH_POTION) {
+        if (potion.strength >= healthRequired && this.potions.get(potion) > 0) {
+          candidates.push(potion);
+        }
+      }
+    }
+    candidates.sort(this.comparePotions);
+    let chosen = candidates[0];
+    let newVal = this.potions.get(chosen) - 1;
+    this.potions.set(chosen, newVal);
+    this.currentHero.takePotion(candidates[0]);
   }
 }
