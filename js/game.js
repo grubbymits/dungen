@@ -13,6 +13,7 @@ class Game {
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
+    this.theMap.drawRooms(this.context);
     this.audio = new Audio(this);
   }
 

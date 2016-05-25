@@ -57,7 +57,7 @@ class Audio {
   }
   playNextSong() {
     console.log("play next song");
-    this.currentIndex = (this.currentIndex) + 1 % this.musicArray.length;
+    this.currentIndex = ((this.currentIndex) + 1) % this.musicArray.length;
     this.currentSong = this.musicArray[this.currentIndex];
     this.currentSong.audio.currentTime = 0;
     this.currentSong.play();

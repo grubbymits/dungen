@@ -16,12 +16,14 @@ function begin() {
   gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
-  var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
-                                MAP_HEIGHT_PIXELS / TILE_SIZE, 0, 0);
+  //var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
+    //                            MAP_HEIGHT_PIXELS / TILE_SIZE, 0, 0);
   //mapGen.placeRooms(12);
   //mapGen.createGraph();
+  //mapGen.refineGraph();
+  //mapGen.layPath();
   //mapGen.drawRooms(gameContext);
-  //return;
+  return;
 
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');

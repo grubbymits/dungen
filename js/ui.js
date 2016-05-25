@@ -212,6 +212,24 @@ class Interface {
       }
     }
   }
+  
+  renderLevelUpMenu() {
+    this.state.menu = LVL_UP;
+    renderCurrentCharacter();
+    let hero = this.state.hero;
+    
+    this.hudContext.fillText("Strength: " + hero.strength,
+                               offsetX, offsetY + 2 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Endurance: " + hero.endurance,
+                               offsetX, offsetY + 5/2 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Agility: " + hero.agility,
+                               offsetX, offsetY + 3 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Wisdom: " + hero.wisdom,
+                               offsetX, offsetY + 7/2 * spacing * UPSCALE_FACTOR);
+    this.hudContext.fillText("Will: " + hero.will,
+                               offsetX, offsetY + 4 * spacing * UPSCALE_FACTOR);
+  }
+  
   renderEquipMenu() {
     this.state.menu = EQUIP;
     this.state.items = [];
@@ -244,9 +262,11 @@ class Interface {
       this.state.items.push(item);
     }
   }
+  
   renderTeamList() {
     
   }
+  
   renderCurrentCharacter() {
     this.hudContext.clearRect(0, 0, this.hud.width, 3 * TILE_SIZE);
     this.hudContext.font = "16px Droid Sans";
@@ -264,6 +284,7 @@ class Interface {
       hero.helmet.sprite.render(offsetX + 4 * spacing, offsetY, this.hudContext);
     }
   }
+  
   renderCurrentStats() {
     let offsetX = TILE_SIZE / 4; //* UPSCALE_FACTOR;
     let offsetY = 2 * TILE_SIZE * UPSCALE_FACTOR;
