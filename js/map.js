@@ -70,24 +70,7 @@ class Room {
   }
   
   addNeighbour(n) {
-    //console.log("adding neighbour of distance:", this.getDistance(n));
     this.connections.add(n);
-    n.addParent(this);
-    //console.log("number of neighbours:", this.neighbours.length);
-  }
-  
-  addParent(p) {
-    this.connections.add(p);
-  }
-  
-  removeNeighbour(n) {
-    //console.log("removing child from parent");
-    n.removeParent(this);
-    this.connections.delete(n);
-  }
-  
-  removeParent(p) {
-    this.connections.delete(p);
   }
   
   getDistance(other) {
@@ -346,24 +329,24 @@ class GameMap {
     let h = 0;
     if (type == LARGE) {
       // 23, 21, 19, 17, 15
-      //w = Math.floor(Math.random() * (20 - 15)) + 15;
-      //h = Math.floor(Math.random() * (20 - 15)) + 15;
-      w = MIN_LARGE;
-      h = MIN_LARGE;
+      w = Math.floor(Math.random() * (20 - 15)) + 15;
+      h = Math.floor(Math.random() * (20 - 15)) + 15;
+      //w = MIN_LARGE;
+      //h = MIN_LARGE;
     }
     if (type == MEDIUM) {
       // 19, 17, 15, 13, 11
-      //w = Math.floor(Math.random() * (16 - 11)) + 11;
-      //h = Math.floor(Math.random() * (16 - 11)) + 11;
-      w = MIN_MEDIUM;
-      h = MIN_MEDIUM;
+      w = Math.floor(Math.random() * (16 - 11)) + 11;
+      h = Math.floor(Math.random() * (16 - 11)) + 11;
+      //w = MIN_MEDIUM;
+      //h = MIN_MEDIUM;
     }
     if (type == SMALL) {
       // 15, 13, 11, 9
-      //w = Math.floor(Math.random() * (11 - 9)) + 9;
-      //h = Math.floor(Math.random() * (11 - 9)) + 9;
-      w = MIN_SMALL;
-      h = MIN_SMALL;
+      w = Math.floor(Math.random() * (11 - 9)) + 9;
+      h = Math.floor(Math.random() * (11 - 9)) + 9;
+      //w = MIN_SMALL;
+      //h = MIN_SMALL;
     }
     return {width : w, height : h};
   }
@@ -409,127 +392,83 @@ class GameMap {
     }
   }
   
-  layPath() {
-    let toVisit = [this.rooms[0]];
-    while (toVisit.length !== 0) {
-      let current = toVisit.shift();
-      
+  // The map generator needs to consider three different types of location:
+  // - ceiling
+  // - wall
+  // - floor
+  // All locations begin as ceiling. When a ceiling becomes a floor, the eight
+  // surrounding locations become walls, (but only the top and centre of these
+  // will change their sprite to differ a ceiling).
+  // - Floor tiles can be placed in celing tiles.
+  // - A floor tile cannot be placed next to a wall when placing rooms (which
+  // ensured by room floor tiles having a radius of wall tiles)
+  // - A wall tile cannot be created over an existing wall tile.
+  
+  createConnections() {
+    let connectedRooms = new Set();
+    let unconnectedRooms = new Set();
+    
+    let to, from;
+    
+    for (let room of this.rooms) {
+      unconnectedRooms.add(room);
+    }
+    connectedRooms.add(this.rooms[0]);
+    unconnectedRooms.delete(this.rooms[0]);
+    
+    while (unconnectedRooms.size !== 0) {
+      let minDistance = (2^64)-1;
+      for (let connectedRoom of connectedRooms.values()) {
+        for (let unconnectedRoom of unconnectedRooms.values()) {
+          if (connectedRoom.getDistance(unconnectedRoom) < minDistance) {
+            minDistance = connectedRoom.getDistance(unconnectedRoom);
+            from = connectedRoom;
+            to = unconnectedRoom;
+          }
+        }
+      }
+      from.addNeighbour(to);
+      unconnectedRooms.delete(to);
+      connectedRooms.add(to);
+    }
+    
+    for (let current of connectedRooms.values()) {
+    
       for (let neighbour of current.connections) {
         let x = current.centre.x;
         let y = current.centre.y;
-        let finished = false;
-        
-        // First, see if there is a path from current to neighbour.
-        // If not, then start carving a path.
-        // If during the carving, the path crosses through another
-        // room/path, perform the path find again.
-        // If there is still no path found, continue carving.
-        if (this.getPath(current.centre, neighbour.centre).length !== 0) {
-          continue;
-        }
         
         if (current.centre.x < neighbour.centre.x) {
           while (x < neighbour.centre.x) {
             ++x;
-            if (this.isCarvingIntoPath(x, y, PATH_WIDTH, PATH_WIDTH)) {
-              let next = this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-              if (this.getPath(next.centre, neighbour.centre).length !== 0) {
-                finished = true;
-                break;
-              }
-            } else {
-              this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-            }
+            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
           }
         } else if (current.centre.x > neighbour.centre.x) {
           while (x > neighbour.centre.x) {
             --x;
-            if (this.isCarvingIntoPath(x, y, PATH_WIDTH, PATH_WIDTH)) {
-              let next = this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-              if (this.getPath(next.centre, neighbour.centre).length !== 0) {
-                finished = true;
-                break;
-              }
-            } else {
-              this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-            }
+            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
           }
-        }
-        if (finished) {
-          continue;
         }
         if (current.centre.y < neighbour.centre.y) {
           while (y < neighbour.centre.y) {
             ++y;
-            if (this.isCarvingIntoPath(x, y, PATH_WIDTH, PATH_WIDTH)) {
-            let next = this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-              if (this.getPath(next.centre, neighbour.centre).length !== 0) {
-                break;
-              }
-            } else {
-              this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-            }
+            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
           }
         } else if (current.centre.y > neighbour.centre.y) {
           while (y > neighbour.centre.y) {
             --y;
-            if (this.isCarvingIntoPath(x, y, PATH_WIDTH, PATH_WIDTH)) {
-              let next = this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-              if (this.getPath(next.centre, neighbour.centre).length !== 0) {
-                break;
-              }
-            } else {
-              this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
-            }
+            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
           }
         }
-        current.connections.delete(neighbour);
-        neighbour.connections.delete(current);
-        toVisit.push(neighbour);
-      }
-    }
-  }
-  
-  createGraph() {
-    // start at the largest room
-    this.rooms.sort((a, b) => {
-      if (a.area < b.area) {
-        return 1;
-      } else if (a.area > b.area) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
-    let toVisit = [this.rooms[0]];
-    while (toVisit.length !== 0) {
-      let room = toVisit.shift();
-      room.visited = true;
-      let potentialNeighbours = [];
-      for (let other of this.rooms) {
-        if (room == other || other.visited) {
-          continue;
-        }
-        if (room.numberConnections >= room.maxConnections) {
-          break;
-        }
-        if (other.numberConnections + potentialNeighbours.length < other.maxConnections) {
-          potentialNeighbours.push(other);
-        }
-      }
-      console.log("size of potential neighbours:", potentialNeighbours.length);
-      // add one or more neighbours to the room if there are any available.
-      for (let i in potentialNeighbours) {
-        room.addNeighbour(potentialNeighbours[i]);
-        toVisit.push(potentialNeighbours.shift());
       }
     }
   }
   
   generate() {
     this.placeRooms(12);
-    this.createGraph();
-    this.layPath();
+    this.createConnections();
+    //this.createGraph();
+    //this.layPath();
   }
   
   drawRooms(context) {
