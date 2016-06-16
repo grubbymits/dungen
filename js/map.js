@@ -3,9 +3,9 @@
 const LARGE = 0;
 const MEDIUM = 1;
 const SMALL = 2;
-const MIN_SMALL = 6;
-const MIN_MEDIUM = 8;
-const MIN_LARGE = 10;
+const MIN_SMALL = 10;
+const MIN_MEDIUM = 13;
+const MIN_LARGE = 16;
 
 class Vec {
   constructor(x, y) {
@@ -65,25 +65,12 @@ class Room {
     return this.height * this.width;
   }
   
-  get numberConnections() {
-    return this.connections.size;
-  }
-  
   addNeighbour(n) {
     this.connections.add(n);
   }
   
   getDistance(other) {
     return this.centre.getCost(other.centre);
-  }
-  
-  get maxConnections() {
-    if (this.area > MIN_MEDIUM * MIN_MEDIUM) {
-      return 4;
-    } else if (this.area > MIN_SMALL * MIN_SMALL) {
-      return 3;
-    }
-    return 2;
   }
 }
 
@@ -349,22 +336,22 @@ class GameMap {
     let h = 0;
     if (type == LARGE) {
       // 23, 21, 19, 17, 15
-      w = Math.floor(Math.random() * (19 - 15)) + 15;
-      h = Math.floor(Math.random() * (19 - 15)) + 15;
+      w = Math.floor(Math.random() * 3) + MIN_LARGE;
+      h = Math.floor(Math.random() * 3) + MIN_LARGE;
       //w = MIN_LARGE;
       //h = MIN_LARGE;
     }
     if (type == MEDIUM) {
       // 19, 17, 15, 13, 11
-      w = Math.floor(Math.random() * (17 - 12)) + 12;
-      h = Math.floor(Math.random() * (17 - 12)) + 12;
+      w = Math.floor(Math.random() * 5) + MIN_MEDIUM;
+      h = Math.floor(Math.random() * 5) + MIN_MEDIUM;
       //w = MIN_MEDIUM;
       //h = MIN_MEDIUM;
     }
     if (type == SMALL) {
       // 15, 13, 11, 9
-      w = Math.floor(Math.random() * (15 - 10)) + 10;
-      h = Math.floor(Math.random() * (15 - 10)) + 10;
+      w = Math.floor(Math.random() * 5) + MIN_SMALL;
+      h = Math.floor(Math.random() * 5) + MIN_SMALL;
       //w = MIN_SMALL;
       //h = MIN_SMALL;
     }
@@ -372,6 +359,7 @@ class GameMap {
   }
   
   placeRooms(roomsToPlace) {
+    console.log("trying to place", roomsToPlace, "rooms");
     let numBigRooms = Math.floor(roomsToPlace / 6);
     let numMediumRooms = Math.floor(2 * roomsToPlace / 6);
     let numSmallRooms = Math.floor(3 * roomsToPlace / 6);
@@ -379,7 +367,6 @@ class GameMap {
 
     // place larger rooms first
     let numRooms = [numBigRooms, numMediumRooms, numSmallRooms];
-    //const roomDims = [ [17, 17], [14, 14], [11, 11]];
 
     for (let i = 0; i < 3 && roomsToPlace !== 0; i++) {
       let rooms = 0;
@@ -395,34 +382,13 @@ class GameMap {
           this.createRoom(x, y, dims.width, dims.height);
           rooms++;
           roomsToPlace--;
+          attempts = 0;
         }
         attempts++;
       }
     }
     console.log("finished placing rooms. not placed:", roomsToPlace);
   }
-  
-  isCarvingIntoPath(startx, starty, width, height) {
-    for (let x = startx; x < startx + width; ++x) {
-      for (let y = starty; y < starty + height; ++y) {
-        if (!this.locations[x][y].isBlocked) {
-          return true;
-        }
-      }
-    }
-  }
-  
-  // The map generator needs to consider three different types of location:
-  // - ceiling
-  // - wall
-  // - floor
-  // All locations begin as ceiling. When a ceiling becomes a floor, the eight
-  // surrounding locations become walls, (but only the top and centre of these
-  // will change their sprite to differ a ceiling).
-  // - Floor tiles can be placed in celing tiles.
-  // - A floor tile cannot be placed next to a wall when placing rooms (which
-  // ensured by room floor tiles having a radius of wall tiles)
-  // - A wall tile cannot be created over an existing wall tile.
   
   createConnections() {
     let connectedRooms = new Set();
@@ -485,7 +451,9 @@ class GameMap {
   }
   
   generate() {
-    this.placeRooms(12);
+    let number = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
+                            (TILE_SIZE * TILE_SIZE * MIN_LARGE * MIN_LARGE));
+    this.placeRooms(number);
     this.createConnections();
     //this.createGraph();
     //this.layPath();
