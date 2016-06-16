@@ -15,7 +15,7 @@ function begin() {
   gameContext.fillStyle = '#000000';
   gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-  var theGame = new Game(gameContext, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
+  var theGame = new Game(gameContext, gameCanvas.width, gameCanvas.height);
   //var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
     //                            MAP_HEIGHT_PIXELS / TILE_SIZE, 0, 0);
   //mapGen.placeRooms(12);
@@ -23,7 +23,7 @@ function begin() {
   //mapGen.refineGraph();
   //mapGen.layPath();
   //mapGen.drawRooms(gameContext);
-  return;
+  //return;
 
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
@@ -39,9 +39,9 @@ function begin() {
     playerType = WARLOCK;
   }
 
-    var startPos = theGame.map.getLocation(theGame.map.width / 2, theGame.map.height / 2).vec;
+    var startPos = theGame.map.getLocation(Math.round(theGame.map.width / 2),
+                                           Math.round(theGame.map.height / 2)).vec;
     var character = theGame.createHero(startPos, playerType);
-
     var player = new Player(character);
     var UI = new Interface(player);
     player.addItem(potions[0]);
@@ -49,8 +49,8 @@ function begin() {
     player.addItem(potions[4]);
     UI.centreCamera(null);
     theGame.addPlayer(player);
-    theGame.placeMonsters(10);
-    theGame.placeChests(2);
+    //theGame.placeMonsters(10);
+    //theGame.placeChests(2);
 
     function *generator() {
       let actor = 0;

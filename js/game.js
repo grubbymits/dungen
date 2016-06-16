@@ -13,14 +13,14 @@ class Game {
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height);
     this.theMap.generate();
-    this.theMap.drawRooms(this.context);
+    //this.theMap.drawRooms(this.context);
     this.audio = new Audio(this);
   }
 
   renderMap() {
     // draw everything
-    for (var x = 0; x < this.theMap.xMax; x++) {
-      for (var y = 0; y < this.theMap.yMax; y++) {
+    for (var x = 0; x < this.theMap.width; x++) {
+      for (var y = 0; y < this.theMap.height; y++) {
         let loc = this.map.getLocation(x,y);
         if (loc.dirty) {
           this.context.fillStyle = '#000000';

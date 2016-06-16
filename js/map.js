@@ -278,8 +278,27 @@ class GameMap {
       this.locations[x][y].type = type;
       this.locations[x][y].blocked = blocking;
       if (type == PATH && y > 1 && this.locations[x][y-1].type != PATH) {
+        if (this.isOutOfRange(x, y-1)) {
+          return;
+        }
         this.locations[x][y-1].type = WALL;
         this.locations[x][y-1].isBlocking = true;
+        
+        // fixups, just in case
+        if (this.isOutOfRange(x, y-2)) {
+          return;
+        }
+        if (this.locations[x][y-2].type == PATH) {
+          this.locations[x][y-1].type = PATH;
+          this.locations[x][y-1].isBlocking = false;
+        }
+        if (this.isOutOfRange(x, y+1)) {
+          return;
+        }
+        if (this.locations[x][y+1].type == WALL) {
+          this.locations[x][y+1].type = PATH;
+          this.locations[x][y+1].isBlocking = false;
+        }
       }
     }
   }
@@ -315,9 +334,10 @@ class GameMap {
   createRoom(startX, startY, width, height) {
     let room = new Room(startX, startY, width, height);
     this.rooms.push(room);
-    for (let x = startX; x < startX + width; x++) {
-      for (let y = startY; y < startY + height; y++) {
+    for (let x = startX+1; x < startX + width-1; x++) {
+      for (let y = startY+1; y < startY + height-2; y++) {
         this.locations[x][y].blocked = false;
+        this.placeTile(x, y, PATH, false);
         //this.locations[x][y].room = room;
       }
     }
@@ -329,22 +349,22 @@ class GameMap {
     let h = 0;
     if (type == LARGE) {
       // 23, 21, 19, 17, 15
-      w = Math.floor(Math.random() * (20 - 15)) + 15;
-      h = Math.floor(Math.random() * (20 - 15)) + 15;
+      w = Math.floor(Math.random() * (19 - 15)) + 15;
+      h = Math.floor(Math.random() * (19 - 15)) + 15;
       //w = MIN_LARGE;
       //h = MIN_LARGE;
     }
     if (type == MEDIUM) {
       // 19, 17, 15, 13, 11
-      w = Math.floor(Math.random() * (16 - 11)) + 11;
-      h = Math.floor(Math.random() * (16 - 11)) + 11;
+      w = Math.floor(Math.random() * (17 - 12)) + 12;
+      h = Math.floor(Math.random() * (17 - 12)) + 12;
       //w = MIN_MEDIUM;
       //h = MIN_MEDIUM;
     }
     if (type == SMALL) {
       // 15, 13, 11, 9
-      w = Math.floor(Math.random() * (11 - 9)) + 9;
-      h = Math.floor(Math.random() * (11 - 9)) + 9;
+      w = Math.floor(Math.random() * (15 - 10)) + 10;
+      h = Math.floor(Math.random() * (15 - 10)) + 10;
       //w = MIN_SMALL;
       //h = MIN_SMALL;
     }
@@ -355,7 +375,7 @@ class GameMap {
     let numBigRooms = Math.floor(roomsToPlace / 6);
     let numMediumRooms = Math.floor(2 * roomsToPlace / 6);
     let numSmallRooms = Math.floor(3 * roomsToPlace / 6);
-    const maxAttempts = 100;
+    const maxAttempts = 200;
 
     // place larger rooms first
     let numRooms = [numBigRooms, numMediumRooms, numSmallRooms];
@@ -368,10 +388,10 @@ class GameMap {
 
         let x = this.randomX;
         let y = this.randomY;
-        console.log("x, y:", x, y);
         let dims = this.getDims(i);
 
         if (this.isSpace(x, y, dims.width, dims.height)) {
+          console.log("placing room at (x, y):", x, y, "of size:", dims.width, dims.height);
           this.createRoom(x, y, dims.width, dims.height);
           rooms++;
           roomsToPlace--;
@@ -417,7 +437,7 @@ class GameMap {
     unconnectedRooms.delete(this.rooms[0]);
     
     while (unconnectedRooms.size !== 0) {
-      let minDistance = (2^64)-1;
+      let minDistance = MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS;
       for (let connectedRoom of connectedRooms.values()) {
         for (let unconnectedRoom of unconnectedRooms.values()) {
           if (connectedRoom.getDistance(unconnectedRoom) < minDistance) {
