@@ -60,22 +60,23 @@ class Room {
     this.connections = new Set();
     this.visited = false;
   }
-  
+
   get area() {
     return this.height * this.width;
   }
-  
+
   addNeighbour(n) {
     this.connections.add(n);
   }
-  
+
   getDistance(other) {
     return this.centre.getCost(other.centre);
   }
 }
 
 class GameMap {
-  constructor(width, height) {
+  constructor(width, height, game) {
+    this.game = game;
     this.locations = [];
     this.rooms = [];
     this.minRoomWidth = MIN_SMALL;
@@ -91,8 +92,46 @@ class GameMap {
         this.locations[x][y] = new Location(true, null, CEILING, x, y);
       }
     }
+    var monsterGroup0 = [ RAT, SPIDERS]; //, RABBIT, BAT];
+
+    var monsterGroup1 = monsterGroup0.slice();
+    monsterGroup1.push(LIZARD);
+    monsterGroup1.push(MUSHROOM);
+
+    var monsterGroup2 = monsterGroup1.slice();
+    monsterGroup2.push(SPIDER_CHAMPION);
+    monsterGroup2.push(BAT_CHAMPION);
+
+    var monsterGroup3 = monsterGroup2.slice();
+    monsterGroup3.push(TOAD);
+    monsterGroup3.push(SCARAB);
+
+    var monsterGroup4 = monsterGroup3.slice();
+    monsterGroup4.push(CENTIPEDE);
+    monsterGroup4.push(SERPENT);
+
+    var monsterGroup5 = monsterGroup4.slice();
+    monsterGroup5.push(SNAKE);
+    monsterGroup5.push(WOLF);
+
+    var monsterGroup6 = monsterGroup5.slice();
+    monsterGroup6.push(WILD_BOAR);
+    monsterGroup6.push(BEAR);
+
+    var monsterGroup7 = monsterGroup6.slice();
+    for (let i in monsterGroup0) {
+      monsterGroup7.shift();
+    }
+
+    this.monsterGroups = [ monsterGroup0,
+                           monsterGroup1,
+                           monsterGroup2,
+                           monsterGroup3,
+                           monsterGroup4,
+                           monsterGroup5,
+                           monsterGroup6 ];
   }
-  
+
   isOutOfRange(x, y) {
     if (x < 0 || y < 0 || x > this.xMax-1 || y > this.yMax-1) {
       return true;
@@ -100,31 +139,31 @@ class GameMap {
       return false;
     }
   }
-  
+
   getLocation(x, y) {
     if (this.isOutOfRange(x, y)) {
       throw "Index out of range:";
     }
     return this.locations[x][y];
   }
-  
+
   isBlocked(loc) {
     if (this.isOutOfRange(loc.x, loc.y)) {
       return true;
     }
     return loc.isBlocked;
   }
-  
+
   removeEntity(pos) {
     this.locations[pos.x][pos.y].entity = null;
     this.locations[pos.x][pos.y].dirty = true;
   }
-  
+
   placeEntity(pos, entity) {
     this.locations[pos.x][pos.y].entity = entity;
     this.locations[pos.x][pos.y].dirty = true;
   }
-  
+
   getEntity(x, y) {
     if (this.isOutOfRange(x, y)) {
       return null;
@@ -132,27 +171,27 @@ class GameMap {
     // entity maybe null;
     return this.locations[x][y].entity;
   }
-  
+
   setDirty(pos) {
     this.locations[pos.x][pos.y].dirty = true;
   }
-  
+
   get width() {
     return this.xMax;
   }
-  
+
   get height() {
     return this.yMax;
   }
-  
+
   getDistance(entity0, entity1) {
     return entity0.pos.getCost(entity1.pos);
   }
-  
+
   vecToLoc(vec) {
     return this.locations[vec.x][vec.y];
   }
-  
+
   getNeighbours(vec) {
     var neighbours = [];
     for (let x = vec.x - 1; x < vec.x + 2; x++) {
@@ -256,7 +295,7 @@ class GameMap {
     path.reverse();
     return path.splice(1);
   }
-  
+
   placeTile(x, y, type, blocking) {
     // Check for out-of-bounds
     if (this.isOutOfRange(x, y)) {
@@ -270,7 +309,7 @@ class GameMap {
         }
         this.locations[x][y-1].type = WALL;
         this.locations[x][y-1].isBlocking = true;
-        
+
         // fixups, just in case
         if (this.isOutOfRange(x, y-2)) {
           return;
@@ -290,19 +329,19 @@ class GameMap {
     }
   }
 
-  
+
   get randomX() {
     let min = 1;
     let max = this.xMax - this.minRoomWidth;
     return Math.floor(Math.random() * (max - min)) + min;
   }
-  
+
   get randomY() {
     let min = 1;
     let max = this.yMax - this.minRoomHeight;
     return Math.floor(Math.random() * (max - min)) + min;
   }
-  
+
   isSpace(startX, startY, width, height) {
     for (let x = startX; x < startX + width; x++) {
       for (let y = startY; y < startY + height; y++) {
@@ -317,7 +356,7 @@ class GameMap {
     }
     return true;
   }
-  
+
   createRoom(startX, startY, width, height) {
     let room = new Room(startX, startY, width, height);
     this.rooms.push(room);
@@ -330,7 +369,7 @@ class GameMap {
     }
     return room;
   }
-  
+
   getDims(type) {
     let w = 0;
     let h = 0;
@@ -357,7 +396,7 @@ class GameMap {
     }
     return {width : w, height : h};
   }
-  
+
   placeRooms(roomsToPlace) {
     console.log("trying to place", roomsToPlace, "rooms");
     let numBigRooms = Math.floor(roomsToPlace / 6);
@@ -389,19 +428,19 @@ class GameMap {
     }
     console.log("finished placing rooms. not placed:", roomsToPlace);
   }
-  
+
   createConnections() {
     let connectedRooms = new Set();
     let unconnectedRooms = new Set();
-    
+
     let to, from;
-    
+
     for (let room of this.rooms) {
       unconnectedRooms.add(room);
     }
     connectedRooms.add(this.rooms[0]);
     unconnectedRooms.delete(this.rooms[0]);
-    
+
     while (unconnectedRooms.size !== 0) {
       let minDistance = MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS;
       for (let connectedRoom of connectedRooms.values()) {
@@ -417,13 +456,14 @@ class GameMap {
       unconnectedRooms.delete(to);
       connectedRooms.add(to);
     }
-    
+
+    // add 'rooms' to create paths between the connected rooms
     for (let current of connectedRooms.values()) {
-    
+
       for (let neighbour of current.connections) {
         let x = current.centre.x;
         let y = current.centre.y;
-        
+
         if (current.centre.x < neighbour.centre.x) {
           while (x < neighbour.centre.x) {
             ++x;
@@ -449,36 +489,64 @@ class GameMap {
       }
     }
   }
-  
+
+  placeMonsters(level, total) {
+    // Try to place monsters in the larger rooms first.
+    // Place ~50% of enemies into the largest 25% of the rooms.
+    this.rooms.sort((a, b) => {
+      if (a.area < b.area) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
+    let nextLimit = Math.floor(total / 8);
+    let roomIdx = 0;
+    let monsters = this.monsterGroups[level];
+
+    for (let current = 0; current < total; ++current) {
+      if (current >= nextLimit) {
+        ++roomIdx;
+        if (roomIdx >= this.rooms.length * 0.25) {
+          nextLimit += (total / 16);
+        } else {
+          nextLimit += (total / 8);
+        }
+        console.log("nextLimit:", nextLimit);
+      }
+      console.log("room id:", roomIdx);
+
+      let room = this.rooms[roomIdx];
+      const MAX_ATTEMPTS = 10;
+      let attempts = 0;
+      let x = room.pos.x;
+      let y = room.pos.y;
+      do {
+        x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
+        y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
+        ++attempts;
+      } while ((this.locations[x][y].isBlocked ||
+               this.locations[x][y].isOccupied) &&
+               attempts < MAX_ATTEMPTS);
+
+      if (!this.locations[x][y].isOccupied &&
+          !this.locations[x][y].isBlocked) {
+        let pos = this.locations[x][y].vec;
+        let type = Math.floor(Math.random() * monsters.length);
+        let monster = this.game.createMonster(pos, type);
+        this.placeEntity(pos, monster);
+      }
+    }
+  }
+
   generate() {
     let number = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
                             (TILE_SIZE * TILE_SIZE * MIN_LARGE * MIN_LARGE));
     this.placeRooms(number);
     this.createConnections();
+    this.placeMonsters(0, 32);
     //this.createGraph();
     //this.layPath();
-  }
-  
-  drawRooms(context) {
-    console.log("draw rooms");
-    context.fillStyle = '#22AA99';
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        if (!this.locations[x][y].isBlocked) {
-          context.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-          //context.stroke();
-        }
-      }
-    }
-    console.log("number of rooms:", this.rooms.length);
-    context.strokeStyle = 'red';
-    for (let room of this.rooms) {
-      for (let neighbour of room.connections) {
-        context.beginPath();
-        context.moveTo(room.centre.x * TILE_SIZE, room.centre.y * TILE_SIZE);
-        context.lineTo(neighbour.centre.x * TILE_SIZE, neighbour.centre.y * TILE_SIZE);
-        context.stroke();
-      }
-    }
   }
 }

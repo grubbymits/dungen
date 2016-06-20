@@ -11,7 +11,7 @@ class Game {
     this.isRunning = false;
     this.skipTicks = 1000 / 20;
     this.nextGameTick = (new Date()).getTime();
-    this.theMap = new GameMap(width, height);
+    this.theMap = new GameMap(width, height, this);
     this.theMap.generate();
     //this.theMap.drawRooms(this.context);
     this.audio = new Audio(this);
@@ -22,7 +22,7 @@ class Game {
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
         let loc = this.map.getLocation(x,y);
-        if (loc.dirty) {
+        if (loc.dirty && loc.type != CEILING) {
           this.context.fillStyle = '#000000';
           this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
                                 y * TILE_SIZE * UPSCALE_FACTOR,
@@ -35,21 +35,21 @@ class Game {
       }
     }
   }
-  
+
   addPlayer(player) {
     this.player = player;
   }
-  
+
   addTextEvent(string, pos) {
     this.player.UI.addEvent(new TextEvent(this.context, new Date().getTime(),
                                           pos, string));
   }
-  
+
   addGraphicEvent(sprite, pos) {
     this.player.UI.addEvent(new GraphicEvent(this.context, new Date().getTime(),
                                              pos, sprite));
   }
-  
+
   createHero(pos, type) {
     var hero;
     if (type == KNIGHT) {
@@ -74,7 +74,7 @@ class Game {
     this.currentEffects.set(hero, []);
     return hero;
   }
-  
+
   createMonster(pos, type) {
     let monster = null;
     if (type == RAT) {
@@ -91,9 +91,9 @@ class Game {
     }
     this.actors.push(monster);
     this.currentEffects.set(monster, []);
-    this.theMap.placeEntity(pos, monster);
+    //this.theMap.placeEntity(pos, monster);
   }
-  
+
   placeMonsters(number) {
     var monsters = 0;
     while (monsters < number) {
@@ -107,7 +107,7 @@ class Game {
       }
     }
   }
-  
+
   placeChests(number) {
     var chests = 0;
     while (chests < number) {
@@ -120,7 +120,7 @@ class Game {
       }
     }
   }
-  
+
   killActor(actor) {
     for (let index in this.actors) {
       if (this.actors[index] == actor) {
@@ -131,16 +131,16 @@ class Game {
       }
     }
   }
-  
+
   getAction(actor) {
     return this.actors[actor].action;
   }
-  
+
   addEffect(actor, effect) {
     console.log("addEffect:", effect);
     this.currentEffects.get(actor).push(effect);
   }
-  
+
   applyEffects(index) {
     let actor = this.actors[index];
     let effects = this.currentEffects.get(actor);
@@ -165,12 +165,12 @@ class Game {
   get map() {
     return this.theMap;
   }
-  
+
   pause() {
     this.isRunning = false;
     this.audio.pauseMusic();
   }
-  
+
   play() {
     this.isRunning = true;
     this.audio.playMusic();
