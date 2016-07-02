@@ -15,6 +15,7 @@ class Game {
     this.theMap.generate();
     //this.theMap.drawRooms(this.context);
     this.audio = new Audio(this);
+    this.spriteFactory = new SpriteFactory(kenneySheet);
   }
 
   renderMap() {
@@ -28,8 +29,8 @@ class Game {
                                 y * TILE_SIZE * UPSCALE_FACTOR,
                                 TILE_SIZE * UPSCALE_FACTOR,
                                 TILE_SIZE * UPSCALE_FACTOR);
-          var type = loc.type;
-          tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
+          let tile = this.spriteFactory.getFloor1x1Tile(loc.type);
+          tile.render(x * TILE_SIZE, y * TILE_SIZE , this.context);
           loc.dirty = false;
         }
       }

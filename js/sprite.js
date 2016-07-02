@@ -15,14 +15,16 @@ const TREASURE_OFFSET = 15;
 const HERO_OFFSET = 18;
 const MONSTER_OFFSET = 19;
 
-const TOTAL_NUM_SHEETS = 3;
+const TOTAL_NUM_SHEETS = 4;
 
 var loadedSpriteSheets = 0;
 
 class SpriteSheet {
-  constructor(name) {
+  constructor(name, size, gap = 0) {
     this.image = new Image();
     this.ready = false;
+    this.tileSize = size;
+    this.gap = gap;
     this.image.addEventListener('load', this.onLoad);
 
     if (name) {
@@ -44,19 +46,21 @@ class SpriteSheet {
   get isReady() {
     return this.ready;
   }
+  get size() {
+    return this.tileSize;
+  }
 }
 
 class Sprite {
   constructor(spriteSheet, offsetX, offsetY) {
     this.spriteSheet = spriteSheet;
-    this.offsetX = offsetX * TILE_SIZE;
-    this.offsetY = offsetY * TILE_SIZE;
-    this.width = TILE_SIZE;
-    this.height = TILE_SIZE;
+    this.offsetX = (offsetX * spriteSheet.size) + (offsetX * spriteSheet.gap);
+    this.offsetY = (offsetY * spriteSheet.size) + (offsetY * spriteSheet.gap);
+    this.width = spriteSheet.size;
+    this.height = spriteSheet.size;
   }
 
   render(desX, desY, context) {
-    //context.clearRect(desX, desY, this.width, this.height);
     context.drawImage(this.spriteSheet.image,
                       this.offsetX,
                       this.offsetY,
@@ -66,11 +70,12 @@ class Sprite {
   }
 }
 
-var greenSpriteSheet = new SpriteSheet('tileset-green-64');
-var redSpriteSheet = new SpriteSheet('tileset-red-64');
-var blueSpriteSheet = new SpriteSheet('tileset-blue-64');
-var yellowSpriteSheet = new SpriteSheet('tileset-yellow-64');
-var uiSpriteSheet = new SpriteSheet('ui');
+var greenSpriteSheet = new SpriteSheet('tileset-green-64', 64);
+var redSpriteSheet = new SpriteSheet('tileset-red-64', 64);
+var blueSpriteSheet = new SpriteSheet('tileset-blue-64', 64);
+var yellowSpriteSheet = new SpriteSheet('tileset-yellow-64', 64);
+var uiSpriteSheet = new SpriteSheet('ui', 64);
+var kenneySheet = new SpriteSheet("kenney-rogue-64", 64, 4);
 
 var targetSprite = new Sprite(uiSpriteSheet, 0, 0);
 var currentActorSprite = new Sprite(uiSpriteSheet, 1, 0);
