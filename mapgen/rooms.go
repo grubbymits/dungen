@@ -1,32 +1,75 @@
+import (
+  "math"
+)
+
+type Vec struct {
+  x uint
+  y uint
+}
+
+type Location struct {
+  vec Vec
+  isBlocked bool
+  entity Entity
+  tileType uint
+}
+
 type Room struct {
   x, y, width, height uint
   visited bool
   connections map[Room] bool
 }
 
+func getDistanceCost(to, from Vec) (uint)
+  costX := Abs(from.x - to.x) * 2;
+  costY := Abs(from.y - to.y) * 2;
+  if costX == 0 {
+    return costY;
+  } else if costY == 0 {
+    return costX;
+  } else {
+    return Sqrt(Pow(costX, 2) + Pow(costY, 2));
+  }
+}
+
 //    this.centre = new Vec(x + Math.floor(width / 2),
   //                        y + Math.floor(height / 2));
 
-func chooseDims(type uint) {
+func chooseDims(roomSize uint) (uint, uint) {
   w := 0
   h := 0
 
-  if type == LARGE {
+  if roomSize == LARGE {
     // 23, 21, 19, 17, 15
     w = Floor(rand.Float32() * 3) + MIN_LARGE
     h = Floor(rand.Float32() * 3) + MIN_LARGE
   }
-  if type == MEDIUM {
+  if roomSize == MEDIUM {
     // 19, 17, 15, 13, 11
     w = Floor(rand.Float32() * 5) + MIN_MEDIUM
     h = Floor(rand.Float32() * 5) + MIN_MEDIUM
   }
-  if type == SMALL {
+  if roomSize == SMALL {
     // 15, 13, 11, 9
     w = Floor(rand.Float32() * 5) + MIN_SMALL
     h = Floor(rand.Float32() * 5) + MIN_SMALL
   }
-  return {width : w, height : h};
+  return w, h;
+}
+
+func isSpace(startX, startY, width, height uint) (bool) {
+  for x := startX; x < startX + width; x++ {
+    for y := startY; y < startY + height; y++ {
+      if isOutOfRange(x, y) {
+        return false;
+      }
+      // Only carve rooms into 'blocked' ceiling regions
+      if locations[x][y].isBlocked {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 func placeRooms(roomsToPlace) {
@@ -46,11 +89,11 @@ func placeRooms(roomsToPlace) {
 
       x := getRandomX()
       y := getRandomY()
-      dims := chooseDims(i)
+      w, h := chooseDims(i)
 
-        if (this.isSpace(x, y, dims.width, dims.height)) {
-          console.log("placing room at (x, y):", x, y, "of size:", dims.width, dims.height);
-          this.createRoom(x, y, dims.width, dims.height);
+        if isSpace(x, y, w, h) {
+          newRoom := createRoom(x, y, w, h);
+          rooms.append(newRoom);
           rooms++;
           roomsToPlace--;
           attempts = 0;
@@ -58,6 +101,21 @@ func placeRooms(roomsToPlace) {
         attempts++;
       }
     }
+}
+
+func createRoom(startX, startY, w, h uint) (Room) {
+  room := Room {x : startX, y : startY, width : w, height : h};
+  //rooms.push(room);
+  // Top 3 rows of tiles need to be set to WALL, as do the bottom 3 rows.
+  // The two vertical borders also need to be WALL and then the remaining
+  // can be set to FLOOR.
+  for x := startX+1; x < startX + width-1; x++ {
+    for y := startY+1; y < startY + height-2; y++ {
+      locations[x][y].blocked = false;
+      placeTile(x, y, PATH, false);
+    }
+  }
+  return room;
 }
 
 func connectRooms(rooms []Room) {
@@ -78,7 +136,7 @@ func connectRooms(rooms []Room) {
     minDistance := MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS;
     for connectedRoom, _ := range connectedRooms {
       for unconnectedRoom, _ := range unconnectedRooms {
-        distance := getDistance(connectedRoom, unconnectedRoom)
+        distance := getDistanceCost(connectedRoom, unconnectedRoom)
         if distance < minDistance {
           minDistance = distance
           from = connectedRoom
