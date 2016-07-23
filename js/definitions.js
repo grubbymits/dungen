@@ -253,7 +253,7 @@ const UPSCALE_FACTOR = 1;
 const MAP_WIDTH_PIXELS = 2560;
 const MAP_HEIGHT_PIXELS = 2560;
 const TILE_SIZE = 64;
-const PATH_WIDTH = 5;
+const PATH_WIDTH = 3;
 
 const CEILING = 0;
 const PATH = 1;

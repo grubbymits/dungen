@@ -91,7 +91,8 @@ class Game {
     }
     this.actors.push(monster);
     this.currentEffects.set(monster, []);
-    //this.theMap.placeEntity(pos, monster);
+    this.theMap.placeEntity(pos, monster);
+    return monster;
   }
 
   placeMonsters(number) {

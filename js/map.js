@@ -36,7 +36,7 @@ class Location {
     this.dirty = true;
   }
   get isBlocked() {
-    return this.blocking;
+    return (this.entity !== null || this.tileType == WALL || this.tileType == CEILING);
   }
   set blocked(blocking) {
     this.blocking = blocking;
@@ -309,31 +309,28 @@ class GameMap {
     // Check for out-of-bounds
     if (this.isOutOfRange(x, y)) {
       return;
-    } else {
-      this.locations[x][y].type = type;
-      this.locations[x][y].blocked = blocking;
-      if (type == PATH && y > 1 && this.locations[x][y-1].type != PATH) {
-        if (this.isOutOfRange(x, y-1)) {
-          return;
-        }
-        this.locations[x][y-1].type = WALL;
-        this.locations[x][y-1].isBlocking = true;
+    }
+    this.locations[x][y].type = type;
+    this.locations[x][y].blocked = blocking;
+    if (this.isOutOfRange(x, y-1)) {
+      console.log("this probably shouldn't happen");
+      return;
+    }
+    if (type == PATH && y > 1 && this.locations[x][y-1].type != PATH) {
+      this.locations[x][y-1].type = WALL;
 
-        // fixups, just in case
-        if (this.isOutOfRange(x, y-2)) {
-          return;
-        }
-        if (this.locations[x][y-2].type == PATH) {
-          this.locations[x][y-1].type = PATH;
-          this.locations[x][y-1].isBlocking = false;
-        }
-        if (this.isOutOfRange(x, y+1)) {
-          return;
-        }
-        if (this.locations[x][y+1].type == WALL) {
-          this.locations[x][y+1].type = PATH;
-          this.locations[x][y+1].isBlocking = false;
-        }
+      // fixups, just in case carving paths isn't tidy
+      if (this.isOutOfRange(x, y-2)) {
+        return;
+      }
+      if (this.locations[x][y-2].type == PATH) {
+        this.locations[x][y-1].type = PATH;
+      }
+      if (this.isOutOfRange(x, y+1)) {
+        return;
+      }
+      if (this.locations[x][y+1].type == WALL) {
+        this.locations[x][y+1].type = PATH;
       }
     }
   }
@@ -358,7 +355,7 @@ class GameMap {
           return false;
         }
         // Only carve rooms into 'blocked' ceiling regions
-        if (!this.locations[x][y].isBlocked) {
+        if (!this.locations[x][y].type == CEILING) {
           return false;
         }
       }
@@ -371,14 +368,19 @@ class GameMap {
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
       for (let y = startY+2; y < startY + height-2; y++) {
-        if (this.isOutOfRange(x, y))
-          console.log("out of range!", x, y);
-        this.locations[x][y].blocked = false;
         this.placeTile(x, y, PATH, false);
         //this.locations[x][y].room = room;
       }
     }
     return room;
+  }
+
+  createPath(startX, startY) {
+    for (let x = startX; x < startX + PATH_WIDTH; x++) {
+      for (let y = startY; y < startY + PATH_WIDTH; y++) {
+        this.placeTile(x, y, PATH, false);
+      }
+    }
   }
 
   getDims(type) {
@@ -477,24 +479,28 @@ class GameMap {
 
         if (current.centre.x < neighbour.centre.x) {
           while (x < neighbour.centre.x) {
-            ++x;
-            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
+            this.createPath(x, y);
+            x++;
+            //x += PATH_WIDTH; //= PATH_WIDTH;
           }
         } else if (current.centre.x > neighbour.centre.x) {
           while (x > neighbour.centre.x) {
-            --x;
-            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
+            this.createPath(x, y);
+            x--;
+            //x -= PATH_WIDTH;
           }
         }
         if (current.centre.y < neighbour.centre.y) {
           while (y < neighbour.centre.y) {
-            ++y;
-            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
+            this.createPath(x, y);
+            y++;
+            //y += PATH_WIDTH;
           }
         } else if (current.centre.y > neighbour.centre.y) {
           while (y > neighbour.centre.y) {
-            --y;
-            this.createRoom(x, y, PATH_WIDTH, PATH_WIDTH);
+            this.createPath(x, y);
+            y--;
+            //y -= PATH_WIDTH;
           }
         }
       }
@@ -519,7 +525,8 @@ class GameMap {
 
     for (let current = 0; current < total; ++current) {
       if (current >= nextLimit) {
-        ++roomIdx;
+        roomIdx = (roomIdx + 1) % this.rooms.length;
+
         if (roomIdx >= this.rooms.length * 0.25) {
           nextLimit += (total / 16);
         } else {
@@ -547,7 +554,7 @@ class GameMap {
         let pos = this.locations[x][y].vec;
         let type = Math.floor(Math.random() * monsters.length);
         let monster = this.game.createMonster(pos, type);
-        this.placeEntity(pos, monster);
+        //this.placeEntity(pos, monster);
       }
     }
   }
