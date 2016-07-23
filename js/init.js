@@ -14,6 +14,7 @@ function begin() {
   var gameContext = gameCanvas.getContext("2d");
   gameContext.fillStyle = '#000000';
   gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+  console.log("canvas resolution set to: ", gameCanvas.width, "x", gameCanvas.height);
 
   var theGame = new Game(gameContext, gameCanvas.width, gameCanvas.height);
   //var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
@@ -84,8 +85,8 @@ function begin() {
         theGame.play();
         // set a maximum game rate
         if (new Date().getTime() >= theGame.nextGameTick) {
-          updater.next();
           theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
+          updater.next();
           theGame.renderMap();
           theGame.renderEntities();
           UI.renderInfo();

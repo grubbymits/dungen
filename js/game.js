@@ -9,7 +9,7 @@ class Game {
     this.context = context;
     this.level = 1;
     this.isRunning = false;
-    this.skipTicks = 1000 / 20;
+    this.skipTicks = 1000 / 100;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height, this);
     this.theMap.generate();
@@ -95,6 +95,7 @@ class Game {
   }
 
   placeMonsters(number) {
+    console.log("placing", number, "monsters");
     var monsters = 0;
     while (monsters < number) {
       let x = getBoundedRandom(1, this.theMap.xMax);

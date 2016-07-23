@@ -3,9 +3,11 @@
 const LARGE = 0;
 const MEDIUM = 1;
 const SMALL = 2;
-const MIN_SMALL = 10;
-const MIN_MEDIUM = 13;
-const MIN_LARGE = 16;
+var MIN_LARGE = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) / TILE_SIZE / 4);
+var MIN_MEDIUM = Math.round(MIN_LARGE * 0.8);
+var MIN_SMALL = Math.round(MIN_LARGE * 0.6);
+
+console.log("MIN_LARGE set to:", MIN_LARGE);
 
 class Vec {
   constructor(x, y) {
@@ -55,6 +57,12 @@ class Room {
     this.pos = new Vec(x, y);
     this.centre = new Vec(x + Math.floor(width / 2),
                           y + Math.floor(height / 2));
+    // Adjust the centre so that when creating paths, we don't go OoB.
+    if (this.centre.x > Math.floor(PATH_WIDTH / 2))
+      this.centre.x -= Math.floor(PATH_WIDTH / 2);
+    if (this.centre.y > Math.floor(PATH_WIDTH / 2))
+      this.centre.y -= Math.floor(PATH_WIDTH / 2);
+
     this.width = width;
     this.height = height;
     this.connections = new Set();
@@ -85,6 +93,7 @@ class GameMap {
     //this.height = height;
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
+    console.log("generating map with dimensions:", this.xMax, "x", this.yMax, "tiles");
 
     for (let x = 0; x < this.xMax; x++) {
       this.locations[x] = [];
@@ -361,7 +370,9 @@ class GameMap {
     let room = new Room(startX, startY, width, height);
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
-      for (let y = startY+1; y < startY + height-2; y++) {
+      for (let y = startY+2; y < startY + height-2; y++) {
+        if (this.isOutOfRange(x, y))
+          console.log("out of range!", x, y);
         this.locations[x][y].blocked = false;
         this.placeTile(x, y, PATH, false);
         //this.locations[x][y].room = room;
@@ -491,6 +502,7 @@ class GameMap {
   }
 
   placeMonsters(level, total) {
+    console.log("placing", total, "level", level, "monsters");
     // Try to place monsters in the larger rooms first.
     // Place ~50% of enemies into the largest 25% of the rooms.
     this.rooms.sort((a, b) => {
@@ -542,7 +554,7 @@ class GameMap {
 
   generate() {
     let number = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
-                            (TILE_SIZE * TILE_SIZE * MIN_LARGE * MIN_LARGE));
+                            (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
     this.placeRooms(number);
     this.createConnections();
     this.placeMonsters(0, 32);
