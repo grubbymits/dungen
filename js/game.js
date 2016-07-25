@@ -12,7 +12,6 @@ class Game {
     this.skipTicks = 1000 / 100;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height, this);
-    this.theMap.generate();
     //this.theMap.drawRooms(this.context);
     this.audio = new Audio(this);
   }

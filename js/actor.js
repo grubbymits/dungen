@@ -189,7 +189,8 @@ class Actor extends Entity {
     return null;
   }
   render() {
-    this.currentSprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
+    this.currentSprite.render(this.pos.x * TILE_SIZE,
+                              this.pos.y * TILE_SIZE, this.game.context);
   }
   get path() {
     return this.currentPath;
