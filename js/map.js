@@ -3,7 +3,8 @@
 const LARGE = 0;
 const MEDIUM = 1;
 const SMALL = 2;
-var MIN_LARGE = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) / TILE_SIZE / 4);
+var MIN_LARGE = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
+                           TILE_SIZE / 4);
 var MIN_MEDIUM = Math.round(MIN_LARGE * 0.8);
 var MIN_SMALL = Math.round(MIN_LARGE * 0.6);
 
@@ -36,7 +37,8 @@ class Location {
     this.dirty = true;
   }
   get isBlocked() {
-    return (this.entity !== null || this.tileType == WALL || this.tileType == CEILING);
+    return (this.entity !== null || this.tileType == WALL ||
+            this.tileType == CEILING);
   }
   set blocked(blocking) {
     this.blocking = blocking;
@@ -223,13 +225,21 @@ class GameMap {
 
   getPath(start, goal) {
     // ignore if the click is out range, blocked or the current location.
+    if (start == undefined)
+      throw("start is undefined");
+    if (goal == undefined)
+      throw("goal is undefined");
+
     if (this.isOutOfRange(goal.x, goal.y)) {
+      console.log("goal is out of range");
       return [];
     }
     if (this.isBlocked(goal) && !goal.isOccupied) {
+      console.log("goal blocked and not by something interesting");
       return [];
     }
     if (start == goal) {
+      console.log("start == goal");
       return [];
     }
     // if the goal is an entity, make a path to be next to it.
@@ -258,22 +268,25 @@ class GameMap {
     cameFrom.set(start, null);
     costSoFar.set(start, 0);
     // frontier is a sorted list of locations with their lowest cost
-    frontier.push({loc : start, cost : 0});
+    frontier.push({vec : start, cost : 0});
 
     // breadth-first search
     var current = null;
     while (frontier.length > 0) {
       current = frontier.shift();
       // exit early
-      if (current.loc == goal) {
+      if (current.vec == goal) {
         break;
       }
-      var neighbours = this.getNeighbours(current.loc);
+      if ((current.vec.x == goal.x && current.vec.y == goal.y)) {
+        console.log("current vec == goal..");
+      }
+      var neighbours = this.getNeighbours(current.vec);
       for (let next of neighbours) {
-        let newCost = costSoFar.get(current.loc) + current.loc.getCost(next);
+        let newCost = costSoFar.get(current.vec) + current.vec.getCost(next);
 
         if (!costSoFar.has(next) || newCost < costSoFar.get(next)) {
-          frontier.push({loc : next, cost : newCost});
+          frontier.push({vec: next, cost : newCost});
           costSoFar.set(next, newCost);
 
           frontier.sort((a, b) => {
@@ -285,12 +298,13 @@ class GameMap {
               return 0;
             }
           });
-          cameFrom.set(next, current.loc);
+          cameFrom.set(next, current.vec);
         }
       }
     }
-    if (current.loc != goal) {
+    if (current.vec != goal) {
       //throw("Path not found to target!");
+      console.log("path not found to target");
       return [];
     }
 
@@ -559,13 +573,77 @@ class GameMap {
     }
   }
 
+  placeChests() {
+    const MAX_ATTEMPTS = 10;
+
+    for (let room of this.rooms) {
+      let attempts = 0;
+      let x = room.pos.x;
+      let y = room.pos.y;
+      do {
+        x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
+        y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
+        ++attempts;
+      } while ((this.locations[x][y].isBlocked ||
+               this.locations[x][y].isOccupied) &&
+               attempts < MAX_ATTEMPTS);
+
+      if (!this.locations[x][y].isOccupied &&
+          !this.locations[x][y].isBlocked) {
+        this.game.createChest(this.locations[x][y]);
+      }
+
+    }
+  }
+
+  placeStairs() {
+    // Choose the two rooms that are the furthest apart and less the entry
+    // and exit stairs in them.
+    let biggestDistance = 0;
+    let entry, exit;
+    for (let i in this.rooms) {
+      for (let j in this.rooms) {
+
+        let from = this.rooms[i];
+        let to = this.rooms[j];
+
+        if (from == to)
+          continue;
+
+        console.log("trying to find a path from", from, "to", to);
+
+        //let fromLoc = this.vecToLoc(from.centre);
+        //let toLoc = this.vecToLoc(to.centre);
+        let fromVec = this.vecToLoc(from.centre).vec;
+        let toVec = this.vecToLoc(to.centre).vec;
+        let path = this.getPath(fromVec, toVec);
+        console.log("path length =", path.length);
+        if (path.length > biggestDistance) {
+          entry = from;
+          exit = to;
+          biggestDistance = path.length;
+        }
+      }
+    }
+
+    if (entry === undefined)
+      throw("entry room is still null!");
+    if (exit === undefined)
+      throw("exit room is still null!");
+
+    this.game.createStair(exit, true);
+    return this.game.createStair(entry, false);
+          
+  }
+
   generate() {
     let number = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
                             (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
     this.placeRooms(number);
     this.createConnections();
+    let entry = this.placeStairs();
+    this.placeChests();
     this.placeMonsters(0, 32);
-    //this.createGraph();
-    //this.layPath();
+    return entry.vec;
   }
 }

@@ -78,6 +78,9 @@ var currentActorSprite = new Sprite(uiSpriteSheet, 1, 0);
 var tileSprites = [ new Sprite(greenSpriteSheet, 1, 1, 32, 32),
                     new Sprite(greenSpriteSheet, 7, 0, 32, 32),
                     new Sprite(greenSpriteSheet, 2, 2, 32, 32)];
+
+var entryStairSprite = new Sprite(greenSpriteSheet, 6, 1);
+var exitStairSprite = new Sprite(greenSpriteSheet, 5, 1);
                     
 var heroSprites = [];
 var damageHeroSprites = [];

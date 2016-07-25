@@ -21,7 +21,7 @@ class Game {
     // draw everything
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
-        let loc = this.map.getLocation(x,y);
+        let loc = this.theMap.getLocation(x,y);
         if (loc.dirty && loc.type != CEILING) {
           this.context.fillStyle = '#000000';
           this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
@@ -110,17 +110,24 @@ class Game {
     }
   }
 
-  placeChests(number) {
-    var chests = 0;
-    while (chests < number) {
-      let x = getBoundedRandom(1, this.theMap.xMax);
-      let y = getBoundedRandom(1, this.theMap.yMax);
-      let loc = this.theMap.getLocation(x, y);
-      if (!loc.isBlocked && !loc.isOccupied) {
-        this.objects.push(new Chest(loc.vec, this));
-        chests++;
-      }
+  createChest(loc) {
+    if (!loc.isBlocked && !loc.isOccupied) {
+      this.objects.push(new Chest(loc.vec, this));
     }
+  }
+
+  createStair(room, isExit) {
+    console.log("create stair at", room);
+    let x = room.centre.x;
+    let y = room.centre.y;
+    let loc = this.theMap.getLocation(x, y);
+    while ((loc.isBlocked || loc.isOccupied)) {
+      x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
+      y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
+      loc = this.theMap.getLocation(x, y);
+    }
+    this.objects.push(new Stair(loc.vec, isExit, this));
+    return loc;
   }
 
   killActor(actor) {

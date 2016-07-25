@@ -17,14 +17,7 @@ function begin() {
   console.log("canvas resolution set to: ", gameCanvas.width, "x", gameCanvas.height);
 
   var theGame = new Game(gameContext, gameCanvas.width, gameCanvas.height);
-  //var mapGen = new MapGenerator(MAP_WIDTH_PIXELS / TILE_SIZE,
-    //                            MAP_HEIGHT_PIXELS / TILE_SIZE, 0, 0);
-  //mapGen.placeRooms(12);
-  //mapGen.createGraph();
-  //mapGen.refineGraph();
-  //mapGen.layPath();
-  //mapGen.drawRooms(gameContext);
-  //return;
+  let startPos = theGame.theMap.generate();
 
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
@@ -40,11 +33,10 @@ function begin() {
     playerType = WARLOCK;
   }
 
-    var startPos = theGame.map.getLocation(Math.round(theGame.map.width / 2),
-                                           Math.round(theGame.map.height / 2)).vec;
-    var character = theGame.createHero(startPos, playerType);
-    var player = new Player(character);
-    var UI = new Interface(player);
+
+  var character = theGame.createHero(startPos, playerType);
+  var player = new Player(character);
+  var UI = new Interface(player);
     player.addItem(potions[0]);
     player.addItem(potions[2]);
     player.addItem(potions[4]);

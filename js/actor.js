@@ -139,6 +139,24 @@ class Chest extends Entity {
   }
 }
 
+class Stair extends Entity {
+  constructor(position, isExit, game) {
+    super(position, true, null, OBJECT, game);
+    if (isExit) {
+      this.sprite = exitStairSprite;
+    }
+    else {
+      this.sprite = entryStairSprite;
+    }
+  }
+  interact(actor) {
+    return null;
+  }
+  get isInteractable() {
+    return true;
+  }
+}
+
 class Actor extends Entity {
   constructor(health, energy,
               position, sprite, damageSprite, kind, game) {
