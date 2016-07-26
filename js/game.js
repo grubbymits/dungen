@@ -39,7 +39,7 @@ class Game {
 
     // reset stuff
     this.context.fillStyle = '#000000';
-    this.context.fillRect(0, 0, this.width, this.height);
+    this.context.fillRect(0, 0, this.theMap.width, this.theMap.height);
     this.actors = [];
     this.objects = [];
     this.currentEffects.clear();
