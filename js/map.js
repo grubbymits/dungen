@@ -526,7 +526,7 @@ class GameMap {
 
     let nextLimit = Math.floor(total / 8);
     let roomIdx = 0;
-    let monsters = this.monsterGroups[level];
+    let monsters = this.monsterGroups[level-1];
 
     for (let current = 0; current < total; ++current) {
       if (current >= nextLimit) {

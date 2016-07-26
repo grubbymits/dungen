@@ -8,7 +8,7 @@ class Game {
     this.currentEffects = new Map();
     this.objects = [];
     this.context = context;
-    this.level = 0;
+    this.level = 1;
     this.isRunning = false;
     this.loading = false;
     this.skipTicks = 1000 / 100;
