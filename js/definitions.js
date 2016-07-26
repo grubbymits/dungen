@@ -34,13 +34,13 @@ const ENEMY_NAMES = [ "Rat",
                       "Demon" ];
 
 const POTION_NAMES = [ "Basic Health Potion",
-                       "Energy Potion",
+                       "Basic Energy Potion",
                        "Health Potion",
-                       "Defense Potion",
-                       "Agility Potion",
-                       "Strength Potion",
-                       "Wisdom Potion",
-                       "Big Health Potion"
+                       "Energy Potion",
+                       "Big Health Potion",
+                       "Big Energy Potion",
+                       "Regeneration Potion",
+                       "Energise Potion"
                       ];
 const TREASURE_NAMES = ["Small coins",
                         "Large coins",

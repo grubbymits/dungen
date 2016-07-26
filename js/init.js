@@ -14,10 +14,10 @@ function begin() {
   var gameContext = gameCanvas.getContext("2d");
   gameContext.fillStyle = '#000000';
   gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-  console.log("canvas resolution set to: ", gameCanvas.width, "x", gameCanvas.height);
+  console.log("canvas resolution set to: ", gameCanvas.width, "x",
+              gameCanvas.height);
 
   var theGame = new Game(gameContext, gameCanvas.width, gameCanvas.height);
-  let startPos = theGame.theMap.generate();
 
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
@@ -33,59 +33,52 @@ function begin() {
     playerType = WARLOCK;
   }
 
+  var UI = theGame.init(playerType);
+  //var character = theGame.createHero(startPos, playerType);
+  //var player = new Player(character);
+  //var UI = new Interface(player);
 
-  var character = theGame.createHero(startPos, playerType);
-  var player = new Player(character);
-  var UI = new Interface(player);
-    player.addItem(potions[0]);
-    player.addItem(potions[2]);
-    player.addItem(potions[4]);
-    UI.centreCamera(null);
-    theGame.addPlayer(player);
-    //theGame.placeMonsters(10);
-    //theGame.placeChests(2);
+  function *generator() {
+    let actor = 0;
+    while(true) {
+      let updateActor = false;
+      let action = theGame.getAction(actor);
+        
+      if (action) {
+        theGame.applyEffects(actor);
+      }
+        
+      while(action) {
+        action = action.perform();
+        yield true;
+        updateActor = true;
+      }
+      if (updateActor) {
+        actor = (actor + 1) % theGame.actors.length;
+      }
+      yield;
+    }
+  }
 
-    function *generator() {
-      let actor = 0;
-      while(true) {
-        let updateActor = false;
-        let action = theGame.getAction(actor);
-        
-        if (action) {
-          theGame.applyEffects(actor);
-        }
-        
-        while(action) {
-          action = action.perform();
-          yield true;
-          updateActor = true;
-        }
-        if (updateActor) {
-          actor = (actor + 1) % theGame.actors.length;
-        }
-        yield;
+  // Generator object to control the flow and order of play
+  var updater = generator();
+
+  var run = function() {
+    if (!document.hasFocus() || theGame.isLoading) {
+      theGame.pause();
+    } else {
+      theGame.play();
+      // set a maximum game rate
+      if (new Date().getTime() >= theGame.nextGameTick) {
+        theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
+        updater.next();
+        theGame.renderMap();
+        theGame.renderEntities();
+        UI.renderInfo();
+        UI.renderHUD();
       }
     }
-
-    // Generator object to control the flow and order of play
-    var updater = generator();
-
-    var run = function() {
-      if (!document.hasFocus()) {
-        theGame.pause();
-      } else {
-        theGame.play();
-        // set a maximum game rate
-        if (new Date().getTime() >= theGame.nextGameTick) {
-          theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
-          updater.next();
-          theGame.renderMap();
-          theGame.renderEntities();
-          UI.renderInfo();
-          UI.renderHUD();
-        }
-      }
-      window.requestAnimationFrame(run);
-    };
-    run();
-  }
+    window.requestAnimationFrame(run);
+  };
+  run();
+}

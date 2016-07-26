@@ -4,16 +4,56 @@ class Game {
   constructor(context, width, height) {
     console.log("Game.constructor");
     this.actors = [];
+    this.heroes = [];
     this.currentEffects = new Map();
     this.objects = [];
     this.context = context;
-    this.level = 1;
+    this.level = 0;
     this.isRunning = false;
+    this.loading = false;
     this.skipTicks = 1000 / 100;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height, this);
-    //this.theMap.drawRooms(this.context);
     this.audio = new Audio(this);
+  }
+
+  get isLoading() {
+    return this.loading;
+  }
+
+  init(playerType) {
+    this.loading = true;
+    let startPos = this.theMap.generate(this.level);
+    let character = this.createHero(startPos, playerType);
+    let player = new Player(character);
+    this.addPlayer(player);
+    let UI = new Interface(this.player);
+    UI.centreCamera();
+    this.loading = false;
+    return UI;
+  }
+
+  setupMap() {
+    this.loading = true;
+    this.pause();
+
+    // reset stuff
+    this.context.fillStyle = '#000000';
+    this.context.fillRect(0, 0, this.width, this.height);
+    this.actors = [];
+    this.objects = [];
+    this.currentEffects.clear();
+
+    // re-add the heroes
+    for (let hero of this.heroes) {
+      this.actors.push(hero);
+    }
+
+    ++this.level;
+    let startPos = this.theMap.generate(this.level);
+    this.player.currentHero.pos = startPos;
+    this.play();
+    this.loading = false;
   }
 
   renderMap() {
@@ -70,6 +110,7 @@ class Game {
       throw("Hero type unrecognised!");
     }
     this.actors.push(hero);
+    this.heroes.push(hero);
     this.currentEffects.set(hero, []);
     return hero;
   }

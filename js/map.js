@@ -87,22 +87,13 @@ class Room {
 class GameMap {
   constructor(width, height, game) {
     this.game = game;
-    this.locations = [];
-    this.rooms = [];
     this.minRoomWidth = MIN_SMALL;
     this.minRoomHeight = MIN_SMALL;
-    //this.width = width;
-    //this.height = height;
+    this.reset();
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
     console.log("generating map with dimensions:", this.xMax, "x", this.yMax, "tiles");
 
-    for (let x = 0; x < this.xMax; x++) {
-      this.locations[x] = [];
-      for (let y = 0; y < this.yMax; y++) {
-        this.locations[x][y] = new Location(true, null, CEILING, x, y);
-      }
-    }
     var monsterGroup0 = [ RAT, SPIDERS]; //, RABBIT, BAT];
 
     var monsterGroup1 = monsterGroup0.slice();
@@ -610,14 +601,9 @@ class GameMap {
         if (from == to)
           continue;
 
-        console.log("trying to find a path from", from, "to", to);
-
-        //let fromLoc = this.vecToLoc(from.centre);
-        //let toLoc = this.vecToLoc(to.centre);
         let fromVec = this.vecToLoc(from.centre).vec;
         let toVec = this.vecToLoc(to.centre).vec;
         let path = this.getPath(fromVec, toVec);
-        console.log("path length =", path.length);
         if (path.length > biggestDistance) {
           entry = from;
           exit = to;
@@ -636,14 +622,29 @@ class GameMap {
           
   }
 
-  generate() {
+  reset() {
+    this.locations = [];
+    this.rooms = [];
+    for (let x = 0; x < this.xMax; x++) {
+      this.locations[x] = [];
+      for (let y = 0; y < this.yMax; y++) {
+        this.locations[x][y] = new Location(true, null, CEILING, x, y);
+      }
+    }
+  }
+
+  generate(level) {
+    this.reset();
     let number = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
                             (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
     this.placeRooms(number);
     this.createConnections();
     let entry = this.placeStairs();
     this.placeChests();
-    this.placeMonsters(0, 32);
-    return entry.vec;
+    this.placeMonsters(level, 32);
+    let neighbours = this.getNeighbours(entry.vec);
+    if (!neighbours.length)
+      throw("no free neighbours next to stairs");
+    return neighbours[0];
   }
 }

@@ -10,7 +10,9 @@ class Entity {
     this.game.map.placeEntity(this.position, this);
   }
   render() {
-    this.sprite.render(this.pos.x * TILE_SIZE, this.pos.y * TILE_SIZE, this.game.context);
+    this.sprite.render(this.pos.x * TILE_SIZE,
+                       this.pos.y * TILE_SIZE,
+                       this.game.context);
   }
   get pos() {
     return this.position;
@@ -62,19 +64,19 @@ class Chest extends Entity {
     if (type < 0.25) {
       return potions[BASIC_HEALTH_POTION];
     } else if (type < 0.4) {
-      return potions[ENERGY_POTION];
+      return potions[BASIC_ENERGY_POTION];
     } else if (type < 0.55) {
       return potions[HEALTH_POTION];
     } else if (type < 0.65) {
-      return potions[DEFENSE_POTION];
+      return potions[ENERGY_POTION];
     } else if (type < 0.75) {
-      return potions[AGILITY_POTION];
-    } else if (type < 0.85) {
-      return potions[STRENGTH_POTION];
-    } else if (type < 0.95) {
-      return potions[WISDOM_POTION];
-    } else {
       return potions[BIG_HEALTH_POTION];
+    } else if (type < 0.85) {
+      return potions[BIG_ENERGY_POTION];
+    } else if (type < 0.95) {
+      return potions[REGENERATION_POTION];
+    } else {
+      return potions[ENERGISE_POTION];
     }
   }
   pickEquipment() {
@@ -148,12 +150,18 @@ class Stair extends Entity {
     else {
       this.sprite = entryStairSprite;
     }
+    this.isExit = isExit;
   }
   interact(actor) {
-    return null;
+    if (!this.isExit)
+      return null;
+    this.game.setupMap();
   }
   get isInteractable() {
-    return true;
+    if (this.isExit)
+      return true;
+    else
+      return false;
   }
 }
 

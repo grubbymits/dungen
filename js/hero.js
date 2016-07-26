@@ -20,8 +20,10 @@ class Hero extends Actor {
     this.endurance = endurance;
     this.subtype = subtype;
     
-    this.maxHealth += Math.floor(this.maxHealth * (this.endurance / MAX_ENDURANCE));
-    this.maxEnergy += Math.floor(this.maxEnergy * (this.endurance / MAX_ENDURANCE) +
+    this.maxHealth += Math.floor(this.maxHealth *
+                                 (this.endurance / MAX_ENDURANCE));
+    this.maxEnergy += Math.floor(this.maxEnergy *
+                                 (this.endurance / MAX_ENDURANCE) +
                                  this.maxEnergy * (this.will / MAX_WILL));
     this.currentHealth = this.maxHealth;
     this.currentEnergy = this.maxEnergy;
@@ -369,13 +371,18 @@ class Player {
       let type = potion.subtype;
       if (type == BASIC_HEALTH_POTION ||
           type == HEALTH_POTION ||
-          type == BIG_HEALTH_POTION) {
+          type == BIG_HEALTH_POTION ||
+          type == REGENERATION_POTION) {
         if (potion.strength >= healthRequired && this.potions.get(potion) > 0) {
           candidates.push(potion);
         }
       }
     }
     candidates.sort(this.comparePotions);
+    if (!candidates.length) {
+      console.log("no available health potions");
+      return;
+    }
     let chosen = candidates[0];
     let newVal = this.potions.get(chosen) - 1;
     this.potions.set(chosen, newVal);
