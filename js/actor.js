@@ -100,7 +100,7 @@ class Chest extends Entity {
     } else if (type < 0.7) {
       itemArray = bows;
     } else if (type < 0.8) {
-      itemArray = scrolls;
+      itemArray = spells;
     } else if (type < 0.9) {
       // jewelry
     } else {
