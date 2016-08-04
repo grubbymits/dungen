@@ -175,7 +175,8 @@ class GameMap {
   }
 
   setDirty(pos) {
-    this.locations[pos.x][pos.y].dirty = true;
+    if (!this.isOutOfRange(pos))
+      this.locations[pos.x][pos.y].dirty = true;
   }
 
   get width() {
