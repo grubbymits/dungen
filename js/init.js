@@ -1,5 +1,9 @@
 "use strict";
 
+$(document).ready(function() {
+  $(".button-collapse").sideNav();
+});
+
 function begin() {
   // Initialise canvas
   var gameCanvas = document.createElement("canvas");

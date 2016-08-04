@@ -30,14 +30,71 @@
         </a>
       </div>
     </div>
+    <div>
+      <ul id="slide-out" class="side-nav">
+        <ul class="collapsible" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header" id="hero_list">Hero</div>
+            <div class="collapsible-body">
+              <a class="waves-effect btn orange" style="margin:2px">Knight</a>
+            </div>
+            <div class="collapsible-body">
+              <a class="waves-effect btn orange" style="margin:2px">Mage</a>
+            </div>
+            <div class="collapsible-body">
+              <a class="waves-effect btn orange" style="margin:2px">Rogue</a>
+            </div>
+            <div class="collapsible-body">
+              <a class="waves-effect btn orange" style="margin:2px">Archer</a>
+            </div>
+          </li>
+        </ul>
+        <p id="stats">
+          Health:<br>
+          Energy:<br>
+          Strength:<br>
+          Endurance:<br>
+          Agility:<br>
+          Wisdom:<br>
+          Will:<br>
+          Attack:<br>
+          Defense:<br>
+        </p>
+        <ul class="collapsible" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header">Primary</div>
+            <div class="collapsible-body"><p style="color:orange">First Sword</p></div>
+            <div class="collapsible-body"><p style="color:orange">Second Sword</p></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Secondary</div>
+            <div class="collapsible-body"><p style="color:orange">Shield</p></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Head</div>
+            <div class="collapsible-body"><p style="color:orange">Helmet</p></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Body</div>
+            <div class="collapsible-body"><p style="color:orange">Armour</p></div>
+          </li>
+        </ul>
+      </ul>
+    </div>
     <div class="fixed-action-btn vertical click-to-toggle" style="bottom: 16px; right: 16px;">
       <a class="btn-floating btn-large orange">
         <i class="large material-icons">gamepad</i>
       </a>
       <ul>
-        <li><a class="btn-floating orange" id="centre_camera"><i class="material-icons">filter_center_focus</i></a></li>
-        <li><a class="btn-floating orange" id="hud_button"><i class="material-icons">accessibility</i></a></li>
-        <li><a class="btn-floating orange "><i class="material-icons">people</i></a></li>
+        <li>
+          <a class="btn-floating orange" id="centre_camera"><i class="material-icons">filter_center_focus</i></a>
+        </li>
+        <li>
+          <a href='#' data-activates="slide-out" class="btn-floating orange button-collapse" id="hud_button">
+            <i class="material-icons">accessibility</i>
+          </a>
+        </li>
+        <li><a class="btn-floating orange"><i class="material-icons">people</i></a></li>
         <li><a class="btn-floating orange" id="rest_button"><i class="material-icons">update</i></a></li>
         <li><a class="btn-floating orange" id="heal_button"><i class="material-icons">healing</i></a></li>
       </ul>
