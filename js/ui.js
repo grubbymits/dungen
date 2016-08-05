@@ -103,9 +103,11 @@ class Interface {
       else if (hero.subtype == ARCHER)
         name = 'Archer';
 
+      let id = name + '_id';
       $('<div class="collapsible-body">' +
-          '<a class="waves-effect btn orange" style="margin:2px">' + name +
-          '</a></div>').insertAfter('#hero_list');
+          '<a class="waves-effect btn orange" style="margin:2px id="' + id + '"">'
+            + name +'</a></div>').insertAfter('#hero_list');
+      $('#' + id).on("click", function(){ console.log("clicked"); });
     }
     // ensure the collapsible ability is enabled.
     $('#collaspible_heroes').collapsible();
