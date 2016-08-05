@@ -90,6 +90,25 @@ class Interface {
     this.stats.height = TILE_SIZE / 2;
     document.body.appendChild(this.stats);
     this.statsContext = this.stats.getContext("2d");
+    this.setupNav();
+  }
+
+  setupNav() {
+    for (let hero of this.player.heroes) {
+      let name = 'Knight';
+      if (hero.subtype == MAGE)
+        name = 'Mage';
+      else if (hero.subtype == ROGUE)
+        name = 'Rogue';
+      else if (hero.subtype == ARCHER)
+        name = 'Archer';
+
+      $('<div class="collapsible-body">' +
+          '<a class="waves-effect btn orange" style="margin:2px">' + name +
+          '</a></div>').insertAfter('#hero_list');
+    }
+    // ensure the collapsible ability is enabled.
+    $('#collaspible_heroes').collapsible();
   }
 
   addEvent(event) {
