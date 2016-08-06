@@ -4,6 +4,7 @@
     left:45%;
     width:80px;
 }
-.class='but' {
-    float:left;
+
+p.msg {
+    white-space: pre-line;
 }

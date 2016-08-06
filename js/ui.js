@@ -107,12 +107,24 @@ class Interface {
       $('<div class="collapsible-body">' +
           '<a class="waves-effect btn orange" style="margin:2px id="' + id + '"">'
             + name +'</a></div>').insertAfter('#hero_list');
-      $('#' + id).on("click", function(){ console.log("clicked"); });
+      $('#collapsible_heroes').on('click', $('#' + id), function() {
+        this.currentHero = hero;
+        $('#stats').text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
+                         "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
+                         "  Strength: " + hero.strength + "\n" +
+                         "  Endurance: " + hero.endurance + "\n" +
+                         "  Agility: " + hero.agility + "\n" +
+                         "  Wisdom: " + hero.wisdom + "\n" +
+                         "  Will: " + hero.will + "\n" +
+                         "  Attack: " + hero.primaryAtkPower + "\n" +
+                         "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
+                         "  Defense: " + hero.physicalDefense);
+      });
     }
     // ensure the collapsible ability is enabled.
-    $('#collaspible_heroes').collapsible();
+    $('#collapsible_heroes').collapsible();
   }
-
+  
   addEvent(event) {
     this.events.push(event);
   }
@@ -306,41 +318,6 @@ class Interface {
     }
   }
   
-  renderCurrentStats() {
-    let offsetX = TILE_SIZE / 4; //* UPSCALE_FACTOR;
-    let offsetY = 2 * TILE_SIZE * UPSCALE_FACTOR;
-    let spacing = TILE_SIZE;
-    let hero = this.state.hero;
-    
-    this.hudContext.font = "16px Droid Sans";
-    this.hudContext.fillStyle = "orange";
-    this.hudContext.textAlign = "left";
-    
-    this.hudContext.clearRect(0, offsetY, this.hud.width, this.hud.height);
-    this.hudContext.fillText("Lvl: " + hero.level, offsetX, offsetY);
-    this.hudContext.fillText("Exp to next Lvl: " + (hero.expToNextLvl - hero.currentExp),
-                               offsetX, offsetY + spacing * UPSCALE_FACTOR / 2);
-    this.hudContext.fillText("Health: " + hero.currentHealth + "/" + hero.maxHealth,
-                               offsetX, offsetY + spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Energy: " + hero.currentEnergy + "/" + hero.maxEnergy,
-                               offsetX, offsetY + 3/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Strength: " + hero.strength,
-                               offsetX, offsetY + 2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Endurance: " + hero.endurance,
-                               offsetX, offsetY + 5/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Agility: " + hero.agility,
-                               offsetX, offsetY + 3 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Wisdom: " + hero.wisdom,
-                               offsetX, offsetY + 7/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Will: " + hero.will,
-                               offsetX, offsetY + 4 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Attack: " + hero.primaryAtkPower,
-                               offsetX, offsetY + 9/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Attack Energy: " + hero.primaryAtkEnergy,
-                               offsetX, offsetY + 5 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Defense: " + hero.physicalDefense,
-                               offsetX, offsetY + 11/2 * spacing * UPSCALE_FACTOR);
-  }
   renderHUD() {
     if (this.hudVisible) {
       this.renderCurrentCharacter();
