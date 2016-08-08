@@ -107,8 +107,12 @@ class Interface {
       $('<div class="collapsible-body">' +
           '<a class="waves-effect btn orange" style="margin:2px id="' + id + '"">'
             + name +'</a></div>').insertAfter('#hero_list');
-      $('#collapsible_heroes').on('click', $('#' + id), function() {
-        this.currentHero = hero;
+
+      // Setup stats display
+      //var UI = this;
+      //var primary = this.getItems(hero.primary.type);
+      $('#collapsible_heroes').on('click', { ui : this }, function(event) {
+        //ui.currentHero = hero;
         $('#stats').text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
                          "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
                          "  Strength: " + hero.strength + "\n" +
@@ -119,10 +123,56 @@ class Interface {
                          "  Attack: " + hero.primaryAtkPower + "\n" +
                          "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
                          "  Defense: " + hero.physicalDefense);
+
+        // Populate primary equipment list
+        $('#equipment_list').empty();
+        $('#equipment_list').append(
+          '<li><div class="collapsible-header" id="primary_equipment">Primary</div></li>');
+
+        let items = event.data.ui.getItems(hero.primary.type);
+        for (let item of items.keys()) {
+
+          $('<div class="collapsible-body">' +
+            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
+            item.name + '</div>').insertAfter('#primary_equipment');
+        }
+        $('#equipment_list').append(
+          '<li><div class="collapsible-header" id="secondary_equipment">Secondary</div></li>');
+
+        items = event.data.ui.getItems(hero.secondary.type);
+        for (let item of items.keys()) {
+
+          $('<div class="collapsible-body">' +
+            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
+            item.name + '</div>').insertAfter('#secondary_equipment');
+        }
+
+        // Populate the head gear drop down
+        $('#equipment_list').append(
+          '<li><div class="collapsible-header" id="head_equipment">Head Gear</div></li>');
+        items = event.data.ui.getItems(HELMET);
+        for (let item of items.keys()) {
+
+          $('<div class="collapsible-body">' +
+            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
+            item.name + '</div>').insertAfter('#head_equipment');
+        }
+
+        // Populate the armour drop down
+        $('#equipment_list').append(
+          '<li><div class="collapsible-header" id="body_equipment">Body Armour</div></li>');
+        items = event.data.ui.getItems(ARMOUR);
+        for (let item of items.keys()) {
+
+          $('<div class="collapsible-body">' +
+            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
+            item.name + '</div>').insertAfter('#body_equipment');
+        }
       });
     }
     // ensure the collapsible ability is enabled.
     $('#collapsible_heroes').collapsible();
+    $('#equipment_list').collapsible();
   }
   
   addEvent(event) {
