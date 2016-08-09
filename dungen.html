@@ -11,58 +11,58 @@
   <link rel='shortcut icon' type='image/x-icon' href='res/img/favicon.ico'>
   <link href='res/img/icon.png' rel="icon" sizes="128x128" />
 </head>
-
-  <body>
-    <div id="levelUpButtons" style="visibility : hidden;">
-      <div class="fixed-action-btn" style="bottom: 64px; right: 240px">
-        <a class="btn-floating btn-large orange" id="strength">
-          <i class="material-icons">fitness_center</i>
-        </a>
-      </div>
-      <div class="fixed-action-btn" style="bottom: 64px; right: 168px">
-        <a class="btn-floating btn-large orange" id="agility">
-          <i class="material-icons">directions_run</i>
-        </a>
-      </div>
-      <div class="fixed-action-btn" style="bottom: 64px; right: 96px">
-        <a class="btn-floating btn-large orange" id="wisdom">
-          <i class="material-icons">school</i>
-        </a>
-      </div>
-    </div>
-    <div>
-      <ul id="slide-out" class="side-nav">
-        <ul class="collapsible" data-collapsible="accordion" id="collapsible_heroes">
-          <li>
-            <div class="collapsible-header" id="hero_list">Hero</div>
-          </li>
-        </ul>
-        <p style="white-space: pre-wrap" id="stats">
-        </p>
-        <ul class="collapsible" data-collapsible="accordion" id="equipment_list">
-        </ul>
-      </ul>
-    </div>
-    <div class="fixed-action-btn vertical click-to-toggle" style="bottom: 16px; right: 16px;">
-      <a class="btn-floating btn-large orange">
-        <i class="large material-icons">gamepad</i>
+<body>
+  <div id="levelUpButtons" style="visibility : hidden;">
+    <div class="fixed-action-btn" style="bottom: 64px; right: 240px">
+      <a class="btn-floating btn-large orange" id="strength">
+        <i class="material-icons">fitness_center</i>
       </a>
-      <ul>
-        <li>
-          <a class="btn-floating orange" id="centre_camera"><i class="material-icons">filter_center_focus</i></a>
-        </li>
-        <li>
-          <a href='#' data-activates="slide-out" class="btn-floating orange button-collapse" id="hud_button">
-            <i class="material-icons">accessibility</i>
-          </a>
-        </li>
-        <li><a class="btn-floating orange"><i class="material-icons">people</i></a></li>
-        <li><a class="btn-floating orange" id="rest_button"><i class="material-icons">update</i></a></li>
-        <li><a class="btn-floating orange" id="heal_button"><i class="material-icons">healing</i></a></li>
-      </ul>
     </div>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.js"></script>
+    <div class="fixed-action-btn" style="bottom: 64px; right: 168px">
+      <a class="btn-floating btn-large orange" id="agility">
+        <i class="material-icons">directions_run</i>
+      </a>
+    </div>
+    <div class="fixed-action-btn" style="bottom: 64px; right: 96px">
+      <a class="btn-floating btn-large orange" id="wisdom">
+        <i class="material-icons">school</i>
+      </a>
+    </div>
+  </div>
+  <div>
+    <ul id="slide-out" class="side-nav">
+      <ul class="collapsible" data-collapsible="accordion" id="collapsible_heroes">
+        <li>
+          <div class="collapsible-header" id="hero_list">Hero</div>
+        </li>
+      </ul>
+      <p style="white-space: pre-wrap" id="stats">
+      </p>
+      <ul class="collapsible" data-collapsible="accordion" id="equipment_list">
+      </ul>
+    </ul>
+  </div>
+  <div class="fixed-action-btn vertical click-to-toggle" style="bottom: 16px; right: 16px;">
+    <a class="btn-floating btn-large orange">
+      <i class="large material-icons">gamepad</i>
+    </a>
+    <ul>
+      <li>
+        <a class="btn-floating orange" id="centre_camera"><i class="material-icons">filter_center_focus</i></a>
+      </li>
+      <li>
+        <a href='#' data-activates="slide-out" class="btn-floating orange button-collapse" id="hud_button">
+          <i class="material-icons">accessibility</i>
+        </a>
+      </li>
+      <li><a class="btn-floating orange"><i class="material-icons">people</i></a></li>
+      <li><a class="btn-floating orange" id="rest_button"><i class="material-icons">update</i></a></li>
+      <li><a class="btn-floating orange" id="heal_button"><i class="material-icons">healing</i></a></li>
+    </ul>
+  </div>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="js/materialize.js"></script>
+  <script type="text/javascript" src="js/seedrandom.min.js"></script>
   <script type="text/javascript" src="js/definitions.js"></script>
   <script type="text/javascript" src="js/audio.js"></script>
   <script type="text/javascript" src="js/util.js"></script>
