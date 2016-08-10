@@ -95,13 +95,13 @@ class Interface {
 
   setupNav() {
     for (let hero of this.player.heroes) {
-      let name = 'Knight';
+      let name = 'knight';
       if (hero.subtype == MAGE)
-        name = 'Mage';
+        name = 'mage';
       else if (hero.subtype == ROGUE)
-        name = 'Rogue';
+        name = 'rogue';
       else if (hero.subtype == ARCHER)
-        name = 'Archer';
+        name = 'archer';
 
       let id = name + '_id';
       $('<div class="collapsible-body">' +
@@ -112,7 +112,14 @@ class Interface {
       //var UI = this;
       //var primary = this.getItems(hero.primary.type);
       $('#collapsible_heroes').on('click', { ui : this }, function(event) {
-        //ui.currentHero = hero;
+        $('#hero_icon').removeClass();
+        $('#hero_icon').addClass(name);
+
+        //let position = hero.primary.sprite.offsetX + " -" + hero.primary.sprite.offsetY; 
+        //$('#primary_icon').attr("object-position", position);
+
+
+        // Populate hero stats
         $('#stats').text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
                          "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
                          "  Strength: " + hero.strength + "\n" +

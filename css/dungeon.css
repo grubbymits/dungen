@@ -8,3 +8,24 @@
 p.msg {
     white-space: pre-line;
 }
+
+img {
+  width: 64px;
+  height: 64px;
+  object-fit: none;
+  object-position: 0 0;
+}
+
+.rogue {
+  object-position: -192px -1152px;
+}
+.archer {
+  object-position: -256px -1152px;
+}
+.knight {
+  object-position: -320px -1152px;
+}
+.mage {
+  object-position: -384px -1152px;
+}
+

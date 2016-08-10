@@ -150,6 +150,7 @@ for (let x = 3; x < 8; ++x) {
 
 for (let x = 0; x < 8; ++x) {
   spellSprites.push(new Sprite(greenSpriteSheet, x, SPELL_OFFSET));
+
   swordSprites.push(new Sprite(greenSpriteSheet, x, SWORD_OFFSET));
   fireSwordSprites.push(new Sprite(redSpriteSheet, x, SWORD_OFFSET));
   iceSwordSprites.push(new Sprite(blueSpriteSheet, x, SWORD_OFFSET));
