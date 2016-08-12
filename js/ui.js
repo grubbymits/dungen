@@ -153,9 +153,10 @@ class Interface {
         let items = event.data.ui.getItems(hero.primary.type);
         for (let item of items.keys()) {
 
+          let string = item.name + ", ATK: " + item.power + ", RNG: " + item.range;
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#primary_equipment').on('click',
+            string + '</div>').insertAfter('#primary_equipment').on('click',
                                               { ui : event.data.ui },
             function(event) {
               hero.equipItem(item);
@@ -169,9 +170,19 @@ class Interface {
         items = event.data.ui.getItems(hero.secondary.type);
         for (let item of items.keys()) {
 
+          let string = item.name;
+          if (item.type == THROWING)
+            string += ", ATK: " + item.power + ", RNG: " + item.range;
+          else if (item.type == ARROWS)
+            string += ", ATK: " + item.power;
+          else if (item.type == SHIELD)
+            string += ", DEF: " + item.defense;
+          else
+            console.log("unhandled item type!");
+
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#secondary_equipment').on('click',
+            string + '</div>').insertAfter('#secondary_equipment').on('click',
                                               { ui : event.data.ui },
             function(event) {
               hero.equipItem(item);
@@ -186,9 +197,10 @@ class Interface {
         items = event.data.ui.getItems(HELMET);
         for (let item of items.keys()) {
 
+          let string = item.name + ", DEF: " + item.defense;
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#head_equipment').on('click',
+            string + '</div>').insertAfter('#head_equipment').on('click',
                                               { ui : event.data.ui },
             function(event) {
               hero.equipItem(item);
@@ -203,9 +215,10 @@ class Interface {
         items = event.data.ui.getItems(ARMOUR);
         for (let item of items.keys()) {
 
+          let string = item.name + ", DEF: " + item.defense;
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#body_equipment').on('click',
+            string + '</div>').insertAfter('#body_equipment').on('click',
                                               { ui : event.data.ui },
             function(event) {
               hero.equipItem(item);
