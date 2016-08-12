@@ -26,6 +26,10 @@ class Game {
     let startPos = this.theMap.generate(this.level);
     let character = this.createHero(startPos, playerType);
     let player = new Player(character);
+    player.addItem(armours[1]);
+    player.addItem(helmets[1]);
+    player.addItem(swords[1]);
+    player.addItem(staffs[1]);
     this.addPlayer(player);
     let UI = new Interface(this.player);
     UI.centreCamera();

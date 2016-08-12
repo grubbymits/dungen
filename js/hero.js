@@ -140,24 +140,25 @@ class Hero extends Actor {
   }
   
   equipItem(item) {
+    console.log("equipItem", item);
     switch(item.type) {
       case ARMOUR:
-      return this.equipArmour = item;
+      this.equipArmour = item;
       break;
       case HELMET:
-      return this.equipHelmet = item;
+      this.equipHelmet = item;
       break;
       case SHIELD:
       case ARROWS:
       case THROWING:
       case SCROLL:
-      return this.equipSecondary = item;
+      this.equipSecondary = item;
       break;
       case SWORD:
       case AXE:
       case BOW:
       case STAFF:
-      return this.equipPrimary = item;
+      this.equipPrimary = item;
       break;
     }
   }

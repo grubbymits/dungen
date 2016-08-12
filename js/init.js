@@ -1,7 +1,9 @@
 "use strict";
 
 $(document).ready(function() {
-  $(".button-collapse").sideNav();
+  $(".button-collapse").sideNav({
+    menuWidth : 5.5 * TILE_SIZE
+  });
 });
 
 function begin() {
@@ -38,9 +40,6 @@ function begin() {
   }
 
   var UI = theGame.init(playerType);
-  //var character = theGame.createHero(startPos, playerType);
-  //var player = new Player(character);
-  //var UI = new Interface(player);
 
   function *generator() {
     let actor = 0;

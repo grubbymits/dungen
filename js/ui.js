@@ -93,6 +93,34 @@ class Interface {
     this.setupNav();
   }
 
+  drawEquipment(hero) {
+    // Draw hero icon and the current equipment
+    let primaryPos = "-" + hero.primary.sprite.offsetX + "px -" + hero.primary.sprite.offsetY + "px";
+    let secondaryPos = "-" + hero.secondary.sprite.offsetX + "px -" + hero.secondary.sprite.offsetY + "px";
+    let headPos = "-" + hero.helmet.sprite.offsetX + "px -" + hero.helmet.sprite.offsetY + "px";
+    let bodyPos = "-" + hero.armour.sprite.offsetX + "px -" + hero.armour.sprite.offsetY + "px";
+    console.log("primary = ", hero.primary, "position =", primaryPos);
+    $('#primary_icon').css("object-position", "");
+    $('#primary_icon').css("object-position", primaryPos);
+    $('#secondary_icon').css("object-position", secondaryPos);
+    $('#head_icon').css("object-position", headPos);
+    $('#body_icon').css("object-position", bodyPos);
+  }
+
+  drawStats(hero) {
+        // Populate hero stats
+        $('#stats').text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
+                         "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
+                         "  Strength: " + hero.strength + "\n" +
+                         "  Endurance: " + hero.endurance + "\n" +
+                         "  Agility: " + hero.agility + "\n" +
+                         "  Wisdom: " + hero.wisdom + "\n" +
+                         "  Will: " + hero.will + "\n" +
+                         "  Attack: " + hero.primaryAtkPower + "\n" +
+                         "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
+                         "  Defense: " + hero.physicalDefense);
+  }
+
   setupNav() {
     for (let hero of this.player.heroes) {
       let name = 'knight';
@@ -109,27 +137,13 @@ class Interface {
             + name +'</a></div>').insertAfter('#hero_list');
 
       // Setup stats display
-      //var UI = this;
-      //var primary = this.getItems(hero.primary.type);
       $('#collapsible_heroes').on('click', { ui : this }, function(event) {
+
         $('#hero_icon').removeClass();
         $('#hero_icon').addClass(name);
 
-        //let position = hero.primary.sprite.offsetX + " -" + hero.primary.sprite.offsetY; 
-        //$('#primary_icon').attr("object-position", position);
-
-
-        // Populate hero stats
-        $('#stats').text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
-                         "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
-                         "  Strength: " + hero.strength + "\n" +
-                         "  Endurance: " + hero.endurance + "\n" +
-                         "  Agility: " + hero.agility + "\n" +
-                         "  Wisdom: " + hero.wisdom + "\n" +
-                         "  Will: " + hero.will + "\n" +
-                         "  Attack: " + hero.primaryAtkPower + "\n" +
-                         "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
-                         "  Defense: " + hero.physicalDefense);
+        event.data.ui.drawEquipment(hero);
+        event.data.ui.drawStats(hero);
 
         // Populate primary equipment list
         $('#equipment_list').empty();
@@ -141,7 +155,13 @@ class Interface {
 
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#primary_equipment');
+            item.name + '</div>').insertAfter('#primary_equipment').on('click',
+                                              { ui : event.data.ui },
+            function(event) {
+              hero.equipItem(item);
+              event.data.ui.drawEquipment(hero);
+              event.data.ui.drawStats(hero);
+            });
         }
         $('#equipment_list').append(
           '<li><div class="collapsible-header" id="secondary_equipment">Secondary</div></li>');
@@ -151,7 +171,13 @@ class Interface {
 
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#secondary_equipment');
+            item.name + '</div>').insertAfter('#secondary_equipment').on('click',
+                                              { ui : event.data.ui },
+            function(event) {
+              hero.equipItem(item);
+              event.data.ui.drawEquipment(hero);
+              event.data.ui.drawStats(hero);
+            });
         }
 
         // Populate the head gear drop down
@@ -162,7 +188,13 @@ class Interface {
 
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#head_equipment');
+            item.name + '</div>').insertAfter('#head_equipment').on('click',
+                                              { ui : event.data.ui },
+            function(event) {
+              hero.equipItem(item);
+              event.data.ui.drawEquipment(hero);
+              event.data.ui.drawStats(hero);
+            });
         }
 
         // Populate the armour drop down
@@ -173,7 +205,13 @@ class Interface {
 
           $('<div class="collapsible-body">' +
             '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            item.name + '</div>').insertAfter('#body_equipment');
+            item.name + '</div>').insertAfter('#body_equipment').on('click',
+                                              { ui : event.data.ui },
+            function(event) {
+              hero.equipItem(item);
+              event.data.ui.drawEquipment(hero);
+              event.data.ui.drawStats(hero);
+            });
         }
       });
     }
