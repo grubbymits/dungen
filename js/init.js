@@ -69,9 +69,13 @@ function begin() {
 
   var run = function() {
     if (!document.hasFocus() || theGame.isLoading) {
-      theGame.pause();
+      if (theGame.isRunning) {
+        theGame.pause();
+      }
     } else {
-      theGame.play();
+      if (!theGame.isRunning) {
+        theGame.play();
+      }
       // set a maximum game rate
       if (new Date().getTime() >= theGame.nextGameTick) {
         theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;

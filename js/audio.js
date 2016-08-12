@@ -8,6 +8,10 @@ class AudioResource {
   pause() {
     this.audio.pause();
   }
+  stop() {
+    this.audio.pause();
+    this.audio.currentTime = 0;
+  }
 }
 class SoundEffect extends AudioResource {
   constructor(name) {
@@ -19,6 +23,7 @@ class Song extends AudioResource {
   constructor(name) {
     super(name);
     this.audio.src = "res/audio/music/" + name + ".ogg";
+    this.audio.loop = false;
   }
 }
 
@@ -37,12 +42,11 @@ class Audio {
                         new Song("15-Ultraviolet"),
                         new Song("16-AllThingsEnd")
                       ];
-    for (let track of this.musicArray) {
-      track.audio.addEventListener("ended", this.playNextSong.bind(this));
-    }
-    this.currentSong = this.musicArray[0];
     this.currentIndex = 0;
-    this.currentSong.audio.autoplay = true;
+    this.currentSong = this.musicArray[0];
+    for (let track in this.musicArray) {
+      this.musicArray[track].audio.addEventListener("ended", this.playNextSong.bind(this));
+    }
     
     this.slashAttackSound = new SoundEffect("melee_woosh");
     this.hitSound = new SoundEffect("hit");
@@ -55,14 +59,15 @@ class Audio {
     this.electricMagicSound = new SoundEffect("Bolt2");
     this.cureSound = new SoundEffect("cure");
   }
+
   playNextSong() {
-    console.log("play next song");
-    this.currentIndex = ((this.currentIndex) + 1) % this.musicArray.length;
+    this.currentIndex = (this.currentIndex + 1) % this.musicArray.length;
+    console.log("play next song, index:", this.currentIndex);
     this.currentSong = this.musicArray[this.currentIndex];
-    this.currentSong.audio.currentTime = 0;
     this.currentSong.play();
   }
   playMusic() {
+    console.log("playMusic");
     if (!this.currentSong.playing) {
       this.currentSong.play();
     }
