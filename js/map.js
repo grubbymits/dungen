@@ -205,8 +205,15 @@ class GameMap {
         if (x == vec.x && y == vec.y) {
           continue;
         }
-        if (this.locations[x][y].isBlocked ||
-            this.locations[x][y].isOccupied) {
+        if (x != vec.x && y != vec.y) {
+          // diagnoal neighbours are only possible if the adjacent tiles are
+          // are free
+          if (this.locations[x][vec.y].isBlocked ||
+              this.locations[vec.x][y].isBlocked) {
+            continue;
+          }
+        }
+        if (this.locations[x][y].isBlocked) {
           continue;
         }
         neighbours.push(this.locations[x][y].vec);
