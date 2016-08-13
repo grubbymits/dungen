@@ -4,7 +4,6 @@ class UIEvent {
   constructor(context, start, millisecs, pos) {
     this.context = context;
     this.startTime = start;
-    console.log("construct event, pos: ", pos);
     this.endTime = this.startTime + millisecs;
     this.position = pos;
     this.x = pos.x * TILE_SIZE * UPSCALE_FACTOR;

@@ -30,10 +30,11 @@ class Game {
     player.addItem(helmets[1]);
     player.addItem(swords[1]);
     player.addItem(staffs[1]);
-    this.addPlayer(player);
+    this.player = player;
     let UI = new Interface(this.player);
     UI.centreCamera();
     this.loading = false;
+    this.renderMap();
     return UI;
   }
 
@@ -59,13 +60,16 @@ class Game {
     this.play();
     this.loading = false;
   }
-
+  
   renderMap() {
     // draw everything
+    for (let hero of this.heroes) {
+      this.theMap.addVisibleTiles(hero.pos, hero.vision);
+    }
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
         let loc = this.theMap.getLocation(x,y);
-        if (loc.dirty && loc.type != CEILING) {
+        if (loc.dirty && loc.type != CEILING && loc.isVisible) {
           this.context.fillStyle = '#000000';
           this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
                                 y * TILE_SIZE * UPSCALE_FACTOR,
@@ -77,10 +81,6 @@ class Game {
         }
       }
     }
-  }
-
-  addPlayer(player) {
-    this.player = player;
   }
 
   addTextEvent(string, pos) {
@@ -208,10 +208,16 @@ class Game {
 
   renderEntities() {
     for (let actor of this.actors) {
-      actor.render();
+      let loc = this.theMap.getLocation(actor.pos.x, actor.pos.y);
+      if (loc.isVisible) {
+        actor.render();
+      }
     }
     for (let object of this.objects) {
-      object.render();
+      let loc = this.theMap.getLocation(object.pos.x, object.pos.y);
+      if (loc.isVisible) {
+        object.render();
+      }
     }
   }
 

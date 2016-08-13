@@ -42,13 +42,13 @@ function begin() {
   var UI = theGame.init(playerType);
 
   function *generator() {
-    let actor = 0;
+    let actorIdx = 0;
     while(true) {
       let updateActor = false;
-      let action = theGame.getAction(actor);
+      let action = theGame.getAction(actorIdx);
         
       if (action) {
-        theGame.applyEffects(actor);
+        theGame.applyEffects(actorIdx);
       }
         
       while(action) {
@@ -57,7 +57,7 @@ function begin() {
         updateActor = true;
       }
       if (updateActor) {
-        actor = (actor + 1) % theGame.actors.length;
+        actorIdx = (actorIdx + 1) % theGame.actors.length;
       }
       yield;
     }

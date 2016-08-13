@@ -35,10 +35,14 @@ class Location {
     this.tileType = type;
     this.vec = new Vec(x, y);
     this.dirty = true;
+    this.visiblity = false;
   }
   get isBlocked() {
     return (this.entity !== null || this.tileType == WALL ||
             this.tileType == CEILING);
+  }
+  get isWallOrCeiling() {
+    return (this.tileType == WALL || this.tileType == CEILING);
   }
   set blocked(blocking) {
     this.blocking = blocking;
@@ -51,6 +55,12 @@ class Location {
   }
   get type() {
     return this.tileType;
+  }
+  set visible(visible) {
+    this.visiblity = visible;
+  }
+  get isVisible() {
+    return this.visiblity;
   }
 }
 
@@ -89,6 +99,7 @@ class GameMap {
     this.game = game;
     this.minRoomWidth = MIN_SMALL;
     this.minRoomHeight = MIN_SMALL;
+    this.shadow = new Set();
     this.reset();
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
@@ -220,6 +231,79 @@ class GameMap {
       }
     }
     return neighbours;
+  }
+  
+  createShadow(startX, startY, maxDistance, octant) {
+    for (let row = 1; row < maxDistance; ++row) {
+      for (let col = 0; col <= row; ++col) {
+        let x = startX;
+        let y = startY;
+        switch(octant) {
+          case 0: x -= col; y -= row; break;  // was 7
+          case 1: x -= row; y -= col; break;  // was 6
+          case 3: x += col; y -= row; break;  // was 0
+          case 2: x -= row; y += col; break;  // was 5
+          case 4: x -= col; y += row; break;  // was 4
+          case 5: x += row; y -= col; break;  // was 1
+          case 6: x += row; y += col; break;  // was 2
+          case 7: x += col; y += row; break;  // was 3
+        }
+        //let y = startY + (row * dy);
+        if (this.isOutOfRange(x, y)) {
+          continue;
+        }
+        if (this.shadow.has(this.getLocation(x, y))) {
+          continue;
+        }
+        this.shadow.add(this.getLocation(x, y));
+      }
+    }
+  }
+  
+  getOctant(startX, startY, maxDistance, octant) {
+    for (let row = 1; row < maxDistance; ++row) {
+      for (let col = 0; col <= row; ++col) {
+        let x = startX;
+        let y = startY;
+        switch(octant) {
+          case 0: x -= col; y -= row; break;  // was 7
+          case 1: x -= row; y -= col; break;  // was 6
+          case 3: x += col; y -= row; break;  // was 0
+          case 2: x -= row; y += col; break;  // was 5
+          case 4: x -= col; y += row; break;  // was 4
+          case 5: x += row; y -= col; break;  // was 1
+          case 6: x += row; y += col; break;  // was 2
+          case 7: x += col; y += row; break;  // was 3
+        }
+        //let y = startY + (row * dy);
+        if (this.isOutOfRange(x, y)) {
+          continue;
+        }
+        if (this.shadow.has(this.getLocation(x, y))) {
+          continue;
+        }
+        if (this.locations[x][y].isWallOrCeiling) {
+          this.createShadow(x, y, maxDistance, octant);
+        }
+        this.locations[x][y].visible = true;
+      }
+    }
+  }
+  
+  addVisibleTiles(start, maxDistance) {
+    //console.log("addVisibleTiles from", start);
+    this.shadow.clear();
+    let octant = 0;
+    for (let x = -1; x < 2; ++x) {
+      for (let y = -1; y < 2; ++y) {
+        this.locations[start.x + x][start.y + y].visible = true;
+        if (0 === x && 0 === y) {
+          continue;
+        }
+        this.getOctant(start.x, start.y, maxDistance, octant);
+        ++octant;
+      }
+    }
   }
 
   getPath(start, goal) {
@@ -631,6 +715,7 @@ class GameMap {
   }
 
   reset() {
+    this.shadow.clear();
     this.locations = [];
     this.rooms = [];
     for (let x = 0; x < this.xMax; x++) {

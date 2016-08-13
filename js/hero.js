@@ -3,6 +3,7 @@
 class Hero extends Actor {
   constructor(health, energy,
               strength, agility, wisdom, will, endurance,
+              vision,
               position, subtype, game) {
     super(health, energy, position,
           heroSprites[subtype], damageHeroSprites[subtype],
@@ -18,6 +19,7 @@ class Hero extends Actor {
     this.wisdom = wisdom;
     this.will = will;
     this.endurance = endurance;
+    this.vision = vision;
     this.subtype = subtype;
     
     this.maxHealth += Math.floor(this.maxHealth *
@@ -168,6 +170,7 @@ class Knight extends Hero {
   constructor(position, game) {
     super(50, 15,
           22, 14, 7, 10, 17,     // 70
+          5,
           position, KNIGHT, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -180,6 +183,7 @@ class Mage extends Hero {
   constructor(position, game) {
     super(50, 15,
           9, 13, 22, 17, 9,
+          6,
           position, MAGE, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipPrimary = staffs[STAFF0];
@@ -198,6 +202,7 @@ class Rogue extends Hero {
   constructor(position, game) {
     super(50, 15,
           15, 20, 10, 14, 11,
+          7,
           position, ROGUE, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
@@ -223,6 +228,7 @@ class Archer extends Hero {
   constructor(position, game) {
     super(50, 15,
           13, 22, 9, 11, 15,
+          7,
           position, ARCHER, game);
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
