@@ -250,7 +250,7 @@ class GameMap {
   createShadow(startX, startY, maxDistance, octant) {
     for (let row = 1; row < maxDistance; ++row) {
       for (let col = 0; col <= row; ++col) {
-        let vec = this.getOctantVec(startX, startY, row, col, octant);
+        let vec = this.getOctantVec(startX, startY, col, row, octant);
         let x = vec.x;
         let y = vec.y;
         if (this.isOutOfRange(x, y)) {

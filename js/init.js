@@ -82,7 +82,6 @@ function begin() {
         theGame.renderMap();
         theGame.renderEntities();
         UI.renderInfo();
-        UI.renderHUD();
       }
     }
     window.requestAnimationFrame(run);
