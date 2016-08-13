@@ -116,6 +116,7 @@ class Game {
     this.actors.push(hero);
     this.heroes.push(hero);
     this.currentEffects.set(hero, []);
+    this.theMap.placeEntity(pos, hero);
     return hero;
   }
 
