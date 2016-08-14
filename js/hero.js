@@ -5,7 +5,7 @@ class Hero extends Actor {
               strength, agility, wisdom, will, endurance,
               vision,
               position, subtype, game) {
-    super(health, energy, position,
+    super(health, energy, vision, position,
           heroSprites[subtype], damageHeroSprites[subtype],
           HERO, game);
     this.equipPrimary = null;
@@ -19,7 +19,6 @@ class Hero extends Actor {
     this.wisdom = wisdom;
     this.will = will;
     this.endurance = endurance;
-    this.vision = vision;
     this.subtype = subtype;
     
     this.maxHealth += Math.floor(this.maxHealth *
@@ -39,7 +38,10 @@ class Hero extends Actor {
     this.currentExp = 0;
     this.expToNextLvl = 15;
     this.id = 1;
+    
+    this.findTarget.targets = this.game.monsters;
   }
+  
   get armour() {
     return this.equipArmour;
   }

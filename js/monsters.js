@@ -2,21 +2,21 @@
 
 class Monster extends Actor {
   constructor(health, energy, index,
-              defense, range, xp,
+              defense, vision, xp,
               atkPower, atkType, atkEnergy,
               position, game) {
-    super(health, energy, position,
+    super(health, energy, vision, position,
           monsterSprites[index], monsterDamageSprites[index],
           MONSTER, game);
     this.level = this.game.level;
     this.index = index;
     this.exp = xp * this.level;
-    this.range = range;
     this.attackPower = atkPower;
     this.attackType = atkType;
     this.attackEnergy = atkEnergy;
     this.physicalDefense = defense;
     //this.meleeSound = document.getElementById("punchSound");
+    this.findTarget.targets = this.game.heroes;
   }
   get action() {
     this.currentSprite = this.sprite;
@@ -64,7 +64,7 @@ class Monster extends Actor {
 class Rat extends Monster {
   constructor(position, game) {
     super(40, 4, RAT,          // health, energy
-          15, 3, 5,        // defense, range, xp
+          15, 7, 5,        // defense, range, xp
           1.5, NORMAL, 2,   // atkPower, atkType, atkEnergy
           position, game);
   }
@@ -73,7 +73,7 @@ class Rat extends Monster {
 class Spiders extends Monster {
   constructor(position, game) {
     super(44, 4, SPIDERS,
-          15, 3, 6,
+          15, 7, 6,
           1.5, NORMAL, 2,
           position, game);
   }
@@ -82,7 +82,7 @@ class Spiders extends Monster {
 class Lizard extends Monster {
   constructor(position, game) {
     super(60, 5, LIZARD,
-          18, 4, 8,
+          18, 7, 8,
           2, NORMAL, 2,
           position, game);
   }
@@ -91,7 +91,7 @@ class Lizard extends Monster {
 class SpiderChampion extends Monster {
   constructor(position, game) {
     super(70, 4, SPIDER_CHAMPION,
-          20, 4, 10,
+          20, 8, 10,
           2.5, NORMAL, 2,
           position, game);
   }

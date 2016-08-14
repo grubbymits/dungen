@@ -234,58 +234,119 @@ class Interact extends Action {
   }
 }
 
+class CalcVisibility extends Action {
+  constructor(actor) {
+    super(actor);
+    this.map = this.actor.game.map;
+    this.visible = new Set();
+    this.shadow = new Set();
+    this.range = this.actor.vision;
+    this.start = this.actor.pos;
+  }
+  
+  createShadow(startX, startY, range, octant) {
+    for (let row = 1; row < range; ++row) {
+      for (let col = 0; col <= row; ++col) {
+        let vec = getOctantVec(startX, startY, col, row, octant);
+        let x = vec.x;
+        let y = vec.y;
+        if (this.map.isOutOfRange(x, y)) {
+          continue;
+        }
+        let loc = this.map.getLocation(x, y);
+        if (this.shadow.has(loc)) {
+          continue;
+        } else {
+          this.shadow.add(loc);
+        }
+      }
+    }
+  }
+  
+  isVisible(target) {
+    let targetLoc = this.map.vecToLoc(target.pos);
+    for (let visible of this.visible) {
+      if (visible == targetLoc) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  perform() {
+    this.shadow.clear();
+    this.visible.clear();
+    
+    for (let octant = 0; octant < 8; ++octant) {
+      for (let row = 1; row < this.range; ++row) {
+        for (let col = 0; col <= row; ++col) {
+          let vec = getOctantVec(this.start.x, this.start.y, col, row, octant);
+          let x = vec.x;
+          let y = vec.y;
+          if (this.map.isOutOfRange(x, y)) {
+            continue;
+          }
+          let loc = this.map.getLocation(x, y);
+          if (this.shadow.has(loc)) {
+            continue;
+          } else if (loc.isWallOrCeiling) {
+            this.createShadow(x, y, this.range - row, octant);
+          } else {
+            this.visible.add(loc);
+          }
+        }
+      }
+    }
+    console.log("visible tiles:", this.visible.size);
+  }
+}
+
 class FindTarget extends Action {
   constructor(actor) {
     super(actor);
     this.map = this.actor.game.map;
+    this.calcVisibility = new CalcVisibility(actor);
+    this.calcVisibility.perform();
+    this.prevPos = this.actor.pos;
   }
-  findAndAttack(x, y) {
-    let target = this.map.getEntity(x, y);
-    if (target) {
-      if (target.kind != this.actor.kind &&
-          target.kind != OBJECT) {
-        this.actor.attack.target = target;
-        this.actor.nextAction = this.actor.attack;
-        return this.actor.nextAction;
+  
+  set targets(targets) {
+    this.targetGroup = targets;
+  }
+  
+  perform() {
+    let pos = this.actor.pos;
+    this.range = this.actor.vision;
+    let visibleTargets = [];
+    
+    if (pos.x != this.prevPos.x || pos.y != this.prevPos.y) {
+      this.calcVisibility.perform();
+      this.prevPos = pos;
+    }
+    
+    for (let target of this.targetGroup) {
+      if (target.pos.getCost(this.actor.pos) > this.range) {
+        continue;
+      }
+      if (this.calcVisibility.isVisible(target)) {
+        visibleTargets.push(target);
       }
     }
-    return null;
-  }
-  perform() {
-    let radius = 0;
-    let pos = this.actor.pos;
-    this.range = this.actor.range;
-
-    while (radius < this.range) {
-      radius = radius + 1;
-      for (let x = pos.x - radius; x < pos.x + radius; x++) {
-        let y = pos.y - radius;
-        let action = this.findAndAttack(x, y);
-        if (action !== null) {
-          return action;
+    
+    if (visibleTargets.length !== 0) {
+      let finalTarget = visibleTargets[0];
+      let smallestCost = finalTarget.pos.getCost(this.actor.pos);
+      
+      for (let target of visibleTargets) {
+        let cost = target.pos.getCost(this.actor.pos);
+        if (cost < smallestCost) {
+          smallestCost = cost;
+          finalTarget = target;
         }
       }
-      for (let x = pos.x - radius; x < pos.x + radius; x++) {
-        let y = pos.y + radius;
-        let action = this.findAndAttack(x, y);
-        if (action !== null) {
-          return action;
-        }
-      }
-      for (let y = pos.y - radius; y < pos.y + radius; y++) {
-        let x = pos.x - radius;
-        let action = this.findAndAttack(x, y);
-        if (action !== null) {
-          return action;
-        }
-      }
-      for (let y = pos.y - radius; y < pos.y + radius; y++) {
-        let x = pos.x + radius;
-        let action = this.findAndAttack(x, y);
-        if (action !== null) {
-          return action;
-        }
-      }
+      this.actor.attack.target = finalTarget;
+      this.actor.nextAction = this.actor.attack;
+      return this.actor.nextAction;
     }
     this.actor.nextAction = null;
     return null;

@@ -5,6 +5,7 @@ class Game {
     console.log("Game.constructor");
     this.actors = [];
     this.heroes = [];
+    this.monsters = [];
     this.currentEffects = new Map();
     this.objects = [];
     this.context = context;
@@ -46,6 +47,7 @@ class Game {
     this.context.fillStyle = '#000000';
     this.context.fillRect(0, 0, this.theMap.width * TILE_SIZE, this.theMap.height * TILE_SIZE);
     this.actors = [];
+    this.monsters = [];
     this.objects = [];
     this.currentEffects.clear();
 
@@ -79,6 +81,21 @@ class Game {
           tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
           loc.dirty = false;
         }
+      }
+    }
+  }
+  
+  renderEntities() {
+    for (let actor of this.actors) {
+      let loc = this.theMap.getLocation(actor.pos.x, actor.pos.y);
+      if (loc.isVisible) {
+        actor.render();
+      }
+    }
+    for (let object of this.objects) {
+      let loc = this.theMap.getLocation(object.pos.x, object.pos.y);
+      if (loc.isVisible) {
+        object.render();
       }
     }
   }
@@ -135,6 +152,7 @@ class Game {
       monster = new SpiderChampion(pos, this);
     }
     this.actors.push(monster);
+    this.monsters.push(monster);
     this.currentEffects.set(monster, []);
     this.theMap.placeEntity(pos, monster);
     return monster;
@@ -206,22 +224,7 @@ class Game {
       }
     }
   }
-
-  renderEntities() {
-    for (let actor of this.actors) {
-      let loc = this.theMap.getLocation(actor.pos.x, actor.pos.y);
-      if (loc.isVisible) {
-        actor.render();
-      }
-    }
-    for (let object of this.objects) {
-      let loc = this.theMap.getLocation(object.pos.x, object.pos.y);
-      if (loc.isVisible) {
-        object.render();
-      }
-    }
-  }
-
+  
   get map() {
     return this.theMap;
   }

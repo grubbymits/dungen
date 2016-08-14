@@ -186,7 +186,7 @@ class GameMap {
   }
 
   setDirty(pos) {
-    if (!this.isOutOfRange(pos))
+    if (!this.isOutOfRange(pos.x, pos.y))
       this.locations[pos.x][pos.y].dirty = true;
   }
 
@@ -233,24 +233,11 @@ class GameMap {
     return neighbours;
   }
   
-  getOctantVec(x, y, col, row, octant) {
-    switch(octant) {
-      case 0: x -= col; y -= row; break;  // was 7
-      case 1: x -= row; y -= col; break;  // was 6
-      case 3: x += col; y -= row; break;  // was 0
-      case 2: x -= row; y += col; break;  // was 5
-      case 4: x -= col; y += row; break;  // was 4
-      case 5: x += row; y -= col; break;  // was 1
-      case 6: x += row; y += col; break;  // was 2
-      case 7: x += col; y += row; break;  // was 3
-    }
-    return new Vec(x, y);
-  }
   
   createShadow(startX, startY, maxDistance, octant) {
     for (let row = 1; row < maxDistance; ++row) {
       for (let col = 0; col <= row; ++col) {
-        let vec = this.getOctantVec(startX, startY, col, row, octant);
+        let vec = getOctantVec(startX, startY, col, row, octant);
         let x = vec.x;
         let y = vec.y;
         if (this.isOutOfRange(x, y)) {
@@ -267,7 +254,7 @@ class GameMap {
   calcVisibilityForOctant(startX, startY, maxDistance, octant) {
     for (let row = 1; row < maxDistance; ++row) {
       for (let col = 0; col <= row; ++col) {
-        let vec = this.getOctantVec(startX, startY, col, row, octant);
+        let vec = getOctantVec(startX, startY, col, row, octant);
         //let y = startY + (row * dy);
         let x = vec.x;
         let y = vec.y;
