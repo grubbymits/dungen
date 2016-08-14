@@ -233,6 +233,7 @@ class Interface {
   }
 
   renderInfo() {
+    let game = this.player.game;
     // Draw text onto the canvas for ~1 second to inform the player of changes.
     // - chest contents
     // - exp gain
@@ -242,15 +243,15 @@ class Interface {
       if (!event.isFinished()) {
         event.render();
       } else {
-        this.player.game.map.setDirty(event.pos);
+        game.map.setDirty(event.pos);
         let pos = new Vec(event.pos.x - 1, event.pos.y - 1);
-        this.player.game.map.setDirty(pos);
+        game.map.setDirty(pos);
         pos.x++;
-        this.player.game.map.setDirty(pos);
+        game.map.setDirty(pos);
         pos.x++;
-        this.player.game.map.setDirty(pos);
+        game.map.setDirty(pos);
         pos.x++;
-        this.player.game.map.setDirty(pos);
+        game.map.setDirty(pos);
         delete this.events[i];
         this.events.splice(i, 1);
       }
@@ -258,6 +259,9 @@ class Interface {
     let hero = this.player.currentHero;
     $('#hero_hud').text("HP: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
                         "EP: " + hero.currentEnergy + "/" + hero.maxEnergy);
+    $('#score_hud').text("Chests: " + game.openChests +"/" + game.totalChests + "\n" +
+                         "Killed: " + game.monstersKilled + "/" + game.totalMonsters + "\n" +
+                         "Exp: " + game.expGained);
   }
 
   levelUp(hero) {

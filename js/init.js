@@ -86,5 +86,6 @@ window.onload = function begin() {
     }
     window.requestAnimationFrame(run);
   };
+  $('#load_bar').hide();
   run();
 };

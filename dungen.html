@@ -17,7 +17,7 @@
     style="left: 0px; top: 0px; position: absolute; zIndex: -1;">
   </canvas>
   <div class="container">
-    <div class="progress">
+    <div class="progress" style="width: 50%; top: 50%; left: 25%; position: fixed;" id="load_bar">
       <div class="indeterminate"></div>
     </div>
   </div>
@@ -74,8 +74,11 @@
       <li><a class="btn-floating orange" id="heal_button"><i class="material-icons">healing</i></a></li>
     </ul>
   </div>
-  <div style="position: fixed; bottom : 0px; left: 0px">
-    <p id="hero_hud" style="color:orange"></p>
+  <div style="position: fixed; top: 0px; left: 0px">
+    <p id="score_hud" style="color: orange; white-space: pre-wrap"></p>
+  </div>
+  <div style="position: fixed; bottom: 0px; left: 0px">
+    <p id="hero_hud" style="color: orange; white-space: pre-wrap"></p>
   </div>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/materialize.js"></script>

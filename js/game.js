@@ -8,6 +8,11 @@ class Game {
     this.monsters = [];
     this.currentEffects = new Map();
     this.objects = [];
+    this.totalChests = 0;
+    this.openChests = 0;
+    this.totalMonsters = 0;
+    this.monstersKilled = 0;
+    this.expGained = 0;
     this.context = context;
     this.level = 1;
     this.isRunning = false;
@@ -49,6 +54,11 @@ class Game {
     this.actors = [];
     this.monsters = [];
     this.objects = [];
+    this.totalChests = 0;
+    this.openChests = 0;
+    this.totalMonsters = 0;
+    this.monstersKilled = 0;
+    this.expGained = 0;
     this.currentEffects.clear();
 
     // re-add the heroes
@@ -155,12 +165,14 @@ class Game {
     this.monsters.push(monster);
     this.currentEffects.set(monster, []);
     this.theMap.placeEntity(pos, monster);
+    ++this.totalMonsters;
     return monster;
   }
 
   createChest(loc) {
     if (!loc.isBlocked && !loc.isOccupied) {
       this.objects.push(new Chest(loc.vec, this));
+      ++this.totalChests;
     }
   }
 
@@ -179,6 +191,10 @@ class Game {
   }
 
   killActor(actor) {
+    if (actor.kind == MONSTER) {
+      ++this.monstersKilled;
+      this.expGained += actor.exp;
+    }
     for (let index in this.actors) {
       if (this.actors[index] == actor) {
         console.log("killing actor, index:", index);
@@ -208,6 +224,10 @@ class Game {
         this.currentEffects.get(actor).splice(i, 1);
       }
     }
+  }
+  
+  openChest() {
+    ++this.openChests;
   }
   
   get map() {

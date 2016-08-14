@@ -120,6 +120,7 @@ class Chest extends Entity {
     this.sprite = chestSprites[1];
     this.open = true;
     this.game.audio.chest();
+    this.game.openChest();
     // randomly choose contained item, its normally going to be a potion or
     // treasure and for weapons and armour it is more likely to be a lesser
     // item rather than the best of its class.
