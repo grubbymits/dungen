@@ -414,7 +414,6 @@ class GameMap {
     }
   }
 
-
   get randomX() {
     let min = 1;
     let max = this.xMax - this.minRoomWidth;
@@ -616,6 +615,10 @@ class GameMap {
       console.log("room id:", roomIdx);
 
       let room = this.rooms[roomIdx];
+      if (room == this.entryRoom) {
+        continue;
+      }
+      
       const MAX_ATTEMPTS = 10;
       let attempts = 0;
       let x = room.pos.x;
@@ -692,8 +695,8 @@ class GameMap {
       throw("exit room is still null!");
 
     this.game.createStair(exit, true);
-    return this.game.createStair(entry, false);
-          
+    this.entryRoom = this.game.createStair(entry, false);
+    return this.entryRoom;
   }
 
   reset() {

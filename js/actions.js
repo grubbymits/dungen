@@ -297,7 +297,7 @@ class CalcVisibility extends Action {
         }
       }
     }
-    console.log("visible tiles:", this.visible.size);
+    console.log("performed visibility, found tiles:", this.visible.size);
   }
 }
 
@@ -325,9 +325,9 @@ class FindTarget extends Action {
     }
     
     for (let target of this.targetGroup) {
-      if (target.pos.getCost(this.actor.pos) > this.range) {
-        continue;
-      }
+      //if (target.pos.getCost(this.actor.pos) > this.range) {
+        //continue;
+      //}
       if (this.calcVisibility.isVisible(target)) {
         visibleTargets.push(target);
       }

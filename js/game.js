@@ -158,21 +158,6 @@ class Game {
     return monster;
   }
 
-  placeMonsters(number) {
-    console.log("placing", number, "monsters");
-    var monsters = 0;
-    while (monsters < number) {
-      let x = getBoundedRandom(1, this.theMap.xMax);
-      let y = getBoundedRandom(1, this.theMap.yMax);
-      let loc = this.theMap.getLocation(x, y);
-      if (!loc.isBlocked && !loc.isOccupied) {
-        let type = getBoundedRandom(RAT, TOAD);
-        this.createMonster(loc.vec, type);
-        monsters++;
-      }
-    }
-  }
-
   createChest(loc) {
     if (!loc.isBlocked && !loc.isOccupied) {
       this.objects.push(new Chest(loc.vec, this));

@@ -64,7 +64,7 @@ class Monster extends Actor {
 class Rat extends Monster {
   constructor(position, game) {
     super(40, 4, RAT,          // health, energy
-          15, 7, 5,        // defense, range, xp
+          15, 4, 5,        // defense, range, xp
           1.5, NORMAL, 2,   // atkPower, atkType, atkEnergy
           position, game);
   }
@@ -73,7 +73,7 @@ class Rat extends Monster {
 class Spiders extends Monster {
   constructor(position, game) {
     super(44, 4, SPIDERS,
-          15, 7, 6,
+          15, 4, 6,
           1.5, NORMAL, 2,
           position, game);
   }
@@ -82,7 +82,7 @@ class Spiders extends Monster {
 class Lizard extends Monster {
   constructor(position, game) {
     super(60, 5, LIZARD,
-          18, 7, 8,
+          18, 5, 8,
           2, NORMAL, 2,
           position, game);
   }
@@ -91,7 +91,7 @@ class Lizard extends Monster {
 class SpiderChampion extends Monster {
   constructor(position, game) {
     super(70, 4, SPIDER_CHAMPION,
-          20, 8, 10,
+          20, 5, 10,
           2.5, NORMAL, 2,
           position, game);
   }
