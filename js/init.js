@@ -6,17 +6,17 @@ $(document).ready(function() {
   });
 });
 
-function begin() {
+window.onload = function begin() {
   // Initialise canvas
-  var gameCanvas = document.createElement("canvas");
-  gameCanvas.setAttribute("id", "gameCanvas");
-  document.body.appendChild(gameCanvas);
+  var gameCanvas = document.getElementById("gameCanvas");
+  //gameCanvas.setAttribute("id", "gameCanvas");
+  //document.body.appendChild(gameCanvas);
   gameCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
   gameCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
-  gameCanvas.style.position = 'absolute';
-  gameCanvas.style.zIndex = '-1';
-  gameCanvas.style.left = '0px';
-  gameCanvas.style.top = '0px';
+  //gameCanvas.style.position = 'absolute';
+  //gameCanvas.style.zIndex = '-1';
+  //gameCanvas.style.left = '0px';
+  //gameCanvas.style.top = '0px';
   var gameContext = gameCanvas.getContext("2d");
   gameContext.fillStyle = '#000000';
   gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -87,4 +87,4 @@ function begin() {
     window.requestAnimationFrame(run);
   };
   run();
-}
+};

@@ -76,19 +76,6 @@ class Interface {
     document.getElementById("agility").addEventListener("click", this.increaseAgility.bind(this), false);
     document.getElementById("strength").addEventListener("click", this.increaseStrength.bind(this), false);
 
-    /*this.hud.addEventListener("click", this.controller.bind(this), false);
-
-    this.stats = document.createElement("canvas");
-    this.stats.style.position = "fixed";
-    this.stats.style.left = '0px';
-    this.stats.style.bottom = '0px';
-    this.stats.style.visibility = 'visible';
-    this.stats.style.zIndex = '4';
-    this.stats.style.background = "rgba(50, 75, 75, 0.7)";
-    this.stats.width = 3 * TILE_SIZE;
-    this.stats.height = TILE_SIZE / 2;
-    document.body.appendChild(this.stats);
-    this.statsContext = this.stats.getContext("2d");*/
     this.setupNav();
   }
 
@@ -241,6 +228,7 @@ class Interface {
     let y = this.player.currentHero.pos.y * TILE_SIZE * UPSCALE_FACTOR;
     x -= window.innerWidth / 2;
     y -= window.innerHeight / 2;
+    console.log("centreCamera to", x, y);
     window.scrollTo(x, y);
   }
 

@@ -15,15 +15,10 @@ const TREASURE_OFFSET = 15;
 const HERO_OFFSET = 18;
 const MONSTER_OFFSET = 19;
 
-const TOTAL_NUM_SHEETS = 3;
-
-var loadedSpriteSheets = 0;
-
 class SpriteSheet {
   constructor(name) {
     this.image = new Image();
     this.ready = false;
-    this.image.addEventListener('load', this.onLoad);
 
     if (name) {
       this.image.src = "res/img/" + name + ".png";
@@ -33,16 +28,6 @@ class SpriteSheet {
       throw new Error("No filename passed");
     }
     console.log("load", name);
-  }
-  onLoad() {
-    this.ready = true;
-    loadedSpriteSheets++;
-    if (loadedSpriteSheets == TOTAL_NUM_SHEETS) {
-      begin();
-    }
-  }
-  get isReady() {
-    return this.ready;
   }
 }
 
