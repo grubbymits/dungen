@@ -7,4 +7,4 @@ A rogue-like RPG in Javascript.
 - All mouse controlled
 
 Music by Trevor Lentz, taken from the album 'Convergence'.
-Sprites from 'Jerom': http://opengameart.org/users/jerom?page=1
+Sprites from 'Jerom': http://jerom-bd.blogspot.co.uk/
