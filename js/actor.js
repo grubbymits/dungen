@@ -18,7 +18,7 @@ class Actor extends Entity {
 
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
-    this.attack = new Attack(this);
+    this.attack = new InitAttack(this);
     this.findTarget = new FindTarget(this);
     this.primaryAttack = new PrimaryAttack(this);
     this.secondaryAttack = null;

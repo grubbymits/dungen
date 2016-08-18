@@ -1,8 +1,10 @@
 "use strict";
 
 class Monster extends Actor {
-  constructor(health, energy, index,
-              defense, vision, xp,
+  constructor(health, energy,
+              index,
+              defense, vision, agility,
+              xp,
               atkPower, atkType, atkEnergy,
               position, game) {
     super(health, energy, vision, position,
@@ -15,7 +17,7 @@ class Monster extends Actor {
     this.attackType = atkType;
     this.attackEnergy = atkEnergy;
     this.physicalDefense = defense;
-    //this.meleeSound = document.getElementById("punchSound");
+    this.agility = agility;
     this.findTarget.targets = this.game.heroes;
   }
   get action() {
@@ -63,36 +65,64 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(40, 4, RAT,          // health, energy
-          15, 4, 5,        // defense, range, xp
-          1.5, NORMAL, 2,   // atkPower, atkType, atkEnergy
+    super(40,     // health
+          4,      // energy
+          RAT,    // kind
+          15,     // defense
+          4,      // vision
+          13,     // agility
+          5,      // xp
+          1.5,    // attack power
+          NORMAL, // attack type
+          2,      // attack energy
           position, game);
   }
 }
 
 class Spiders extends Monster {
   constructor(position, game) {
-    super(44, 4, SPIDERS,
-          15, 4, 6,
-          1.5, NORMAL, 2,
+    super(44,
+          4,
+          SPIDERS,
+          15,
+          4,
+          14,
+          6,
+          1.5,
+          NORMAL,
+          2,
           position, game);
   }
 }
 
 class Lizard extends Monster {
   constructor(position, game) {
-    super(60, 5, LIZARD,
-          18, 5, 8,
-          2, NORMAL, 2,
+    super(60,
+          5,
+          LIZARD,
+          18,
+          5,
+          7,
+          8,
+          2,
+          NORMAL,
+          2,
           position, game);
   }
 }
 
 class SpiderChampion extends Monster {
   constructor(position, game) {
-    super(70, 4, SPIDER_CHAMPION,
-          20, 5, 10,
-          2.5, NORMAL, 2,
+    super(70,
+          4,
+          SPIDER_CHAMPION,
+          20,
+          5,
+          10,
+          10,
+          2.5,
+          NORMAL,
+          2,
           position, game);
   }
 }

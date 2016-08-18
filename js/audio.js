@@ -50,6 +50,7 @@ class Audio {
     
     this.slashAttackSound = new SoundEffect("melee_woosh");
     this.hitSound = new SoundEffect("hit");
+    this.dodgeSound = new SoundEffect("swipe");
     this.punchSound = new SoundEffect("punch");
     this.dieSound = new SoundEffect("enemy_die");
     this.chestSound = new SoundEffect("chest");
@@ -107,6 +108,9 @@ class Audio {
   }
   hit() {
     this.hitSound.play();
+  }
+  dodge() { 
+    this.dodgeSound.play();
   }
   punch() {
     this.punchSound.play();

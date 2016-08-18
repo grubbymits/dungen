@@ -104,7 +104,7 @@ class DealDamage extends Action {
   }
 }
 
-class PrimaryAttack extends Action {
+class AttackBase extends Action {
   constructor(actor) {
     super(actor);
     this.dealDamage = new DealDamage(actor, this);
@@ -112,6 +112,18 @@ class PrimaryAttack extends Action {
 
   set target(target) {
     this.targetActor = target;
+  }
+
+  get success() {
+    let dodgeChance = Math.random() * this.targetActor.agility;
+    let connectChance = Math.random() * this.actor.agility;
+    return connectChance > dodgeChance;
+  }
+}
+
+class PrimaryAttack extends AttackBase {
+  constructor(actor) {
+    super(actor);
   }
   
   get range() {
@@ -123,29 +135,27 @@ class PrimaryAttack extends Action {
   }
 
   perform() {
-    //if (target.dodges) {
-      //return null;
-    //} else {
     let energyRequired = this.actor.primaryAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
-    this.game.audio.playAttack(this.actor);
-    this.dealDamage.target = this.targetActor;
-    this.actor.useEnergy(energyRequired);
-    return this.dealDamage;
-    //}
+    if (this.success) {
+      this.game.audio.playAttack(this.actor);
+      this.dealDamage.target = this.targetActor;
+      this.actor.useEnergy(energyRequired);
+      return this.dealDamage;
+    } else {
+      this.actor.useEnergy(energyRequired);
+      this.game.addTextEvent("Dodged!", this.targetActor.pos);
+      this.game.audio.dodge();
+      return null;
+    }
   }
 }
 
-class SecondaryAttack extends Action {
+class SecondaryAttack extends AttackBase {
   constructor(actor) {
     super(actor);
-    this.dealDamage = new DealDamage(actor, this);
-  }
-
-  set target(target) {
-    this.targetActor = target;
   }
   
   get range() {
@@ -157,22 +167,25 @@ class SecondaryAttack extends Action {
   }
 
   perform() {
-    //if (target.dodges) {
-      //return null;
-    //} else {
     let energyRequired = this.actor.secondaryAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
-    this.game.audio.playAttack(this.actor);
-    this.dealDamage.target = this.targetActor;
-    this.actor.useEnergy(energyRequired);
-    return this.dealDamage;
-    //}
+    if (this.success) {
+      this.game.audio.playAttack(this.actor);
+      this.dealDamage.target = this.targetActor;
+      this.actor.useEnergy(energyRequired);
+      return this.dealDamage;
+    } else {
+      this.actor.useEnergy(energyRequired);
+      this.game.addTextEvent("Dodged!", this.targetActor.pos);
+      this.game.audio.dodge();
+      return null;
+    }
   }
 }
 
-class Attack extends Action {
+class InitAttack extends Action {
   constructor(actor) {
     super(actor);
     this.map = this.actor.game.map;
