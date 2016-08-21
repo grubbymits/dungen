@@ -65,7 +65,7 @@ class Monster extends Actor {
 
 class Rat extends Monster {
   constructor(position, game) {
-    super(40,     // health
+    super(38,     // health
           4,      // energy
           RAT,    // kind
           15,     // defense
@@ -73,6 +73,22 @@ class Rat extends Monster {
           13,     // agility
           5,      // xp
           1.5,    // attack power
+          NORMAL, // attack type
+          2,      // attack energy
+          position, game);
+  }
+}
+
+class Rabbit extends Monster {
+  constructor(position, game) {
+    super(40,     // health
+          5,      // energy
+          RABBIT,    // kind
+          15,     // defense
+          4,      // vision
+          15,     // agility
+          6,      // xp
+          1.7,    // attack power
           NORMAL, // attack type
           2,      // attack energy
           position, game);
@@ -91,6 +107,22 @@ class Spiders extends Monster {
           1.5,
           NORMAL,
           2,
+          position, game);
+  }
+}
+
+class Bat extends Monster {
+  constructor(position, game) {
+    super(36,     // health
+          5,      // energy
+          BAT,    // kind
+          10,     // defense
+          5,      // vision
+          16,     // agility
+          7,      // xp
+          1.5,    // attack power
+          NORMAL, // attack type
+          2,      // attack energy
           position, game);
   }
 }
@@ -126,3 +158,47 @@ class SpiderChampion extends Monster {
           position, game);
   }
 }
+
+class Toad extends Monster {
+  constructor(position, game) {
+    super(40,     // health
+          4,      // energy
+          RAT,    // kind
+          15,     // defense
+          4,      // vision
+          13,     // agility
+          5,      // xp
+          1.5,    // attack power
+          NORMAL, // attack type
+          2,      // attack energy
+          position, game);
+  }
+}
+/*
+const TOAD = 4;
+const SCARAB = 5;
+const CENTIPEDE = 6;
+const SERPENT = 7;
+const MUSHROOM = 8;
+const BAT_CHAMPION = 11;
+const SNAKE = 12;
+const WOLF = 13;
+const WILD_BOAR = 14;
+const BEAR = 15;
+const SLIMES = 16;
+const SLIME_CHAMPION = 17;
+const SCORPION = 18;
+const KRAKEN = 19;
+const VAMPIRE = 20;
+const MUMMY = 21;
+const WRAITH = 22;
+const CARABIA = 23;
+const GOBLIN = 24;
+const ZOMBIE = 25;
+const UNDEAD = 26;
+const ORC = 27;
+const CYCLOP = 28;
+const WEREWOLF = 29;
+const GOLEM = 30;
+const DEMON = 31;
+*/

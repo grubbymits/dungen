@@ -69,6 +69,7 @@ class Game {
     ++this.level;
     let startPos = this.theMap.generate(this.level);
     this.player.currentHero.pos = startPos;
+    UI.centreCamera();
     this.play();
     this.loading = false;
   }
@@ -149,17 +150,27 @@ class Game {
 
   createMonster(pos, type) {
     let monster = null;
-    if (type == RAT) {
-      monster = new Rat(pos, this);
-    }
-    else if (type == SPIDERS) {
-      monster = new Spiders(pos, this);
-    }
-    else if (type == LIZARD) {
-      monster = new Lizard(pos, this);
-    }
-    else if (type == SPIDER_CHAMPION) {
-      monster = new SpiderChampion(pos, this);
+    switch(type) {
+      case RAT:
+        monster = new Rat(pos, this);
+        break;
+      case SPIDERS:
+        monster = new Spiders(pos, this);
+        break;
+      case RABBIT:
+        monster = new Rabbit(pos, this);
+        break;
+      case BAT:
+        monster = new Bat(pos, this);
+        break;
+      case LIZARD:
+        monster = new Lizard(pos, this);
+        break;
+      case SPIDER_CHAMPION:
+        monster = new SpiderChampion(pos, this);
+        break;
+      default:
+        throw("unhandled monster type!");
     }
     this.actors.push(monster);
     this.monsters.push(monster);

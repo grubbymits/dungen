@@ -310,7 +310,6 @@ class CalcVisibility extends Action {
         }
       }
     }
-    console.log("performed visibility, found tiles:", this.visible.size);
   }
 }
 

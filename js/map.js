@@ -105,36 +105,44 @@ class GameMap {
     this.yMax = height / TILE_SIZE;
     console.log("generating map with dimensions:", this.xMax, "x", this.yMax, "tiles");
 
-    var monsterGroup0 = [ RAT, SPIDERS]; //, RABBIT, BAT];
+    var monsterGroup0 = [ RAT, SPIDERS, RABBIT];
 
     var monsterGroup1 = monsterGroup0.slice();
-    monsterGroup1.push(LIZARD);
-    monsterGroup1.push(MUSHROOM);
+    monsterGroup1.push(BAT);
 
     var monsterGroup2 = monsterGroup1.slice();
-    monsterGroup2.push(SPIDER_CHAMPION);
-    monsterGroup2.push(BAT_CHAMPION);
-
+    monsterGroup2.push(LIZARD);
+    
     var monsterGroup3 = monsterGroup2.slice();
-    monsterGroup3.push(TOAD);
-    monsterGroup3.push(SCARAB);
-
+    monsterGroup3.push(SPIDER_CHAMPION);
+    
     var monsterGroup4 = monsterGroup3.slice();
-    monsterGroup4.push(CENTIPEDE);
-    monsterGroup4.push(SERPENT);
+    monsterGroup4.push(BAT_CHAMPION);
 
     var monsterGroup5 = monsterGroup4.slice();
-    monsterGroup5.push(SNAKE);
-    monsterGroup5.push(WOLF);
-
+    monsterGroup5.push(TOAD);
+    
     var monsterGroup6 = monsterGroup5.slice();
-    monsterGroup6.push(WILD_BOAR);
-    monsterGroup6.push(BEAR);
+    monsterGroup6.push(SCARAB);
 
     var monsterGroup7 = monsterGroup6.slice();
-    for (let i in monsterGroup0) {
-      monsterGroup7.shift();
-    }
+    monsterGroup7.push(CENTIPEDE);
+    
+    var monsterGroup8 = monsterGroup7.slice();
+    monsterGroup8.push(SERPENT);
+
+    var monsterGroup9 = monsterGroup8.slice();
+    monsterGroup9.push(SNAKE);
+    
+    var monsterGroup10 = monsterGroup9.slice();
+    monsterGroup10.push(WOLF);
+
+    var monsterGroup11 = monsterGroup10.slice();
+    monsterGroup11.push(WILD_BOAR);
+    
+    var monsterGroup12 = monsterGroup11.slice();
+    monsterGroup12.push(BEAR);
+    
 
     this.monsterGroups = [ monsterGroup0,
                            monsterGroup1,
@@ -142,7 +150,22 @@ class GameMap {
                            monsterGroup3,
                            monsterGroup4,
                            monsterGroup5,
-                           monsterGroup6 ];
+                           monsterGroup6,
+                           monsterGroup7,
+                           monsterGroup8,
+                           monsterGroup9,
+                           monsterGroup10,
+                           monsterGroup11,
+                           monsterGroup12 ];
+  
+    for (let groupIdx in this.monsterGroups) {
+      let group = this.monsterGroups[groupIdx];
+      console.log("monster group", groupIdx);
+      for (let monsterIdx in group) {
+        let monster = group[monsterIdx];
+        console.log("  ", ENEMY_NAMES[monster]);
+      }
+    }
   }
 
   isOutOfRange(x, y) {
@@ -600,6 +623,10 @@ class GameMap {
     let nextLimit = Math.floor(total / 8);
     let roomIdx = 0;
     let monsters = this.monsterGroups[level-1];
+    console.log("monster choices:");
+    for (let monsterIdx in monsters) {
+      console.log(ENEMY_NAMES[monsters[monsterIdx]]);
+    }
 
     for (let current = 0; current < total; ++current) {
       if (current >= nextLimit) {
@@ -635,7 +662,7 @@ class GameMap {
           !this.locations[x][y].isBlocked) {
         let pos = this.locations[x][y].vec;
         let type = Math.floor(Math.random() * monsters.length);
-        let monster = this.game.createMonster(pos, type);
+        let monster = this.game.createMonster(pos, monsters[type]);
         //this.placeEntity(pos, monster);
       }
     }
