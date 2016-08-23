@@ -8,6 +8,10 @@ var MIN_LARGE = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
 var MIN_MEDIUM = Math.round(MIN_LARGE * 0.8);
 var MIN_SMALL = Math.round(MIN_LARGE * 0.6);
 
+const HIDDEN = 0;
+const PARTIALLY_VISIBLE = 1;
+const VISIBLE = 2;
+
 console.log("MIN_LARGE set to:", MIN_LARGE);
 
 class Vec {
@@ -35,7 +39,7 @@ class Location {
     this.tileType = type;
     this.vec = new Vec(x, y);
     this.dirty = true;
-    this.visiblity = false;
+    this.visible = HIDDEN;
   }
   get isBlocked() {
     return (this.entity !== null || this.tileType == WALL ||
@@ -56,11 +60,18 @@ class Location {
   get type() {
     return this.tileType;
   }
-  set visible(visible) {
-    this.visiblity = visible;
+  set visibility(visible) {
+    // once visible, it can't become hidden or partial
+    if (this.visible != VISIBLE) {
+      this.visible = visible;
+      this.dirty = true;
+    }
   }
   get isVisible() {
-    return this.visiblity;
+    return this.visible == VISIBLE;
+  }
+  get isPartiallyVisible() {
+    return this.visible == PARTIALLY_VISIBLE;
   }
 }
 
@@ -198,6 +209,10 @@ class GameMap {
   placeEntity(pos, entity) {
     this.locations[pos.x][pos.y].entity = entity;
     this.locations[pos.x][pos.y].dirty = true;
+    if (entity.kind == HERO) {
+      console.log("place hero, addVisibleTiles");
+      this.addVisibleTiles(entity.pos, entity.vision);
+    }
   }
 
   getEntity(x, y) {
@@ -275,7 +290,7 @@ class GameMap {
   }
   
   calcVisibilityForOctant(startX, startY, maxDistance, octant) {
-    for (let row = 1; row < maxDistance; ++row) {
+    for (let row = 1; row <= maxDistance; ++row) {
       for (let col = 0; col <= row; ++col) {
         let vec = getOctantVec(startX, startY, col, row, octant);
         //let y = startY + (row * dy);
@@ -290,18 +305,21 @@ class GameMap {
         if (this.locations[x][y].isWallOrCeiling) {
           this.createShadow(x, y, maxDistance, octant);
         }
-        this.locations[x][y].visible = true;
+        if (row == maxDistance) {
+          this.locations[x][y].visibility = PARTIALLY_VISIBLE;
+        } else {
+          this.locations[x][y].visibility = VISIBLE;
+        }
       }
     }
   }
   
   addVisibleTiles(start, maxDistance) {
-    //console.log("addVisibleTiles from", start);
     this.shadow.clear();
     let octant = 0;
     for (let x = -1; x < 2; ++x) {
       for (let y = -1; y < 2; ++y) {
-        this.locations[start.x + x][start.y + y].visible = true;
+        this.locations[start.x + x][start.y + y].visibility = VISIBLE;
         if (0 === x && 0 === y) {
           continue;
         }

@@ -14,8 +14,11 @@
   <link href='res/img/icon.png' rel="icon" sizes="128x128" />
 </head>
 <body>
-  <canvas id="gameCanvas" width="2560" height="2560"
+  <canvas id="mapCanvas" width="2560" height="2560"
     style="left: 0px; top: 0px; position: absolute; zIndex: -1;">
+  </canvas>
+  <canvas id="overlayCanvas" width="2560" height="2560"
+    style="left: 0px; top: 0px; position: absolute; zIndex: 0; pointer-events:none; ">
   </canvas>
   <div class="container">
     <div class="progress" style="width: 50%; top: 50%; left: 25%; position: fixed;" id="load_bar">

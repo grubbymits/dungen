@@ -1,7 +1,7 @@
 "use strict";
 
 class Game {
-  constructor(context, width, height) {
+  constructor(context, overlayContext, width, height) {
     console.log("Game.constructor");
     this.actors = [];
     this.heroes = [];
@@ -14,6 +14,7 @@ class Game {
     this.monstersKilled = 0;
     this.expGained = 0;
     this.context = context;
+    this.overlayContext = overlayContext;
     this.level = 1;
     this.isRunning = false;
     this.loading = false;
@@ -50,7 +51,9 @@ class Game {
 
     // reset stuff
     this.context.fillStyle = '#000000';
-    this.context.fillRect(0, 0, this.theMap.width * TILE_SIZE, this.theMap.height * TILE_SIZE);
+    this.context.fillRect(0, 0,
+                          this.theMap.width * TILE_SIZE,
+                          this.theMap.height * TILE_SIZE);
     this.actors = [];
     this.monsters = [];
     this.objects = [];
@@ -76,13 +79,10 @@ class Game {
   
   renderMap() {
     // draw everything
-    for (let hero of this.heroes) {
-      this.theMap.addVisibleTiles(hero.pos, hero.vision);
-    }
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
         let loc = this.theMap.getLocation(x,y);
-        if (loc.dirty && loc.type != CEILING && loc.isVisible) {
+        if (loc.dirty && loc.type != CEILING) {
           this.context.fillStyle = '#000000';
           this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
                                 y * TILE_SIZE * UPSCALE_FACTOR,
@@ -90,6 +90,33 @@ class Game {
                                 TILE_SIZE * UPSCALE_FACTOR);
           var type = loc.type;
           tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
+          loc.dirty = false;
+        }
+      }
+    }
+  }
+
+  renderVisible() {
+    for (var x = 0; x < this.theMap.width; x++) {
+      for (var y = 0; y < this.theMap.height; y++) {
+        let loc = this.theMap.getLocation(x,y);
+        if (loc.dirty && loc.type != CEILING &&
+            (loc.isVisible || loc.isPartiallyVisible)) {
+
+          this.overlayContext.clearRect(x * TILE_SIZE * UPSCALE_FACTOR,
+                                        y * TILE_SIZE * UPSCALE_FACTOR,
+                                        TILE_SIZE * UPSCALE_FACTOR,
+                                        TILE_SIZE * UPSCALE_FACTOR);
+          /*
+          if (loc.isPartiallyVisible) {
+            this.overlayContext.globalAlpha = 0.5;
+            this.overlayContext.fillStyle = '#000000';
+            this.overlayContext.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
+                                         y * TILE_SIZE * UPSCALE_FACTOR,
+                                         TILE_SIZE * UPSCALE_FACTOR,
+                                         TILE_SIZE * UPSCALE_FACTOR);
+            this.overlayContext.globalAlpha = 1.0;
+          }*/
           loc.dirty = false;
         }
       }
