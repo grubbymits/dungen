@@ -8,22 +8,24 @@ $(document).ready(function() {
 
 window.onload = function begin() {
   // Initialise canvas
-  var gameCanvas = document.getElementById("gameCanvas");
-  //gameCanvas.setAttribute("id", "gameCanvas");
-  //document.body.appendChild(gameCanvas);
-  gameCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
-  gameCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
-  //gameCanvas.style.position = 'absolute';
-  //gameCanvas.style.zIndex = '-1';
-  //gameCanvas.style.left = '0px';
-  //gameCanvas.style.top = '0px';
-  var gameContext = gameCanvas.getContext("2d");
-  gameContext.fillStyle = '#000000';
-  gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-  console.log("canvas resolution set to: ", gameCanvas.width, "x",
-              gameCanvas.height);
+  var mapCanvas = document.getElementById("mapCanvas");
+  mapCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
+  mapCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
+  var mapContext = mapCanvas.getContext("2d");
+  mapContext.fillStyle = '#000000';
+  mapContext.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
+  console.log("canvas resolution set to: ", mapCanvas.width, "x",
+              mapCanvas.height);
 
-  var theGame = new Game(gameContext, gameCanvas.width, gameCanvas.height);
+  var overlayCanvas = document.getElementById("overlayCanvas");
+  overlayCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
+  overlayCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
+  var overlayContext = overlayCanvas.getContext("2d");
+  overlayContext.fillStyle = '#000000';
+  overlayContext.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+  var theGame = new Game(mapContext, overlayContext, mapCanvas.width,
+                         mapCanvas.height);
 
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
@@ -79,7 +81,7 @@ window.onload = function begin() {
       if (new Date().getTime() >= theGame.nextGameTick) {
         theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
         updater.next();
-        theGame.renderMap();
+        theGame.renderVisible();
         theGame.renderEntities();
         UI.renderInfo();
       }
@@ -87,5 +89,6 @@ window.onload = function begin() {
     window.requestAnimationFrame(run);
   };
   $('#load_bar').hide();
+  theGame.renderMap();
   run();
 };

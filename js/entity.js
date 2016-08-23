@@ -12,7 +12,7 @@ class Entity {
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE,
                        this.pos.y * TILE_SIZE,
-                       this.game.context);
+                       this.game.overlayContext);
   }
   get pos() {
     return this.position;
