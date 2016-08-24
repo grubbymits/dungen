@@ -285,6 +285,7 @@ class GameMap {
           continue;
         }
         this.shadow.add(this.getLocation(x, y));
+        this.locations[x][y].visibility = PARTIALLY_VISIBLE;
       }
     }
   }
@@ -302,13 +303,13 @@ class GameMap {
         if (this.shadow.has(this.locations[x][y])) {
           continue;
         }
+        this.locations[x][y].visibility = VISIBLE;
+
         if (this.locations[x][y].isWallOrCeiling) {
           this.createShadow(x, y, maxDistance, octant);
         }
-        if (row == maxDistance) {
+        else if (row == maxDistance) {
           this.locations[x][y].visibility = PARTIALLY_VISIBLE;
-        } else {
-          this.locations[x][y].visibility = VISIBLE;
         }
       }
     }

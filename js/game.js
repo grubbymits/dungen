@@ -90,7 +90,7 @@ class Game {
                                 TILE_SIZE * UPSCALE_FACTOR);
           var type = loc.type;
           tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
-          loc.dirty = false;
+          //loc.dirty = false;
         }
       }
     }
@@ -107,7 +107,7 @@ class Game {
                                         y * TILE_SIZE * UPSCALE_FACTOR,
                                         TILE_SIZE * UPSCALE_FACTOR,
                                         TILE_SIZE * UPSCALE_FACTOR);
-          /*
+          
           if (loc.isPartiallyVisible) {
             this.overlayContext.globalAlpha = 0.5;
             this.overlayContext.fillStyle = '#000000';
@@ -116,7 +116,7 @@ class Game {
                                          TILE_SIZE * UPSCALE_FACTOR,
                                          TILE_SIZE * UPSCALE_FACTOR);
             this.overlayContext.globalAlpha = 1.0;
-          }*/
+          }
           loc.dirty = false;
         }
       }
