@@ -18,7 +18,7 @@ class Game {
     this.level = 1;
     this.isRunning = false;
     this.loading = false;
-    this.skipTicks = 1000 / 100;
+    this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height, this);
     this.audio = new Audio(this);
@@ -139,12 +139,12 @@ class Game {
   }
 
   addTextEvent(string, pos) {
-    this.player.UI.addEvent(new TextEvent(this.context, new Date().getTime(),
+    this.player.UI.addEvent(new TextEvent(this.overlayContext, new Date().getTime(),
                                           pos, string));
   }
 
   addGraphicEvent(sprite, pos) {
-    this.player.UI.addEvent(new GraphicEvent(this.context, new Date().getTime(),
+    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, new Date().getTime(),
                                              pos, sprite));
   }
 
@@ -171,7 +171,7 @@ class Game {
     this.actors.push(hero);
     this.heroes.push(hero);
     this.currentEffects.set(hero, []);
-    this.theMap.placeEntity(pos, hero);
+    //this.theMap.placeEntity(pos, hero);
     return hero;
   }
 
@@ -202,7 +202,7 @@ class Game {
     this.actors.push(monster);
     this.monsters.push(monster);
     this.currentEffects.set(monster, []);
-    this.theMap.placeEntity(pos, monster);
+    //this.theMap.placeEntity(pos, monster);
     ++this.totalMonsters;
     return monster;
   }

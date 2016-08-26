@@ -31,7 +31,7 @@ class WalkAction extends Action {
   }
   set dest(goal) {
     this.destination = goal;
-    this.currentPath = this.map.getPath(this.actor.position, this.destination);
+    this.currentPath = this.map.getPath(this.actor.pos, this.destination);
   }
   perform() {
     if (this.currentPath.length == 0) {
@@ -39,6 +39,18 @@ class WalkAction extends Action {
     }
     let pos = this.actor.pos;
     let next = this.currentPath[0];
+   
+    // Entities move around, so path may need to be recalculated.
+    if (next.isBlocked) {
+      this.currentPath = this.map.getPath(pos, this.destination);
+      
+      if (this.currentPath.length == 0 && this.actor.nextAction == this) {
+        this.actor.nextAction = null;
+        return;
+      } else {
+        next = this.currentPath[0];
+      }
+    }
 
     var energyRequired = 0;
     if (pos.x == next.x) {

@@ -73,10 +73,14 @@ class Location {
   get isPartiallyVisible() {
     return this.visible == PARTIALLY_VISIBLE;
   }
+  get isHidden() {
+    return this.visible == HIDDEN;
+  }
 }
 
 class Room {
-  constructor(x, y, width, height) {
+  
+  constructor(x, y, width, height, id) {
     this.pos = new Vec(x, y);
     this.centre = new Vec(x + Math.floor(width / 2),
                           y + Math.floor(height / 2));
@@ -90,6 +94,8 @@ class Room {
     this.height = height;
     this.connections = new Set();
     this.visited = false;
+    this.id = id;
+    console.log("creating room with id:", id);
   }
 
   get area() {
@@ -169,6 +175,7 @@ class GameMap {
                            monsterGroup11,
                            monsterGroup12 ];
   
+    /*
     for (let groupIdx in this.monsterGroups) {
       let group = this.monsterGroups[groupIdx];
       console.log("monster group", groupIdx);
@@ -176,7 +183,7 @@ class GameMap {
         let monster = group[monsterIdx];
         console.log("  ", ENEMY_NAMES[monster]);
       }
-    }
+    }*/
   }
 
   isOutOfRange(x, y) {
@@ -207,10 +214,12 @@ class GameMap {
   }
 
   placeEntity(pos, entity) {
+    if (this.locations[pos.x][pos.y].entity !== null) {
+      throw("trying to place in non empty loc!");
+    }
     this.locations[pos.x][pos.y].entity = entity;
     this.locations[pos.x][pos.y].dirty = true;
     if (entity.kind == HERO) {
-      console.log("place hero, addVisibleTiles");
       this.addVisibleTiles(entity.pos, entity.vision);
     }
   }
@@ -285,13 +294,12 @@ class GameMap {
           continue;
         }
         this.shadow.add(this.getLocation(x, y));
-        this.locations[x][y].visibility = PARTIALLY_VISIBLE;
       }
     }
   }
   
   calcVisibilityForOctant(startX, startY, maxDistance, octant) {
-    for (let row = 1; row <= maxDistance; ++row) {
+    for (let row = 1; row < maxDistance; ++row) {
       for (let col = 0; col <= row; ++col) {
         let vec = getOctantVec(startX, startY, col, row, octant);
         //let y = startY + (row * dy);
@@ -308,9 +316,6 @@ class GameMap {
         if (this.locations[x][y].isWallOrCeiling) {
           this.createShadow(x, y, maxDistance, octant);
         }
-        else if (row == maxDistance) {
-          this.locations[x][y].visibility = PARTIALLY_VISIBLE;
-        }
       }
     }
   }
@@ -326,6 +331,14 @@ class GameMap {
         }
         this.calcVisibilityForOctant(start.x, start.y, maxDistance, octant);
         ++octant;
+      }
+    }
+    for (let x = start.x-maxDistance; x <= start.x+maxDistance; ++x) {
+      for (let y = start.y-maxDistance; y <= start.y+maxDistance; ++y) {
+        if (this.isOutOfRange(x, y)) {
+          continue;
+        }
+        this.locations[x][y].visibility = PARTIALLY_VISIBLE;
       }
     }
   }
@@ -484,7 +497,7 @@ class GameMap {
   }
 
   createRoom(startX, startY, width, height) {
-    let room = new Room(startX, startY, width, height);
+    let room = new Room(startX, startY, width, height, this.rooms.length);
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
       for (let y = startY+2; y < startY + height-2; y++) {
@@ -656,12 +669,10 @@ class GameMap {
         } else {
           nextLimit += (total / 8);
         }
-        console.log("nextLimit:", nextLimit);
       }
-      console.log("room id:", roomIdx);
 
       let room = this.rooms[roomIdx];
-      if (room == this.entryRoom) {
+      if (room.id == this.entryRoom.id) {
         continue;
       }
       
@@ -673,12 +684,10 @@ class GameMap {
         x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
         y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
         ++attempts;
-      } while ((this.locations[x][y].isBlocked ||
-               this.locations[x][y].isOccupied) &&
+      } while (this.locations[x][y].isBlocked &&
                attempts < MAX_ATTEMPTS);
 
-      if (!this.locations[x][y].isOccupied &&
-          !this.locations[x][y].isBlocked) {
+      if (!this.locations[x][y].isBlocked) {
         let pos = this.locations[x][y].vec;
         let type = Math.floor(Math.random() * monsters.length);
         let monster = this.game.createMonster(pos, monsters[type]);
@@ -698,12 +707,10 @@ class GameMap {
         x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
         y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
         ++attempts;
-      } while ((this.locations[x][y].isBlocked ||
-               this.locations[x][y].isOccupied) &&
+      } while (this.locations[x][y].isBlocked ||
                attempts < MAX_ATTEMPTS);
 
-      if (!this.locations[x][y].isOccupied &&
-          !this.locations[x][y].isBlocked) {
+      if (!this.locations[x][y].isBlocked) {
         this.game.createChest(this.locations[x][y]);
       }
 
@@ -741,8 +748,8 @@ class GameMap {
       throw("exit room is still null!");
 
     this.game.createStair(exit, true);
-    this.entryRoom = this.game.createStair(entry, false);
-    return this.entryRoom;
+    this.entryRoom = entry;
+    return this.game.createStair(entry, false);
   }
 
   reset() {
@@ -763,10 +770,10 @@ class GameMap {
                             (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
     this.placeRooms(number);
     this.createConnections();
-    let entry = this.placeStairs();
+    let entryLoc = this.placeStairs();
     this.placeChests();
     this.placeMonsters(level, 32);
-    let neighbours = this.getNeighbours(entry.vec);
+    let neighbours = this.getNeighbours(entryLoc.vec);
     if (!neighbours.length)
       throw("no free neighbours next to stairs");
     return neighbours[0];

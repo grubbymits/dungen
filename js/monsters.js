@@ -55,9 +55,9 @@ class Monster extends Actor {
   }
   render() {
     super.render();
-    this.game.context.fillStyle = 'orangered';
+    this.game.overlayContext.fillStyle = 'orangered';
     let healthBar = (this.currentHealth / this.maxHealth) * TILE_SIZE * UPSCALE_FACTOR;
-    this.game.context.fillRect(this.pos.x * TILE_SIZE * UPSCALE_FACTOR,
+    this.game.overlayContext.fillRect(this.pos.x * TILE_SIZE * UPSCALE_FACTOR,
                                this.pos.y * TILE_SIZE * UPSCALE_FACTOR,
                                healthBar, 2 * UPSCALE_FACTOR);
   }
