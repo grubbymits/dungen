@@ -40,6 +40,7 @@ class Hero extends Actor {
     this.id = 1;
     
     this.findTarget.targets = this.game.monsters;
+    this.game.theMap.addVisibleTiles(this.pos, this.vision);
   }
   
   get armour() {
@@ -354,6 +355,9 @@ class Player {
     items.set(item, number);
   }
   setDestination(x, y) {
+    if (this.game.theMap.getLocation(x, y).isHidden) {
+      return;
+    }
     this.currentHero.setDestination(x, y);
   }
   setRest() {
