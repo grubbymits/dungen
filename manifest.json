@@ -1,0 +1,12 @@
+{
+  "name": "Dungen",
+  "short_name": "Dungen",
+  "display": "fullscreen",
+  "description": "A dungen crawling RPG",
+  "orientation": "portrait",
+  "icons": [{
+    "src": "res/img/icon.png",
+    "sizes": "128x128",
+    "type": "image/png"
+  }]
+}
