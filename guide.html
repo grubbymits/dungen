@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Introduction to Dungen, a rogue-like RPG in Javascript.">
+  <link type="text/css" rel="stylesheet" href="css/codingbear.css"/>
+  <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="css/font-awesome.min.css"  media="screen,projection"/>
+  <link rel='shortcut icon' type='image/x-icon' href='res/img/favicon.ico'>
+    <title>Dungen Intro</title>
+  </head>
+  <body>
+    <div style="background-color:#2AA198">
+      <div class="container" style="background-color:#002B36">
+        <div class="row">
+          <div class="col-md-offset-1 col-lg-offset-1 col-lg-10 col-md-10 col-sm-12">
+            <cb_h1>Introduction<br></cb_h1>
+            <cb_p>
+              Dungen is a rogue-like RPG that is written in Javascript and
+              playable in the browser. In the game, the player controls one or
+              more characters as they adventure down into the depths of the
+              dungeon, defeating monsters, increasing their skills and
+              collecting a wealth of equipment and treasure.
+              <br><br>
+            </cb_p>
+            <cb_h1>Characters<br></cb_h1>
+            <cb_p>
+              The player initially gets to choose a character to play as, and
+              as the game progresses, more characters will join the team. Each
+              character has a class which defines what equipment their can use
+              as well as their starting attributes. Once the characters gain
+              enough experience, they level-up and the player can choose how
+              the character's attributes develop. The attributes are:<br>
+              - Strength, which affects how much damage weapons do.<br>
+              - Agility, which affects how efficiently characters use weapons
+                and can allow characters to dodge blows.<br>
+              - Endurance, affects the character's total HP and EP <br>
+              - Wisdom, effectiveness of magical spells that the character
+                casts - including attacks with staffs.<br>
+              - Will, affects the character's total EP increases and also defines
+                their resistance to magical attacks. <br>
+              <br>
+            </cb_p>
+              <cb_h2>Knight<br></cb_h2>
+              <img src="res/img/knight.png" alt="knight" height="64" width="320">
+              <cb_p>
+                <br>
+                The Knight uses a sword to attack and is equipped with a shield,
+                armour and a helmet for defense. The knight is not restricted in
+                what defensiveness equipment he can use, which means his defense
+                is high, suitable to close range combat with the sword. This
+                combat style is matched by his high strength and endurance, as
+                well as reasonable agility.
+                <br><br>
+              </cb_p>
+              <cb_h2>Mage<br></cb_h2>
+              <img src="res/img/mage.png" alt="mage" height="64" width="320">
+              <cb_p>
+                <br>
+                The Mage is the opposite of the knight. His wisdom is high to enable
+                him to perform effective ranged magical attacks with his staff as well
+                as resisting incoming spells as well. The mage has low strength and
+                can only equip a limited set of defensive clothing, so he has to rely on
+                being agile enough to dodge blows as well as using defensive and
+                recovery spells.
+                <br><br>
+              </cb_p>
+              <cb_h2>Rogue<br></cb_h2>
+              <img src="res/img/rogue.png" alt="rogue" height="64" width="320">
+              <cb_p>
+                <br>
+                The Rogue uses a balance of strength and agility to land deadly blows
+                while dodging attacks. He can equip a good selection of armours,
+                except for the heavier ones which would impede his movements. The rogue
+                uses blades to attack close range and also can use a selection of
+                throwing blades to attack from medium range.
+                <br><br>
+              </cb_p>
+              <cb_h2>Archer<br></cb_h2>
+              <img src="res/img/archer.png" alt="archer" height="64" width="320">
+              <cb_p>
+                <br>
+                The Archer is a long range combantant who uses a combination of bows
+                and arrows to deal high damage from afar. The Archer's key skill is
+                agility to enable him to fire arrows in quick succession, but he also
+                needs strength to draw his bow. Like the Rogue, he can equip a good
+                selection of armour and helmets but not the heavier items.
+                <br><br>
+              </cb_p>
+              <cb_h2>Warlock<br></cb_h2>
+              <img src="res/img/warlock.png" alt="warlock" height="64" width="320">
+              <cb_p>
+                <br>
+                The Warlock is a physically strong character who wields an axe
+                but can also use spells. The warlock has strong will, endurance and
+                strength but is not very agile.
+                <br><br>
+              </cb_p>
+            <br><br>
+            <cb_h1>Game Play<br></cb_h1>
+            <cb_h2>Turn-based action<br></cb_h2>
+            <cb_p>
+              Dungen is a turn-based game which allows each character (including
+              enemies) to take their turn in order. During a character's turn, it
+              can perform an action as long as it has enough energy points (EP),
+              if it doesn't have enough EP then the character rests for that turn
+              and recovers some EP. Movements and attacks both use EP with attacks
+              using heavier weapons and/or by a less agile character will consume
+              more EP.
+              Each character has health points (HP) too and when this value hits
+              zero, the character collapses and will not take another turn until
+              they have been revived. When a monster dies, the heroes in the team
+              gain experience points (XP) which when accumulated allow the characters
+              to level-up which increases maximum HP, EP and their attributes.
+              <br>
+            </cb_p>
+            <br><br>
+            <cb_h2>Equipment and Items<br></cb_h2>
+            <cb_p>
+              Each character has four equipment slots: their primary attack weapon,
+              their secondary item, body armour and a helmet. The class of the
+              characters defines which item types they can and can't use. As the game
+              progresses the player will encounter chests placed throughout the dungeons
+              which contain equipment and potions and treasure that will help the team
+              survive their adventure.
+              <br><br>
+              <cb_h3>Weapons<br></cb_h3>
+              <cb_h3>Armour<br></cb_h3>
+              <cb_h3>Potions<br></cb_h3>
+              <br>
+            </cb_p>
+            <br><br>
+            <cb_h2>Controls<br><br></cb_h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-offset-1 col-lg-offset-1 col-lg-5 col-md-5 col-sm-12">
+            <cb_p>
+              Control of the heroes is performed purely through touch or mouse clicks.
+              The player will click or tap on targets or items they want to interact with
+              as well as some on-screen buttons that are provided for menus, etc...
+              In the bottom right of the screen is the main controller
+              button, which looks like a directional controller from an old
+              gamepad. On clicking this button, another set of buttons will
+              appear above it which enable the player to access menus and take
+              team actions.<br>
+              - Centre camera on the hero. <br>
+              - Open or close equipment menu. <br>
+              - Select single or team control <br>
+              - Rest, will rest the party until they're fully rested or until another
+                command is given.<br>
+              - Heal, with quick button will select the weakest potion that the player
+                is in possession of to heal the currently controlled hero.<br>
+            <br>
+            </cb_p>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+              <img src="res/img/main-button.png" alt="main control button"
+                   height="384" width="362">
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-offset-1 col-lg-offset-1 col-lg-5 col-md-5 col-sm-12">
+            <cb_h3>Menus<br></cb_h3>
+            <cb_p>
+              Clicking on the person button will bring up the menu for hero in the top
+              right corner of the screen. The view will show the stats for the hero,
+              with their current equipment displayed at the top. Clicking on any of the
+              currently equipped items will bring up a list of alternative items that
+              the player has in their inventory. Clicking on an item in this list will
+              equip it to the hero.
+              <br>
+            </cb_p>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+              <img src="res/img/menu.png" alt="player stats menu"
+                   height="515" width="320">
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

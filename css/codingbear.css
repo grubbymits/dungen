@@ -1,0 +1,20 @@
+cb_h1 {
+  color : #B58900;
+  font-family:"Lucida Console", Monaco, monospace;
+  font-size:x-large;
+}
+cb_h2 {
+  color : #B58900;
+  font-family:"Lucida Console", Monaco, monospace;
+  font-size:large;
+}
+cb_h3 {
+  color : #B58900;
+  font-family:"Lucida Console", Monaco, monospace;
+  font-size:medium;
+}
+cb_p {
+  color : #859900;
+  font-family:"Lucida Console", Monaco, monospace;
+  font-size:small;
+}
