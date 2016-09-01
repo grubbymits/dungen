@@ -2,6 +2,7 @@
   "name": "Dungen",
   "short_name": "Dungen",
   "display": "fullscreen",
+  "background_color": "black",
   "description": "A dungen crawling RPG",
   "orientation": "portrait",
   "icons": [{
