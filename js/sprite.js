@@ -58,6 +58,7 @@ var yellowSpriteSheet = new SpriteSheet('tileset-yellow-64');
 var uiSpriteSheet = new SpriteSheet('ui');
 
 var targetSprite = new Sprite(uiSpriteSheet, 0, 0);
+var currentHeroSprite = new Sprite(uiSpriteSheet, 1, 0);
 var currentActorSprite = new Sprite(uiSpriteSheet, 1, 0);
 
 var tileSprites = [ new Sprite(greenSpriteSheet, 1, 1, 32, 32),

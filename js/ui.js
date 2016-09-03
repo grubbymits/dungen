@@ -104,7 +104,8 @@ class Interface {
                          "  Will: " + hero.will + "\n" +
                          "  Attack: " + hero.primaryAtkPower + "\n" +
                          "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
-                         "  Defense: " + hero.physicalDefense);
+                         "  Defense: " + hero.physicalDefense + "\n" +
+                         "  Exp to next lvl: " + hero.expToNextLvl);
   }
 
   setupNav() {
@@ -256,7 +257,12 @@ class Interface {
         this.events.splice(i, 1);
       }
     }
+    
     let hero = this.player.currentHero;
+    currentHeroSprite.render(hero.pos.x * TILE_SIZE,
+                             hero.pos.y * TILE_SIZE,
+                             this.game.overlayContext);
+                             
     $('#hero_hud').text("HP: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
                         "EP: " + hero.currentEnergy + "/" + hero.maxEnergy);
     $('#score_hud').text("Chests: " + game.openChests +"/" + game.totalChests + "\n" +
@@ -292,28 +298,28 @@ class Interface {
   getItems(type) {
     switch(type) {
       default:
-      console.error("unhandled item type:", type);
-      break;
+        console.error("unhandled item type:", type);
+        break;
       case ARMOUR:
-      return this.player.armours;
+        return this.player.armours;
       case HELMET:
-      return this.player.helmets;
+        return this.player.helmets;
       case SHIELD:
-      return this.player.shields;
+        return this.player.shields;
       case SWORD:
-      return this.player.swords;
+        return this.player.swords;
       case STAFF:
-      return this.player.staffs;
+        return this.player.staffs;
       case AXE:
-      return this.player.axes;
+        return this.player.axes;
       case THROWING:
-      return this.player.throwing;
+        return this.player.throwing;
       case BOW:
-      return this.player.bows;
+        return this.player.bows;
       case ARROWS:
-      return this.player.arrows;
+        return this.player.arrows;
       case SPELL:
-      return this.player.spells;
+        return this.player.spells;
     }
   }
   

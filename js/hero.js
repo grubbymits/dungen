@@ -12,7 +12,6 @@ class Hero extends Actor {
     this.equipSecondary = null;
     this.equipArmour = null;
     this.equipHelmet = null;
-    
 
     this.strength = strength;
     this.agility = agility;
@@ -148,23 +147,23 @@ class Hero extends Actor {
     console.log("equipItem", item);
     switch(item.type) {
       case ARMOUR:
-      this.equipArmour = item;
-      break;
+        this.equipArmour = item;
+        break;
       case HELMET:
-      this.equipHelmet = item;
-      break;
+        this.equipHelmet = item;
+        break;
       case SHIELD:
       case ARROWS:
       case THROWING:
       case SCROLL:
-      this.equipSecondary = item;
-      break;
+        this.equipSecondary = item;
+        break;
       case SWORD:
       case AXE:
       case BOW:
       case STAFF:
-      this.equipPrimary = item;
-      break;
+        this.equipPrimary = item;
+        break;
     }
   }
 }
@@ -279,6 +278,7 @@ class Player {
     this.treasure = new Map();
     this.addHero(hero);
   }
+  
   increaseExp(exp) {
     for (let hero of this.heroes) {
       if (hero.increaseExp(exp)) {
@@ -288,9 +288,11 @@ class Player {
       }
     }
   }
+  
   addUI(UI) {
     this.UI = UI;
   }
+  
   addHero(hero) {
     this.heroes.push(hero);
     this.addItem(hero.primary);
@@ -305,61 +307,64 @@ class Player {
       this.addItem(hero.ring);
     }
   }
+  
   addItem(item) {
     let number = 1;
     let items;
     switch(item.type) {
       default:
-      console.error("unhandled item type in Player.addItem");
-      break;
+        console.error("unhandled item type in Player.addItem");
+        break;
       case ARMOUR:
-      items = this.armours;
-      break;
+        items = this.armours;
+        break;
       case HELMET:
-      items = this.helmets;
-      break;
+        items = this.helmets;
+        break;
       case SHIELD:
-      items = this.shields;
-      break;
+        items = this.shields;
+        break;
       case SWORD:
-      items = this.swords;
-      break;
+        items = this.swords;
+        break;
       case STAFF:
-      items = this.staffs;
-      break;
+        items = this.staffs;
+        break;
       case AXE:
-      items = this.axes;
-      break;
+        items = this.axes;
+        break;
       case ARROWS:
-      items = this.arrows;
-      break;
+        items = this.arrows;
+        break;
       case THROWING:
-      items = this.throwing;
-      break;
+        items = this.throwing;
+        break;
       case BOW:
-      items = this.bows;
-      break;
+        items = this.bows;
+        break;
       case SPELL:
-      items = this.spells;
-      break;
+        items = this.spells;
+        break;
       case POTION:
-      items = this.potions;
-      break;
+        items = this.potions;
+        break;
       case TREASURE:
-      items = this.treasure;
-      break;
+        items = this.treasure;
+        break;
     }
     if (items.has(item)) {
       number += items.get(item);
     }
     items.set(item, number);
   }
+  
   setDestination(x, y) {
     if (this.game.theMap.getLocation(x, y).isHidden) {
       return;
     }
     this.currentHero.setDestination(x, y);
   }
+  
   setRest() {
     for (let hero of this.heroes) {
       hero.setRest();
