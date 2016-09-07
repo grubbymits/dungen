@@ -1,5 +1,16 @@
 "use strict";
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/dungen/worker.js')
+  .then(function(reg) {
+    // registration worked
+    console.log('Registration succeeded. Scope is ' + reg.scope);
+  }).catch(function(error) {
+    // registration failed
+    console.log('Registration failed with ' + error);
+  });
+}
+
 $(document).ready(function() {
   $(".button-collapse").sideNav({
     menuWidth : 5.5 * TILE_SIZE
@@ -88,6 +99,7 @@ window.onload = function begin() {
     }
     window.requestAnimationFrame(run);
   };
+  
   $('#load_bar').hide();
   theGame.renderMap();
   run();
