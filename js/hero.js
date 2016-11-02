@@ -178,6 +178,7 @@ class Knight extends Hero {
     this.equipHelmet = helmets[HELMET0];
     this.equipPrimary = swords[SWORD0];
     this.equipSecondary = shields[SHIELD0];
+    this.className = 'knight';
   }
 }
 
@@ -191,6 +192,7 @@ class Mage extends Hero {
     this.equipPrimary = staffs[STAFF0];
     this.equipSecondary = spells[SPELL0];
     //this.equipRing = basicRing;
+    this.className = 'mage';
   }
   get primaryAtkPower() {
     return Math.round(this.equipPrimary.power * this.wisdom / MAX_WISDOM);
@@ -211,6 +213,7 @@ class Rogue extends Hero {
     this.equipPrimary = swords[SWORD0];
     this.equipSecondary = throwing[THROWING0];
     this.secondaryAttack = new SecondaryAttack(this);
+    this.className = 'rogue';
   }
   get secondaryAtkPower() {
     return Math.round(this.equipSecondary.power * this.strength / MAX_STRENGTH);
@@ -236,6 +239,7 @@ class Archer extends Hero {
     this.equipHelmet = helmets[HELMET0];
     this.equipPrimary = bows[BOW0];
     this.equipSecondary = arrows[ARROWS0];
+    this.className = 'archer';
   }
   get primaryAtkPower() {
     return Math.round((this.equipPrimary.power + this.equipSecondary.power) *
@@ -256,6 +260,7 @@ class Warlock extends Hero {
     this.equipSecondary = spells[SPELL0];
     this.equipArmour = armours[ARMOUR0];
     this.equipHelmet = helmets[HELMET0];
+    this.className = 'warlock';
   }
 }
 

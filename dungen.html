@@ -17,26 +17,39 @@
   <canvas id="gameCanvas" width="2560" height="2560"
     style="left: 0px; top: 0px; position: absolute; zIndex: -1;">
   </canvas>
+  <div style="position:fixed; top: 30%; left: 30%; visibility: hidden" id="lvl_up_menu">
+  <div class="row">
+    <div class="col s10 m6">
+      <div class="card horizontal">
+        <div class="card-image" style="left: 40%; top: 5px; width: 64px;">
+          <ul>
+          <img src="res/img/tileset-green-64.png" id="lvl_up_hero_icon">
+        </ul>
+        </div>
+        <div class="card-stacked">
+          <div class="card-content">
+            <p>HUZZAH! You have smighted many a foe and have gained enough experience to increase
+               your adventuring level status.
+               Now select the character attribute that you want to increase.<br><br>
+            </p>
+            <p style="white-space: pre-wrap" id="lvl_up_stats">
+            </p>
+          </div>
+          <div class="card-action">
+            <a id="increase_strength" href="#">Increase Strength<br></a>
+            <a id="increase_endurance" href="#">Increase Endurance<br></a>
+            <a id="increase_agility" href="#">Increase Agility<br></a>
+            <a id="increase_wisdom" href="#">Increase Wisdom<br></a>
+            <a id="increase_will" href="#">Increase Will<br></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
   <div class="container">
     <div class="progress" style="width: 50%; top: 50%; left: 25%; position: fixed;" id="load_bar">
       <div class="indeterminate"></div>
-    </div>
-  </div>
-  <div id="levelUpButtons" style="visibility : hidden;">
-    <div class="fixed-action-btn" style="bottom: 64px; right: 240px">
-      <a class="btn-floating btn-large orange" id="strength">
-        <i class="material-icons">fitness_center</i>
-      </a>
-    </div>
-    <div class="fixed-action-btn" style="bottom: 64px; right: 168px">
-      <a class="btn-floating btn-large orange" id="agility">
-        <i class="material-icons">directions_run</i>
-      </a>
-    </div>
-    <div class="fixed-action-btn" style="bottom: 64px; right: 96px">
-      <a class="btn-floating btn-large orange" id="wisdom">
-        <i class="material-icons">school</i>
-      </a>
     </div>
   </div>
   <div>

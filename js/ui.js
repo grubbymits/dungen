@@ -63,60 +63,72 @@ class Interface {
     this.hud.style.visibility = 'hidden';
     this.hud.style.background = "rgba(50, 75, 75, 0.7)";
     document.body.appendChild(this.hud);
-    //this.hudContext = this.hud.getContext("2d");
-    this.lvlUpButtons = document.getElementById("levelUpButtons");
 
-    document.getElementById("centre_camera").addEventListener("click", this.centreCamera.bind(this), false);
-    document.getElementById("rest_button").addEventListener("click", event => player.setRest());
-    document.getElementById("heal_button").addEventListener("click", event => player.healHero());
-    //document.getElementById("hud_button").addEventListener("click", this.controlHUD.bind(this), false);
-    document.getElementById("gameCanvas").addEventListener("click", this.onCanvasClick.bind(this), false);
+    document.getElementById("centre_camera")
+      .addEventListener("click", this.centreCamera.bind(this), false);
+    document.getElementById("rest_button")
+      .addEventListener("click", event => player.setRest());
+    document.getElementById("heal_button")
+      .addEventListener("click", event => player.healHero());
+    document.getElementById("gameCanvas")
+      .addEventListener("click", this.onCanvasClick.bind(this), false);
 
-    document.getElementById("wisdom").addEventListener("click", this.increaseWisdom.bind(this), false);
-    document.getElementById("agility").addEventListener("click", this.increaseAgility.bind(this), false);
-    document.getElementById("strength").addEventListener("click", this.increaseStrength.bind(this), false);
+    // Links for level up menu
+    document.getElementById("increase_strength")
+      .addEventListener("click", this.increaseStrength.bind(this), false);
+    document.getElementById("increase_endurance")
+      .addEventListener("click", this.increaseEndurance.bind(this), false);
+    document.getElementById("increase_agility")
+      .addEventListener("click", this.increaseAgility.bind(this), false);
+    document.getElementById("increase_will")
+      .addEventListener("click", this.increaseWill.bind(this), false);
+    document.getElementById("increase_wisdom")
+      .addEventListener("click", this.increaseWisdom.bind(this), false);
 
     this.setupNav();
   }
 
   drawEquipment(hero) {
     // Draw hero icon and the current equipment
-    let primaryPos = "-" + hero.primary.sprite.offsetX + "px -" + hero.primary.sprite.offsetY + "px";
-    let secondaryPos = "-" + hero.secondary.sprite.offsetX + "px -" + hero.secondary.sprite.offsetY + "px";
-    let headPos = "-" + hero.helmet.sprite.offsetX + "px -" + hero.helmet.sprite.offsetY + "px";
-    let bodyPos = "-" + hero.armour.sprite.offsetX + "px -" + hero.armour.sprite.offsetY + "px";
-    console.log("primary = ", hero.primary, "position =", primaryPos);
-    $('#primary_icon').css("object-position", "");
+    let primaryPos = "-" + hero.primary.sprite.offsetX + "px -"
+      + hero.primary.sprite.offsetY + "px";
+    let secondaryPos = "-" + hero.secondary.sprite.offsetX + "px -"
+      + hero.secondary.sprite.offsetY + "px";
+    let headPos = "-" + hero.helmet.sprite.offsetX + "px -"
+      + hero.helmet.sprite.offsetY + "px";
+    let bodyPos = "-" + hero.armour.sprite.offsetX + "px -"
+      + hero.armour.sprite.offsetY + "px";
+
     $('#primary_icon').css("object-position", primaryPos);
     $('#secondary_icon').css("object-position", secondaryPos);
     $('#head_icon').css("object-position", headPos);
     $('#body_icon').css("object-position", bodyPos);
   }
 
-  drawStats(hero) {
-        // Populate hero stats
-        $('#stats').text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
-                         "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
-                         "  Strength: " + hero.strength + "\n" +
-                         "  Endurance: " + hero.endurance + "\n" +
-                         "  Agility: " + hero.agility + "\n" +
-                         "  Wisdom: " + hero.wisdom + "\n" +
-                         "  Will: " + hero.will + "\n" +
-                         "  Attack: " + hero.primaryAtkPower + "\n" +
-                         "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
-                         "  Defense: " + hero.physicalDefense);
+  drawStats(hero, field) {
+    // Populate hero stats
+    $(field).text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
+                  "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
+                  "  Strength: " + hero.strength + "\n" +
+                  "  Endurance: " + hero.endurance + "\n" +
+                  "  Agility: " + hero.agility + "\n" +
+                  "  Wisdom: " + hero.wisdom + "\n" +
+                  "  Will: " + hero.will + "\n" +
+                  "  Attack: " + hero.primaryAtkPower + "\n" +
+                  "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
+                  "  Defense: " + hero.physicalDefense);
+  }
+
+  drawLevelUp(hero) {
+    $('#lvl_up_hero_icon').removeClass();
+    $('#lvl_up_hero_icon').addClass(hero.className);
+    this.drawStats(hero, '#lvl_up_stats');
+    $('#lvl_up_menu').css("visibility", "visible");
   }
 
   setupNav() {
     for (let hero of this.player.heroes) {
-      let name = 'knight';
-      if (hero.subtype == MAGE)
-        name = 'mage';
-      else if (hero.subtype == ROGUE)
-        name = 'rogue';
-      else if (hero.subtype == ARCHER)
-        name = 'archer';
-
+      let name = hero.className;
       let id = name + '_id';
       $('<div class="collapsible-body">' +
           '<a class="waves-effect btn orange" style="margin:2px id="' + id + '"">'
@@ -129,7 +141,7 @@ class Interface {
         $('#hero_icon').addClass(name);
 
         event.data.ui.drawEquipment(hero);
-        event.data.ui.drawStats(hero);
+        event.data.ui.drawStats(hero, '#stats');
 
         // Populate primary equipment list
         $('#equipment_list').empty();
@@ -265,30 +277,50 @@ class Interface {
   }
 
   levelUp(hero) {
-    this.lvlUpButtons.style.visibility = "visible";
     this.heroToLevelUp = hero;
-    //let strength = document.getElementById("strength");
-    //strength.style.left = window.innerWidth / 2 + "px";
-    //strength.disabled = false;
+    this.drawLevelUp(hero);
   }
+
   increaseAgility() {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.agility++;
-      this.lvlUpButtons.style.visibility = "hidden";
+      $('#lvl_up_menu').css("visibility", "invisible");
+      this.drawStats(this.heroToLevelUp, '#stats');
     }
   }
+
   increaseStrength() {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.strength++;
-      this.lvlUpButtons.style.visibility = "hidden";
+      $('#lvl_up_menu').css("visibility", "hidden");
+      this.drawStats(this.heroToLevelUp, '#stats');
     }
   }
+
+  increaseEndurance() {
+    if (this.heroToLevelUp !== null) {
+      this.heroToLevelUp.endurance++;
+      $('#lvl_up_menu').css("visibility", "hidden");
+      this.drawStats(this.heroToLevelUp, '#stats');
+    }
+  }
+
   increaseWisdom() {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.wisdom++;
-      this.lvlUpButtons.style.visibility = "hidden";
+      $('#lvl_up_menu').css("visibility", "hidden");
+      this.drawStats(this.heroToLevelUp, '#stats');
     }
   }
+
+  increaseWill() {
+    if (this.heroToLevelUp !== null) {
+      this.heroToLevelUp.will++;
+      $('#lvl_up_menu').css("visibility", "hidden");
+      this.drawStats(this.heroToLevelUp, '#stats');
+    }
+  }
+
   getItems(type) {
     switch(type) {
       default:
@@ -315,23 +347,6 @@ class Interface {
       case SPELL:
       return this.player.spells;
     }
-  }
-  
-  renderLevelUpMenu() {
-    this.state.menu = LVL_UP;
-    renderCurrentCharacter();
-    let hero = this.state.hero;
-    
-    this.hudContext.fillText("Strength: " + hero.strength,
-                               offsetX, offsetY + 2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Endurance: " + hero.endurance,
-                               offsetX, offsetY + 5/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Agility: " + hero.agility,
-                               offsetX, offsetY + 3 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Wisdom: " + hero.wisdom,
-                               offsetX, offsetY + 7/2 * spacing * UPSCALE_FACTOR);
-    this.hudContext.fillText("Will: " + hero.will,
-                               offsetX, offsetY + 4 * spacing * UPSCALE_FACTOR);
   }
   
   onCanvasClick(event) {
