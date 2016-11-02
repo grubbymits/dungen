@@ -70,7 +70,7 @@ class Interface {
       .addEventListener("click", event => player.setRest());
     document.getElementById("heal_button")
       .addEventListener("click", event => player.healHero());
-    document.getElementById("gameCanvas")
+    document.getElementById("mapCanvas")
       .addEventListener("click", this.onCanvasClick.bind(this), false);
 
     // Links for level up menu

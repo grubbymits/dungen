@@ -1,7 +1,7 @@
 "use strict";
 
 class Game {
-  constructor(context, width, height) {
+  constructor(context, overlayContext, width, height) {
     console.log("Game.constructor");
     this.actors = [];
     this.heroes = [];
@@ -14,10 +14,11 @@ class Game {
     this.monstersKilled = 0;
     this.expGained = 0;
     this.context = context;
+    this.overlayContext = overlayContext;
     this.level = 1;
     this.isRunning = false;
     this.loading = false;
-    this.skipTicks = 1000 / 100;
+    this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = new GameMap(width, height, this);
     this.audio = new Audio(this);
@@ -50,7 +51,9 @@ class Game {
 
     // reset stuff
     this.context.fillStyle = '#000000';
-    this.context.fillRect(0, 0, this.theMap.width * TILE_SIZE, this.theMap.height * TILE_SIZE);
+    this.context.fillRect(0, 0,
+                          this.theMap.width * TILE_SIZE,
+                          this.theMap.height * TILE_SIZE);
     this.actors = [];
     this.monsters = [];
     this.objects = [];
@@ -76,13 +79,10 @@ class Game {
   
   renderMap() {
     // draw everything
-    for (let hero of this.heroes) {
-      this.theMap.addVisibleTiles(hero.pos, hero.vision);
-    }
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
         let loc = this.theMap.getLocation(x,y);
-        if (loc.dirty && loc.type != CEILING && loc.isVisible) {
+        if (loc.dirty && loc.type != CEILING) {
           this.context.fillStyle = '#000000';
           this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
                                 y * TILE_SIZE * UPSCALE_FACTOR,
@@ -90,6 +90,33 @@ class Game {
                                 TILE_SIZE * UPSCALE_FACTOR);
           var type = loc.type;
           tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
+          //loc.dirty = false;
+        }
+      }
+    }
+  }
+
+  renderVisible() {
+    for (var x = 0; x < this.theMap.width; x++) {
+      for (var y = 0; y < this.theMap.height; y++) {
+        let loc = this.theMap.getLocation(x,y);
+        if (loc.dirty && loc.type != CEILING &&
+            (loc.isVisible || loc.isPartiallyVisible)) {
+
+          this.overlayContext.clearRect(x * TILE_SIZE * UPSCALE_FACTOR,
+                                        y * TILE_SIZE * UPSCALE_FACTOR,
+                                        TILE_SIZE * UPSCALE_FACTOR,
+                                        TILE_SIZE * UPSCALE_FACTOR);
+          
+          if (loc.isPartiallyVisible) {
+            this.overlayContext.globalAlpha = 0.5;
+            this.overlayContext.fillStyle = '#000000';
+            this.overlayContext.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
+                                         y * TILE_SIZE * UPSCALE_FACTOR,
+                                         TILE_SIZE * UPSCALE_FACTOR,
+                                         TILE_SIZE * UPSCALE_FACTOR);
+            this.overlayContext.globalAlpha = 1.0;
+          }
           loc.dirty = false;
         }
       }
@@ -112,12 +139,12 @@ class Game {
   }
 
   addTextEvent(string, pos) {
-    this.player.UI.addEvent(new TextEvent(this.context, new Date().getTime(),
+    this.player.UI.addEvent(new TextEvent(this.overlayContext, new Date().getTime(),
                                           pos, string));
   }
 
   addGraphicEvent(sprite, pos) {
-    this.player.UI.addEvent(new GraphicEvent(this.context, new Date().getTime(),
+    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, new Date().getTime(),
                                              pos, sprite));
   }
 
@@ -144,7 +171,7 @@ class Game {
     this.actors.push(hero);
     this.heroes.push(hero);
     this.currentEffects.set(hero, []);
-    this.theMap.placeEntity(pos, hero);
+    //this.theMap.placeEntity(pos, hero);
     return hero;
   }
 
@@ -175,7 +202,7 @@ class Game {
     this.actors.push(monster);
     this.monsters.push(monster);
     this.currentEffects.set(monster, []);
-    this.theMap.placeEntity(pos, monster);
+    //this.theMap.placeEntity(pos, monster);
     ++this.totalMonsters;
     return monster;
   }

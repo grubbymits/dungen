@@ -173,6 +173,7 @@ class Treasure extends Item {
 class Spell extends Item {
   constructor(kind) {
     super(SPELL, kind);
+    this.names = SPELL_NAMES;
   }
   use(actor) {
     
