@@ -284,7 +284,7 @@ class Interface {
   increaseAgility() {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.agility++;
-      $('#lvl_up_menu').css("visibility", "invisible");
+      $('#lvl_up_menu').css("visibility", "hidden");
       this.drawStats(this.heroToLevelUp, '#stats');
     }
   }
