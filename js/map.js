@@ -214,11 +214,20 @@ class GameMap {
   }
 
   placeEntity(pos, entity) {
+    //let origPos = entity.pos;
+
+    //if (this.locations[origPos.x][origPos.y].entity != entity) {
+      //throw("entity's pos and this map data is out of sync!");
+    //}
     if (this.locations[pos.x][pos.y].entity !== null) {
+      console.log("existing entity = ", this.locations[pos.x][pos.y].entity);
+      console.log("new entity = ", entity);
       throw("trying to place in non empty loc!");
     }
+
     this.locations[pos.x][pos.y].entity = entity;
     this.locations[pos.x][pos.y].dirty = true;
+
     if (entity.kind == HERO) {
       this.addVisibleTiles(entity.pos, entity.vision);
     }

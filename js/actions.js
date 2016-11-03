@@ -36,7 +36,7 @@ class WalkAction extends Action {
 
   perform() {
 
-    if (this.currentPath.length == 0) {
+    if (this.currentPath.length === 0) {
       return;
     }
 
@@ -47,7 +47,7 @@ class WalkAction extends Action {
     if (this.map.isBlocked(next)) {
       this.currentPath = this.map.getPath(pos, this.destination);
       
-      if (this.currentPath.length == 0) {
+      if (this.currentPath.length === 0) {
         if (this.actor.nextAction == this) {
           this.actor.nextAction = null;
         }
@@ -77,7 +77,7 @@ class WalkAction extends Action {
     this.map.placeEntity(next, this.actor);
     this.actor.pos = next;
     this.actor.useEnergy(energyRequired);
-    if (this.currentPath.length == 0 && this.actor.nextAction == this) {
+    if (this.currentPath.length === 0 && this.actor.nextAction == this) {
       this.actor.nextAction = null;
     }
   }
