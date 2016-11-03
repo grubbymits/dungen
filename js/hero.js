@@ -359,12 +359,15 @@ class Player {
     }
     items.set(item, number);
   }
+
   setDestination(x, y) {
-    if (this.game.theMap.getLocation(x, y).isHidden) {
+    let loc = this.game.theMap.getLocation(x, y);
+    if (loc.isHidden) {
       return;
     }
-    this.currentHero.setDestination(x, y);
+    this.currentHero.setDestination(loc.vec);
   }
+
   setRest() {
     for (let hero of this.heroes) {
       hero.setRest();

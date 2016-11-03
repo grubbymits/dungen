@@ -61,11 +61,13 @@ class Actor extends Entity {
   get nextStep() {
     return this.currentPath[0];
   }
+
   shiftNextStep() {
     this.currentPath.shift();
   }
-  setDestination(x, y) {
-    let target = this.game.map.getEntity(x, y);
+
+  setDestination(vec) {
+    let target = this.game.map.getEntity(vec);
     if (target) {
       if (target.kind == OBJECT) {
         if (target.isInteractable) {
@@ -78,12 +80,12 @@ class Actor extends Entity {
         this.nextAction = this.attack;
         return;
       }
-    } else if (!this.game.map.isBlocked(x, y)) {
-      console.log("destination set to: ", x, y);
-      this.walk.dest = this.game.map.getLocation(x, y).vec;
+    } else if (!this.game.map.isBlocked(vec)) {
+      this.walk.dest = vec; //this.game.map.getLocation(x, y).vec;
       this.nextAction = this.walk;
     }
   }
+
   setRest() {
     this.nextAction = this.rest;
   }

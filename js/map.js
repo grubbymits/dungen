@@ -175,15 +175,6 @@ class GameMap {
                            monsterGroup11,
                            monsterGroup12 ];
   
-    /*
-    for (let groupIdx in this.monsterGroups) {
-      let group = this.monsterGroups[groupIdx];
-      console.log("monster group", groupIdx);
-      for (let monsterIdx in group) {
-        let monster = group[monsterIdx];
-        console.log("  ", ENEMY_NAMES[monster]);
-      }
-    }*/
   }
 
   isOutOfRange(x, y) {
@@ -201,27 +192,20 @@ class GameMap {
     return this.locations[x][y];
   }
 
-  isBlocked(loc) {
-    if (this.isOutOfRange(loc.x, loc.y)) {
+  isBlocked(vec) {
+    if (this.isOutOfRange(vec.x, vec.y)) {
       return true;
     }
-    return loc.isBlocked;
+    return this.getLocation(vec.x, vec.y).isBlocked;
   }
 
-  removeEntity(pos) {
-    this.locations[pos.x][pos.y].entity = null;
-    this.locations[pos.x][pos.y].dirty = true;
+  removeEntity(vec) {
+    this.locations[vec.x][vec.y].entity = null;
+    this.locations[vec.x][vec.y].dirty = true;
   }
 
   placeEntity(pos, entity) {
-    //let origPos = entity.pos;
-
-    //if (this.locations[origPos.x][origPos.y].entity != entity) {
-      //throw("entity's pos and this map data is out of sync!");
-    //}
     if (this.locations[pos.x][pos.y].entity !== null) {
-      console.log("existing entity = ", this.locations[pos.x][pos.y].entity);
-      console.log("new entity = ", entity);
       throw("trying to place in non empty loc!");
     }
 
@@ -233,17 +217,17 @@ class GameMap {
     }
   }
 
-  getEntity(x, y) {
-    if (this.isOutOfRange(x, y)) {
+  getEntity(vec) {
+    if (this.isOutOfRange(vec.x, vec.y)) {
       return null;
     }
     // entity maybe null;
-    return this.locations[x][y].entity;
+    return this.locations[vec.x][vec.y].entity;
   }
 
-  setDirty(pos) {
-    if (!this.isOutOfRange(pos.x, pos.y))
-      this.locations[pos.x][pos.y].dirty = true;
+  setDirty(vec) {
+    if (!this.isOutOfRange(vec.x, vec.y))
+      this.locations[vec.x][vec.y].dirty = true;
   }
 
   get width() {
@@ -352,6 +336,7 @@ class GameMap {
     }
   }
 
+  // return an array of Vecs
   getPath(start, goal) {
     // ignore if the click is out range, blocked or the current location.
     if (start == undefined)
@@ -363,7 +348,7 @@ class GameMap {
       console.log("goal is out of range");
       return [];
     }
-    if (this.isBlocked(goal) && !goal.isOccupied) {
+    if (this.isBlocked(goal) && !this.vecToLoc(goal).isOccupied) {
       console.log("goal blocked and not by something interesting");
       return [];
     }
