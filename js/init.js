@@ -78,17 +78,17 @@ window.onload = function begin() {
         theGame.play();
       }
       // set a maximum game rate
-      if (new Date().getTime() >= theGame.nextGameTick) {
-        theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
+      //if (new Date().getTime() >= theGame.nextGameTick) {
+        //theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
         updater.next();
-        theGame.renderVisible();
+        theGame.renderChanges();
         theGame.renderEntities();
         UI.renderInfo();
-      }
+      //}
     }
-    window.requestAnimationFrame(run);
+    //window.requestAnimationFrame(run);
   };
   $('#load_bar').hide();
   theGame.renderMap();
-  run();
+  window.setInterval(run, 33);
 };

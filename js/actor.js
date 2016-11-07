@@ -15,7 +15,6 @@ class Actor extends Entity {
     this.id = 0;
     this.vision = vision;
 
-
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.attack = new InitAttack(this);

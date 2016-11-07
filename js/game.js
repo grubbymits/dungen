@@ -82,7 +82,7 @@ class Game {
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
         let loc = this.theMap.getLocation(x,y);
-        if (loc.dirty && loc.type != CEILING) {
+        if (loc.type != CEILING) {
           this.context.fillStyle = '#000000';
           this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
                                 y * TILE_SIZE * UPSCALE_FACTOR,
@@ -96,6 +96,7 @@ class Game {
     }
   }
 
+  /*
   renderVisible() {
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
@@ -121,8 +122,42 @@ class Game {
         }
       }
     }
+  }*/
+
+  renderChanges() {
+    while (this.theMap.newVisible.length > 0) {
+      let vec = this.theMap.newVisible.pop();
+      this.overlayContext.clearRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
+                                    vec.y * TILE_SIZE * UPSCALE_FACTOR,
+                                    TILE_SIZE * UPSCALE_FACTOR,
+                                    TILE_SIZE * UPSCALE_FACTOR);
+    }
+
+    this.overlayContext.globalAlpha = 0.5;
+    this.overlayContext.fillStyle = '#000000';
+    while (this.theMap.newPartialVisible.length > 0) {
+      let vec = this.theMap.newPartialVisible.pop();
+      this.overlayContext.clearRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
+                                    vec.y * TILE_SIZE * UPSCALE_FACTOR,
+                                    TILE_SIZE * UPSCALE_FACTOR,
+                                    TILE_SIZE * UPSCALE_FACTOR);
+      this.overlayContext.fillRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
+                                   vec.y * TILE_SIZE * UPSCALE_FACTOR,
+                                   TILE_SIZE * UPSCALE_FACTOR,
+                                   TILE_SIZE * UPSCALE_FACTOR);
+    }
+    this.overlayContext.globalAlpha = 1.0;
+
+    while (this.theMap.newDirty.length > 0) {
+      console.log("clear new dirty");
+      let vec = this.theMap.newDirty.pop();
+      this.overlayContext.clearRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
+                                    vec.y * TILE_SIZE * UPSCALE_FACTOR,
+                                    TILE_SIZE * UPSCALE_FACTOR,
+                                    TILE_SIZE * UPSCALE_FACTOR);
+    }
   }
-  
+ 
   renderEntities() {
     for (let actor of this.actors) {
       let loc = this.theMap.getLocation(actor.pos.x, actor.pos.y);

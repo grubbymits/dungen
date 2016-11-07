@@ -38,7 +38,7 @@ class Location {
     this.entity = entity;
     this.tileType = type;
     this.vec = new Vec(x, y);
-    this.dirty = true;
+    //this.dirty = true;
     this.visible = HIDDEN;
   }
   get isBlocked() {
@@ -64,7 +64,7 @@ class Location {
     // once visible, it can't become hidden or partial
     if (this.visible != VISIBLE) {
       this.visible = visible;
-      this.dirty = true;
+      //this.dirty = true;
     }
   }
   get isVisible() {
@@ -200,17 +200,25 @@ class GameMap {
   }
 
   removeEntity(vec) {
-    this.locations[vec.x][vec.y].entity = null;
-    this.locations[vec.x][vec.y].dirty = true;
+    let loc = this.locations[vec.x][vec.y];
+    loc.entity = null;
+    //this.locations[vec.x][vec.y].dirty = true;
+    if (loc.isVisible) {
+      this.newDirty.push(vec);
+    }
   }
 
-  placeEntity(pos, entity) {
-    if (this.locations[pos.x][pos.y].entity !== null) {
+  placeEntity(vec, entity) {
+    let loc = this.locations[vec.x][vec.y];
+    if (loc.entity !== null) {
       throw("trying to place in non empty loc!");
     }
 
-    this.locations[pos.x][pos.y].entity = entity;
-    this.locations[pos.x][pos.y].dirty = true;
+    loc.entity = entity;
+    //this.locations[pos.x][pos.y].dirty = true;
+    if (loc.isVisible) {
+      this.newDirty.push(vec);
+    }
 
     if (entity.kind == HERO) {
       this.addVisibleTiles(entity.pos, entity.vision);
@@ -226,8 +234,10 @@ class GameMap {
   }
 
   setDirty(vec) {
-    if (!this.isOutOfRange(vec.x, vec.y))
-      this.locations[vec.x][vec.y].dirty = true;
+    if (!this.isOutOfRange(vec.x, vec.y)) {
+      //this.locations[vec.x][vec.y].dirty = true;
+      this.newDirty.push(vec);
+    }
   }
 
   get width() {
@@ -305,6 +315,7 @@ class GameMap {
           continue;
         }
         this.locations[x][y].visibility = VISIBLE;
+        this.newVisible.push(vec);
 
         if (this.locations[x][y].isWallOrCeiling) {
           this.createShadow(x, y, maxDistance, octant);
@@ -318,7 +329,12 @@ class GameMap {
     let octant = 0;
     for (let x = -1; x < 2; ++x) {
       for (let y = -1; y < 2; ++y) {
-        this.locations[start.x + x][start.y + y].visibility = VISIBLE;
+        let loc = this.locations[start.x + x][start.y + y]; //.visibility = VISIBLE;
+        if (!loc.isVisible) {
+          this.newVisible.push(loc.vec);
+          loc.visibility = VISIBLE;
+        }
+
         if (0 === x && 0 === y) {
           continue;
         }
@@ -331,7 +347,11 @@ class GameMap {
         if (this.isOutOfRange(x, y)) {
           continue;
         }
-        this.locations[x][y].visibility = PARTIALLY_VISIBLE;
+        let loc = this.locations[x][y];
+        if (loc.isHidden) {
+          this.locations[x][y].visibility = PARTIALLY_VISIBLE;
+          this.newPartialVisible.push(loc.vec);
+        }
       }
     }
   }
@@ -748,6 +768,9 @@ class GameMap {
 
   reset() {
     this.shadow.clear();
+    this.newVisible = [];
+    this.newPartialVisible = [];
+    this.newDirty = [];
     this.locations = [];
     this.rooms = [];
     for (let x = 0; x < this.xMax; x++) {

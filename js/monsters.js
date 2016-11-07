@@ -19,6 +19,7 @@ class Monster extends Actor {
     this.physicalDefense = defense;
     this.agility = agility;
     this.findTarget.targets = this.game.heroes;
+    this.name = ENEMY_NAMES[index];
   }
   get action() {
     this.currentSprite = this.sprite;

@@ -42,6 +42,10 @@ class Hero extends Actor {
     this.findTarget.targets = this.game.monsters;
     this.game.theMap.addVisibleTiles(this.pos, this.vision);
   }
+
+  get name() {
+    return this.className;
+  }
   
   get armour() {
     return this.equipArmour;

@@ -19,13 +19,13 @@ class UIEvent {
 
 class TextEvent extends UIEvent {
   constructor(context, start, pos, text) {
-    super(context, start, 1000, pos);
+    super(context, start, 3000, pos);
     this.string = text;
   }
   render() {
-    this.context.font = "16px Droid Sans";
-    this.context.fillStyle = "orange";
-    this.context.fillText(this.string, this.x, this.y);
+    //this.context.font = "16px Droid Sans";
+    //this.context.fillStyle = "orange";
+    //this.context.fillText(this.string, this.x, this.y);
   }
 }
 
@@ -250,20 +250,18 @@ class Interface {
     // - chest contents
     // - exp gain
     // - level up
+    let eventList = "";
     for (let i in this.events) {
       let event = this.events[i];
+
+      if (event.string !== null) {
+        eventList += event.string + "\n";
+      }
+
       if (!event.isFinished()) {
         event.render();
-      } else {
         game.map.setDirty(event.pos);
-        let pos = new Vec(event.pos.x - 1, event.pos.y - 1);
-        game.map.setDirty(pos);
-        pos.x++;
-        game.map.setDirty(pos);
-        pos.x++;
-        game.map.setDirty(pos);
-        pos.x++;
-        game.map.setDirty(pos);
+      } else {
         delete this.events[i];
         this.events.splice(i, 1);
       }
@@ -274,6 +272,7 @@ class Interface {
     $('#score_hud').text("Chests: " + game.openChests +"/" + game.totalChests + "\n" +
                          "Killed: " + game.monstersKilled + "/" + game.totalMonsters + "\n" +
                          "Exp: " + game.expGained);
+    $('#action_hud').text(eventList);
   }
 
   levelUp(hero) {
