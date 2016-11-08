@@ -20,7 +20,8 @@ class Game {
     this.loading = false;
     this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
-    this.theMap = new GameMap(width, height, this);
+    this.theMap = null; //new GameMap(width, height, this);
+    this.mapGenerator = new MapGenerator(width, height, this);
     this.audio = new Audio(this);
   }
 
@@ -30,8 +31,13 @@ class Game {
 
   init(playerType) {
     this.loading = true;
-    let startPos = this.theMap.generate(this.level);
-    let character = this.createHero(startPos, playerType);
+
+    this.theMap = this.mapGenerator.map;
+    this.mapGenerator.generate(this.level);
+    this.createStair(this.mapGenerator.exitStairLoc, true);
+    this.createStair(this.mapGenerator.entryStairLoc, false);
+
+    let character = this.createHero(this.mapGenerator.entryVec, playerType);
     let player = new Player(character);
     player.addItem(armours[1]);
     player.addItem(helmets[1]);
@@ -95,34 +101,6 @@ class Game {
       }
     }
   }
-
-  /*
-  renderVisible() {
-    for (var x = 0; x < this.theMap.width; x++) {
-      for (var y = 0; y < this.theMap.height; y++) {
-        let loc = this.theMap.getLocation(x,y);
-        if (loc.dirty && loc.type != CEILING &&
-            (loc.isVisible || loc.isPartiallyVisible)) {
-
-          this.overlayContext.clearRect(x * TILE_SIZE * UPSCALE_FACTOR,
-                                        y * TILE_SIZE * UPSCALE_FACTOR,
-                                        TILE_SIZE * UPSCALE_FACTOR,
-                                        TILE_SIZE * UPSCALE_FACTOR);
-          
-          if (loc.isPartiallyVisible) {
-            this.overlayContext.globalAlpha = 0.5;
-            this.overlayContext.fillStyle = '#000000';
-            this.overlayContext.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
-                                         y * TILE_SIZE * UPSCALE_FACTOR,
-                                         TILE_SIZE * UPSCALE_FACTOR,
-                                         TILE_SIZE * UPSCALE_FACTOR);
-            this.overlayContext.globalAlpha = 1.0;
-          }
-          loc.dirty = false;
-        }
-      }
-    }
-  }*/
 
   renderChanges() {
     while (this.theMap.newVisible.length > 0) {
@@ -236,7 +214,6 @@ class Game {
     this.actors.push(monster);
     this.monsters.push(monster);
     this.currentEffects.set(monster, []);
-    //this.theMap.placeEntity(pos, monster);
     ++this.totalMonsters;
     return monster;
   }
@@ -248,18 +225,8 @@ class Game {
     }
   }
 
-  createStair(room, isExit) {
-    console.log("create stair at", room);
-    let x = room.centre.x;
-    let y = room.centre.y;
-    let loc = this.theMap.getLocation(x, y);
-    while ((loc.isBlocked || loc.isOccupied)) {
-      x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
-      y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
-      loc = this.theMap.getLocation(x, y);
-    }
+  createStair(loc, isExit) {
     this.objects.push(new Stair(loc.vec, isExit, this));
-    return loc;
   }
 
   killActor(actor) {
