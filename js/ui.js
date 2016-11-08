@@ -1,39 +1,42 @@
 "use strict";
 
+const TEXT_EVENT = 0;
+const GRAPHIC_EVENT = 1;
+
 class UIEvent {
-  constructor(context, start, millisecs, pos) {
-    this.context = context;
+  constructor(start, millisecs) {
     this.startTime = start;
     this.endTime = this.startTime + millisecs;
-    this.position = pos;
-    this.x = pos.x * TILE_SIZE * UPSCALE_FACTOR;
-    this.y = pos.y * TILE_SIZE * UPSCALE_FACTOR;
   }
-  get pos() {
-    return this.position;
-  }
+
   isFinished() {
     return (new Date().getTime() >= this.endTime);
   }
 }
 
 class TextEvent extends UIEvent {
-  constructor(context, start, pos, text) {
-    super(context, start, 3000, pos);
+  constructor(text, start) {
+    super(start, 3000);
     this.string = text;
-  }
-  render() {
-    //this.context.font = "16px Droid Sans";
-    //this.context.fillStyle = "orange";
-    //this.context.fillText(this.string, this.x, this.y);
+    this.type = TEXT_EVENT;
   }
 }
 
 class GraphicEvent extends UIEvent {
   constructor(context, start, pos, sprite) {
-    super(context, start, 1000, pos);
+    super(start, 1000);
     this.sprite = sprite;
+    this.context = context;
+    this.position = pos;
+    this.x = pos.x * TILE_SIZE * UPSCALE_FACTOR;
+    this.y = pos.y * TILE_SIZE * UPSCALE_FACTOR;
+    this.type = GRAPHIC_EVENT;
   }
+
+  get pos() {
+    return this.position;
+  }
+
   render() {
     this.sprite.render(this.x, this.y, this.context);
   }
@@ -229,6 +232,11 @@ class Interface {
     // ensure the collapsible ability is enabled.
     $('#collapsible_heroes').collapsible();
     $('#equipment_list').collapsible();
+
+    // Initialise
+    $('#hero_icon').addClass(this.player.currentHero.className);
+    this.drawEquipment(this.player.currentHero);
+    this.drawStats(this.player.currentHero);
   }
   
   addEvent(event) {
@@ -254,13 +262,13 @@ class Interface {
     for (let i in this.events) {
       let event = this.events[i];
 
-      if (event.string !== null) {
-        eventList += event.string + "\n";
-      }
-
       if (!event.isFinished()) {
-        event.render();
-        game.map.setDirty(event.pos);
+        if (event.type == TEXT_EVENT) {
+          eventList += event.string + "\n";
+        } else {
+          event.render();
+          game.map.setDirty(event.pos);
+        } 
       } else {
         delete this.events[i];
         this.events.splice(i, 1);

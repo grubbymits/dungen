@@ -104,7 +104,7 @@ class DealDamage extends Action {
     if (this.targetActor.health <= 0) {
       if (this.actor.increaseExp !== null) {
         let text = this.actor.name + " gains " + this.targetActor.exp + "xp";
-        this.game.addTextEvent(text, this.targetActor.pos);
+        this.game.addTextEvent(text);
         this.actor.game.player.increaseExp(this.targetActor.exp);
       }
       this.game.audio.die();
@@ -115,7 +115,7 @@ class DealDamage extends Action {
       this.game.audio.hit();
       let text = this.actor.name + " deals " + damage + " to "
         + this.targetActor.name;
-      this.game.addTextEvent(text, this.targetActor.pos);
+      this.game.addTextEvent(text);
     }
   }
   set target(target) {
@@ -135,7 +135,8 @@ class AttackBase extends Action {
 
   get success() {
     let dodgeChance = Math.random() * this.targetActor.agility;
-    let connectChance = Math.random() * this.actor.agility;
+    // Weight it in favour of actually connecting.
+    let connectChance = 3 * Math.random() * this.actor.agility;
     return connectChance > dodgeChance;
   }
 }
@@ -166,7 +167,7 @@ class PrimaryAttack extends AttackBase {
     } else {
       this.actor.useEnergy(energyRequired);
       let text = this.targetActor.name + " dodged attack from " + this.actor.name;
-      this.game.addTextEvent(text, this.targetActor.pos);
+      this.game.addTextEvent(text);
       this.game.audio.dodge();
       return null;
     }
@@ -198,7 +199,8 @@ class SecondaryAttack extends AttackBase {
       return this.dealDamage;
     } else {
       this.actor.useEnergy(energyRequired);
-      this.game.addTextEvent("Dodged!", this.targetActor.pos);
+      let text = this.targetActor.name + " dodged attack from " + this.actor.name;
+      this.game.addTextEvent(text);
       this.game.audio.dodge();
       return null;
     }

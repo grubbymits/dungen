@@ -173,9 +173,8 @@ class Game {
     }
   }
 
-  addTextEvent(string, pos) {
-    this.player.UI.addEvent(new TextEvent(this.overlayContext, new Date().getTime(),
-                                          pos, string));
+  addTextEvent(string) {
+    this.player.UI.addEvent(new TextEvent(string, new Date().getTime()));
   }
 
   addGraphicEvent(sprite, pos) {
