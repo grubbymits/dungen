@@ -45,8 +45,9 @@ class Location {
     this.visible = HIDDEN;
   }
   get isBlocked() {
+    // this.blocking is used to cause a temp block until an entity is placed.
     return (this.entity !== null || this.tileType == WALL ||
-            this.tileType == CEILING);
+            this.tileType == CEILING || this.blocking);
   }
   get isWallOrCeiling() {
     return (this.tileType == WALL || this.tileType == CEILING);
@@ -82,8 +83,7 @@ class Location {
 }
 
 class GameMap {
-  constructor(width, height, game) {
-    this.game = game;
+  constructor(width, height) {
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
 
@@ -159,14 +159,16 @@ class GameMap {
       throw("trying to place in non empty loc!");
     }
 
+    if (entity.kind == HERO) {
+      this.addVisibleTiles(vec, entity.vision);
+    }
+
     loc.entity = entity;
+    entity.pos = vec;
+
     //this.locations[pos.x][pos.y].dirty = true;
     if (loc.isVisible) {
       this.newDirty.push(vec);
-    }
-
-    if (entity.kind == HERO) {
-      this.addVisibleTiles(entity.pos, entity.vision);
     }
   }
 
@@ -259,10 +261,15 @@ class GameMap {
         if (this.shadow.has(this.locations[x][y])) {
           continue;
         }
-        this.locations[x][y].visibility = VISIBLE;
-        this.newVisible.push(vec);
 
-        if (this.locations[x][y].isWallOrCeiling) {
+        let loc = this.locations[x][y];
+        if (!loc.isVisible) {
+          loc.visibility = VISIBLE;
+          this.newVisible.push(vec);
+          console.log("adding new visibile");
+        }
+
+        if (loc.isWallOrCeiling) {
           this.createShadow(x, y, maxDistance, octant);
         }
       }
@@ -278,6 +285,7 @@ class GameMap {
         if (!loc.isVisible) {
           this.newVisible.push(loc.vec);
           loc.visibility = VISIBLE;
+          console.log("adding new visibile");
         }
 
         if (0 === x && 0 === y) {

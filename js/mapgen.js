@@ -1,5 +1,12 @@
 "use strict";
 
+class MonsterPosition {
+  constructor(type, vec) {
+    this.type = type;
+    this.vec = vec;
+  }
+}
+
 class Room {
   
   constructor(x, y, width, height, id) {
@@ -34,7 +41,7 @@ class Room {
 }
 
 class MapGenerator {
-  constructor(width, height, game) {
+  constructor(width, height) {
     var monsterGroup0 = [ RAT, SPIDERS, RABBIT];
 
     var monsterGroup1 = monsterGroup0.slice();
@@ -88,9 +95,10 @@ class MapGenerator {
                            monsterGroup11,
                            monsterGroup12 ];
 
-    this.game = game;
-    this.map = new GameMap(width, height, game);
-    this.rooms = [];
+    //this.map = new GameMap(width, height);
+    //this.rooms = [];
+    //this.chestLocs = [];
+    //this.monsterPlacements = [];
     this.minRoomWidth = MIN_SMALL;
     this.minRoomHeight = MIN_SMALL;
     this.xMax = width / TILE_SIZE;
@@ -98,14 +106,18 @@ class MapGenerator {
   }
 
   // Generate level and return start position
-  generate(level) {
+  generate(level, width, height) {
+    this.rooms = [];
+    this.chestLocs = [];
+    this.monsterPlacements = [];
+    this.map = new GameMap(width, height);
     let numRooms = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
                               (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
     this.placeRooms(numRooms);
     this.createConnections();
     this.placeStairs();
-    this.placeChests();
-    this.placeMonsters(level, 32);
+    //this.placeChests();
+    //this.placeMonsters(level, 32);
     //this.entryVec = neighbours[0];
     //return neighbours[0];
   }
@@ -356,7 +368,9 @@ class MapGenerator {
       let loc = this.map.getLocation(x, y);
       if (!loc.isBlocked) {
         let type = Math.floor(Math.random() * monsters.length);
-        let monster = this.game.createMonster(loc.vec, monsters[type]);
+        //let monster = this.game.createMonster(loc.vec, monsters[type]);
+        this.monsterPlacements.push(new MonsterPosition(monsters[type], loc.vec));
+        loc.blocked = true;
       }
     }
   }
@@ -376,7 +390,9 @@ class MapGenerator {
 
       let loc = this.map.getLocation(x, y);
       if (!loc.isBlocked) {
-        this.game.createChest(loc);
+        this.chestLocs.push(loc);
+        loc.blocked = true;
+        //this.game.createChest(loc);
       }
 
     }

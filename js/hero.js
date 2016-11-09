@@ -38,9 +38,19 @@ class Hero extends Actor {
     this.currentExp = 0;
     this.expToNextLvl = 15;
     this.id = 1;
-    
     this.findTarget.targets = this.game.monsters;
-    this.game.theMap.addVisibleTiles(this.pos, this.vision);
+  }
+
+  reset() {
+    this.currentHealth = this.maxHealth;
+    this.currentEnergy = this.maxEnergy;
+    this.walk = new WalkAction(this);
+    this.rest = new RestAction(this);
+    this.attack = new InitAttack(this);
+    this.findTarget = new FindTarget(this);
+    this.primaryAttack = new PrimaryAttack(this);
+    this.interact = new Interact(this);
+    this.findTarget.targets = this.game.monsters;
   }
 
   get name() {
@@ -50,30 +60,39 @@ class Hero extends Actor {
   get armour() {
     return this.equipArmour;
   }
+
   get helmet() {
     return this.equipHelmet;
   }
+
   get ring() {
     return this.equipRing;
   }
+
   get primary() {
     return this.equipPrimary;
   }
+
   get secondary() {
     return this.equipSecondary;
   }
+
   get primaryAtkPower() {
     return Math.round(this.equipPrimary.power * this.strength / MAX_STRENGTH);
   }
+
   get primaryAtkEnergy() {
     return Math.round(this.equipPrimary.energy * MAX_AGILITY / this.agility);
   }
+
   get primaryAtkType() {
     return this.equipPrimary.type;
   }
+
   get primaryAtkRange() {
     return this.equipPrimary.range;
   }
+
   get physicalDefense() {
     var total = 0;
     if (this.equipArmour) {
@@ -87,6 +106,7 @@ class Hero extends Actor {
     }
     return total;
   }
+
   get action() {
     this.currentSprite = this.sprite;
     if (this.isFollowing) {

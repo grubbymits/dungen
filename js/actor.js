@@ -31,14 +31,17 @@ class Actor extends Entity {
     // needs to be implemented differently for heros and monsters atm
     return null;
   }
+
   render() {
     this.currentSprite.render(this.pos.x * TILE_SIZE,
                               this.pos.y * TILE_SIZE,
                               this.game.overlayContext);
   }
+
   get path() {
     return this.currentPath;
   }
+
   incrementEnergy() {
     if (this.currentEnergy < this.maxEnergy - 1) {
       this.currentEnergy = this.currentEnergy + 2;
@@ -48,15 +51,19 @@ class Actor extends Entity {
       this.nextAction = null;
     }
   }
+
   useEnergy(required) {
     this.currentEnergy = this.currentEnergy - required;
   }
+
   set energy(energy) {
     this.currentEnergy = energy;
   }
+
   get health() {
     return this.currentHealth;
   }
+
   get nextStep() {
     return this.currentPath[0];
   }

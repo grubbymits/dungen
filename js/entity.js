@@ -7,7 +7,7 @@ class Entity {
     this.sprite = sprite;
     this.kind = kind;
     this.game = game;
-    this.game.map.placeEntity(this.position, this);
+    //this.game.map.placeEntity(this.position, this);
   }
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE,
@@ -156,7 +156,7 @@ class Stair extends Entity {
   interact(actor) {
     if (!this.isExit)
       return null;
-    this.game.setupMap();
+    this.game.loadNextMap();
   }
   get isInteractable() {
     if (this.isExit)
