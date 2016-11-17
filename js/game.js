@@ -96,8 +96,14 @@ class Game {
     this.createStair(this.mapGenerator.entryStairLoc, false);
 
     this.mapGenerator.placeChests();
+    console.log("placing chests:", this.mapGenerator.chestLocs.length);
     for (let loc of this.mapGenerator.chestLocs) {
       this.createChest(loc);
+    }
+
+    console.log("placing skulls:", this.mapGenerator.skullLocs.length);
+    for (let loc of this.mapGenerator.skullLocs) {
+      this.createSkull(loc);
     }
 
     this.mapGenerator.placeMonsters(this.level, 32);
@@ -110,31 +116,28 @@ class Game {
   
   renderMap() {
     // draw everything
+    this.overlayContext.clearRect(0, 0,
+                                  this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
+                                  this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
     this.context.fillStyle = '#000000';
     this.context.fillRect(0, 0,
                           this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
                           this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
-        let loc = this.theMap.getLocation(x,y);
-        if (loc.type != CEILING) {
-          //this.context.fillStyle = '#000000';
-          //this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
-            //                    y * TILE_SIZE * UPSCALE_FACTOR,
-              //                  TILE_SIZE * UPSCALE_FACTOR,
-                //                TILE_SIZE * UPSCALE_FACTOR);
-          var type = loc.type;
+        let type = this.theMap.getLocationType(x,y);
+        if (type != CEILING) {
+          if (type >= SYMBOL0 && type <= SYMBOL5) {
+            // magic symbols are drawn ontop of floor tiles
+            tileSprites[PATH].render(x * TILE_SIZE, y * TILE_SIZE, this.context);
+          }
           tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
-          //loc.dirty = false;
         }
       }
     }
   }
 
   clearOverlay() {
-    //this.overlayContext.clearRect(0, 0,
-      //                            this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
-        //                          this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
     this.overlayContext.fillStyle = '#000000';
     this.overlayContext.fillRect(0, 0,
                                  this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
@@ -254,6 +257,7 @@ class Game {
     this.theMap.placeEntity(pos, monster);
     this.currentEffects.set(monster, []);
     ++this.totalMonsters;
+    this.map.getLocation(pos.x, pos.y).blocked = false;
     return monster;
   }
 
@@ -262,12 +266,21 @@ class Game {
     this.objects.push(chest);
     this.theMap.placeEntity(loc.vec, chest);
     ++this.totalChests;
+    loc.blocked = false;
   }
 
   createStair(loc, isExit) {
     let stair = new Stair(loc.vec, isExit, this);
     this.objects.push(stair);
     this.theMap.placeEntity(loc.vec, stair);
+    loc.blocked = false;
+  }
+
+  createSkull(loc) {
+    let skull = new Skull(loc.vec, this);
+    this.objects.push(skull);
+    this.theMap.placeEntity(loc.vec, skull);
+    loc.blocked = false;
   }
 
   killActor(actor) {

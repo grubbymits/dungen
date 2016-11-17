@@ -253,11 +253,34 @@ const UPSCALE_FACTOR = 1;
 const MAP_WIDTH_PIXELS = 2560;
 const MAP_HEIGHT_PIXELS = 2560;
 const TILE_SIZE = 64;
-const PATH_WIDTH = 3;
+const PATH_WIDTH = 4;
 
 const CEILING = 0;
 const PATH = 1;
 const WALL = 2;
+/*
+const WALL0 = 2;
+const WALL1 = 3;
+const WALL2 = 4;
+const WALL3 = 5;
+const WALL4 = 6;
+const WALL5 = 7;
+*/
+const WATER = 3;
+const SYMBOL0 = 4;
+const SYMBOL1 = 5;
+const SYMBOL2 = 6;
+const SYMBOL3 = 7;
+const SYMBOL4 = 8;
+const SYMBOL5 = 9;
+/*
+const SYMBOL0 = 9;
+const SYMBOL1 = 10;
+const SYMBOL2 = 11;
+const SYMBOL3 = 12;
+const SYMBOL4 = 13;
+const SYMBOL5 = 14;
+*/
 const NORTH = 0;
 const EAST = 1;
 const SOUTH = 2;

@@ -28,6 +28,20 @@ class Entity {
   }
 }
 
+class Skull extends Entity {
+  constructor(position, game) {
+    super(position, true, null, OBJECT, game);
+    let spriteIdx = Math.random();
+    if (spriteIdx < 0.333) {
+      this.sprite = skullSprites[0];
+    } else if (spriteIdx < 0.666) {
+      this.sprite = skullSprites[1];
+    } else {
+      this.sprite = skullSprites[2];
+    }
+  }
+}
+
 class Chest extends Entity {
   constructor(position, game) {
     super(position, true, chestSprites[0], OBJECT, game);

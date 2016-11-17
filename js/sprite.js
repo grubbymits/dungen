@@ -12,6 +12,7 @@ const HELMET_OFFSET = 12;
 const SHIELD_OFFSET = 13;
 const STAFF_OFFSET = 14;
 const TREASURE_OFFSET = 15;
+const SYMBOL_OFFSET = 17;
 const HERO_OFFSET = 18;
 const MONSTER_OFFSET = 19;
 
@@ -60,9 +61,21 @@ var uiSpriteSheet = new SpriteSheet('ui');
 var targetSprite = new Sprite(uiSpriteSheet, 0, 0);
 var currentActorSprite = new Sprite(uiSpriteSheet, 1, 0);
 
-var tileSprites = [ new Sprite(greenSpriteSheet, 1, 1, 32, 32),
-                    new Sprite(greenSpriteSheet, 7, 0, 32, 32),
-                    new Sprite(greenSpriteSheet, 2, 2, 32, 32)];
+var tileSprites = [ new Sprite(greenSpriteSheet, 0, 0),   // CEILING
+                    new Sprite(greenSpriteSheet, 7, 0),   // PATH
+                    new Sprite(greenSpriteSheet, 2, 2)];  // WALL
+/*
+for (let x = 2; x >= 0; --x) {
+  for (let y = 2; y > 0; --y) {
+    tileSprites.push(new Sprite(greenSpriteSheet, x, y));
+  }
+}*/
+
+tileSprites.push(new Sprite(greenSpriteSheet, 5, 3));
+
+for (let x = 0; x < 6; ++x) {
+  tileSprites.push(new Sprite(greenSpriteSheet, x, SYMBOL_OFFSET));
+}
 
 var entryStairSprite = new Sprite(greenSpriteSheet, 6, 1);
 var exitStairSprite = new Sprite(greenSpriteSheet, 5, 1);
@@ -165,4 +178,9 @@ for (let x = 0; x < 8; ++x) {
 }
 var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4),
                      new Sprite(greenSpriteSheet, 1, 4)
+                   ];
+
+var skullSprites = [ new Sprite(greenSpriteSheet, 0, 16),
+                     new Sprite(greenSpriteSheet, 1, 16),
+                     new Sprite(greenSpriteSheet, 2, 16)
                    ];

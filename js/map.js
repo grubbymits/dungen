@@ -4,7 +4,7 @@ const LARGE = 0;
 const MEDIUM = 1;
 const SMALL = 2;
 var MIN_LARGE = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
-                           TILE_SIZE / 4);
+                           TILE_SIZE / 5);
 var MIN_MEDIUM = Math.round(MIN_LARGE * 0.8);
 var MIN_SMALL = Math.round(MIN_LARGE * 0.6);
 
@@ -41,7 +41,6 @@ class Location {
     this.entity = entity;
     this.tileType = type;
     this.vec = new Vec(x, y);
-    //this.dirty = true;
     this.visible = HIDDEN;
   }
   get isBlocked() {
@@ -79,6 +78,12 @@ class Location {
   }
   get isHidden() {
     return this.visible == HIDDEN;
+  }
+  set tileSprite(sprite) {
+    this.sprite = sprite;
+  }
+  get tileSprite() {
+    return this.sprite;
   }
 }
 
@@ -266,7 +271,6 @@ class GameMap {
         if (!loc.isVisible) {
           loc.visibility = VISIBLE;
           this.newVisible.push(vec);
-          console.log("adding new visibile");
         }
 
         if (loc.isWallOrCeiling) {
@@ -285,7 +289,6 @@ class GameMap {
         if (!loc.isVisible) {
           this.newVisible.push(loc.vec);
           loc.visibility = VISIBLE;
-          console.log("adding new visibile");
         }
 
         if (0 === x && 0 === y) {

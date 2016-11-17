@@ -109,17 +109,37 @@ class MapGenerator {
   generate(level, width, height) {
     this.rooms = [];
     this.chestLocs = [];
+    this.skullLocs = [];
     this.monsterPlacements = [];
     this.map = new GameMap(width, height);
     let numRooms = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
                               (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
     this.placeRooms(numRooms);
     this.createConnections();
+    this.fixupMap();
     this.placeStairs();
-    //this.placeChests();
-    //this.placeMonsters(level, 32);
-    //this.entryVec = neighbours[0];
-    //return neighbours[0];
+    this.decorateRooms();
+  }
+
+  fixupMap() {
+    for (let x = 0; x < this.map.width; ++x) {
+      for (let y = 0; y < this.map.height - 1; ++y) {
+
+        let tileType = this.map.getLocationType(x, y);
+        let tileBelowType = this.map.getLocationType(x, y + 1);
+
+        if (tileType == CEILING) {
+          if (tileBelowType != CEILING) {
+            this.map.setLocationType(x, y + 1, WALL);
+          }
+        }
+        else if (tileType != WALL) {
+          if (tileBelowType == WALL) {
+            this.map.setLocationType(x, y + 1, tileType);
+          }
+        }
+      }
+    }
   }
 
   placeTile(x, y, type, blocking) {
@@ -129,24 +149,6 @@ class MapGenerator {
     }
     this.map.setLocationType(x, y, type);
     this.map.setLocationBlocking(x, y, blocking);
-
-    if (type == PATH && y > 1 && this.map.getLocationType(x, y - 1) != PATH) {
-      this.map.setLocationType(x, y - 1, WALL);
-
-      // fixups, just in case carving paths isn't tidy
-      if (this.map.isOutOfRange(x, y - 2)) {
-        return;
-      }
-      if (this.map.getLocationType(x, y - 2) == PATH) {
-        this.map.setLocationType(x, y - 1, PATH);
-      }
-      if (this.map.isOutOfRange(x, y + 1)) {
-        return;
-      }
-      if (this.map.getLocationType(x, y + 1) == WALL) {
-        this.map.setLocationType(x, y + 1, PATH);
-      }
-    }
   }
 
   get randomX() {
@@ -180,8 +182,8 @@ class MapGenerator {
     let room = new Room(startX, startY, width, height, this.rooms.length);
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
-      for (let y = startY+2; y < startY + height-2; y++) {
-        this.placeTile(x, y, PATH, false);
+      for (let y = startY+1; y < startY + height-1; y++) {
+        this.placeTile(x, y, PATH, true);
       }
     }
     return room;
@@ -255,6 +257,7 @@ class MapGenerator {
   }
 
   createConnections() {
+    console.log("creating connections between rooms");
     let connectedRooms = new Set();
     let unconnectedRooms = new Set();
 
@@ -319,6 +322,67 @@ class MapGenerator {
     }
   }
 
+  getRandomLocation(room) {
+    const MAX_ATTEMPTS = 10;
+    let attempts = 0;
+    let x = room.pos.x;
+    let y = room.pos.y;
+    do {
+      x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
+      y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
+      ++attempts;
+    } while (this.map.getLocation(x, y).isBlocked || attempts < MAX_ATTEMPTS);
+
+    return this.map.getLocation(x, y);
+  }
+
+  decorateRooms() {
+    console.log("decorating rooms");
+    // 3 skull sprites
+    // tombstone
+    // table with melted candle
+    // fountain
+    // 6 symbols
+    // 2 signs
+    for (let room of this.rooms) {
+
+      /*
+      let wallType = getBoundedRandom(WALL1, WALL5);
+      for (let x = room.pos.x; x < room.pos.x + room.width; ++x) {
+        for (let y = room.pos.y - 1; y < room.pos.y + room.height; ++y) {
+          if (this.map.getLocationType(x, y) == WALL) {
+            this.map.setLocationType(x, y, wallType);
+          }
+        }
+      }
+      */
+
+      // 1/6 rooms can have signs
+      // place at the entry/exit to the room
+
+      // 1/3 rooms can have skulls
+      // place anyway
+      if (Math.random() < 0.333) {
+        let loc = this.getRandomLocation(room);
+        if (!loc.isBlocked) {
+          this.skullLocs.push(loc);
+          loc.blocked = true;
+        }
+      }
+
+      // 1/4 rooms can have tombstone
+      // place in the corners
+
+      // 1/3 rooms can have magic symbols
+      // place the symbol either in the centre or at the entry/exit
+      // magic symbols are not entities, they will be drawn as part of the map.
+      if (Math.random() < 0.333) {
+        let spriteType = getBoundedRandom(SYMBOL0, SYMBOL5);
+        this.map.setLocationType(room.centre.x+1, room.centre.y+1, spriteType);
+      }
+    }
+  }
+
   placeMonsters(level, total) {
     console.log("placing", total, "level", level, "monsters");
     // Try to place monsters in the larger rooms first.
@@ -354,18 +418,8 @@ class MapGenerator {
       if (room.id == this.entryRoom.id) {
         continue;
       }
-      
-      const MAX_ATTEMPTS = 10;
-      let attempts = 0;
-      let x = room.pos.x;
-      let y = room.pos.y;
-      do {
-        x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
-        y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
-        ++attempts;
-      } while (this.map.getLocation(x, y).isBlocked || attempts < MAX_ATTEMPTS);
 
-      let loc = this.map.getLocation(x, y);
+      let loc = this.getRandomLocation(room);
       if (!loc.isBlocked) {
         let type = Math.floor(Math.random() * monsters.length);
         //let monster = this.game.createMonster(loc.vec, monsters[type]);
@@ -447,5 +501,57 @@ class MapGenerator {
       throw("no free neighbours next to stairs");
     else
       this.entryVec = neighbours[0];
+  }
+}
+
+class SewerGenerator extends MapGenerator {
+  constructor(WATER, PATH) {
+    // Select wall, room floor and path tiles
+    super(WALL, WATER, PATH);
+
+    // add rat, spiders, lizard, bat
+    // add spider champion,
+    // add bat champion
+    // add toad
+    // add centipede
+    // add snake
+    // add slimes
+    // add slime champion
+    // add scorpion
+    // add kraken
+  }
+
+  decorate() {
+    // add grills to some walls that are adjacent to water
+  }
+}
+
+class  DungeonGenerator extends MapGenerator {
+  constructor() {
+    // add rat, spiders, bat
+    // add spider champion,
+    // add bat champion
+  }
+
+  decorate() {
+    // add locked doors and damaged wall tiles
+    // add skeletons
+  }
+}
+
+class CatacombsGenerator extends MapGenerator {
+  constructor() {
+    // add rat, spiders, bat
+    // add spider champion,
+    // add bat champion
+    // add zombie
+    // add undead
+    // add mummy
+    // add wraith
+    // add vampire
+  }
+
+  decorate() {
+    // add skulls, tombstones, etc..
   }
 }
