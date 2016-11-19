@@ -15,13 +15,13 @@ class Game {
     this.expGained = 0;
     this.context = context;
     this.overlayContext = overlayContext;
-    this.level = 1;
+    this.level = 6;
     this.isRunning = false;
     this.loading = false;
     this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = null; //new GameMap(width, height, this);
-    this.mapGenerator = new MapGenerator(width, height);
+    this.mapGenerator = new SewerGenerator(width, height);
     this.audio = new Audio(this);
   }
 
@@ -127,11 +127,8 @@ class Game {
       for (var y = 0; y < this.theMap.height; y++) {
         let type = this.theMap.getLocationType(x,y);
         if (type != CEILING) {
-          if (type >= SYMBOL0 && type <= SYMBOL5) {
-            // magic symbols are drawn ontop of floor tiles
-            tileSprites[PATH].render(x * TILE_SIZE, y * TILE_SIZE, this.context);
-          }
-          tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
+          let spriteIdx = this.theMap.getLocationSprite(x, y);
+          tileSprites[spriteIdx].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
         }
       }
     }
@@ -248,6 +245,33 @@ class Game {
         break;
       case SPIDER_CHAMPION:
         monster = new SpiderChampion(pos, this);
+        break;
+      case BAT_CHAMPION:
+        monster = new BatChampion(pos, this);
+        break;
+      case TOAD:
+        monster = new Toad(pos, this);
+        break;
+      case CENTIPEDE:
+        monster = new Centipede(pos, this);
+        break;
+      case SNAKE:
+        monster = new Snake(pos, this);
+        break;
+      case SCARAB:
+        monster = new Scarab(pos, this);
+        break;
+      case ZOMBIE:
+        monster = new Zombie(pos, this);
+        break;
+      case SCORPION:
+        monster = new Scorpion(pos, this);
+        break;
+      case UNDEAD:
+        monster = new Undead(pos, this);
+        break;
+      case WEREWOLF:
+        monster = new Werewolf(pos, this);
         break;
       default:
         throw("unhandled monster type!");

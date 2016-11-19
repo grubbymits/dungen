@@ -142,6 +142,13 @@ class GameMap {
     this.locations[x][y].blocked = blocking;
   }
 
+  getLocationSprite(x, y) {
+    if (this.isOutOfRange(x, y)) {
+      throw "Index out of range:";
+    }
+    return this.locations[x][y].tileSprite;
+  }
+
   isBlocked(vec) {
     if (this.isOutOfRange(vec.x, vec.y)) {
       return true;

@@ -128,11 +128,21 @@ class SewerGenerator extends MapGenerator {
         let loc = this.map.getLocation(x, y);
         let locBelow = this.map.getLocation(x, y + 1)
 
+        if (loc.type == WALL) {
+          loc.tileSprite = TILE_THICK_BRICK;
+        }
+
         if (loc.type == WALL && locBelow.type == WATER) {
           let random = Math.random();
-          if (random < 0.1) {
-            loc.tileSprite = tileSprites[GRATE];
+          if (random < 0.2) {
+            loc.tileSprite = TILE_GRATE;
+          } else {
+            loc.tileSprite = TILE_THICK_BRICK;
           }
+        } else if (loc.type == PATH) {
+          loc.tileSprite = TILE_LARGE_CROSS;
+        } else if (loc.type == WATER) {
+          loc.tileSprite = TILE_WATER;
         }
       }
     }
@@ -197,6 +207,7 @@ class DungeonGenerator extends MapGenerator {
   }
 
   decorate() {
+
     // add locked doors and damaged wall tiles
     // add grate wall tiles
     // add skeletons
@@ -207,14 +218,16 @@ class DungeonGenerator extends MapGenerator {
         if (loc.type == WALL) {
           let random = Math.random();
           if (random < 0.85) {
-            loc.tileSprite = tileSprite[DARK_SOLID];
+            loc.tileSprite = TILE_DARK_SOLID;
           } else if (random < 0.9) {
-            loc.tileSprite = tileSprite[GRATE];
+            loc.tileSprite = TILE_GRATE;
           } else if (random < 0.95) {
-            loc.tileSprite = tileSprite[DARK_CRACKED];
+            loc.tileSprite = TILE_DARK_CRACKED;
           } else {
-            loc.tileSprite = tileSprite[DARK_DOOR];
+            loc.tileSprite = TILE_DARK_DOOR;
           }
+        } else if (loc.type == PATH) {
+          loc.tileSprite = 7;
         }
       }
     }
@@ -282,7 +295,7 @@ class CatacombsGenerator extends MapGenerator {
   }
 }
 
-class WizardsLairGenerator extends MapGenerator {
+class SorcerersLairGenerator extends MapGenerator {
   constructor() {
     // add goblin, orc, slimes, slime champion
     // add zombie

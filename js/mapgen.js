@@ -41,7 +41,10 @@ class Room {
 }
 
 class MapGenerator {
-  constructor(width, height) {
+  constructor(width, height, roomType, pathType) {
+    this.roomFloor = roomType;
+    this.pathFloor = pathType;
+    /*
     var monsterGroup0 = [ RAT, SPIDERS, RABBIT];
 
     var monsterGroup1 = monsterGroup0.slice();
@@ -99,6 +102,7 @@ class MapGenerator {
     //this.rooms = [];
     //this.chestLocs = [];
     //this.monsterPlacements = [];
+    */
     this.minRoomWidth = MIN_SMALL;
     this.minRoomHeight = MIN_SMALL;
     this.xMax = width / TILE_SIZE;
@@ -118,7 +122,7 @@ class MapGenerator {
     this.createConnections();
     this.fixupMap();
     this.placeStairs();
-    this.decorateRooms();
+    this.decorate(); //Rooms();
   }
 
   fixupMap() {
@@ -183,7 +187,7 @@ class MapGenerator {
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
       for (let y = startY+1; y < startY + height-1; y++) {
-        this.placeTile(x, y, PATH, true);
+        this.placeTile(x, y, this.roomFloor, true);
       }
     }
     return room;
@@ -192,7 +196,7 @@ class MapGenerator {
   createPath(startX, startY) {
     for (let x = startX; x < startX + PATH_WIDTH; x++) {
       for (let y = startY; y < startY + PATH_WIDTH; y++) {
-        this.placeTile(x, y, PATH, false);
+        this.placeTile(x, y, this.pathFloor, false);
       }
     }
   }
@@ -504,54 +508,4 @@ class MapGenerator {
   }
 }
 
-class SewerGenerator extends MapGenerator {
-  constructor(WATER, PATH) {
-    // Select wall, room floor and path tiles
-    super(WALL, WATER, PATH);
 
-    // add rat, spiders, lizard, bat
-    // add spider champion,
-    // add bat champion
-    // add toad
-    // add centipede
-    // add snake
-    // add slimes
-    // add slime champion
-    // add scorpion
-    // add kraken
-  }
-
-  decorate() {
-    // add grills to some walls that are adjacent to water
-  }
-}
-
-class  DungeonGenerator extends MapGenerator {
-  constructor() {
-    // add rat, spiders, bat
-    // add spider champion,
-    // add bat champion
-  }
-
-  decorate() {
-    // add locked doors and damaged wall tiles
-    // add skeletons
-  }
-}
-
-class CatacombsGenerator extends MapGenerator {
-  constructor() {
-    // add rat, spiders, bat
-    // add spider champion,
-    // add bat champion
-    // add zombie
-    // add undead
-    // add mummy
-    // add wraith
-    // add vampire
-  }
-
-  decorate() {
-    // add skulls, tombstones, etc..
-  }
-}
