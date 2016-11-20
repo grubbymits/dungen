@@ -25,6 +25,16 @@
       onload="resizeIframe(this)" id="main_frame">
     </iframe>
   <script>
+    // onload normally fixes the height, but does not work for the collapsible lists.
+    function resizeToContent() {
+      var frame = document.getElementById("main_frame");
+      var newHeight = frame.contentWindow.document.body.scrollHeight + 'px';
+      frame.style.height = newHeight;
+    }
+    window.onload = function onLoad() {
+      setInterval("resizeToContent()", 250);
+    }
+
     window.addEventListener('message', receiveMessage, false);
     function receiveMessage(event) {
       if (event.origin !== "http://codingbear.uk") {
