@@ -214,6 +214,7 @@ class Mage extends Hero {
           6,
           position, MAGE, game);
     this.equipArmour = armours[ARMOUR0];
+    this.equipHelmet = helmets[HELMET0];
     this.equipPrimary = staffs[STAFF0];
     this.equipSecondary = spells[SPELL0];
     //this.equipRing = basicRing;

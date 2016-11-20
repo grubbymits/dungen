@@ -174,6 +174,7 @@ class Spell extends Item {
   constructor(kind) {
     super(SPELL, kind);
     this.names = SPELL_NAMES;
+    this.sprites = spellSprites;
   }
   use(actor) {
     

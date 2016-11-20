@@ -23,8 +23,7 @@
               </p>
             </div>
             <div class="card-action" style="background-color: #aec440">
-              <a href='#' style="color:#527f39"
-                 onclick="top.window.location.href='dungen.html?player=knight';">Select Knight
+              <a href='#' style="color:#527f39" onclick="selectKnight()">Select Knight
               </a>
             </div>
           </div>
@@ -45,8 +44,7 @@
             </p>
           </div>
           <div class="card-action" style="background-color: #aec440">
-            <a href='#' style="color:#527f39"
-               onclick="top.window.location.href='dungen.html?player=mage';">Select Mage
+            <a href='#' style="color:#527f39" onclick="selectMage()">Select Mage
             </a>
           </div>
         </div>
@@ -66,8 +64,7 @@
             </p>
           </div>
           <div class="card-action" style="background-color: #aec440">
-            <a href='#' style="color:#527f39"
-               onclick="top.window.location.href='dungen.html?player=rogue';">Select Rogue
+            <a href='#' style="color:#527f39" onclick="selectRogue()">Select Rogue
             </a>
           </div>
         </div>
@@ -86,12 +83,25 @@
             </p>
           </div>
           <div class="card-action" style="background-color: #aec440">
-            <a href='#' style="color:#527f39"
-               onclick="top.window.location.href='dungen.html?player=archer';">Select Archer
+            <a href='#' style="color:#527f39" onclick="selectArcher()">Select Archer
             </a>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      function selectKnight() {
+        window.parent.postMessage("map_select.html?player=knight", "http://codingbear.uk");
+      }
+      function selectMage() {
+        window.parent.postMessage("map_select.html?player=mage", "http://codingbear.uk");
+      }
+      function selectRogue() {
+        window.parent.postMessage("map_select.html?player=rogue", "http://codingbear.uk");
+      }
+      function selectArcher() {
+        window.parent.postMessage("map_select.html?player=archer", "http://codingbear.uk");
+      }
+    </script>
 </body>
 </html>
