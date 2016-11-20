@@ -21,7 +21,8 @@ class Game {
     this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = null; //new GameMap(width, height, this);
-    this.mapGenerator = new SewerGenerator(width, height);
+    this.width = width;
+    this.height = height;
     this.audio = new Audio(this);
   }
 
@@ -29,8 +30,19 @@ class Game {
     return this.loading;
   }
 
-  init(playerType) {
+  init(playerType, mapType) {
     this.loading = true;
+    if (mapType == OLD_CITY) {
+      this.mapGenerator = new OldCityGenerator(this.width, this.height);
+    } else if (mapType == SEWER) {
+      this.mapGenerator = new SewerGenerator(this.width, this.height);
+    } else if (mapType == DUNGEON) {
+      this.mapGenerator = new DungeonGenerator(this.width, this.height);
+    } else if (mapType == CATACOMBS) {
+      this.mapGenerator = new CatacombsGenerator(this.width, this.height);
+    } else {
+      this.mapGenerator = new SorcerersLairGenerator(this.width, this.height);
+    }
     this.setupMap();
 
     //let neighbours = this.theMap.getNeighbours(this.mapGenerator.exitStairLoc.vec);

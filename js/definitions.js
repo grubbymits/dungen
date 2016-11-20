@@ -354,3 +354,9 @@ const MAX_ENERGY_INC = 10;
 const STATS = 0;
 const EQUIP = 1;
 const TEAM = 2;
+
+const OLD_CITY = 0;
+const SEWER = 1;
+const DUNGEON = 2;
+const CATACOMBS = 3;
+const LAIR = 4;
