@@ -42,6 +42,13 @@ class Skull extends Entity {
   }
 }
 
+class Tombstone extends Entity {
+  constructor(position, game) {
+    super(position, true, null, OBJECT, game);
+    this.sprite = tombstoneSprite;
+  }
+}
+
 class Chest extends Entity {
   constructor(position, game) {
     super(position, true, chestSprites[0], OBJECT, game);

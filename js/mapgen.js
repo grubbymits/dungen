@@ -44,65 +44,6 @@ class MapGenerator {
   constructor(width, height, roomType, pathType) {
     this.roomFloor = roomType;
     this.pathFloor = pathType;
-    /*
-    var monsterGroup0 = [ RAT, SPIDERS, RABBIT];
-
-    var monsterGroup1 = monsterGroup0.slice();
-    monsterGroup1.push(BAT);
-
-    var monsterGroup2 = monsterGroup1.slice();
-    monsterGroup2.push(LIZARD);
-    
-    var monsterGroup3 = monsterGroup2.slice();
-    monsterGroup3.push(SPIDER_CHAMPION);
-    
-    var monsterGroup4 = monsterGroup3.slice();
-    monsterGroup4.push(BAT_CHAMPION);
-
-    var monsterGroup5 = monsterGroup4.slice();
-    monsterGroup5.push(TOAD);
-    
-    var monsterGroup6 = monsterGroup5.slice();
-    monsterGroup6.push(SCARAB);
-
-    var monsterGroup7 = monsterGroup6.slice();
-    monsterGroup7.push(CENTIPEDE);
-    
-    var monsterGroup8 = monsterGroup7.slice();
-    monsterGroup8.push(SERPENT);
-
-    var monsterGroup9 = monsterGroup8.slice();
-    monsterGroup9.push(SNAKE);
-    
-    var monsterGroup10 = monsterGroup9.slice();
-    monsterGroup10.push(WOLF);
-
-    var monsterGroup11 = monsterGroup10.slice();
-    monsterGroup11.push(WILD_BOAR);
-    
-    var monsterGroup12 = monsterGroup11.slice();
-    monsterGroup12.push(BEAR);
-    
-
-    this.monsterGroups = [ monsterGroup0,
-                           monsterGroup1,
-                           monsterGroup2,
-                           monsterGroup3,
-                           monsterGroup4,
-                           monsterGroup5,
-                           monsterGroup6,
-                           monsterGroup7,
-                           monsterGroup8,
-                           monsterGroup9,
-                           monsterGroup10,
-                           monsterGroup11,
-                           monsterGroup12 ];
-
-    //this.map = new GameMap(width, height);
-    //this.rooms = [];
-    //this.chestLocs = [];
-    //this.monsterPlacements = [];
-    */
     this.minRoomWidth = MIN_SMALL;
     this.minRoomHeight = MIN_SMALL;
     this.xMax = width / TILE_SIZE;
@@ -114,6 +55,7 @@ class MapGenerator {
     this.rooms = [];
     this.chestLocs = [];
     this.skullLocs = [];
+    this.tombstoneLocs = [];
     this.monsterPlacements = [];
     this.map = new GameMap(width, height);
     let numRooms = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
@@ -187,7 +129,7 @@ class MapGenerator {
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
       for (let y = startY+1; y < startY + height-1; y++) {
-        this.placeTile(x, y, this.roomFloor, true);
+        this.placeTile(x, y, this.roomFloor, false);
       }
     }
     return room;

@@ -277,7 +277,7 @@ class Zombie extends Monster {
   }
 }
 
-// Level 6: Scorpion, Undead, Werewolf
+// Level 6: Scorpion, Undead, Serpent 
 class Scorpion extends Monster {
   constructor(position, game) {
     super(140,          // health
@@ -310,6 +310,23 @@ class Undead extends Monster {
   }
 }
 
+class Serpent  extends Monster {
+  constructor(position, game) {
+    super(160,          // health
+          10,           // energy
+          SERPENT,      // kind
+          17,           // defense
+          6,            // vision
+          25,           // agility
+          28,           // xp
+          3,            // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
+
+// Level 7: Werewolf, Goblin, Mummy
 class Werewolf extends Monster {
   constructor(position, game) {
     super(180,          // health
@@ -325,7 +342,103 @@ class Werewolf extends Monster {
           position, game);
   }
 }
-// Level 7: Serpent, Goblin, Mummy
+
+class Goblin  extends Monster {
+  constructor(position, game) {
+    super(160,          // health
+          10,           // energy
+          GOBLIN,       // kind
+          17,           // defense
+          6,            // vision
+          25,           // agility
+          28,           // xp
+          3,            // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
+
+class Mummy extends Monster {
+  constructor(position, game) {
+    super(160,          // health
+          10,           // energy
+          MUMMY,        // kind
+          17,           // defense
+          6,            // vision
+          25,           // agility
+          28,           // xp
+          3,            // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
+
 // Level 8: Wolf, Slimes, Orc, Vampire
+class Wolf extends Monster {
+  constructor(position, game) {
+    super(160,          // health
+          10,           // energy
+          WOLF,         // kind
+          17,           // defense
+          6,            // vision
+          25,           // agility
+          28,           // xp
+          3,            // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
+
+class Slimes extends Monster {
+  constructor(position, game) {
+    super(160,          // health
+          10,           // energy
+          SLIMES,       // kind
+          17,           // defense
+          6,            // vision
+          25,           // agility
+          28,           // xp
+          3,            // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
+
+class Orc extends Monster {
+  constructor(position, game) {
+    super(160,          // health
+          10,           // energy
+          ORC,          // kind
+          17,           // defense
+          6,            // vision
+          25,           // agility
+          28,           // xp
+          3,            // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
+
+class Vampire extends Monster {
+  constructor(position, game) {
+    super(220,          // health
+          15,           // energy
+          VAMPIRE,      // kind
+          24,           // defense
+          8,            // vision
+          25,           // agility
+          35,           // xp
+          3.4,          // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
+
 // Level 9: Boar, Slime Champion, Cyclops, Wraith
 // Level 10: Bear, Kraken, Golem, Carabia, Demon

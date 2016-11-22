@@ -118,6 +118,11 @@ class Game {
       this.createSkull(loc);
     }
 
+    console.log("placing tombstones:", this.mapGenerator.tombstoneLocs.length);
+    for (let loc of this.mapGenerator.tombstoneLocs) {
+      this.createTombstone(loc);
+    }
+
     this.mapGenerator.placeMonsters(this.level, 32);
     for (let monster of this.mapGenerator.monsterPlacements) {
       this.createMonster(monster.vec, monster.type);
@@ -239,6 +244,7 @@ class Game {
 
   createMonster(pos, type) {
     let monster = null;
+    console.log("create", ENEMY_NAMES[type]);
     switch(type) {
       case RAT:
         monster = new Rat(pos, this);
@@ -254,6 +260,9 @@ class Game {
         break;
       case LIZARD:
         monster = new Lizard(pos, this);
+        break;
+      case MUSHROOM:
+        monster = new Mushroom(pos, this);
         break;
       case SPIDER_CHAMPION:
         monster = new SpiderChampion(pos, this);
@@ -316,6 +325,13 @@ class Game {
     let skull = new Skull(loc.vec, this);
     this.objects.push(skull);
     this.theMap.placeEntity(loc.vec, skull);
+    loc.blocked = false;
+  }
+
+  createTombstone(loc) {
+    let tombstone = new Tombstone(loc.vec, this);
+    this.objects.push(tombstone);
+    this.theMap.placeEntity(loc.vec, tombstone);
     loc.blocked = false;
   }
 

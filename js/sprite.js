@@ -220,3 +220,4 @@ var skullSprites = [ new Sprite(greenSpriteSheet, 0, 16),
                      new Sprite(greenSpriteSheet, 1, 16),
                      new Sprite(greenSpriteSheet, 2, 16)
                    ];
+var tombstoneSprite = new Sprite(greenSpriteSheet, 3, 16);

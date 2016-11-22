@@ -258,6 +258,8 @@ const PATH_WIDTH = 4;
 const CEILING = 0;
 const PATH = 1;
 const WALL = 2;
+const WATER = 3;
+const DIRT = 4;
 /*
 const WALL0 = 2;
 const WALL1 = 3;
@@ -266,7 +268,6 @@ const WALL3 = 5;
 const WALL4 = 6;
 const WALL5 = 7;
 */
-const WATER = 3;
 const SYMBOL0 = 4;
 const SYMBOL1 = 5;
 const SYMBOL2 = 6;
@@ -303,7 +304,7 @@ const BAT = 10;
 const BAT_CHAMPION = 11;
 const SNAKE = 12;
 const WOLF = 13;
-const WILD_BOAR = 14;
+const BOAR = 14;
 const BEAR = 15;
 const SLIMES = 16;
 const SLIME_CHAMPION = 17;

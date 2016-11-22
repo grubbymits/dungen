@@ -60,6 +60,34 @@ class OldCityGenerator extends MapGenerator {
     // use a variety of walls: both brick types and the pillars
     // add door tiles
     // add some signs
+    for (let x = 0; x < this.map.width; ++x) {
+      for (let y = 1; y < this.map.height - 1; ++y) {
+        let loc = this.map.getLocation(x, y);
+        let locBelow = this.map.getLocation(x, y + 1)
+
+        if (loc.type == WALL) {
+          loc.tileSprite = TILE_THIN_BRICK;
+          if (x > 0 && x < this.map.width - 1 && y > 2) {
+            if (this.map.getLocationType(x - 1, y) == WALL &&
+                this.map.getLocationType(x + 1, y) == WALL &&
+                this.map.getLocationType(x, y - 2) == CEILING) {
+              let random = Math.random();
+              if (random < 0.1) {
+                loc.tileSprite = TILE_ROUND_DOOR;
+              } else if (random < 0.2) {
+                loc.tileSprite = TILE_SQUARE_DOOR;
+              } else if (random < 0.3) {
+                loc.tileSprite = TILE_NARROW_DOOR;
+              }
+            }
+          }
+        } else if (loc.type == DIRT) {
+          loc.tileSprite = TILE_DIRT;
+        } else {
+          loc.tileSprite = TILE_LARGE_SQUARE;
+        }
+      }
+    }
   }
 }
 
@@ -216,18 +244,25 @@ class DungeonGenerator extends MapGenerator {
         let loc = this.map.getLocation(x, y);
 
         if (loc.type == WALL) {
+          loc.tileSprite = TILE_DARK_SOLID;
           let random = Math.random();
-          if (random < 0.85) {
-            loc.tileSprite = TILE_DARK_SOLID;
-          } else if (random < 0.9) {
+          if (random < 0.15) {
             loc.tileSprite = TILE_GRATE;
-          } else if (random < 0.95) {
+          } else if (random < 0.3) {
             loc.tileSprite = TILE_DARK_CRACKED;
-          } else {
-            loc.tileSprite = TILE_DARK_DOOR;
+          }
+          if (x > 0 && x < this.map.width - 1 && y > 2) {
+            if (this.map.getLocationType(x - 1, y) == WALL &&
+                this.map.getLocationType(x + 1, y) == WALL &&
+                this.map.getLocationType(x, y - 2) == CEILING) {
+              let random = Math.random();
+              if (random < 0.2) {
+                loc.tileSprite = TILE_DARK_DOOR;
+              }
+            }
           }
         } else if (loc.type == PATH) {
-          loc.tileSprite = 7;
+          loc.tileSprite = TILE_SPARSE_CROSS;
         }
       }
     }
@@ -235,7 +270,9 @@ class DungeonGenerator extends MapGenerator {
 }
 
 class CatacombsGenerator extends MapGenerator {
-  constructor() {
+  constructor(width, height) {
+    super(width, height, DIRT, PATH);
+
     // add rat, spiders, bat
     // add spider champion,
     // add bat champion
@@ -291,7 +328,46 @@ class CatacombsGenerator extends MapGenerator {
 
   decorate() {
     // add skulls, tombstones, etc..
+    for (let room of this.rooms) {
+      // 1/2 rooms can have skulls
+      if (Math.random() < 0.5) {
+        let loc = this.getRandomLocation(room);
+        if (!loc.isBlocked) {
+          this.skullLocs.push(loc);
+          loc.blocked = true;
+        }
+      }
+      if (Math.random() < 0.5) {
+        let loc = this.getRandomLocation(room);
+        if (!loc.isBlocked) {
+          this.tombstoneLocs.push(loc);
+          loc.blocked = true;
+        }
+      }
+    }
     // add pillar door tiles
+    for (let x = 0; x < this.map.width; ++x) {
+      for (let y = 0; y < this.map.height - 1; ++y) {
+        let loc = this.map.getLocation(x, y);
+        if (loc.type == WALL) {
+          loc.tileSprite = TILE_PILLARS;
+          if (x > 0 && x < this.map.width - 1 && y > 2) {
+            if (this.map.getLocationType(x - 1, y) == WALL &&
+                this.map.getLocationType(x + 1, y) == WALL &&
+                this.map.getLocationType(x, y - 2) == CEILING) {
+              let random = Math.random();
+              if (random < 0.2) {
+                loc.tileSprite = TILE_PILLAR_DOOR;
+              }
+            }
+          }
+        } else if (loc.type == DIRT) {
+          loc.tileSprite = TILE_DIRT;
+        } else if (loc.type == PATH) {
+          loc.tileSprite = TILE_LARGE_CROSS;
+        }
+      }
+    }
   }
 }
 
