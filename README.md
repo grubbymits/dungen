@@ -6,5 +6,7 @@ A rogue-like RPG in Javascript.
 - Simple 2D sprites
 - All mouse controlled
 
+Playable at: http://codingbear.uk/dungen/start.html
+
 Music by Trevor Lentz, taken from the album 'Convergence'.
 Sprites from 'Jerom': http://jerom-bd.blogspot.co.uk/
