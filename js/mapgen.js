@@ -445,8 +445,10 @@ class MapGenerator {
     let neighbours = this.map.getNeighbours(this.entryStairLoc.vec);
     if (!neighbours.length)
       throw("no free neighbours next to stairs");
-    else
+    else {
       this.entryVec = neighbours[0];
+      this.map.setLocationBlocking(this.entryVec.x, this.entryVec.y, true);
+    }
   }
 }
 

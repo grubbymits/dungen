@@ -178,6 +178,7 @@ class GameMap {
 
     loc.entity = entity;
     entity.pos = vec;
+    loc.blocking = false;
 
     //this.locations[pos.x][pos.y].dirty = true;
     if (loc.isVisible) {
