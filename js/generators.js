@@ -59,7 +59,6 @@ class OldCityGenerator extends MapGenerator {
   decorate() {
     // use a variety of walls: both brick types and the pillars
     // add door tiles
-    // add some signs
     for (let x = 0; x < this.map.width; ++x) {
       for (let y = 1; y < this.map.height - 1; ++y) {
         let loc = this.map.getLocation(x, y);
@@ -86,6 +85,12 @@ class OldCityGenerator extends MapGenerator {
         } else {
           loc.tileSprite = TILE_LARGE_SQUARE;
         }
+      }
+    }
+    // add some signs
+    for (let room of this.rooms) {
+      if (Math.random() < 0.33) {
+        this.placeSign(room);
       }
     }
   }
@@ -235,7 +240,6 @@ class DungeonGenerator extends MapGenerator {
   }
 
   decorate() {
-
     // add locked doors and damaged wall tiles
     // add grate wall tiles
     // add skeletons
@@ -263,6 +267,16 @@ class DungeonGenerator extends MapGenerator {
           }
         } else if (loc.type == PATH) {
           loc.tileSprite = TILE_SPARSE_CROSS;
+        }
+      }
+    }
+    for (let room of this.rooms) {
+      // 1/3 rooms can have skulls
+      if (Math.random() < 0.33) {
+        let loc = this.getRandomLocation(room);
+        if (!loc.isBlocked) {
+          this.skullLocs.push(loc);
+          loc.blocked = true;
         }
       }
     }

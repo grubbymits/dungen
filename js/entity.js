@@ -49,6 +49,17 @@ class Tombstone extends Entity {
   }
 }
 
+class Sign extends Entity {
+  constructor(position, game) {
+    super(position, true, null, OBJECT, game);
+    if (Math.random() < 0.5) {
+      this.sprite = signSprites[0];
+    } else {
+      this.sprite = signSprites[1];
+    }
+  }
+}
+
 class Chest extends Entity {
   constructor(position, game) {
     super(position, true, chestSprites[0], OBJECT, game);

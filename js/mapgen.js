@@ -56,6 +56,7 @@ class MapGenerator {
     this.chestLocs = [];
     this.skullLocs = [];
     this.tombstoneLocs = [];
+    this.signLocs = [];
     this.monsterPlacements = [];
     this.map = new GameMap(width, height);
     let numRooms = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
@@ -168,6 +169,48 @@ class MapGenerator {
       //h = MIN_SMALL;
     }
     return {width : w, height : h};
+  }
+
+  placeSign(room) {
+    for (let x = room.pos.x; x < room.pos.x + room.width; ++x) {
+      for (let y = room.pos.y; y < room.pos.y + room.height; ++y) {
+
+        let loc = this.map.getLocation(x, y);
+        if (loc.isBlocked) {
+          continue;
+        }
+
+        if (this.map.getLocationType(x, y - 1) == WALL) {
+          if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
+              (this.map.getLocationType(x + 1, y - 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        } else if (this.map.getLocationType(x - 1, y) == WALL) {
+          if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
+              (this.map.getLocationType(x - 1, y + 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        } else if (this.map.getLocationType(x + 1, y) == WALL) {
+          if ((this.map.getLocationType(x + 1, y - 1) == PATH) ||
+              (this.map.getLocationType(x + 1, y + 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        } else if (this.map.getLocationType(x, y + 1) == WALL) {
+          if ((this.map.getLocationType(x - 1, y + 1) == PATH) ||
+              (this.map.getLocationType(x + 1, y + 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        }
+      }
+    }
   }
 
   placeRooms(roomsToPlace) {

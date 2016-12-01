@@ -123,6 +123,11 @@ class Game {
       this.createTombstone(loc);
     }
 
+    console.log("placing signs:", this.mapGenerator.signLocs.length);
+    for (let loc of this.mapGenerator.signLocs) {
+      this.createSign(loc);
+    }
+
     this.mapGenerator.placeMonsters(this.level, 32);
     for (let monster of this.mapGenerator.monsterPlacements) {
       this.createMonster(monster.vec, monster.type);
@@ -332,6 +337,13 @@ class Game {
     let tombstone = new Tombstone(loc.vec, this);
     this.objects.push(tombstone);
     this.theMap.placeEntity(loc.vec, tombstone);
+    loc.blocked = false;
+  }
+
+  createSign(loc) {
+    let sign = new Sign(loc.vec, this);
+    this.objects.push(sign);
+    this.theMap.placeEntity(loc.vec, sign);
     loc.blocked = false;
   }
 

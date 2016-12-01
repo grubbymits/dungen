@@ -221,3 +221,6 @@ var skullSprites = [ new Sprite(greenSpriteSheet, 0, 16),
                      new Sprite(greenSpriteSheet, 2, 16)
                    ];
 var tombstoneSprite = new Sprite(greenSpriteSheet, 3, 16);
+
+var signSprites = [ new Sprite(greenSpriteSheet, 6, 17),
+                    new Sprite(greenSpriteSheet, 7, 17) ];
