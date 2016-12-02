@@ -57,6 +57,8 @@ class MapGenerator {
     this.skullLocs = [];
     this.tombstoneLocs = [];
     this.signLocs = [];
+    this.magicalObjectLocs = [];
+    this.symbolLocs = [];
     this.monsterPlacements = [];
     this.map = new GameMap(width, height);
     let numRooms = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
@@ -210,6 +212,14 @@ class MapGenerator {
           }
         }
       }
+    }
+  }
+
+  placeSkull(room) {
+    let loc = this.getRandomLocation(room);
+    if (!loc.isBlocked) {
+      this.skullLocs.push(loc);
+      loc.blocked = true;
     }
   }
 

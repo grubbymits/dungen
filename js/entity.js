@@ -1,13 +1,11 @@
 "use strict";
 
 class Entity {
-  constructor(position, blocking, sprite, kind, game) {
+  constructor(position, sprite, kind, game) {
     this.position = position;
-    this.blocking = blocking;
     this.sprite = sprite;
     this.kind = kind;
     this.game = game;
-    //this.game.map.placeEntity(this.position, this);
   }
   render() {
     this.sprite.render(this.pos.x * TILE_SIZE,
@@ -30,7 +28,7 @@ class Entity {
 
 class Skull extends Entity {
   constructor(position, game) {
-    super(position, true, null, OBJECT, game);
+    super(position, null, OBJECT, game);
     let spriteIdx = Math.random();
     if (spriteIdx < 0.333) {
       this.sprite = skullSprites[0];
@@ -44,14 +42,24 @@ class Skull extends Entity {
 
 class Tombstone extends Entity {
   constructor(position, game) {
-    super(position, true, null, OBJECT, game);
-    this.sprite = tombstoneSprite;
+    super(position, tombstoneSprite, OBJECT, game);
+  }
+}
+
+class MagicalObject extends Entity {
+  constructor(position, game) {
+    super(position, null, OBJECT, game);
+    if (Math.random() < 0.5) {
+      this.sprite = magicalObjectSprites[0];
+    } else {
+      this.sprite = magicalObjectSprites[1];
+    }
   }
 }
 
 class Sign extends Entity {
   constructor(position, game) {
-    super(position, true, null, OBJECT, game);
+    super(position, null, OBJECT, game);
     if (Math.random() < 0.5) {
       this.sprite = signSprites[0];
     } else {
@@ -62,7 +70,7 @@ class Sign extends Entity {
 
 class Chest extends Entity {
   constructor(position, game) {
-    super(position, true, chestSprites[0], OBJECT, game);
+    super(position, chestSprites[0], OBJECT, game);
     this.open = false;
   }
   pickTreasure() {
@@ -176,7 +184,7 @@ class Chest extends Entity {
 
 class Stair extends Entity {
   constructor(position, isExit, game) {
-    super(position, true, null, OBJECT, game);
+    super(position, null, OBJECT, game);
     if (isExit) {
       this.sprite = exitStairSprite;
     }

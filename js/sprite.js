@@ -109,10 +109,6 @@ for (let y = 2; y < 4; ++y) {
   }
 }
 
-for (let x = 0; x < 6; ++x) {
-  tileSprites.push(new Sprite(greenSpriteSheet, x, SYMBOL_OFFSET));
-}
-
 var entryStairSprite = new Sprite(greenSpriteSheet, 6, 1);
 var exitStairSprite = new Sprite(greenSpriteSheet, 5, 1);
                     
@@ -221,6 +217,14 @@ var skullSprites = [ new Sprite(greenSpriteSheet, 0, 16),
                      new Sprite(greenSpriteSheet, 2, 16)
                    ];
 var tombstoneSprite = new Sprite(greenSpriteSheet, 3, 16);
+
+var magicalObjectSprites = [ new Sprite(greenSpriteSheet, 4, 16),
+                              new Sprite(greenSpriteSheet, 5, 16) ];
+
+var symbolSprites = [];
+for (let x = 0; x < 6; ++x) {
+  symbolSprites.push(new Sprite(greenSpriteSheet, x, SYMBOL_OFFSET));
+}
 
 var signSprites = [ new Sprite(greenSpriteSheet, 6, 17),
                     new Sprite(greenSpriteSheet, 7, 17) ];

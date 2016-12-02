@@ -15,7 +15,7 @@ class Game {
     this.expGained = 0;
     this.context = context;
     this.overlayContext = overlayContext;
-    this.level = 6;
+    this.level = 1;
     this.isRunning = false;
     this.loading = false;
     this.skipTicks = 1000 / 60;
@@ -128,6 +128,10 @@ class Game {
       this.createSign(loc);
     }
 
+    for (let loc of this.mapGenerator.magicalObjectLocs) {
+      this.createMagicalObject(loc);
+    }
+
     this.mapGenerator.placeMonsters(this.level, 32);
     for (let monster of this.mapGenerator.monsterPlacements) {
       this.createMonster(monster.vec, monster.type);
@@ -153,6 +157,24 @@ class Game {
           tileSprites[spriteIdx].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
         }
       }
+    }
+    for (let loc of this.mapGenerator.symbolLocs) {
+      let spriteIdx = 0;
+      if (Math.random() < 0.16) {
+        spriteIdx = 0;
+      } else if (Math.random() < 0.33) {
+        spriteIdx = 1;
+      } else if (Math.random() < 0.5) {
+        spriteIdx = 2;
+      } else if (Math.random() < 0.66) {
+        spriteIdx = 3;
+      } else if (Math.random() < 0.73) {
+        spriteIdx = 4;
+      } else if (Math.random() < 0.73) {
+        spriteIdx = 5;
+      }
+      let sprite = symbolSprites[spriteIdx];
+      sprite.render(loc.vec.x * TILE_SIZE, loc.vec.y * TILE_SIZE, this.context);
     }
   }
 
@@ -299,6 +321,18 @@ class Game {
       case WEREWOLF:
         monster = new Werewolf(pos, this);
         break;
+      case SLIMES:
+        monster = new Slimes(pos, this);
+        break;
+      case SLIME_CHAMPION:
+        monster = new SlimeChampion(pos, this);
+        break;
+      case GOBLIN:
+        monster = new Goblin(pos, this);
+        break;
+      case ORC:
+        monster = new Orc(pos, this);
+        break;
       default:
         throw("unhandled monster type!");
     }
@@ -344,6 +378,13 @@ class Game {
     let sign = new Sign(loc.vec, this);
     this.objects.push(sign);
     this.theMap.placeEntity(loc.vec, sign);
+    loc.blocked = false;
+  }
+
+  createMagicalObject(loc) {
+    let object = new MagicalObject(loc.vec, this);
+    this.objects.push(object);
+    this.theMap.placeEntity(loc.vec, object);
     loc.blocked = false;
   }
 

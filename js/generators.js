@@ -345,11 +345,7 @@ class CatacombsGenerator extends MapGenerator {
     for (let room of this.rooms) {
       // 1/2 rooms can have skulls
       if (Math.random() < 0.5) {
-        let loc = this.getRandomLocation(room);
-        if (!loc.isBlocked) {
-          this.skullLocs.push(loc);
-          loc.blocked = true;
-        }
+        this.placeSkull(room);
       }
       if (Math.random() < 0.5) {
         let loc = this.getRandomLocation(room);
@@ -386,7 +382,8 @@ class CatacombsGenerator extends MapGenerator {
 }
 
 class SorcerersLairGenerator extends MapGenerator {
-  constructor() {
+  constructor(width, height) {
+    super(width, height, PATH, PATH);
     // add goblin, orc, slimes, slime champion
     // add zombie
     // add undead
@@ -441,8 +438,47 @@ class SorcerersLairGenerator extends MapGenerator {
   }
 
   decorate() {
-    // add magic symbols
-    // add table, fountain
     // add grates and doors on walls
+    for (let x = 0; x < this.map.width; ++x) {
+      for (let y = 1; y < this.map.height - 1; ++y) {
+        let loc = this.map.getLocation(x, y);
+        let locBelow = this.map.getLocation(x, y + 1)
+
+        if (loc.type == WALL) {
+          loc.tileSprite = TILE_THIN_BRICK;
+          if (x > 0 && x < this.map.width - 1 && y > 2) {
+            if (this.map.getLocationType(x - 1, y) == WALL &&
+                this.map.getLocationType(x + 1, y) == WALL &&
+                this.map.getLocationType(x, y - 2) == CEILING) {
+              let random = Math.random();
+              if (random < 0.1) {
+                loc.tileSprite = TILE_ROUND_DOOR;
+              } else if (random < 0.2) {
+                loc.tileSprite = TILE_SQUARE_DOOR;
+              } else if (random < 0.3) {
+                loc.tileSprite = TILE_GRATE;
+              }
+            }
+          }
+        } else if (loc.type == PATH) {
+          loc.tileSprite = TILE_LARGE_CROSS;
+        }
+      }
+    }
+    // add table, fountain, skulls, magical symbols
+    for (let room of this.rooms) {
+      if (Math.random() < 0.3) {
+        this.placeSkull(room);
+      }
+      if (Math.random() < 0.2) {
+        let loc = this.getRandomLocation(room);
+        this.magicalObjectLocs.push(loc);
+        loc.blocked = true;
+      }
+      if (Math.random() < 0.25) {
+        let loc = this.getRandomLocation(room);
+        this.symbolLocs.push(loc);
+      }
+    }
   }
 }

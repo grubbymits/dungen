@@ -441,4 +441,19 @@ class Vampire extends Monster {
 }
 
 // Level 9: Boar, Slime Champion, Cyclops, Wraith
+class SlimeChampion extends Monster {
+  constructor(position, game) {
+    super(250,          // health
+          10,           // energy
+          SLIME_CHAMPION,       // kind
+          17,           // defense
+          6,            // vision
+          25,           // agility
+          28,           // xp
+          3,            // attack power
+          NORMAL,       // attack type
+          2,            // attack energy
+          position, game);
+  }
+}
 // Level 10: Bear, Kraken, Golem, Carabia, Demon
