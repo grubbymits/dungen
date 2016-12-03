@@ -404,10 +404,13 @@ class TakePotion extends Action {
     super(actor);
   }
   set potion(potion) {
+    this.thePotion = potion;
     this.effect = potion.effect;
   }
   perform() {
     this.game.addEffect(this.actor, this.effect);
+    this.game.addGraphicEvent(this.thePotion.sprite,
+                              new Vec(this.actor.pos.x, this.actor.pos.y - 1));
     this.actor.nextAction = null;
   }
 }
