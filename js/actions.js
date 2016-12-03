@@ -159,6 +159,12 @@ class PrimaryAttack extends AttackBase {
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
+
+    if (this.actor.kind == HERO) {
+      this.game.addGraphicEvent(this.actor.primary.sprite,
+                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
+    }
+
     if (this.success) {
       this.game.audio.playAttack(this.actor);
       this.dealDamage.target = this.targetActor;
@@ -192,6 +198,12 @@ class SecondaryAttack extends AttackBase {
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
+
+    if (this.actor.kind == HERO) {
+      this.game.addGraphicEvent(this.actor.secondary.sprite,
+                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
+    }
+
     if (this.success) {
       this.game.audio.playAttack(this.actor);
       this.dealDamage.target = this.targetActor;

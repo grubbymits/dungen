@@ -4,8 +4,8 @@ const TEXT_EVENT = 0;
 const GRAPHIC_EVENT = 1;
 
 class UIEvent {
-  constructor(start, millisecs) {
-    this.startTime = start;
+  constructor(millisecs) {
+    this.startTime = new Date().getTime();
     this.endTime = this.startTime + millisecs;
   }
 
@@ -15,16 +15,16 @@ class UIEvent {
 }
 
 class TextEvent extends UIEvent {
-  constructor(text, start) {
-    super(start, 3000);
+  constructor(text) {
+    super(3000);
     this.string = text;
     this.type = TEXT_EVENT;
   }
 }
 
 class GraphicEvent extends UIEvent {
-  constructor(context, start, pos, sprite) {
-    super(start, 1000);
+  constructor(context, pos, sprite) {
+    super(1000);
     this.sprite = sprite;
     this.context = context;
     this.position = pos;

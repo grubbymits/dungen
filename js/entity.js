@@ -166,9 +166,9 @@ class Chest extends Entity {
     // item rather than the best of its class.
     let type = Math.random();
     let item = null;
-    if (type < 0.4) {
+    if (type < 0.33) {
       item = this.pickTreasure();
-    } else if (type < 0.8) {
+    } else if (type < 0.66) {
       item = this.pickPotion();
     } else {
       item = this.pickEquipment();
@@ -176,8 +176,12 @@ class Chest extends Entity {
     if (item === null) {
       console.log("item is null");
       return;
+    } else {
+      console.log("received:", item.name);
     }
     this.game.addTextEvent("Received " + item.name);
+    this.game.addGraphicEvent(item.sprite,
+                              new Vec(this.pos.x, this.pos.y - 1));
     this.game.player.addItem(item);
   }
 }

@@ -234,12 +234,15 @@ class Game {
   }
 
   addTextEvent(string) {
-    this.player.UI.addEvent(new TextEvent(string, new Date().getTime()));
+    this.player.UI.addEvent(new TextEvent(string));
   }
 
   addGraphicEvent(sprite, pos) {
-    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, new Date().getTime(),
-                                             pos, sprite));
+    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos, sprite));
+  }
+
+  addItemEvent(item, pos) {
+    this.player.UI.addEvent(new ItemEvent(item, pos));
   }
 
   createHero(pos, type) {

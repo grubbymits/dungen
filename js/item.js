@@ -167,6 +167,7 @@ class Treasure extends Item {
     super(TREASURE, kind);
     this.value = value;
     this.names = TREASURE_NAMES;
+    this.sprites = treasureSprites;
   }
 }
 
