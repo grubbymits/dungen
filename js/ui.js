@@ -2,6 +2,7 @@
 
 const TEXT_EVENT = 0;
 const GRAPHIC_EVENT = 1;
+const PATH_EVENT = 2;
 
 class UIEvent {
   constructor(millisecs) {
@@ -39,6 +40,32 @@ class GraphicEvent extends UIEvent {
 
   render() {
     this.sprite.render(this.x, this.y, this.context);
+  }
+}
+
+class PathEvent extends UIEvent {
+  constructor(context, path) {
+    super(1000);
+    this.context = context;
+    this.path = path;
+    this.type = PATH_EVENT;
+  }
+
+  render() {
+    if (this.path.length === 0)
+      return;
+    // draw a line between each location of the path
+    let src = this.path[0];
+    this.context.strokeStyle = "orange";
+    this.context.beginPath();
+    this.context.moveTo(src.x * TILE_SIZE + (TILE_SIZE / 2),
+                        src.y * TILE_SIZE + (TILE_SIZE / 2));
+    for (let i = 1; i < this.path.length; ++i) {
+      let dest = this.path[i];
+      this.context.lineTo(dest.x * TILE_SIZE + (TILE_SIZE / 2),
+                          dest.y * TILE_SIZE + (TILE_SIZE / 2));
+    }
+    this.context.stroke();
   }
 }
 
@@ -265,10 +292,18 @@ class Interface {
       if (!event.isFinished()) {
         if (event.type == TEXT_EVENT) {
           eventList += event.string + "\n";
-        } else {
+        } else if (event.type == GRAPHIC_EVENT) {
           event.render();
           game.map.setDirty(event.pos);
-        } 
+        } else if (event.type == PATH_EVENT) {
+          event.render();
+          for (let node of event.path) {
+            game.map.setDirty(node);
+            // clean up diagonal artifacts
+            game.map.setDirty(new Vec(node.x - 1, node.y));
+            game.map.setDirty(new Vec(node.x + 1, node.y));
+          }
+        }
       } else {
         delete this.events[i];
         this.events.splice(i, 1);

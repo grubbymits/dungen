@@ -32,6 +32,9 @@ class WalkAction extends Action {
   set dest(goal) {
     this.destination = goal;
     this.currentPath = this.map.getPath(this.actor.pos, this.destination);
+    if (this.actor.kind == HERO) {
+      this.game.addPathEvent(this.currentPath);
+    }
   }
 
   perform() {

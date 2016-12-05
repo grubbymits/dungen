@@ -241,8 +241,8 @@ class Game {
     this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos, sprite));
   }
 
-  addItemEvent(item, pos) {
-    this.player.UI.addEvent(new ItemEvent(item, pos));
+  addPathEvent(path) {
+    this.player.UI.addEvent(new PathEvent(this.overlayContext, path));
   }
 
   createHero(pos, type) {
