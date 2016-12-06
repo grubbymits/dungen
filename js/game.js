@@ -97,7 +97,7 @@ class Game {
     this.renderMap();
     this.clearOverlay();
     this.renderChanges();
-    this.play();
+    //this.play();
     this.loading = false;
   }
 
@@ -142,9 +142,9 @@ class Game {
   
   renderMap() {
     // draw everything
-    this.overlayContext.clearRect(0, 0,
-                                  this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
-                                  this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
+    //this.overlayContext.clearRect(0, 0,
+      //                            this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
+        //                          this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
     this.context.fillStyle = '#000000';
     this.context.fillRect(0, 0,
                           this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,

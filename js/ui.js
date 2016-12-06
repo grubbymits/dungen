@@ -13,6 +13,8 @@ class UIEvent {
   isFinished() {
     return (new Date().getTime() >= this.endTime);
   }
+
+  end(game) { }
 }
 
 class TextEvent extends UIEvent {
@@ -41,6 +43,10 @@ class GraphicEvent extends UIEvent {
   render() {
     this.sprite.render(this.x, this.y, this.context);
   }
+
+  end(game) {
+    game.map.setDirty(this.position);
+  }
 }
 
 class PathEvent extends UIEvent {
@@ -66,6 +72,15 @@ class PathEvent extends UIEvent {
                           dest.y * TILE_SIZE + (TILE_SIZE / 2));
     }
     this.context.stroke();
+  }
+
+  end(game) {
+    for (let node of this.path) {
+      game.map.setDirty(node);
+      // clean up diagonal artifacts
+      game.map.setDirty(new Vec(node.x - 1, node.y));
+      game.map.setDirty(new Vec(node.x + 1, node.y));
+    }
   }
 }
 
@@ -135,25 +150,120 @@ class Interface {
     $('#body_icon').css("object-position", bodyPos);
   }
 
-  drawStats(hero, field) {
+  drawStats(hero, field, writeAll) {
+    let text = "";
     // Populate hero stats
-    $(field).text("  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
-                  "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
-                  "  Strength: " + hero.strength + "\n" +
-                  "  Endurance: " + hero.endurance + "\n" +
-                  "  Agility: " + hero.agility + "\n" +
-                  "  Wisdom: " + hero.wisdom + "\n" +
-                  "  Will: " + hero.will + "\n" +
-                  "  Attack: " + hero.primaryAtkPower + "\n" +
-                  "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
-                  "  Defense: " + hero.physicalDefense);
+    if (writeAll) {
+      text = "  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
+             "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
+             "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
+             "  Attack: " + hero.primaryAtkPower + "\n" +
+             "  Defense: " + hero.physicalDefense + "\n";
+    }
+    text += "  Strength: " + hero.strength + "\n" +
+            "  Endurance: " + hero.endurance + "\n" +
+            "  Agility: " + hero.agility + "\n" +
+            "  Wisdom: " + hero.wisdom + "\n" +
+            "  Will: " + hero.will + "\n";
+    $(field).text(text);
   }
 
   drawLevelUp(hero) {
     $('#lvl_up_hero_icon').removeClass();
     $('#lvl_up_hero_icon').addClass(hero.className);
-    this.drawStats(hero, '#lvl_up_stats');
+    this.drawStats(hero, '#lvl_up_stats', false);
     $('#lvl_up_menu').css("visibility", "visible");
+  }
+
+  populatePrimaryList(hero) {
+    $('#equipment_list').append(
+      '<li><div class="collapsible-header" id="primary_equipment">Primary</div></li>');
+    let items = this.getItems(hero.primary.type);
+    for (let item of items.keys()) {
+
+      let string = item.name + ", ATK: " + item.power + ", RNG: " + item.range;
+      $('<div class="collapsible-body">' +
+        '<a class="waves-effect btn orange" style="margin:2px"</a>' + string + '</div>')
+      .insertAfter('#primary_equipment').on('click', { ui : this },
+      function(event) {
+        hero.equipItem(item);
+        event.data.ui.drawEquipment(hero);
+        event.data.ui.drawStats(hero, '#stats', true);
+      });
+    }
+  }
+
+  populateSecondaryList(hero) {
+    $('#equipment_list').append(
+      '<li><div class="collapsible-header" id="secondary_equipment">Secondary</div></li>');
+
+    let items = this.getItems(hero.secondary.type);
+    for (let item of items.keys()) {
+
+      let string = item.name;
+      if (item.type == THROWING)
+        string += ", ATK: " + item.power + ", RNG: " + item.range;
+      else if (item.type == ARROWS)
+        string += ", ATK: " + item.power;
+      else if (item.type == SHIELD)
+        string += ", DEF: " + item.defense;
+      else
+        console.log("unhandled item type!");
+
+      $('<div class="collapsible-body">' +
+        '<a class="waves-effect btn orange" style="margin:2px"</a>' + string + '</div>')
+        .insertAfter('#secondary_equipment').on('click', { ui : this },
+        function(event) {
+          hero.equipItem(item);
+          event.data.ui.drawEquipment(hero);
+          event.data.ui.drawStats(hero, '#stats', true);
+        });
+    }
+  }
+
+  populateHeadList(hero) {
+    $('#equipment_list').append(
+      '<li><div class="collapsible-header" id="head_equipment">Head Gear</div></li>');
+    let items = this.getItems(HELMET);
+    for (let item of items.keys()) {
+
+      let string = item.name + ", DEF: " + item.defense;
+      $('<div class="collapsible-body">' +
+        '<a class="waves-effect btn orange" style="margin:2px"</a>' + string + '</div>')
+      .insertAfter('#head_equipment').on('click', { ui : this },
+        function(event) {
+          hero.equipItem(item);
+          event.data.ui.drawEquipment(hero);
+          event.data.ui.drawStats(hero, '#stats', true);
+        });
+    }
+  }
+
+  populateArmourList(hero) {
+    $('#equipment_list').append(
+      '<li><div class="collapsible-header" id="body_equipment">Body Armour</div></li>');
+    let items = this.getItems(ARMOUR);
+    for (let item of items.keys()) {
+
+      let string = item.name + ", DEF: " + item.defense;
+      $('<div class="collapsible-body">' +
+        '<a class="waves-effect btn orange" style="margin:2px"</a>' + string + '</div>')
+      .insertAfter('#body_equipment').on('click', { ui : this },
+        function(event) {
+          hero.equipItem(item);
+          event.data.ui.drawEquipment(hero);
+          event.data.ui.drawStats(hero, '#stats', true);
+        });
+    }
+  }
+
+  refreshEquipmentLists(hero) {
+    // Clear and repopulate equipment lists
+    $('#equipment_list').empty();
+    this.populatePrimaryList(hero);
+    this.populateSecondaryList(hero);
+    this.populateHeadList(hero);
+    this.populateArmourList(hero);
   }
 
   setupNav() {
@@ -171,89 +281,8 @@ class Interface {
         $('#hero_icon').addClass(name);
 
         event.data.ui.drawEquipment(hero);
-        event.data.ui.drawStats(hero, '#stats');
-
-        // Populate primary equipment list
-        $('#equipment_list').empty();
-        $('#equipment_list').append(
-          '<li><div class="collapsible-header" id="primary_equipment">Primary</div></li>');
-
-        let items = event.data.ui.getItems(hero.primary.type);
-        for (let item of items.keys()) {
-
-          let string = item.name + ", ATK: " + item.power + ", RNG: " + item.range;
-          $('<div class="collapsible-body">' +
-            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            string + '</div>').insertAfter('#primary_equipment').on('click',
-                                              { ui : event.data.ui },
-            function(event) {
-              hero.equipItem(item);
-              event.data.ui.drawEquipment(hero);
-              event.data.ui.drawStats(hero);
-            });
-        }
-        $('#equipment_list').append(
-          '<li><div class="collapsible-header" id="secondary_equipment">Secondary</div></li>');
-
-        items = event.data.ui.getItems(hero.secondary.type);
-        for (let item of items.keys()) {
-
-          let string = item.name;
-          if (item.type == THROWING)
-            string += ", ATK: " + item.power + ", RNG: " + item.range;
-          else if (item.type == ARROWS)
-            string += ", ATK: " + item.power;
-          else if (item.type == SHIELD)
-            string += ", DEF: " + item.defense;
-          else
-            console.log("unhandled item type!");
-
-          $('<div class="collapsible-body">' +
-            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            string + '</div>').insertAfter('#secondary_equipment').on('click',
-                                              { ui : event.data.ui },
-            function(event) {
-              hero.equipItem(item);
-              event.data.ui.drawEquipment(hero);
-              event.data.ui.drawStats(hero);
-            });
-        }
-
-        // Populate the head gear drop down
-        $('#equipment_list').append(
-          '<li><div class="collapsible-header" id="head_equipment">Head Gear</div></li>');
-        items = event.data.ui.getItems(HELMET);
-        for (let item of items.keys()) {
-
-          let string = item.name + ", DEF: " + item.defense;
-          $('<div class="collapsible-body">' +
-            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            string + '</div>').insertAfter('#head_equipment').on('click',
-                                              { ui : event.data.ui },
-            function(event) {
-              hero.equipItem(item);
-              event.data.ui.drawEquipment(hero);
-              event.data.ui.drawStats(hero);
-            });
-        }
-
-        // Populate the armour drop down
-        $('#equipment_list').append(
-          '<li><div class="collapsible-header" id="body_equipment">Body Armour</div></li>');
-        items = event.data.ui.getItems(ARMOUR);
-        for (let item of items.keys()) {
-
-          let string = item.name + ", DEF: " + item.defense;
-          $('<div class="collapsible-body">' +
-            '<a class="waves-effect btn orange" style="margin:2px"</a>' +
-            string + '</div>').insertAfter('#body_equipment').on('click',
-                                              { ui : event.data.ui },
-            function(event) {
-              hero.equipItem(item);
-              event.data.ui.drawEquipment(hero);
-              event.data.ui.drawStats(hero);
-            });
-        }
+        event.data.ui.drawStats(hero, '#stats', true);
+        event.data.ui.refreshEquipmentLists(hero);
       });
     }
     // ensure the collapsible ability is enabled.
@@ -263,7 +292,7 @@ class Interface {
     // Initialise
     $('#hero_icon').addClass(this.player.currentHero.className);
     this.drawEquipment(this.player.currentHero);
-    this.drawStats(this.player.currentHero);
+    this.drawStats(this.player.currentHero, '#stats', true);
   }
   
   addEvent(event) {
@@ -292,19 +321,11 @@ class Interface {
       if (!event.isFinished()) {
         if (event.type == TEXT_EVENT) {
           eventList += event.string + "\n";
-        } else if (event.type == GRAPHIC_EVENT) {
+        } else {
           event.render();
-          game.map.setDirty(event.pos);
-        } else if (event.type == PATH_EVENT) {
-          event.render();
-          for (let node of event.path) {
-            game.map.setDirty(node);
-            // clean up diagonal artifacts
-            game.map.setDirty(new Vec(node.x - 1, node.y));
-            game.map.setDirty(new Vec(node.x + 1, node.y));
-          }
         }
       } else {
+        event.end(game);
         delete this.events[i];
         this.events.splice(i, 1);
       }
@@ -327,7 +348,7 @@ class Interface {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.agility++;
       $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats');
+      this.drawStats(this.heroToLevelUp, '#stats', true);
     }
   }
 
@@ -335,7 +356,7 @@ class Interface {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.strength++;
       $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats');
+      this.drawStats(this.heroToLevelUp, '#stats', true);
     }
   }
 
@@ -343,7 +364,7 @@ class Interface {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.endurance++;
       $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats');
+      this.drawStats(this.heroToLevelUp, '#stats', true);
     }
   }
 
@@ -351,7 +372,7 @@ class Interface {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.wisdom++;
       $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats');
+      this.drawStats(this.heroToLevelUp, '#stats', true);
     }
   }
 
@@ -359,7 +380,7 @@ class Interface {
     if (this.heroToLevelUp !== null) {
       this.heroToLevelUp.will++;
       $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats');
+      this.drawStats(this.heroToLevelUp, '#stats', true);
     }
   }
 
