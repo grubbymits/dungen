@@ -184,7 +184,7 @@ class SewerGenerator extends MapGenerator {
 
 class DungeonGenerator extends MapGenerator {
   constructor(width, height) {
-    super(width, height, PATH, PATH);
+    super(width, height, SPIKES, PATH);
 
     // add rat, spiders, bat
     // add spider champion,
@@ -258,7 +258,8 @@ class DungeonGenerator extends MapGenerator {
           if (x > 0 && x < this.map.width - 1 && y > 2) {
             if (this.map.getLocationType(x - 1, y) == WALL &&
                 this.map.getLocationType(x + 1, y) == WALL &&
-                this.map.getLocationType(x, y - 2) == CEILING) {
+                this.map.getLocationType(x, y - 2) == CEILING &&
+                this.map.getLocationType(x, y + 1) == PATH) {
               let random = Math.random();
               if (random < 0.2) {
                 loc.tileSprite = TILE_DARK_DOOR;
@@ -267,6 +268,8 @@ class DungeonGenerator extends MapGenerator {
           }
         } else if (loc.type == PATH) {
           loc.tileSprite = TILE_SPARSE_CROSS;
+        } else {
+          loc.tileSprite = TILE_SPIKES;
         }
       }
     }

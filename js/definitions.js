@@ -260,6 +260,7 @@ const PATH = 1;
 const WALL = 2;
 const WATER = 3;
 const DIRT = 4;
+const SPIKES = 5;
 /*
 const WALL0 = 2;
 const WALL1 = 3;

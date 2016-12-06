@@ -47,7 +47,7 @@ class Location {
     // this.blocking is used to cause a temp block until an entity is placed.
     return (this.entity !== null || this.tileType == WALL ||
             this.tileType == CEILING || this.tileType == WATER ||
-            this.blocking);
+            this.tileType == SPIKES || this.blocking);
   }
   get isWallOrCeiling() {
     return (this.tileType == WALL || this.tileType == CEILING);
