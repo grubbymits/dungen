@@ -95,6 +95,7 @@ class DealDamage extends Action {
     super(actor);
     this.attack = attack;
   }
+
   perform() {
     let power = this.attack.power;
     let type = this.attack.type;
@@ -116,11 +117,14 @@ class DealDamage extends Action {
       this.actor.nextAction = null;
     } else {
       this.game.audio.hit();
-      let text = this.actor.name + " deals " + damage + " to "
-        + this.targetActor.name;
+      let text = this.actor.name + " deals " + damage + " to " + this.targetActor.name;
+      if (this.actor.kind == HERO) {
+        text += " with " + this.attack.name;
+      }
       this.game.addTextEvent(text);
     }
   }
+
   set target(target) {
     this.targetActor = target;
   }
@@ -155,6 +159,12 @@ class PrimaryAttack extends AttackBase {
   
   get power() {
     return this.actor.primaryAtkPower;
+  }
+
+  get name() {
+    if (this.actor.primary) {
+      return this.actor.primary.name;
+    }
   }
 
   perform() {
@@ -194,6 +204,12 @@ class SecondaryAttack extends AttackBase {
   
   get power() {
     return this.actor.secondaryAtkPower;
+  }
+
+  get name() {
+    if (this.actor.secondary) {
+      return this.actor.secondary.name;
+    }
   }
 
   perform() {
