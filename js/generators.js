@@ -276,11 +276,7 @@ class DungeonGenerator extends MapGenerator {
     for (let room of this.rooms) {
       // 1/3 rooms can have skulls
       if (Math.random() < 0.33) {
-        let loc = this.getRandomLocation(room);
-        if (!loc.isBlocked) {
-          this.skullLocs.push(loc);
-          loc.blocked = true;
-        }
+        this.placeSkull(room);
       }
     }
   }
@@ -346,6 +342,9 @@ class CatacombsGenerator extends MapGenerator {
   decorate() {
     // add skulls, tombstones, etc..
     for (let room of this.rooms) {
+      if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+        continue;
+      }
       // 1/2 rooms can have skulls
       if (Math.random() < 0.5) {
         this.placeSkull(room);
@@ -470,6 +469,9 @@ class SorcerersLairGenerator extends MapGenerator {
     }
     // add table, fountain, skulls, magical symbols
     for (let room of this.rooms) {
+      if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+        continue;
+      }
       if (Math.random() < 0.3) {
         this.placeSkull(room);
       }

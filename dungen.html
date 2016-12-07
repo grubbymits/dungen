@@ -20,11 +20,11 @@
   <canvas id="overlayCanvas" width="2560" height="2560"
     style="left: 0px; top: 0px; position: absolute; zIndex: 0; pointer-events:none; ">
   </canvas>
-  <div style="position:fixed; top: 25px; left: 30%; visibility: hidden" id="lvl_up_menu">
+  <div style="position:fixed; width: 100%; visibility: hidden" id="lvl_up_menu">
   <div class="row">
-    <div class="col s10 m6">
+    <div class="col s12 m8 push-m2 l6 push-l3">
       <div class="card horizontal">
-        <div class="card-image" style="left: 40%; top: 5px; width: 64px;">
+        <div class="card-image" style="margin: auto; top: 5px; width: 64px;">
           <ul>
           <img src="res/img/tileset-green-64.png" id="lvl_up_hero_icon">
         </ul>
@@ -91,13 +91,13 @@
       <li><a class="btn-floating orange" id="heal_button"><i class="material-icons">healing</i></a></li>
     </ul>
   </div>
-  <div style="position: fixed; top: 0px; left: 0px;">
+  <div style="position: fixed; bottom: 44px; left: 0px;">
     <p id="score_hud" style="color: orange; background-color: rgba(100,100,100,0.8); white-space: pre-wrap"></p>
   </div>
   <div style="position: fixed; bottom: 0px; left: 0px">
     <p id="hero_hud" style="color: orange; background-color: rgba(100,100,100,0.8); white-space: pre-wrap"></p>
   </div>
-  <div style="position: fixed; top: 0px; right: 50px">
+  <div style="position: fixed; top: 0px; right: 1px">
     <p id="action_hud" style="color: orange; background-color: rgba(100,100,100,0.8); white-space: pre-wrap"></p>
   </div>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

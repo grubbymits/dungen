@@ -44,8 +44,18 @@ class MapGenerator {
   constructor(width, height, roomType, pathType) {
     this.roomFloor = roomType;
     this.pathFloor = pathType;
-    this.minRoomWidth = MIN_SMALL;
-    this.minRoomHeight = MIN_SMALL;
+    // randomly choose either 4 or 5 for constant denominator
+    let denominator = 5;
+    if (Math.random() < 0.5) {
+      denominator = 4;
+    }
+    console.log("room size denominator:", denominator);
+
+    this.minLargeDim = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
+                                TILE_SIZE / denominator);
+    this.medRoomDim = Math.round(this.minLargeDim * 0.8);
+    this.minRoomDim = Math.round(this.minLargeDim * 0.6);
+
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
   }
@@ -62,7 +72,7 @@ class MapGenerator {
     this.monsterPlacements = [];
     this.map = new GameMap(width, height);
     let numRooms = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
-                              (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
+                              (TILE_SIZE * TILE_SIZE * this.medRoomDim * this.medRoomDim));
     this.placeRooms(numRooms);
     this.createConnections();
     this.fixupMap();
@@ -102,13 +112,13 @@ class MapGenerator {
 
   get randomX() {
     let min = 1;
-    let max = this.xMax - this.minRoomWidth;
+    let max = this.xMax - this.minRoomDim;
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
   get randomY() {
     let min = 1;
-    let max = this.yMax - this.minRoomHeight;
+    let max = this.yMax - this.minRoomDim;
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
@@ -151,29 +161,26 @@ class MapGenerator {
     let h = 0;
     if (type == LARGE) {
       // 23, 21, 19, 17, 15
-      w = Math.floor(Math.random() * 3) + MIN_LARGE;
-      h = Math.floor(Math.random() * 3) + MIN_LARGE;
-      //w = MIN_LARGE;
-      //h = MIN_LARGE;
+      w = Math.floor(Math.random() * 3) + this.minLargeDim;
+      h = Math.floor(Math.random() * 3) + this.minLargeDim;
     }
     if (type == MEDIUM) {
       // 19, 17, 15, 13, 11
-      w = Math.floor(Math.random() * 5) + MIN_MEDIUM;
-      h = Math.floor(Math.random() * 5) + MIN_MEDIUM;
-      //w = MIN_MEDIUM;
-      //h = MIN_MEDIUM;
+      w = Math.floor(Math.random() * 5) + this.medRoomDim;
+      h = Math.floor(Math.random() * 5) + this.medRoomDim;
     }
     if (type == SMALL) {
       // 15, 13, 11, 9
-      w = Math.floor(Math.random() * 5) + MIN_SMALL;
-      h = Math.floor(Math.random() * 5) + MIN_SMALL;
-      //w = MIN_SMALL;
-      //h = MIN_SMALL;
+      w = Math.floor(Math.random() * 5) + this.minRoomDim;
+      h = Math.floor(Math.random() * 5) + this.minRoomDim;
     }
     return {width : w, height : h};
   }
 
   placeSign(room) {
+    if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+      return;
+    }
     for (let x = room.pos.x; x < room.pos.x + room.width; ++x) {
       for (let y = room.pos.y; y < room.pos.y + room.height; ++y) {
 
@@ -216,6 +223,9 @@ class MapGenerator {
   }
 
   placeSkull(room) {
+    if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+      return;
+    }
     let loc = this.getRandomLocation(room);
     if (!loc.isBlocked) {
       this.skullLocs.push(loc);
@@ -335,53 +345,6 @@ class MapGenerator {
     return this.map.getLocation(x, y);
   }
 
-  decorateRooms() {
-    console.log("decorating rooms");
-    // 3 skull sprites
-    // tombstone
-    // table with melted candle
-    // fountain
-    // 6 symbols
-    // 2 signs
-    for (let room of this.rooms) {
-
-      /*
-      let wallType = getBoundedRandom(WALL1, WALL5);
-      for (let x = room.pos.x; x < room.pos.x + room.width; ++x) {
-        for (let y = room.pos.y - 1; y < room.pos.y + room.height; ++y) {
-          if (this.map.getLocationType(x, y) == WALL) {
-            this.map.setLocationType(x, y, wallType);
-          }
-        }
-      }
-      */
-
-      // 1/6 rooms can have signs
-      // place at the entry/exit to the room
-
-      // 1/3 rooms can have skulls
-      // place anyway
-      if (Math.random() < 0.333) {
-        let loc = this.getRandomLocation(room);
-        if (!loc.isBlocked) {
-          this.skullLocs.push(loc);
-          loc.blocked = true;
-        }
-      }
-
-      // 1/4 rooms can have tombstone
-      // place in the corners
-
-      // 1/3 rooms can have magic symbols
-      // place the symbol either in the centre or at the entry/exit
-      // magic symbols are not entities, they will be drawn as part of the map.
-      if (Math.random() < 0.333) {
-        let spriteType = getBoundedRandom(SYMBOL0, SYMBOL5);
-        this.map.setLocationType(room.centre.x+1, room.centre.y+1, spriteType);
-      }
-    }
-  }
-
   placeMonsters(level, total) {
     console.log("placing", total, "level", level, "monsters");
     // Try to place monsters in the larger rooms first.
@@ -421,7 +384,6 @@ class MapGenerator {
       let loc = this.getRandomLocation(room);
       if (!loc.isBlocked) {
         let type = Math.floor(Math.random() * monsters.length);
-        //let monster = this.game.createMonster(loc.vec, monsters[type]);
         this.monsterPlacements.push(new MonsterPosition(monsters[type], loc.vec));
         loc.blocked = true;
       }
@@ -432,6 +394,10 @@ class MapGenerator {
     const MAX_ATTEMPTS = 10;
 
     for (let room of this.rooms) {
+      if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+        continue;
+      }
+
       let attempts = 0;
       let x = room.pos.x;
       let y = room.pos.y;
@@ -445,9 +411,7 @@ class MapGenerator {
       if (!loc.isBlocked) {
         this.chestLocs.push(loc);
         loc.blocked = true;
-        //this.game.createChest(loc);
       }
-
     }
   }
 

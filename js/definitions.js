@@ -135,7 +135,8 @@ const SPELL_NAMES = ["First scroll",
                       "Fourth scroll",
                       "Fifth scroll",
                       "Sixth scroll",
-                      "Seventh scroll"];
+                      "Seventh scroll",
+                      "Eight scroll"];
 
 // Item types
 const SWORD = 0;

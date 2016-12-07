@@ -3,16 +3,10 @@
 const LARGE = 0;
 const MEDIUM = 1;
 const SMALL = 2;
-var MIN_LARGE = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
-                           TILE_SIZE / 5);
-var MIN_MEDIUM = Math.round(MIN_LARGE * 0.8);
-var MIN_SMALL = Math.round(MIN_LARGE * 0.6);
 
 const HIDDEN = 0;
 const PARTIALLY_VISIBLE = 1;
 const VISIBLE = 2;
-
-console.log("MIN_LARGE set to:", MIN_LARGE);
 
 class Vec {
   constructor(x, y) {
