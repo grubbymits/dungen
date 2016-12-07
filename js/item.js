@@ -167,6 +167,7 @@ class Treasure extends Item {
     super(TREASURE, kind);
     this.value = value;
     this.names = TREASURE_NAMES;
+    this.sprites = treasureSprites;
   }
 }
 
@@ -174,6 +175,7 @@ class Spell extends Item {
   constructor(kind) {
     super(SPELL, kind);
     this.names = SPELL_NAMES;
+    this.sprites = spellSprites;
   }
   use(actor) {
     

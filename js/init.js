@@ -28,20 +28,37 @@ window.onload = function begin() {
                          mapCanvas.height);
 
   var searchString = window.location.search.substring(1);
+
   var variableArray = searchString.split('&');
-  var type = variableArray[0].split('=')[1];
+  var playerString = variableArray[0].split('=')[1];
   var playerType = KNIGHT;
-  if (type == 'mage') {
+  if (playerString == 'mage') {
     playerType = MAGE;
-  } else if (type == 'rogue') {
+  } else if (playerString == 'rogue') {
     playerType = ROGUE;
-  } else if (type == 'archer') {
+  } else if (playerString == 'archer') {
     playerType = ARCHER;
-  } else if (type == 'warlock') {
+  } else if (playerString == 'warlock') {
     playerType = WARLOCK;
   }
 
-  var UI = theGame.init(playerType);
+  var mapString = variableArray[1].split('=')[1];
+  var mapType;
+  if (mapString == 'oldcity') {
+    mapType = OLD_CITY;
+  } else if (mapString == 'sewer') {
+    mapType = SEWER;
+  } else if (mapString == 'dungeon') {
+    mapType = DUNGEON;
+  } else if (mapString == 'catacombs') {
+    mapType = CATACOMBS;
+  } else {
+    mapType = LAIR;
+  }
+
+  console.log("init map for", playerString, mapString);
+
+  var UI = theGame.init(playerType, mapType);
 
   function *generator() {
     let actorIdx = 0;

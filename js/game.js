@@ -21,7 +21,8 @@ class Game {
     this.skipTicks = 1000 / 60;
     this.nextGameTick = (new Date()).getTime();
     this.theMap = null; //new GameMap(width, height, this);
-    this.mapGenerator = new MapGenerator(width, height);
+    this.width = width;
+    this.height = height;
     this.audio = new Audio(this);
   }
 
@@ -29,8 +30,19 @@ class Game {
     return this.loading;
   }
 
-  init(playerType) {
+  init(playerType, mapType) {
     this.loading = true;
+    if (mapType == OLD_CITY) {
+      this.mapGenerator = new OldCityGenerator(this.width, this.height);
+    } else if (mapType == SEWER) {
+      this.mapGenerator = new SewerGenerator(this.width, this.height);
+    } else if (mapType == DUNGEON) {
+      this.mapGenerator = new DungeonGenerator(this.width, this.height);
+    } else if (mapType == CATACOMBS) {
+      this.mapGenerator = new CatacombsGenerator(this.width, this.height);
+    } else {
+      this.mapGenerator = new SorcerersLairGenerator(this.width, this.height);
+    }
     this.setupMap();
 
     //let neighbours = this.theMap.getNeighbours(this.mapGenerator.exitStairLoc.vec);
@@ -85,7 +97,7 @@ class Game {
     this.renderMap();
     this.clearOverlay();
     this.renderChanges();
-    this.play();
+    //this.play();
     this.loading = false;
   }
 
@@ -96,8 +108,28 @@ class Game {
     this.createStair(this.mapGenerator.entryStairLoc, false);
 
     this.mapGenerator.placeChests();
+    console.log("placing chests:", this.mapGenerator.chestLocs.length);
     for (let loc of this.mapGenerator.chestLocs) {
       this.createChest(loc);
+    }
+
+    console.log("placing skulls:", this.mapGenerator.skullLocs.length);
+    for (let loc of this.mapGenerator.skullLocs) {
+      this.createSkull(loc);
+    }
+
+    console.log("placing tombstones:", this.mapGenerator.tombstoneLocs.length);
+    for (let loc of this.mapGenerator.tombstoneLocs) {
+      this.createTombstone(loc);
+    }
+
+    console.log("placing signs:", this.mapGenerator.signLocs.length);
+    for (let loc of this.mapGenerator.signLocs) {
+      this.createSign(loc);
+    }
+
+    for (let loc of this.mapGenerator.magicalObjectLocs) {
+      this.createMagicalObject(loc);
     }
 
     this.mapGenerator.placeMonsters(this.level, 32);
@@ -116,25 +148,34 @@ class Game {
                           this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
     for (var x = 0; x < this.theMap.width; x++) {
       for (var y = 0; y < this.theMap.height; y++) {
-        let loc = this.theMap.getLocation(x,y);
-        if (loc.type != CEILING) {
-          //this.context.fillStyle = '#000000';
-          //this.context.fillRect(x * TILE_SIZE * UPSCALE_FACTOR,
-            //                    y * TILE_SIZE * UPSCALE_FACTOR,
-              //                  TILE_SIZE * UPSCALE_FACTOR,
-                //                TILE_SIZE * UPSCALE_FACTOR);
-          var type = loc.type;
-          tileSprites[type].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
-          //loc.dirty = false;
+        let type = this.theMap.getLocationType(x,y);
+        if (type != CEILING) {
+          let spriteIdx = this.theMap.getLocationSprite(x, y);
+          tileSprites[spriteIdx].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
         }
       }
+    }
+    for (let loc of this.mapGenerator.symbolLocs) {
+      let spriteIdx = 0;
+      if (Math.random() < 0.16) {
+        spriteIdx = 0;
+      } else if (Math.random() < 0.33) {
+        spriteIdx = 1;
+      } else if (Math.random() < 0.5) {
+        spriteIdx = 2;
+      } else if (Math.random() < 0.66) {
+        spriteIdx = 3;
+      } else if (Math.random() < 0.73) {
+        spriteIdx = 4;
+      } else if (Math.random() < 0.73) {
+        spriteIdx = 5;
+      }
+      let sprite = symbolSprites[spriteIdx];
+      sprite.render(loc.vec.x * TILE_SIZE, loc.vec.y * TILE_SIZE, this.context);
     }
   }
 
   clearOverlay() {
-    //this.overlayContext.clearRect(0, 0,
-      //                            this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
-        //                          this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
     this.overlayContext.fillStyle = '#000000';
     this.overlayContext.fillRect(0, 0,
                                  this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
@@ -190,12 +231,15 @@ class Game {
   }
 
   addTextEvent(string) {
-    this.player.UI.addEvent(new TextEvent(string, new Date().getTime()));
+    this.player.UI.addEvent(new TextEvent(string));
   }
 
   addGraphicEvent(sprite, pos) {
-    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, new Date().getTime(),
-                                             pos, sprite));
+    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos, sprite));
+  }
+
+  addPathEvent(path) {
+    this.player.UI.addEvent(new PathEvent(this.overlayContext, path));
   }
 
   createHero(pos, type) {
@@ -227,6 +271,7 @@ class Game {
 
   createMonster(pos, type) {
     let monster = null;
+    console.log("create", ENEMY_NAMES[type]);
     switch(type) {
       case RAT:
         monster = new Rat(pos, this);
@@ -243,8 +288,50 @@ class Game {
       case LIZARD:
         monster = new Lizard(pos, this);
         break;
+      case MUSHROOM:
+        monster = new Mushroom(pos, this);
+        break;
       case SPIDER_CHAMPION:
         monster = new SpiderChampion(pos, this);
+        break;
+      case BAT_CHAMPION:
+        monster = new BatChampion(pos, this);
+        break;
+      case TOAD:
+        monster = new Toad(pos, this);
+        break;
+      case CENTIPEDE:
+        monster = new Centipede(pos, this);
+        break;
+      case SNAKE:
+        monster = new Snake(pos, this);
+        break;
+      case SCARAB:
+        monster = new Scarab(pos, this);
+        break;
+      case ZOMBIE:
+        monster = new Zombie(pos, this);
+        break;
+      case SCORPION:
+        monster = new Scorpion(pos, this);
+        break;
+      case UNDEAD:
+        monster = new Undead(pos, this);
+        break;
+      case WEREWOLF:
+        monster = new Werewolf(pos, this);
+        break;
+      case SLIMES:
+        monster = new Slimes(pos, this);
+        break;
+      case SLIME_CHAMPION:
+        monster = new SlimeChampion(pos, this);
+        break;
+      case GOBLIN:
+        monster = new Goblin(pos, this);
+        break;
+      case ORC:
+        monster = new Orc(pos, this);
         break;
       default:
         throw("unhandled monster type!");
@@ -254,6 +341,7 @@ class Game {
     this.theMap.placeEntity(pos, monster);
     this.currentEffects.set(monster, []);
     ++this.totalMonsters;
+    this.map.getLocation(pos.x, pos.y).blocked = false;
     return monster;
   }
 
@@ -262,12 +350,42 @@ class Game {
     this.objects.push(chest);
     this.theMap.placeEntity(loc.vec, chest);
     ++this.totalChests;
+    loc.blocked = false;
   }
 
   createStair(loc, isExit) {
     let stair = new Stair(loc.vec, isExit, this);
     this.objects.push(stair);
     this.theMap.placeEntity(loc.vec, stair);
+    loc.blocked = false;
+  }
+
+  createSkull(loc) {
+    let skull = new Skull(loc.vec, this);
+    this.objects.push(skull);
+    this.theMap.placeEntity(loc.vec, skull);
+    loc.blocked = false;
+  }
+
+  createTombstone(loc) {
+    let tombstone = new Tombstone(loc.vec, this);
+    this.objects.push(tombstone);
+    this.theMap.placeEntity(loc.vec, tombstone);
+    loc.blocked = false;
+  }
+
+  createSign(loc) {
+    let sign = new Sign(loc.vec, this);
+    this.objects.push(sign);
+    this.theMap.placeEntity(loc.vec, sign);
+    loc.blocked = false;
+  }
+
+  createMagicalObject(loc) {
+    let object = new MagicalObject(loc.vec, this);
+    this.objects.push(object);
+    this.theMap.placeEntity(loc.vec, object);
+    loc.blocked = false;
   }
 
   killActor(actor) {

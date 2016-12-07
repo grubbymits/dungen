@@ -3,7 +3,7 @@
 class Actor extends Entity {
   constructor(health, energy, vision,
               position, sprite, damageSprite, kind, game) {
-    super(position, true, sprite, kind, game);
+    super(position, sprite, kind, game);
     this.damageSprite = damageSprite;
     this.currentSprite = this.sprite;
     this.currentHealth = health;

@@ -32,6 +32,9 @@ class WalkAction extends Action {
   set dest(goal) {
     this.destination = goal;
     this.currentPath = this.map.getPath(this.actor.pos, this.destination);
+    if (this.actor.kind == HERO) {
+      this.game.addPathEvent(this.currentPath);
+    }
   }
 
   perform() {
@@ -92,6 +95,7 @@ class DealDamage extends Action {
     super(actor);
     this.attack = attack;
   }
+
   perform() {
     let power = this.attack.power;
     let type = this.attack.type;
@@ -113,11 +117,14 @@ class DealDamage extends Action {
       this.actor.nextAction = null;
     } else {
       this.game.audio.hit();
-      let text = this.actor.name + " deals " + damage + " to "
-        + this.targetActor.name;
+      let text = this.actor.name + " deals " + damage + " to " + this.targetActor.name;
+      if (this.actor.kind == HERO) {
+        text += " with " + this.attack.name;
+      }
       this.game.addTextEvent(text);
     }
   }
+
   set target(target) {
     this.targetActor = target;
   }
@@ -154,11 +161,23 @@ class PrimaryAttack extends AttackBase {
     return this.actor.primaryAtkPower;
   }
 
+  get name() {
+    if (this.actor.primary) {
+      return this.actor.primary.name;
+    }
+  }
+
   perform() {
     let energyRequired = this.actor.primaryAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
+
+    if (this.actor.kind == HERO) {
+      this.game.addGraphicEvent(this.actor.primary.sprite,
+                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
+    }
+
     if (this.success) {
       this.game.audio.playAttack(this.actor);
       this.dealDamage.target = this.targetActor;
@@ -187,11 +206,23 @@ class SecondaryAttack extends AttackBase {
     return this.actor.secondaryAtkPower;
   }
 
+  get name() {
+    if (this.actor.secondary) {
+      return this.actor.secondary.name;
+    }
+  }
+
   perform() {
     let energyRequired = this.actor.secondaryAtkEnergy;
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
+
+    if (this.actor.kind == HERO) {
+      this.game.addGraphicEvent(this.actor.secondary.sprite,
+                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
+    }
+
     if (this.success) {
       this.game.audio.playAttack(this.actor);
       this.dealDamage.target = this.targetActor;
@@ -392,10 +423,13 @@ class TakePotion extends Action {
     super(actor);
   }
   set potion(potion) {
+    this.thePotion = potion;
     this.effect = potion.effect;
   }
   perform() {
     this.game.addEffect(this.actor, this.effect);
+    this.game.addGraphicEvent(this.thePotion.sprite,
+                              new Vec(this.actor.pos.x, this.actor.pos.y - 1));
     this.actor.nextAction = null;
   }
 }

@@ -135,7 +135,8 @@ const SPELL_NAMES = ["First scroll",
                       "Fourth scroll",
                       "Fifth scroll",
                       "Sixth scroll",
-                      "Seventh scroll"];
+                      "Seventh scroll",
+                      "Eight scroll"];
 
 // Item types
 const SWORD = 0;
@@ -253,11 +254,36 @@ const UPSCALE_FACTOR = 1;
 const MAP_WIDTH_PIXELS = 2560;
 const MAP_HEIGHT_PIXELS = 2560;
 const TILE_SIZE = 64;
-const PATH_WIDTH = 3;
+const PATH_WIDTH = 4;
 
 const CEILING = 0;
 const PATH = 1;
 const WALL = 2;
+const WATER = 3;
+const DIRT = 4;
+const SPIKES = 5;
+/*
+const WALL0 = 2;
+const WALL1 = 3;
+const WALL2 = 4;
+const WALL3 = 5;
+const WALL4 = 6;
+const WALL5 = 7;
+*/
+const SYMBOL0 = 4;
+const SYMBOL1 = 5;
+const SYMBOL2 = 6;
+const SYMBOL3 = 7;
+const SYMBOL4 = 8;
+const SYMBOL5 = 9;
+/*
+const SYMBOL0 = 9;
+const SYMBOL1 = 10;
+const SYMBOL2 = 11;
+const SYMBOL3 = 12;
+const SYMBOL4 = 13;
+const SYMBOL5 = 14;
+*/
 const NORTH = 0;
 const EAST = 1;
 const SOUTH = 2;
@@ -280,7 +306,7 @@ const BAT = 10;
 const BAT_CHAMPION = 11;
 const SNAKE = 12;
 const WOLF = 13;
-const WILD_BOAR = 14;
+const BOAR = 14;
 const BEAR = 15;
 const SLIMES = 16;
 const SLIME_CHAMPION = 17;
@@ -294,7 +320,7 @@ const GOBLIN = 24;
 const ZOMBIE = 25;
 const UNDEAD = 26;
 const ORC = 27;
-const CYCLOP = 28;
+const CYCLOPS = 28;
 const WEREWOLF = 29;
 const GOLEM = 30;
 const DEMON = 31;
@@ -331,3 +357,9 @@ const MAX_ENERGY_INC = 10;
 const STATS = 0;
 const EQUIP = 1;
 const TEAM = 2;
+
+const OLD_CITY = 0;
+const SEWER = 1;
+const DUNGEON = 2;
+const CATACOMBS = 3;
+const LAIR = 4;

@@ -12,6 +12,7 @@ const HELMET_OFFSET = 12;
 const SHIELD_OFFSET = 13;
 const STAFF_OFFSET = 14;
 const TREASURE_OFFSET = 15;
+const SYMBOL_OFFSET = 17;
 const HERO_OFFSET = 18;
 const MONSTER_OFFSET = 19;
 
@@ -60,9 +61,53 @@ var uiSpriteSheet = new SpriteSheet('ui');
 var targetSprite = new Sprite(uiSpriteSheet, 0, 0);
 var currentActorSprite = new Sprite(uiSpriteSheet, 1, 0);
 
-var tileSprites = [ new Sprite(greenSpriteSheet, 1, 1, 32, 32),
-                    new Sprite(greenSpriteSheet, 7, 0, 32, 32),
-                    new Sprite(greenSpriteSheet, 2, 2, 32, 32)];
+
+const TILE_TRIANGLE_DOTS = 0;
+const TILE_HORIZONTAL_LINES = 1;
+const TILE_DIAGONAL_LINES = 2;
+const TILE_DENSE_CROSS = 3;
+const TILE_LARGE_CROSS = 4;
+const TILE_LARGE_SQUARE = 5;
+const TILE_SMALL_SQUARE = 6;
+const TILE_SPARSE_CROSS = 7;
+
+const TILE_LIGHT_SOLID = 8;
+const TILE_LIGHT_RAISED = 9;
+const TILE_DARK_SOLID = 10;
+const TILE_DARK_CRACKED = 11;
+const TILE_DARK_DOOR = 12;
+const TILE_LIGHT_RAISED_LAYER = 13;
+const TILE_DARK_RAISED_LAYER = 14;
+const TILE_THICK_BRICK = 15;
+const TILE_THIN_BRICK = 16;
+const TILE_THIN_BRICK_HOLE = 17;
+const TILE_NARROW_DOOR = 18;
+const TILE_ROUND_DOOR = 19;
+const TILE_SQUARE_DOOR = 20;
+const TILE_PILLARS = 21;
+const TILE_PILLAR_DOOR = 22;
+const TILE_GRATE = 23;
+const TILE_SPIKES = 24;
+const TILE_CHEQUER = 25;
+const TILE_WATER = 26;
+const TILE_DIRT = 27;
+const TILE_SPACE = 28;
+
+var tileSprites = [];
+// Path patterns
+for (let x = 0; x < 8; ++x) {
+  tileSprites.push(new Sprite(greenSpriteSheet, x, 0));
+}
+
+for (let x = 0; x < 5; ++x) {
+  tileSprites.push(new Sprite(greenSpriteSheet, x, 1));
+}
+
+for (let y = 2; y < 4; ++y) {
+  for (let x = 0; x < 8; ++x) {
+    tileSprites.push(new Sprite(greenSpriteSheet, x, y));
+  }
+}
 
 var entryStairSprite = new Sprite(greenSpriteSheet, 6, 1);
 var exitStairSprite = new Sprite(greenSpriteSheet, 5, 1);
@@ -166,3 +211,20 @@ for (let x = 0; x < 8; ++x) {
 var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4),
                      new Sprite(greenSpriteSheet, 1, 4)
                    ];
+
+var skullSprites = [ new Sprite(greenSpriteSheet, 0, 16),
+                     new Sprite(greenSpriteSheet, 1, 16),
+                     new Sprite(greenSpriteSheet, 2, 16)
+                   ];
+var tombstoneSprite = new Sprite(greenSpriteSheet, 3, 16);
+
+var magicalObjectSprites = [ new Sprite(greenSpriteSheet, 4, 16),
+                              new Sprite(greenSpriteSheet, 5, 16) ];
+
+var symbolSprites = [];
+for (let x = 0; x < 6; ++x) {
+  symbolSprites.push(new Sprite(greenSpriteSheet, x, SYMBOL_OFFSET));
+}
+
+var signSprites = [ new Sprite(greenSpriteSheet, 6, 17),
+                    new Sprite(greenSpriteSheet, 7, 17) ];

@@ -3,16 +3,10 @@
 const LARGE = 0;
 const MEDIUM = 1;
 const SMALL = 2;
-var MIN_LARGE = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
-                           TILE_SIZE / 4);
-var MIN_MEDIUM = Math.round(MIN_LARGE * 0.8);
-var MIN_SMALL = Math.round(MIN_LARGE * 0.6);
 
 const HIDDEN = 0;
 const PARTIALLY_VISIBLE = 1;
 const VISIBLE = 2;
-
-console.log("MIN_LARGE set to:", MIN_LARGE);
 
 class Vec {
   constructor(x, y) {
@@ -41,13 +35,13 @@ class Location {
     this.entity = entity;
     this.tileType = type;
     this.vec = new Vec(x, y);
-    //this.dirty = true;
     this.visible = HIDDEN;
   }
   get isBlocked() {
     // this.blocking is used to cause a temp block until an entity is placed.
     return (this.entity !== null || this.tileType == WALL ||
-            this.tileType == CEILING || this.blocking);
+            this.tileType == CEILING || this.tileType == WATER ||
+            this.tileType == SPIKES || this.blocking);
   }
   get isWallOrCeiling() {
     return (this.tileType == WALL || this.tileType == CEILING);
@@ -79,6 +73,12 @@ class Location {
   }
   get isHidden() {
     return this.visible == HIDDEN;
+  }
+  set tileSprite(sprite) {
+    this.sprite = sprite;
+  }
+  get tileSprite() {
+    return this.sprite;
   }
 }
 
@@ -137,6 +137,13 @@ class GameMap {
     this.locations[x][y].blocked = blocking;
   }
 
+  getLocationSprite(x, y) {
+    if (this.isOutOfRange(x, y)) {
+      throw "Index out of range:";
+    }
+    return this.locations[x][y].tileSprite;
+  }
+
   isBlocked(vec) {
     if (this.isOutOfRange(vec.x, vec.y)) {
       return true;
@@ -165,6 +172,7 @@ class GameMap {
 
     loc.entity = entity;
     entity.pos = vec;
+    loc.blocking = false;
 
     //this.locations[pos.x][pos.y].dirty = true;
     if (loc.isVisible) {
@@ -266,7 +274,6 @@ class GameMap {
         if (!loc.isVisible) {
           loc.visibility = VISIBLE;
           this.newVisible.push(vec);
-          console.log("adding new visibile");
         }
 
         if (loc.isWallOrCeiling) {
@@ -285,7 +292,6 @@ class GameMap {
         if (!loc.isVisible) {
           this.newVisible.push(loc.vec);
           loc.visibility = VISIBLE;
-          console.log("adding new visibile");
         }
 
         if (0 === x && 0 === y) {

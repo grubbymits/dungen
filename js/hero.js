@@ -214,6 +214,7 @@ class Mage extends Hero {
           6,
           position, MAGE, game);
     this.equipArmour = armours[ARMOUR0];
+    this.equipHelmet = helmets[HELMET0];
     this.equipPrimary = staffs[STAFF0];
     this.equipSecondary = spells[SPELL0];
     //this.equipRing = basicRing;
@@ -293,6 +294,7 @@ class Player {
   constructor(hero) {
     this.currentHero = hero;
     this.game = hero.game;
+    this.UI = null;
     this.heroes = [];
     this.shields = new Map();
     this.helmets = new Map();
@@ -382,6 +384,13 @@ class Player {
       number += items.get(item);
     }
     items.set(item, number);
+    if (item.type != TREASURE && item.type != POTION) {
+      // at the beginning, the UI would not have been defined and the equipment
+      // list will be populated once it is.
+      if (this.UI !== null) {
+        this.UI.refreshEquipmentLists(this.currentHero);
+      }
+    }
   }
 
   setDestination(x, y) {

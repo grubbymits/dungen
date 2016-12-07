@@ -41,66 +41,21 @@ class Room {
 }
 
 class MapGenerator {
-  constructor(width, height) {
-    var monsterGroup0 = [ RAT, SPIDERS, RABBIT];
+  constructor(width, height, roomType, pathType) {
+    this.roomFloor = roomType;
+    this.pathFloor = pathType;
+    // randomly choose either 4 or 5 for constant denominator
+    let denominator = 5;
+    if (Math.random() < 0.5) {
+      denominator = 4;
+    }
+    console.log("room size denominator:", denominator);
 
-    var monsterGroup1 = monsterGroup0.slice();
-    monsterGroup1.push(BAT);
+    this.minLargeDim = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
+                                TILE_SIZE / denominator);
+    this.medRoomDim = Math.round(this.minLargeDim * 0.8);
+    this.minRoomDim = Math.round(this.minLargeDim * 0.6);
 
-    var monsterGroup2 = monsterGroup1.slice();
-    monsterGroup2.push(LIZARD);
-    
-    var monsterGroup3 = monsterGroup2.slice();
-    monsterGroup3.push(SPIDER_CHAMPION);
-    
-    var monsterGroup4 = monsterGroup3.slice();
-    monsterGroup4.push(BAT_CHAMPION);
-
-    var monsterGroup5 = monsterGroup4.slice();
-    monsterGroup5.push(TOAD);
-    
-    var monsterGroup6 = monsterGroup5.slice();
-    monsterGroup6.push(SCARAB);
-
-    var monsterGroup7 = monsterGroup6.slice();
-    monsterGroup7.push(CENTIPEDE);
-    
-    var monsterGroup8 = monsterGroup7.slice();
-    monsterGroup8.push(SERPENT);
-
-    var monsterGroup9 = monsterGroup8.slice();
-    monsterGroup9.push(SNAKE);
-    
-    var monsterGroup10 = monsterGroup9.slice();
-    monsterGroup10.push(WOLF);
-
-    var monsterGroup11 = monsterGroup10.slice();
-    monsterGroup11.push(WILD_BOAR);
-    
-    var monsterGroup12 = monsterGroup11.slice();
-    monsterGroup12.push(BEAR);
-    
-
-    this.monsterGroups = [ monsterGroup0,
-                           monsterGroup1,
-                           monsterGroup2,
-                           monsterGroup3,
-                           monsterGroup4,
-                           monsterGroup5,
-                           monsterGroup6,
-                           monsterGroup7,
-                           monsterGroup8,
-                           monsterGroup9,
-                           monsterGroup10,
-                           monsterGroup11,
-                           monsterGroup12 ];
-
-    //this.map = new GameMap(width, height);
-    //this.rooms = [];
-    //this.chestLocs = [];
-    //this.monsterPlacements = [];
-    this.minRoomWidth = MIN_SMALL;
-    this.minRoomHeight = MIN_SMALL;
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
   }
@@ -109,17 +64,41 @@ class MapGenerator {
   generate(level, width, height) {
     this.rooms = [];
     this.chestLocs = [];
+    this.skullLocs = [];
+    this.tombstoneLocs = [];
+    this.signLocs = [];
+    this.magicalObjectLocs = [];
+    this.symbolLocs = [];
     this.monsterPlacements = [];
     this.map = new GameMap(width, height);
     let numRooms = Math.round((MAP_WIDTH_PIXELS * MAP_HEIGHT_PIXELS) /
-                              (TILE_SIZE * TILE_SIZE * MIN_MEDIUM * MIN_MEDIUM));
+                              (TILE_SIZE * TILE_SIZE * this.medRoomDim * this.medRoomDim));
     this.placeRooms(numRooms);
     this.createConnections();
+    this.fixupMap();
     this.placeStairs();
-    //this.placeChests();
-    //this.placeMonsters(level, 32);
-    //this.entryVec = neighbours[0];
-    //return neighbours[0];
+    this.decorate(); //Rooms();
+  }
+
+  fixupMap() {
+    for (let x = 0; x < this.map.width; ++x) {
+      for (let y = 0; y < this.map.height - 1; ++y) {
+
+        let tileType = this.map.getLocationType(x, y);
+        let tileBelowType = this.map.getLocationType(x, y + 1);
+
+        if (tileType == CEILING) {
+          if (tileBelowType != CEILING) {
+            this.map.setLocationType(x, y + 1, WALL);
+          }
+        }
+        else if (tileType != WALL) {
+          if (tileBelowType == WALL) {
+            this.map.setLocationType(x, y + 1, tileType);
+          }
+        }
+      }
+    }
   }
 
   placeTile(x, y, type, blocking) {
@@ -129,35 +108,17 @@ class MapGenerator {
     }
     this.map.setLocationType(x, y, type);
     this.map.setLocationBlocking(x, y, blocking);
-
-    if (type == PATH && y > 1 && this.map.getLocationType(x, y - 1) != PATH) {
-      this.map.setLocationType(x, y - 1, WALL);
-
-      // fixups, just in case carving paths isn't tidy
-      if (this.map.isOutOfRange(x, y - 2)) {
-        return;
-      }
-      if (this.map.getLocationType(x, y - 2) == PATH) {
-        this.map.setLocationType(x, y - 1, PATH);
-      }
-      if (this.map.isOutOfRange(x, y + 1)) {
-        return;
-      }
-      if (this.map.getLocationType(x, y + 1) == WALL) {
-        this.map.setLocationType(x, y + 1, PATH);
-      }
-    }
   }
 
   get randomX() {
     let min = 1;
-    let max = this.xMax - this.minRoomWidth;
+    let max = this.xMax - this.minRoomDim;
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
   get randomY() {
     let min = 1;
-    let max = this.yMax - this.minRoomHeight;
+    let max = this.yMax - this.minRoomDim;
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
@@ -180,8 +141,8 @@ class MapGenerator {
     let room = new Room(startX, startY, width, height, this.rooms.length);
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
-      for (let y = startY+2; y < startY + height-2; y++) {
-        this.placeTile(x, y, PATH, false);
+      for (let y = startY+1; y < startY + height-1; y++) {
+        this.placeTile(x, y, this.roomFloor, false);
       }
     }
     return room;
@@ -190,7 +151,7 @@ class MapGenerator {
   createPath(startX, startY) {
     for (let x = startX; x < startX + PATH_WIDTH; x++) {
       for (let y = startY; y < startY + PATH_WIDTH; y++) {
-        this.placeTile(x, y, PATH, false);
+        this.placeTile(x, y, this.pathFloor, false);
       }
     }
   }
@@ -200,26 +161,76 @@ class MapGenerator {
     let h = 0;
     if (type == LARGE) {
       // 23, 21, 19, 17, 15
-      w = Math.floor(Math.random() * 3) + MIN_LARGE;
-      h = Math.floor(Math.random() * 3) + MIN_LARGE;
-      //w = MIN_LARGE;
-      //h = MIN_LARGE;
+      w = Math.floor(Math.random() * 3) + this.minLargeDim;
+      h = Math.floor(Math.random() * 3) + this.minLargeDim;
     }
     if (type == MEDIUM) {
       // 19, 17, 15, 13, 11
-      w = Math.floor(Math.random() * 5) + MIN_MEDIUM;
-      h = Math.floor(Math.random() * 5) + MIN_MEDIUM;
-      //w = MIN_MEDIUM;
-      //h = MIN_MEDIUM;
+      w = Math.floor(Math.random() * 5) + this.medRoomDim;
+      h = Math.floor(Math.random() * 5) + this.medRoomDim;
     }
     if (type == SMALL) {
       // 15, 13, 11, 9
-      w = Math.floor(Math.random() * 5) + MIN_SMALL;
-      h = Math.floor(Math.random() * 5) + MIN_SMALL;
-      //w = MIN_SMALL;
-      //h = MIN_SMALL;
+      w = Math.floor(Math.random() * 5) + this.minRoomDim;
+      h = Math.floor(Math.random() * 5) + this.minRoomDim;
     }
     return {width : w, height : h};
+  }
+
+  placeSign(room) {
+    if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+      return;
+    }
+    for (let x = room.pos.x; x < room.pos.x + room.width; ++x) {
+      for (let y = room.pos.y; y < room.pos.y + room.height; ++y) {
+
+        let loc = this.map.getLocation(x, y);
+        if (loc.isBlocked) {
+          continue;
+        }
+
+        if (this.map.getLocationType(x, y - 1) == WALL) {
+          if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
+              (this.map.getLocationType(x + 1, y - 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        } else if (this.map.getLocationType(x - 1, y) == WALL) {
+          if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
+              (this.map.getLocationType(x - 1, y + 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        } else if (this.map.getLocationType(x + 1, y) == WALL) {
+          if ((this.map.getLocationType(x + 1, y - 1) == PATH) ||
+              (this.map.getLocationType(x + 1, y + 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        } else if (this.map.getLocationType(x, y + 1) == WALL) {
+          if ((this.map.getLocationType(x - 1, y + 1) == PATH) ||
+              (this.map.getLocationType(x + 1, y + 1) == PATH)) {
+            this.signLocs.push(loc);
+            loc.blocked = true;
+            return;
+          }
+        }
+      }
+    }
+  }
+
+  placeSkull(room) {
+    if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+      return;
+    }
+    let loc = this.getRandomLocation(room);
+    if (!loc.isBlocked) {
+      this.skullLocs.push(loc);
+      loc.blocked = true;
+    }
   }
 
   placeRooms(roomsToPlace) {
@@ -255,6 +266,7 @@ class MapGenerator {
   }
 
   createConnections() {
+    console.log("creating connections between rooms");
     let connectedRooms = new Set();
     let unconnectedRooms = new Set();
 
@@ -319,6 +331,20 @@ class MapGenerator {
     }
   }
 
+  getRandomLocation(room) {
+    const MAX_ATTEMPTS = 10;
+    let attempts = 0;
+    let x = room.pos.x;
+    let y = room.pos.y;
+    do {
+      x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
+      y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
+      ++attempts;
+    } while (this.map.getLocation(x, y).isBlocked || attempts < MAX_ATTEMPTS);
+
+    return this.map.getLocation(x, y);
+  }
+
   placeMonsters(level, total) {
     console.log("placing", total, "level", level, "monsters");
     // Try to place monsters in the larger rooms first.
@@ -354,21 +380,10 @@ class MapGenerator {
       if (room.id == this.entryRoom.id) {
         continue;
       }
-      
-      const MAX_ATTEMPTS = 10;
-      let attempts = 0;
-      let x = room.pos.x;
-      let y = room.pos.y;
-      do {
-        x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
-        y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
-        ++attempts;
-      } while (this.map.getLocation(x, y).isBlocked || attempts < MAX_ATTEMPTS);
 
-      let loc = this.map.getLocation(x, y);
+      let loc = this.getRandomLocation(room);
       if (!loc.isBlocked) {
         let type = Math.floor(Math.random() * monsters.length);
-        //let monster = this.game.createMonster(loc.vec, monsters[type]);
         this.monsterPlacements.push(new MonsterPosition(monsters[type], loc.vec));
         loc.blocked = true;
       }
@@ -379,6 +394,10 @@ class MapGenerator {
     const MAX_ATTEMPTS = 10;
 
     for (let room of this.rooms) {
+      if (room.id == this.entryRoom.id || room.id == this.exitRoom.id) {
+        continue;
+      }
+
       let attempts = 0;
       let x = room.pos.x;
       let y = room.pos.y;
@@ -392,9 +411,7 @@ class MapGenerator {
       if (!loc.isBlocked) {
         this.chestLocs.push(loc);
         loc.blocked = true;
-        //this.game.createChest(loc);
       }
-
     }
   }
 
@@ -445,7 +462,11 @@ class MapGenerator {
     let neighbours = this.map.getNeighbours(this.entryStairLoc.vec);
     if (!neighbours.length)
       throw("no free neighbours next to stairs");
-    else
+    else {
       this.entryVec = neighbours[0];
+      this.map.setLocationBlocking(this.entryVec.x, this.entryVec.y, true);
+    }
   }
 }
+
+

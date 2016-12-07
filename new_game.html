@@ -6,10 +6,10 @@
   <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body bgcolor="#002B36">
+<body bgcolor="#204631">
     <div class="row">
         <div class="col l3 m6">
-          <div class="card hoverable large teal lighten-2">
+          <div class="card hoverable large" style="background-color: #527f39">
             <div class="card-image">
               <img src="res/img/knight.png">
             </div>
@@ -22,13 +22,14 @@
                  wear all helmets and armour.
               </p>
             </div>
-            <div class="card-action light-green darken-2">
-              <a href='#' onclick="top.window.location.href='dungen.html?player=knight';">Select Knight</a>
+            <div class="card-action" style="background-color: #aec440">
+              <a href='#' style="color:#527f39" onclick="selectKnight()">Select Knight
+              </a>
             </div>
           </div>
         </div>
       <div class="col l3 m6">
-        <div class="card hoverable large teal lighten-2">
+        <div class="card hoverable large" style="background-color: #527f39">
           <div class="card-image">
             <img src="res/img/mage.png">
           </div>
@@ -42,13 +43,14 @@
                attacks.
             </p>
           </div>
-          <div class="card-action light-green darken-2">
-            <a href='#' onclick="top.window.location.href='dungen.html?player=mage';">Select Mage</a>
+          <div class="card-action" style="background-color: #aec440">
+            <a href='#' style="color:#527f39" onclick="selectMage()">Select Mage
+            </a>
           </div>
         </div>
       </div>
       <div class="col l3 m6">
-        <div class="card hoverable large teal lighten-2">
+        <div class="card hoverable large" style="background-color: #527f39">
           <div class="card-image">
             <img src="res/img/rogue.png">
           </div>
@@ -61,13 +63,14 @@
                for being able to perform range attacks as well as melee.
             </p>
           </div>
-          <div class="card-action light-green darken-2">
-            <a href='#' onclick="top.window.location.href='dungen.html?player=rogue';">Select Rogue</a>
+          <div class="card-action" style="background-color: #aec440">
+            <a href='#' style="color:#527f39" onclick="selectRogue()">Select Rogue
+            </a>
           </div>
         </div>
       </div>
       <div class="col l3 m6">
-        <div class="card hoverable large teal lighten-2">
+        <div class="card hoverable large" style="background-color: #527f39">
           <div class="card-image">
             <img src="res/img/archer.png">
           </div>
@@ -79,11 +82,26 @@
                bows and arrows. He is also agile and can wear an assortment of helmets and armours.
             </p>
           </div>
-          <div class="card-action light-green darken-2">
-            <a href='#' onclick="top.window.location.href='dungen.html?player=archer';">Select Archer</a>
+          <div class="card-action" style="background-color: #aec440">
+            <a href='#' style="color:#527f39" onclick="selectArcher()">Select Archer
+            </a>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      function selectKnight() {
+        window.parent.postMessage("map_select.html?player=knight", "http://codingbear.uk");
+      }
+      function selectMage() {
+        window.parent.postMessage("map_select.html?player=mage", "http://codingbear.uk");
+      }
+      function selectRogue() {
+        window.parent.postMessage("map_select.html?player=rogue", "http://codingbear.uk");
+      }
+      function selectArcher() {
+        window.parent.postMessage("map_select.html?player=archer", "http://codingbear.uk");
+      }
+    </script>
 </body>
 </html>
