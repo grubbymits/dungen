@@ -63,11 +63,12 @@ class MapGenerator {
   // Generate level and return start position
   generate(level, width, height) {
     this.rooms = [];
-    this.chestLocs = [];
-    this.skullLocs = [];
-    this.tombstoneLocs = [];
-    this.signLocs = [];
-    this.magicalObjectLocs = [];
+    //this.chestLocs = [];
+    //this.skullLocs = [];
+    //this.tombstoneLocs = [];
+    //this.signLocs = [];
+    //this.magicalObjectLocs = [];
+    this.reservedLocs = [];
     this.symbolLocs = [];
     this.monsterPlacements = [];
     this.map = new GameMap(width, height);
@@ -192,29 +193,33 @@ class MapGenerator {
         if (this.map.getLocationType(x, y - 1) == WALL) {
           if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
               (this.map.getLocationType(x + 1, y - 1) == PATH)) {
-            this.signLocs.push(loc);
-            loc.blocked = true;
+            this.reserveLoc(SIGN, loc);
+            //this.signLocs.push(loc);
+            //loc.blocked = true;
             return;
           }
         } else if (this.map.getLocationType(x - 1, y) == WALL) {
           if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
               (this.map.getLocationType(x - 1, y + 1) == PATH)) {
-            this.signLocs.push(loc);
-            loc.blocked = true;
+            this.reserveLoc(SIGN, loc);
+            //this.signLocs.push(loc);
+            //loc.blocked = true;
             return;
           }
         } else if (this.map.getLocationType(x + 1, y) == WALL) {
           if ((this.map.getLocationType(x + 1, y - 1) == PATH) ||
               (this.map.getLocationType(x + 1, y + 1) == PATH)) {
-            this.signLocs.push(loc);
-            loc.blocked = true;
+            this.reserveLoc(SIGN, loc);
+            //this.signLocs.push(loc);
+            //loc.blocked = true;
             return;
           }
         } else if (this.map.getLocationType(x, y + 1) == WALL) {
           if ((this.map.getLocationType(x - 1, y + 1) == PATH) ||
               (this.map.getLocationType(x + 1, y + 1) == PATH)) {
-            this.signLocs.push(loc);
-            loc.blocked = true;
+            this.reserveLoc(SIGN, loc);
+            //this.signLocs.push(loc);
+            //loc.blocked = true;
             return;
           }
         }
@@ -228,8 +233,9 @@ class MapGenerator {
     }
     let loc = this.getRandomLocation(room);
     if (!loc.isBlocked) {
-      this.skullLocs.push(loc);
-      loc.blocked = true;
+      this.reserveLoc(SKULL, loc);
+      //this.skullLocs.push(loc);
+      //loc.blocked = true;
     }
   }
 
@@ -345,6 +351,11 @@ class MapGenerator {
     return this.map.getLocation(x, y);
   }
 
+  reserveLoc(type, loc) {
+    this.reservedLocs.push({ type: type, loc: loc });
+    loc.blocked = true;
+  }
+
   placeMonsters(level, total) {
     console.log("placing", total, "level", level, "monsters");
     // Try to place monsters in the larger rooms first.
@@ -409,8 +420,9 @@ class MapGenerator {
 
       let loc = this.map.getLocation(x, y);
       if (!loc.isBlocked) {
-        this.chestLocs.push(loc);
-        loc.blocked = true;
+        this.reserveLoc(CHEST, loc);
+        //this.chestLocs.push(loc);
+        //loc.blocked = true;
       }
     }
   }
@@ -466,6 +478,9 @@ class MapGenerator {
       this.entryVec = neighbours[0];
       this.map.setLocationBlocking(this.entryVec.x, this.entryVec.y, true);
     }
+    let loc = this.getRandomLocation(entry);
+    console.log("reserving loc for ally:", loc);
+    this.reserveLoc(ALLY, loc);
   }
 }
 

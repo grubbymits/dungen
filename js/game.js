@@ -8,6 +8,8 @@ class Game {
     this.monsters = [];
     this.currentEffects = new Map();
     this.objects = [];
+    this.entitiesToRemove = [];
+    this.entitiesToCreate = [];
     this.totalChests = 0;
     this.openChests = 0;
     this.totalMonsters = 0;
@@ -48,7 +50,7 @@ class Game {
     //let neighbours = this.theMap.getNeighbours(this.mapGenerator.exitStairLoc.vec);
     //let entryVec = neighbours[0];
 
-    let character = this.createHero(this.mapGenerator.entryVec, playerType);
+    let character = this.createHero(this.mapGenerator.entryVec, playerType, false);
     this.theMap.addVisibleTiles(character.pos, character.vision);
 
     let player = new Player(character);
@@ -74,6 +76,8 @@ class Game {
     this.actors = [];
     this.monsters = [];
     this.objects = [];
+    this.entitiesToRemove = [];
+    this.entitiesToCreate = [];
     this.totalChests = 0;
     this.openChests = 0;
     this.totalMonsters = 0;
@@ -104,10 +108,45 @@ class Game {
   setupMap() {
     this.mapGenerator.generate(this.level, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
     this.theMap = this.mapGenerator.map;
-    this.createStair(this.mapGenerator.exitStairLoc, true);
-    this.createStair(this.mapGenerator.entryStairLoc, false);
+
+    let stair = new Stair(this.mapGenerator.exitStairLoc.vec, true, this);
+    this.addObject(stair, this.mapGenerator.exitStairLoc);
+    stair = new Stair(this.mapGenerator.entryStairLoc.vec, false, this);
+    this.addObject(stair, this.mapGenerator.entryStairLoc);
 
     this.mapGenerator.placeChests();
+
+    for (let resEntity of this.mapGenerator.reservedLocs) {
+      let loc = resEntity.loc;
+      switch(resEntity.type) {
+      case CHEST:
+        this.createChest(loc);
+        break;
+      case SKULL:
+        let skull = new Skull(loc.vec, this);
+        this.addObject(skull, loc);
+        break;
+      case TOMBSTONE:
+        let tombstone = new Tombstone(loc.vec, this);
+        this.addObject(tombstone, loc);
+        break;
+      case SIGN:
+        let sign = new Sign(loc.vec, this);
+        this.addObject(sign, loc);
+        break;
+      case MAGICAL_OBJ:
+        let object = new MagicalObject(loc.vec, this);
+        this.addObject(object, loc);
+        break;
+      case ALLY:
+        console.log("resEntity == ALLY");
+        let ally = new Ally(loc.vec, ARCHER, this);
+        this.addObject(ally, loc);
+        break;
+      }
+    }
+
+    /*
     console.log("placing chests:", this.mapGenerator.chestLocs.length);
     for (let loc of this.mapGenerator.chestLocs) {
       this.createChest(loc);
@@ -131,6 +170,7 @@ class Game {
     for (let loc of this.mapGenerator.magicalObjectLocs) {
       this.createMagicalObject(loc);
     }
+    */
 
     this.mapGenerator.placeMonsters(this.level, 32);
     for (let monster of this.mapGenerator.monsterPlacements) {
@@ -242,7 +282,7 @@ class Game {
     this.player.UI.addEvent(new PathEvent(this.overlayContext, path));
   }
 
-  createHero(pos, type) {
+  createHero(pos, type, isFollowing) {
     var hero;
     if (type == KNIGHT) {
       hero = new Knight(pos, this);
@@ -261,6 +301,9 @@ class Game {
       console.log("adding warlock");
     } else {
       throw("Hero type unrecognised!");
+    }
+    if (isFollowing) {
+      hero.follow(this.player.currentHero);
     }
     this.actors.push(hero);
     this.heroes.push(hero);
@@ -345,60 +388,38 @@ class Game {
     return monster;
   }
 
+
   createChest(loc) {
     let chest = new Chest(loc.vec, this);
-    this.objects.push(chest);
-    this.theMap.placeEntity(loc.vec, chest);
     ++this.totalChests;
-    loc.blocked = false;
+    this.addObject(chest, loc);
   }
 
-  createStair(loc, isExit) {
-    let stair = new Stair(loc.vec, isExit, this);
-    this.objects.push(stair);
-    this.theMap.placeEntity(loc.vec, stair);
-    loc.blocked = false;
-  }
-
-  createSkull(loc) {
-    let skull = new Skull(loc.vec, this);
-    this.objects.push(skull);
-    this.theMap.placeEntity(loc.vec, skull);
-    loc.blocked = false;
-  }
-
-  createTombstone(loc) {
-    let tombstone = new Tombstone(loc.vec, this);
-    this.objects.push(tombstone);
-    this.theMap.placeEntity(loc.vec, tombstone);
-    loc.blocked = false;
-  }
-
-  createSign(loc) {
-    let sign = new Sign(loc.vec, this);
-    this.objects.push(sign);
-    this.theMap.placeEntity(loc.vec, sign);
-    loc.blocked = false;
-  }
-
-  createMagicalObject(loc) {
-    let object = new MagicalObject(loc.vec, this);
+  addObject(object, loc) {
     this.objects.push(object);
-    this.theMap.placeEntity(loc.vec, object);
+    this.theMap.placeEntity(object.pos, object);
     loc.blocked = false;
   }
 
-  killActor(actor) {
-    if (actor.kind == MONSTER) {
+  removeEntity(entity) {
+    console.log("remove entity:", entity);
+    if (entity.kind == MONSTER) {
       ++this.monstersKilled;
-      this.expGained += actor.exp;
+      this.expGained += entity.exp;
     }
-    for (let index in this.actors) {
-      if (this.actors[index] == actor) {
-        console.log("killing actor, index:", index);
-        this.theMap.removeEntity(this.actors[index].position);
-        delete this.actors[index];
-        this.actors.splice(index, 1);
+
+    let entities;
+    if (entity.kind != OBJECT) {
+      entities = this.actors;
+    } else {
+      entities = this.objects;
+    }
+
+    for (let index in entities) {
+      if (entities[index] == entity) {
+        this.theMap.removeEntity(entity.position);
+        delete entities[index];
+        entities.splice(index, 1);
       }
     }
   }
@@ -422,6 +443,25 @@ class Game {
         this.currentEffects.get(actor).splice(i, 1);
       }
     }
+  }
+
+  update() {
+    if (this.entitiesToRemove.length != 0) {
+      console.log("entitiesToRemove:", this.entitiesToRemove);
+    }
+    if (this.entitiesToCreate.length != 0) {
+      console.log("entitiesToCreate:", this.entitiesToCreate);
+    }
+    for (let entity of this.entitiesToRemove) {
+      this.removeEntity(entity);
+    }
+    for (let entity of this.entitiesToCreate) {
+      if (entity.type == HERO) {
+        this.createHero(entity.pos, entity.subtype, true);
+      }
+    }
+    this.entitiesToRemove = [];
+    this.entitiesToCreate = [];
   }
   
   openChest() {

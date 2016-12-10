@@ -284,6 +284,14 @@ const SYMBOL3 = 12;
 const SYMBOL4 = 13;
 const SYMBOL5 = 14;
 */
+
+const CHEST = 0;
+const SIGN = 1;
+const SKULL = 2;
+const TOMBSTONE = 3;
+const MAGICAL_OBJ = 4;
+const ALLY = 5;
+
 const NORTH = 0;
 const EAST = 1;
 const SOUTH = 2;

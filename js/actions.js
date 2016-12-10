@@ -112,7 +112,7 @@ class DealDamage extends Action {
         this.actor.game.player.increaseExp(this.targetActor.exp);
       }
       this.game.audio.die();
-      this.game.killActor(this.targetActor);
+      this.game.entitiesToRemove.push(this.targetActor);
       this.targetActor = null;
       this.actor.nextAction = null;
     } else {
@@ -292,6 +292,7 @@ class Interact extends Action {
     let targetDistance =  this.map.getDistance(this.actor, this.targetObject);
     if (this.actor.primaryAtkRange >= targetDistance) {
       this.targetObject.interact(this.actor);
+      this.actor.nextAction = null;
       return null;
     } else {
       this.actor.walk.dest = this.targetObject.pos;

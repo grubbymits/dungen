@@ -153,9 +153,11 @@ class Chest extends Entity {
     // actually rare at the start!
     return itemArray[getBoundedRandom(itemArray.length, 0)];
   }
+
   get isInteractable() {
     return !this.open;
   }
+
   interact(actor) {
     this.sprite = chestSprites[1];
     this.open = true;
@@ -197,15 +199,34 @@ class Stair extends Entity {
     }
     this.isExit = isExit;
   }
+
   interact(actor) {
     if (!this.isExit)
       return null;
     this.game.loadNextMap();
   }
+
   get isInteractable() {
     if (this.isExit)
       return true;
     else
       return false;
+  }
+}
+
+class Ally extends Entity {
+  constructor(position, subtype, game) {
+    super(position, heroSprites[subtype], OBJECT, game);
+    console.log("adding ally at", position);
+    this.subtype = subtype;
+  }
+
+  interact(actor) {
+    this.game.entitiesToCreate.push({ type: HERO, subtype: this.subtype, pos: this.position });
+    this.game.entitiesToRemove.push(this);
+  }
+
+  get isInteractable() {
+    return true;
   }
 }

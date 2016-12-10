@@ -154,6 +154,7 @@ class GameMap {
   removeEntity(vec) {
     let loc = this.locations[vec.x][vec.y];
     loc.entity = null;
+    loc.blocked = false;
     //this.locations[vec.x][vec.y].dirty = true;
     if (loc.isVisible) {
       this.newDirty.push(vec);

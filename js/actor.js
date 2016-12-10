@@ -75,6 +75,7 @@ class Actor extends Entity {
   setDestination(vec) {
     let target = this.game.map.getEntity(vec);
     if (target) {
+      console.log("Target:", target);
       if (target.kind == OBJECT) {
         if (target.isInteractable) {
           this.interact.target = target;

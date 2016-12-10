@@ -352,8 +352,9 @@ class CatacombsGenerator extends MapGenerator {
       if (Math.random() < 0.5) {
         let loc = this.getRandomLocation(room);
         if (!loc.isBlocked) {
-          this.tombstoneLocs.push(loc);
-          loc.blocked = true;
+          this.reserveLoc(TOMBSTONE, loc);
+          //this.tombstoneLocs.push(loc);
+          //loc.blocked = true;
         }
       }
     }
@@ -477,8 +478,9 @@ class SorcerersLairGenerator extends MapGenerator {
       }
       if (Math.random() < 0.2) {
         let loc = this.getRandomLocation(room);
-        this.magicalObjectLocs.push(loc);
-        loc.blocked = true;
+        this.reserveLoc(MAGICAL_OBJ, loc);
+        // this.magicalObjectLocs.push(loc);
+        //loc.blocked = true;
       }
       if (Math.random() < 0.25) {
         let loc = this.getRandomLocation(room);

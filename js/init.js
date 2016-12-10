@@ -77,6 +77,7 @@ window.onload = function begin() {
       }
       if (updateActor) {
         actorIdx = (actorIdx + 1) % theGame.actors.length;
+        //console.log("actorIdx:", actorIdx);
       }
       yield;
     }
@@ -98,6 +99,7 @@ window.onload = function begin() {
       //if (new Date().getTime() >= theGame.nextGameTick) {
         //theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
         updater.next();
+        theGame.update();
         theGame.renderChanges();
         theGame.renderEntities();
         UI.renderInfo();
