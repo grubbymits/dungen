@@ -84,9 +84,13 @@ class Location {
 
 class GameMap {
   constructor(width, height) {
+    if ((width % TILE_SIZE != 0) ||
+        (height % TILE_SIZE != 0)) {
+      throw new Error("incompatible map dimension(s)");
+    }
     this.xMax = width / TILE_SIZE;
     this.yMax = height / TILE_SIZE;
-
+    
     this.shadow = new Set();
     this.newVisible = [];
     this.newPartialVisible = [];
@@ -95,7 +99,7 @@ class GameMap {
     for (let x = 0; x < this.xMax; x++) {
       this.locations[x] = [];
       for (let y = 0; y < this.yMax; y++) {
-        this.locations[x][y] = new Location(true, null, CEILING, x, y);
+        this.locations[x][y] = new Location(false, null, CEILING, x, y);
       }
     }
     console.log("generating map with dimensions:", this.xMax, "x", this.yMax, "tiles");
@@ -162,7 +166,7 @@ class GameMap {
 
   placeEntity(vec, entity) {
     let loc = this.locations[vec.x][vec.y];
-    if (loc.entity !== null) {
+    if (loc.blocked) {
       throw("trying to place in non empty loc!");
     }
 
