@@ -101,13 +101,12 @@ class MapGenerator {
     }
   }
 
-  placeTile(x, y, type, blocking) {
+  placeTile(x, y, type) {
     // Check for out-of-bounds
     if (this.map.isOutOfRange(x, y)) {
       return;
     }
     this.map.setLocationType(x, y, type);
-    this.map.setLocationBlocking(x, y, blocking);
   }
 
   get randomX() {
@@ -128,7 +127,7 @@ class MapGenerator {
         if (this.map.isOutOfRange(x, y)) {
           return false;
         }
-        // Only carve rooms into 'blocked' ceiling regions
+        // Only carve rooms into ceiling regions
         if (!this.map.getLocationType(x, y) == CEILING) {
           return false;
         }
@@ -142,7 +141,7 @@ class MapGenerator {
     this.rooms.push(room);
     for (let x = startX+1; x < startX + width-1; x++) {
       for (let y = startY+1; y < startY + height-1; y++) {
-        this.placeTile(x, y, this.roomFloor, false);
+        this.placeTile(x, y, this.roomFloor);
       }
     }
     return room;
@@ -151,7 +150,7 @@ class MapGenerator {
   createPath(startX, startY) {
     for (let x = startX; x < startX + PATH_WIDTH; x++) {
       for (let y = startY; y < startY + PATH_WIDTH; y++) {
-        this.placeTile(x, y, this.pathFloor, false);
+        this.placeTile(x, y, this.pathFloor);
       }
     }
   }

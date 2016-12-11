@@ -71,7 +71,7 @@ let vec = new Vec(0, 0);
 let entity = { name: "test-entity" };
 
 describe('GameMap', function() {
-  describe('constructor(width, height)', function() {
+  describe('#constructor(width, height)', function() {
     it('Construct map', function() {
       var fn = function() { new GameMap(160, 160); };
       expect(fn).to.throw(Error, "incompatible map dimension(s)");
@@ -121,6 +121,38 @@ describe('GameMap', function() {
       let map = new GameMap(256, 256);
       map.placeEntity(vec, entity);
       assert.equal(map.getEntity(vec).name, "test-entity");
+    });
+  });
+  describe('#getNeighbours(vec)', function() {
+    it('get free locations around the vec', function() {
+      let map = new GameMap(256, 256);
+      map.setLocationType(0, 0, PATH);
+      assert.equal(map.getNeighbours(vec).length, 0);
+      map.setLocationType(1, 0, PATH);
+      assert.equal(map.getNeighbours(vec).length, 1);
+      map.setLocationType(1, 1, PATH);
+      assert.equal(map.getNeighbours(vec).length, 1);
+      map.setLocationType(0, 1, PATH);
+      assert.equal(map.getNeighbours(vec).length, 3);
+    });
+  });
+  describe('#getPath(start, goal)', function() {
+    it('Get an array of vecs as a path', function() {
+      let map = new GameMap(256, 256);
+      let start = new Vec(0, 0);
+      let goal = new Vec(2, 0);
+      let obstacle = new Vec(1, 0);
+      
+      map.setLocationType(0, 0, PATH);
+      map.setLocationType(0, 1, PATH);
+      map.setLocationType(1, 1, PATH);
+      map.setLocationType(2, 1, PATH);
+      map.setLocationType(2, 0, PATH);
+      assert.equal(map.getPath(start, goal).length, 4);
+     
+      map.setLocationType(1, 0, PATH);
+      map.placeEntity(obstacle, entity);
+      assert.equal(map.getPath(start, goal).length, 4);
     });
   });
 });
