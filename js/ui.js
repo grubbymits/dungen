@@ -84,14 +84,69 @@ class PathEvent extends UIEvent {
   }
 }
 
+class LevelUpEvent {
+  constructor(UI, hero) {
+    this.UI = UI;
+    this.hero = hero;
+    this.finished = false;
+    this.active = false;
+    console.log("create LvlUpEvent for:", hero.name);
+  }
+
+  begin() {
+    $("#increase_strength").on('click', { lvlup : this },
+    function(event) {
+      event.data.lvlup.hero.strength++;
+      event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
+      $('#lvl_up_menu').css("visibility", "hidden");
+      event.data.lvlup.finished = true;
+    });
+    $("#increase_endurance").on('click', { lvlup : this },
+    function(event) {
+      event.data.lvlup.hero.endurance++;
+      event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
+      $('#lvl_up_menu').css("visibility", "hidden");
+      event.data.lvlup.finished = true;
+    });
+    $("#increase_agility").on('click', { lvlup : this },
+    function(event) {
+      event.data.lvlup.hero.agility++;
+      event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
+      $('#lvl_up_menu').css("visibility", "hidden");
+      event.data.lvlup.finished = true;
+    });
+    $("#increase_will").on('click', { lvlup : this },
+    function(event) {
+      event.data.lvlup.hero.will++;
+      event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
+      $('#lvl_up_menu').css("visibility", "hidden");
+      event.data.lvlup.finished = true;
+    });
+    $("#increase_wisdom").on('click', { lvlup : this },
+    function(event) {
+      event.data.lvlup.hero.wisdom++;
+      event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
+      $('#lvl_up_menu').css("visibility", "hidden");
+      event.data.lvlup.finished = true;
+    });
+
+    this.active = true;
+    console.log("beginning LvlUpEvent for:", this.hero.name);
+    $('#lvl_up_hero_icon').removeClass();
+    $('#lvl_up_hero_icon').addClass(this.hero.className);
+    this.UI.drawStats(this.hero, '#lvl_up_stats', false);
+    $('#lvl_up_menu').css("visibility", "visible");
+  }
+}
+
 class Interface {
   constructor(game) {
     //this.keysDown = {};
     this.game = game; //player.game;
     //this.player = player;
     //this.player.addUI(this);
-    this.heroToLevelUp = null;
     this.events = [];
+    this.LvlUpEvents = [];
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'fixed';
@@ -111,19 +166,6 @@ class Interface {
       .addEventListener("click", event => player.healHero());
     document.getElementById("mapCanvas")
       .addEventListener("click", this.onCanvasClick.bind(this), false);
-
-    // Links for level up menu
-    document.getElementById("increase_strength")
-      .addEventListener("click", this.increaseStrength.bind(this), false);
-    document.getElementById("increase_endurance")
-      .addEventListener("click", this.increaseEndurance.bind(this), false);
-    document.getElementById("increase_agility")
-      .addEventListener("click", this.increaseAgility.bind(this), false);
-    document.getElementById("increase_will")
-      .addEventListener("click", this.increaseWill.bind(this), false);
-    document.getElementById("increase_wisdom")
-      .addEventListener("click", this.increaseWisdom.bind(this), false);
-
   }
 
   init(player) {
@@ -165,12 +207,6 @@ class Interface {
     $(field).text(text);
   }
 
-  drawLevelUp(hero) {
-    $('#lvl_up_hero_icon').removeClass();
-    $('#lvl_up_hero_icon').addClass(hero.className);
-    this.drawStats(hero, '#lvl_up_stats', false);
-    $('#lvl_up_menu').css("visibility", "visible");
-  }
 
   populatePrimaryList(hero) {
     $('#equipment_list').append(
@@ -330,6 +366,21 @@ class Interface {
         this.events.splice(i, 1);
       }
     }
+
+    for (let i in this.LvlUpEvents) {
+      let event = this.LvlUpEvents[i];
+      if (event.active && !event.finished) {
+        break;
+      }
+      if (!event.active && !event.finished) {
+        event.begin();
+        break;
+      } else if (event.finished) {
+        delete this.LvlUpEvents[i];
+        this.LvlUpEvents.splice(i, 1);
+      }
+    }
+
     let hero = this.player.currentHero;
     $('#hero_hud').text("HP: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
                         "EP: " + hero.currentEnergy + "/" + hero.maxEnergy);
@@ -340,48 +391,7 @@ class Interface {
   }
 
   levelUp(hero) {
-    this.heroToLevelUp = hero;
-    this.drawLevelUp(hero);
-  }
-
-  increaseAgility() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.agility++;
-      $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats', true);
-    }
-  }
-
-  increaseStrength() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.strength++;
-      $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats', true);
-    }
-  }
-
-  increaseEndurance() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.endurance++;
-      $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats', true);
-    }
-  }
-
-  increaseWisdom() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.wisdom++;
-      $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats', true);
-    }
-  }
-
-  increaseWill() {
-    if (this.heroToLevelUp !== null) {
-      this.heroToLevelUp.will++;
-      $('#lvl_up_menu').css("visibility", "hidden");
-      this.drawStats(this.heroToLevelUp, '#stats', true);
-    }
+    this.LvlUpEvents.push(new LevelUpEvent(this, hero));
   }
 
   getItems(type) {

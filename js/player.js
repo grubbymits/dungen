@@ -20,9 +20,10 @@ class Player {
 
   increaseExp(exp) {
     for (let hero of this.heroes) {
+      let text = hero.name + " gains " + exp + "xp";
+      this.game.addTextEvent(text);
       if (hero.increaseExp(exp)) {
-        this.UI.addEvent(new TextEvent(this.game.context, new Date().getTime(),
-                                       hero.pos, "lvl up!"));
+        this.UI.addEvent(new TextEvent(hero.name + " lvl up!"));
         this.UI.levelUp(hero);
       }
     }

@@ -107,8 +107,6 @@ class DealDamage extends Action {
 
     if (this.targetActor.health <= 0) {
       if (this.actor.increaseExp !== null) {
-        let text = this.actor.name + " gains " + this.targetActor.exp + "xp";
-        this.game.addTextEvent(text);
         this.actor.game.player.increaseExp(this.targetActor.exp);
       }
       this.game.audio.die();
