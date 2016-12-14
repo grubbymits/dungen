@@ -172,6 +172,9 @@ class PrimaryAttack extends AttackBase {
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
+    if (this.targetActor.health < 1) {
+      return null;
+    }
 
     if (this.actor.kind == HERO) {
       this.game.addGraphicEvent(this.actor.primary.sprite,
@@ -217,6 +220,9 @@ class SecondaryAttack extends AttackBase {
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
+    if (this.targetActor.health < 1) {
+      return null;
+    }
 
     if (this.actor.kind == HERO) {
       this.game.addGraphicEvent(this.actor.secondary.sprite,
@@ -245,6 +251,10 @@ class InitAttack extends Action {
   }
 
   set target(target) {
+    if (target.health < 1) {
+      this.targetActor = null;
+      return;
+    }
     this.game.addGraphicEvent(targetSprite, target.pos);
     this.targetActor = target;
   }
@@ -254,6 +264,13 @@ class InitAttack extends Action {
   }
 
   perform() {
+    if (this.targetActor === null) {
+      return null;
+    }
+    if (this.targetActor.health < 1) {
+      return null;
+    }
+
     let targetDistance =  this.map.getDistance(this.actor, this.targetActor);
     // if target is in range, we can return an attack action,
     // otherwise we should return a walkaction to get closer.

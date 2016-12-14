@@ -85,19 +85,13 @@ class PathEvent extends UIEvent {
 }
 
 class Interface {
-  constructor(player) {
+  constructor(game) {
     //this.keysDown = {};
-    this.game = player.game;
-    this.player = player;
-    this.player.addUI(this);
+    this.game = game; //player.game;
+    //this.player = player;
+    //this.player.addUI(this);
     this.heroToLevelUp = null;
     this.events = [];
-    this.hudVisible = false;
-    this.itemMenuVisible = false;
-    this.state = { menu: STATS,
-                   hero: this.player.currentHero,
-                   itemType: ARMOUR,
-                   items: [] };
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'fixed';
@@ -130,7 +124,10 @@ class Interface {
     document.getElementById("increase_wisdom")
       .addEventListener("click", this.increaseWisdom.bind(this), false);
 
-    this.setupNav();
+  }
+
+  init(player) {
+    this.player = player;
   }
 
   drawEquipment(hero) {
@@ -266,35 +263,38 @@ class Interface {
     this.populateArmourList(hero);
   }
 
-  setupNav() {
-    for (let hero of this.player.heroes) {
-      let name = hero.className;
-      let id = name + '_id';
-      $('<div class="collapsible-body">' +
-          '<a class="waves-effect btn orange" style="margin:2px id="' + id + '"">'
-            + name +'</a></div>').insertAfter('#hero_list');
+  addHero(hero) {
+    // Add a button for the new hero
+    let name = hero.className;
+    let id = name + '_id';
+    var new_btn = $('<li><a class="waves-effect btn orange" style="margin:2px id="'
+                    + id + '">' + name +'</a></li>')
+      .on('click', { ui : this }, function(event) {
 
-      // Setup stats display
-      $('#collapsible_heroes').on('click', { ui : this }, function(event) {
+      $('#hero_icon').removeClass();
+      $('#hero_icon').addClass(name);
 
-        $('#hero_icon').removeClass();
-        $('#hero_icon').addClass(name);
+      event.data.ui.drawEquipment(hero);
+      event.data.ui.drawStats(hero, '#stats', true);
+      event.data.ui.refreshEquipmentLists(hero);
+    });
 
-        event.data.ui.drawEquipment(hero);
-        event.data.ui.drawStats(hero, '#stats', true);
-        event.data.ui.refreshEquipmentLists(hero);
-      });
-    }
+    $('#hero_list ul').append(new_btn);
+
     // ensure the collapsible ability is enabled.
     $('#collapsible_heroes').collapsible();
     $('#equipment_list').collapsible();
 
-    // Initialise
-    $('#hero_icon').addClass(this.player.currentHero.className);
-    this.drawEquipment(this.player.currentHero);
-    this.drawStats(this.player.currentHero, '#stats', true);
   }
-  
+
+  initNav(hero) {
+    console.log(hero);
+    // Initialise Nav
+    $('#hero_icon').addClass(hero.className);
+    this.drawEquipment(hero);
+    this.drawStats(hero, '#stats', true);
+  }
+
   addEvent(event) {
     this.events.push(event);
   }

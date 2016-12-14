@@ -1,8 +1,8 @@
 class Player {
-  constructor(hero) {
-    this.currentHero = hero;
-    this.game = hero.game;
-    this.UI = null;
+  constructor(game, UI) {
+    this.currentHero = null;
+    this.game = game;
+    this.UI = UI;
     this.heroes = [];
     this.shields = new Map();
     this.helmets = new Map();
@@ -16,7 +16,6 @@ class Player {
     this.spells = new Map();
     this.potions = new Map();
     this.treasure = new Map();
-    this.addHero(hero);
   }
 
   increaseExp(exp) {
@@ -29,8 +28,10 @@ class Player {
     }
   }
 
-  addUI(UI) {
-    this.UI = UI;
+  init(hero) {
+    console.log("init player:", hero);
+    this.currentHero = hero;
+    this.UI.initNav(hero);
   }
 
   addHero(hero) {
@@ -46,6 +47,7 @@ class Player {
     if (hero.ring) {
       this.addItem(hero.ring);
     }
+    this.UI.addHero(hero);
   }
 
   addItem(item) {
@@ -99,7 +101,7 @@ class Player {
     if (item.type != TREASURE && item.type != POTION) {
       // at the beginning, the UI would not have been defined and the equipment
       // list will be populated once it is.
-      if (this.UI !== null) {
+      if (this.currentHero !== null) {
         this.UI.refreshEquipmentLists(this.currentHero);
       }
     }

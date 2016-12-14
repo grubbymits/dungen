@@ -58,7 +58,14 @@ window.onload = function begin() {
 
   console.log("init map for", playerString, mapString);
 
-  var UI = theGame.init(playerType, mapType);
+  var UI = new Interface(theGame);
+  var player = new Player(theGame, UI);
+
+  UI.init(player);
+  theGame.init(player, playerType, mapType);
+
+  //UI.setupNav();
+  UI.centreCamera();
 
   function *generator() {
     let actorIdx = 0;

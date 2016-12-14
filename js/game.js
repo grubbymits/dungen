@@ -32,7 +32,7 @@ class Game {
     return this.loading;
   }
 
-  init(playerType, mapType) {
+  init(player, playerType, mapType) {
     this.loading = true;
     if (mapType == OLD_CITY) {
       this.mapGenerator = new OldCityGenerator(this.width, this.height);
@@ -47,25 +47,12 @@ class Game {
     }
     this.setupMap();
 
-    //let neighbours = this.theMap.getNeighbours(this.mapGenerator.exitStairLoc.vec);
-    //let entryVec = neighbours[0];
-
+    this.player = player;
     let character = this.createHero(this.mapGenerator.entryVec, playerType, false);
     this.theMap.addVisibleTiles(character.pos, character.vision);
-
-    let player = new Player(character);
-    player.addItem(armours[1]);
-    player.addItem(helmets[1]);
-    player.addItem(swords[1]);
-    player.addItem(staffs[1]);
-    player.addItem(potions[0]);
-    player.addItem(potions[0]);
-    this.player = player;
-    let UI = new Interface(this.player);
-    UI.centreCamera();
+    this.player.init(character);
     this.loading = false;
     this.renderMap();
-    return UI;
   }
 
   loadNextMap() {
@@ -309,6 +296,7 @@ class Game {
     this.heroes.push(hero);
     this.currentEffects.set(hero, []);
     this.theMap.placeEntity(pos, hero);
+    this.player.addHero(hero);
     return hero;
   }
 
