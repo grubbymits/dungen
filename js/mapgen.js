@@ -436,6 +436,7 @@ class MapGenerator {
       y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
       loc = this.map.getLocation(x, y);
     }
+    loc.blocked = true;
     return loc;
   }
 

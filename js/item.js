@@ -10,27 +10,6 @@ class Item {
     return this.names[this.subtype];
   }
   
-  get sound() {
-    switch(this.type) {
-      default:
-        console.log("unhandled item type in Item.sound");
-        return null;
-      case SWORD:
-      case AXE:
-        return slashAttackSound;
-      case STAFF:
-        if (type == ELECTRIC) {
-          return electricMagicSound;
-        } else if (type == FIRE) {
-          return fireMagicSound;
-        } else if (type == ICE) {
-          return iceMagicSound;
-        } else {
-          return normalMagicSound;
-        }
-    }
-  }
-  
   get sprite() {
     return this.sprites[this.subtype];
   }

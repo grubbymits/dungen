@@ -12,6 +12,9 @@ class AudioResource {
     this.audio.pause();
     this.audio.currentTime = 0;
   }
+  set volume(vol) {
+    this.audio.volume = vol;
+  }
 }
 class SoundEffect extends AudioResource {
   constructor(name) {
@@ -24,6 +27,7 @@ class Song extends AudioResource {
     super(name);
     this.audio.src = "res/audio/music/" + name + ".ogg";
     this.audio.loop = false;
+    this.audio.volume = 0.3;
   }
 }
 
@@ -49,6 +53,7 @@ class Audio {
     }
     
     this.slashAttackSound = new SoundEffect("melee_woosh");
+    this.airSound = new SoundEffect("woosh");
     this.hitSound = new SoundEffect("hit");
     this.dodgeSound = new SoundEffect("swipe");
     this.punchSound = new SoundEffect("punch");
@@ -82,6 +87,10 @@ class Audio {
     if (actor.kind == HERO) {
       let weapon = actor.primary;
       switch(weapon.type) {
+        case THROWING:
+        case BOW:
+          this.woosh();
+          break;
         case AXE:
         case SWORD:
           this.slash();
@@ -105,6 +114,9 @@ class Audio {
   
   slash() {
     this.slashAttackSound.play();
+  }
+  woosh() {
+    this.airSound.play();
   }
   hit() {
     this.hitSound.play();

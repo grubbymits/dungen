@@ -164,6 +164,7 @@ class GameMap {
   placeEntity(vec, entity) {
     let loc = this.locations[vec.x][vec.y];
     if (loc.entity !== null) {
+      console.log(loc);
       throw("trying to place in non empty loc!");
     }
 

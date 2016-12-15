@@ -300,6 +300,7 @@ class Interface {
   }
 
   addHero(hero) {
+    this.events.push(new TextEvent(hero.name + " joins the team"));
     // Add a button for the new hero
     let name = hero.className;
     let id = name + '_id';
@@ -391,6 +392,7 @@ class Interface {
   }
 
   levelUp(hero) {
+    this.events.push(new TextEvent(hero.name + " lvl up!"));
     this.LvlUpEvents.push(new LevelUpEvent(this, hero));
   }
 
