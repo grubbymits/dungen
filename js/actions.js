@@ -171,6 +171,7 @@ class PrimaryAttack extends AttackBase {
       return this.actor.rest;
     }
     if (this.targetActor.health < 1) {
+      this.actor.nextAction = null;
       return null;
     }
 
@@ -219,6 +220,7 @@ class SecondaryAttack extends AttackBase {
       return this.actor.rest;
     }
     if (this.targetActor.health < 1) {
+      this.actor.nextAction = null;
       return null;
     }
 
@@ -263,9 +265,11 @@ class InitAttack extends Action {
 
   perform() {
     if (this.targetActor === null) {
+      this.actor.nextAction = null;
       return null;
     }
     if (this.targetActor.health < 1) {
+      this.actor.nextAction = null;
       return null;
     }
 

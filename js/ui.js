@@ -161,11 +161,21 @@ class Interface {
     document.getElementById("centre_camera")
       .addEventListener("click", this.centreCamera.bind(this), false);
     document.getElementById("rest_button")
-      .addEventListener("click", event => player.setRest());
+      .addEventListener("click", event => this.player.setRest());
     document.getElementById("heal_button")
-      .addEventListener("click", event => player.healHero());
+      .addEventListener("click", event => this.player.healHero());
     document.getElementById("mapCanvas")
       .addEventListener("click", this.onCanvasClick.bind(this), false);
+
+    $('#group_button').on('click', { ui : this },
+    function(event) {
+      let player = event.data.ui.player;
+      if (player.hasGroupControl) {
+        player.hasGroupControl = false;
+      } else {
+        player.hasGroupControl = true;
+      }
+    });
   }
 
   init(player) {

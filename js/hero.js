@@ -162,10 +162,18 @@ class Hero extends Actor {
   }
 
   follow(leader) {
+    console.log("follow", this.name, leader.name);
     this.leader = leader;
     this.isFollowing = true;
     this.walk.dest = this.leader.position;
     this.nextAction = this.walk;
+  }
+
+  unfollow() {
+    console.log("unfollow", this.name);
+    this.leader = null;
+    this.isFollowing = false;
+    this.nextAction = null;
   }
   
   equipItem(item) {

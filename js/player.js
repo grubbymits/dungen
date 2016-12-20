@@ -16,6 +16,7 @@ class Player {
     this.spells = new Map();
     this.potions = new Map();
     this.treasure = new Map();
+    this.groupControl = true;
   }
 
   increaseExp(exp) {
@@ -28,9 +29,32 @@ class Player {
     }
   }
 
+  get hasGroupControl() {
+    return this.groupControl;
+  }
+
+  set hasGroupControl(control) {
+    this.groupControl = control;
+    console.log("setting group", control);
+    if (!control) {
+      for (let hero of this.heroes) {
+        hero.unfollow();
+      }
+    } else {
+      for (let hero of this.heroes) {
+        if (hero == this.leadHero) {
+          continue;
+        }
+        hero.follow(this.leadHero);
+      }
+      this.currentHero = this.leadHero;
+    }
+  }
+
   init(hero) {
     console.log("init player:", hero);
     this.currentHero = hero;
+    this.leadHero = hero;
     this.UI.initNav(hero);
   }
 

@@ -72,10 +72,16 @@ window.onload = function begin() {
     while(true) {
       let updateActor = false;
       let action = theGame.getAction(actorIdx);
-        
+
+      let actor = theGame.actors[actorIdx];
+      if (actor.kind == HERO && !actor.isFollowing) {
+        player.currentHero = actor;
+      }
+      
       if (action) {
         theGame.applyEffects(actorIdx);
       }
+
         
       while(action) {
         action = action.perform();
@@ -84,8 +90,8 @@ window.onload = function begin() {
       }
       if (updateActor) {
         actorIdx = (actorIdx + 1) % theGame.actors.length;
-        //console.log("actorIdx:", actorIdx);
       }
+
       yield;
     }
   }

@@ -133,32 +133,6 @@ class Game {
       }
     }
 
-    /*
-    console.log("placing chests:", this.mapGenerator.chestLocs.length);
-    for (let loc of this.mapGenerator.chestLocs) {
-      this.createChest(loc);
-    }
-
-    console.log("placing skulls:", this.mapGenerator.skullLocs.length);
-    for (let loc of this.mapGenerator.skullLocs) {
-      this.createSkull(loc);
-    }
-
-    console.log("placing tombstones:", this.mapGenerator.tombstoneLocs.length);
-    for (let loc of this.mapGenerator.tombstoneLocs) {
-      this.createTombstone(loc);
-    }
-
-    console.log("placing signs:", this.mapGenerator.signLocs.length);
-    for (let loc of this.mapGenerator.signLocs) {
-      this.createSign(loc);
-    }
-
-    for (let loc of this.mapGenerator.magicalObjectLocs) {
-      this.createMagicalObject(loc);
-    }
-    */
-
     this.mapGenerator.placeMonsters(this.level, 32);
     for (let monster of this.mapGenerator.monsterPlacements) {
       this.createMonster(monster.vec, monster.type);
