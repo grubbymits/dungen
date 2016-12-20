@@ -172,8 +172,10 @@ class Interface {
       let player = event.data.ui.player;
       if (player.hasGroupControl) {
         player.hasGroupControl = false;
+        event.data.ui.events.push(new TextEvent("Individual controls enabled"));
       } else {
         player.hasGroupControl = true;
+        event.data.ui.events.push(new TextEvent("Individual controls disabled"));
       }
     });
   }

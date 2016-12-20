@@ -3,24 +3,33 @@
 class Entity {
   constructor(position, sprite, kind, game) {
     this.position = position;
+    this.drawX = position.x * TILE_SIZE;
+    this.drawY = position.y * TILE_SIZE;
     this.sprite = sprite;
     this.kind = kind;
     this.game = game;
   }
+
   render() {
-    this.sprite.render(this.pos.x * TILE_SIZE,
-                       this.pos.y * TILE_SIZE,
+    this.sprite.render(this.drawX,
+                       this.drawY,
                        this.game.overlayContext);
   }
+
   get pos() {
     return this.position;
   }
+
   set pos(pos) {
     this.position = pos;
+    this.drawX = pos.x * TILE_SIZE;
+    this.drawY = pos.y * TILE_SIZE;
   }
+
   interact(actor) {
     return null;
   }
+
   get isInteractable() {
     return false;
   }

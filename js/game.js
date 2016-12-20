@@ -179,47 +179,49 @@ class Game {
   clearOverlay() {
     this.overlayContext.fillStyle = '#000000';
     this.overlayContext.fillRect(0, 0,
-                                 this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
-                                 this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
+                                 this.theMap.width * TILE_SIZE,
+                                 this.theMap.height * TILE_SIZE);
   }
 
   renderChanges() {
     while (this.theMap.newVisible.length > 0) {
       let vec = this.theMap.newVisible.pop();
-      this.overlayContext.clearRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
-                                    vec.y * TILE_SIZE * UPSCALE_FACTOR,
-                                    TILE_SIZE * UPSCALE_FACTOR,
-                                    TILE_SIZE * UPSCALE_FACTOR);
+      this.overlayContext.clearRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
+                                    TILE_SIZE, TILE_SIZE);
     }
 
     this.overlayContext.globalAlpha = 0.5;
     this.overlayContext.fillStyle = '#000000';
     while (this.theMap.newPartialVisible.length > 0) {
       let vec = this.theMap.newPartialVisible.pop();
-      this.overlayContext.clearRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
-                                    vec.y * TILE_SIZE * UPSCALE_FACTOR,
-                                    TILE_SIZE * UPSCALE_FACTOR,
-                                    TILE_SIZE * UPSCALE_FACTOR);
-      this.overlayContext.fillRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
-                                   vec.y * TILE_SIZE * UPSCALE_FACTOR,
-                                   TILE_SIZE * UPSCALE_FACTOR,
-                                   TILE_SIZE * UPSCALE_FACTOR);
+      this.overlayContext.clearRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
+                                    TILE_SIZE, TILE_SIZE);
+      this.overlayContext.fillRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
+                                   TILE_SIZE, TILE_SIZE);
     }
     this.overlayContext.globalAlpha = 1.0;
 
     while (this.theMap.newDirty.length > 0) {
       let vec = this.theMap.newDirty.pop();
-      this.overlayContext.clearRect(vec.x * TILE_SIZE * UPSCALE_FACTOR,
-                                    vec.y * TILE_SIZE * UPSCALE_FACTOR,
-                                    TILE_SIZE * UPSCALE_FACTOR,
-                                    TILE_SIZE * UPSCALE_FACTOR);
+      this.overlayContext.clearRect(vec.x * TILE_SIZE,
+                                    vec.y * TILE_SIZE,
+                                    TILE_SIZE, TILE_SIZE);
     }
   }
  
   renderEntities() {
     for (let actor of this.actors) {
       let loc = this.theMap.getLocation(actor.pos.x, actor.pos.y);
+
       if (loc.isVisible) {
+        if (actor.kind == HERO) {
+          this.overlayContext.clearRect(actor.drawX, actor.drawY,
+                                        TILE_SIZE, TILE_SIZE);
+          if (actor == this.player.currentHero) {
+            currentActorSprite.render(actor.drawX, actor.drawY,
+                                      this.overlayContext);
+          }
+        }
         actor.render();
       }
     }
