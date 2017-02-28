@@ -29,7 +29,23 @@ class WalkAction extends Action {
     this.currentPath = [];
     this.map = this.actor.game.map;
   }
+
   set dest(goal) {
+    if (this.actor.kind == HERO && this.actor.isFollowing) {
+      let target = this.map.getEntity(goal);
+      if (target && target.kind == HERO) {
+        let neighbours = this.map.getNeighbours(goal);
+        let minCost = 0;
+        for (let i in neighbours) {
+          let neighbour = neighbours[i];
+          let cost = this.actor.pos.getCost(neighbour);
+          if (cost < minCost) {
+            minCost = cost;
+            goal = neighbour;
+          }
+        }
+      }
+    }
     this.destination = goal;
     this.currentPath = this.map.getPath(this.actor.pos, this.destination);
     if (this.actor.kind == HERO) {

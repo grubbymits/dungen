@@ -45,10 +45,13 @@ class Game {
     } else {
       this.mapGenerator = new SorcerersLairGenerator(this.width, this.height);
     }
-    this.setupMap();
+    this.setupMap(1);
 
     this.player = player;
-    let character = this.createHero(this.mapGenerator.entryVec, playerType, false);
+    if (this.mapGenerator.entryVecs.length == 0) {
+      throw("entryVecs not populated");
+    }
+    let character = this.createHero(this.mapGenerator.entryVecs[0], playerType, false);
     this.theMap.addVisibleTiles(character.pos, character.vision);
     this.player.init(character);
     this.loading = false;
@@ -56,6 +59,7 @@ class Game {
   }
 
   loadNextMap() {
+    console.log("loadNextMap");
     this.loading = true;
     this.pause();
 
@@ -72,17 +76,16 @@ class Game {
     this.expGained = 0;
     this.currentEffects.clear();
 
+
+    this.setupMap(this.heroes.length);
     // re-add the heroes
     for (let hero of this.heroes) {
+      hero.reset();
+      hero.pos = this.mapGenerator.entryVecs.pop();
+      this.theMap.placeEntity(hero.pos, hero);
+      this.theMap.addVisibleTiles(hero.pos, hero.vision);
       this.actors.push(hero);
     }
-
-    this.setupMap();
-    //this.player.currentHero.pos = this.mapGenerator.entryVec;
-    this.player.currentHero.reset();
-    this.theMap.placeEntity(this.mapGenerator.entryVec, this.player.currentHero);
-    this.theMap.addVisibleTiles(this.player.currentHero.pos,
-                                this.player.currentHero.vision);
     this.player.UI.centreCamera();
 
     this.renderMap();
@@ -92,8 +95,9 @@ class Game {
     this.loading = false;
   }
 
-  setupMap() {
-    this.mapGenerator.generate(this.level, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS);
+  setupMap(numHeroes) {
+    this.mapGenerator.generate(this.level, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS,
+                               numHeroes);
     this.theMap = this.mapGenerator.map;
 
     let stair = new Stair(this.mapGenerator.exitStairLoc.vec, true, this);
@@ -126,8 +130,18 @@ class Game {
         this.addObject(object, loc);
         break;
       case ALLY:
-        console.log("resEntity == ALLY");
-        let ally = new Ally(loc.vec, ARCHER, this);
+        let newAllies = new Set([ARCHER, ROGUE, MAGE, KNIGHT]);; 
+        for (let hero of this.heroes) {
+          console.log("Hero subtype:", hero.subtype);
+          newAllies.delete(hero.subtype);
+        }
+        do {
+          var allyType = getBoundedRandom(ROGUE, BLACK_MAGE);
+          var found = newAllies.has(allyType);
+          console.log("found", found, "allType:", allyType);
+        } while (!found);
+
+        let ally = new Ally(loc.vec, allyType, this);
         this.addObject(ally, loc);
         break;
       }
@@ -152,7 +166,8 @@ class Game {
         let type = this.theMap.getLocationType(x,y);
         if (type != CEILING) {
           let spriteIdx = this.theMap.getLocationSprite(x, y);
-          tileSprites[spriteIdx].render(x * TILE_SIZE, y * TILE_SIZE , this.context);
+          tileSprites[spriteIdx].render(x * TILE_SIZE, y * TILE_SIZE,
+                                        this.context);
         }
       }
     }
@@ -172,7 +187,8 @@ class Game {
         spriteIdx = 5;
       }
       let sprite = symbolSprites[spriteIdx];
-      sprite.render(loc.vec.x * TILE_SIZE, loc.vec.y * TILE_SIZE, this.context);
+      sprite.render(loc.vec.x * TILE_SIZE, loc.vec.y * TILE_SIZE,
+                    this.context);
     }
   }
 
@@ -238,7 +254,8 @@ class Game {
   }
 
   addGraphicEvent(sprite, pos) {
-    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos, sprite));
+    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos,
+                                             sprite));
   }
 
   addPathEvent(path) {
@@ -406,6 +423,12 @@ class Game {
         delete this.currentEffects.get(actor)[i];
         this.currentEffects.get(actor).splice(i, 1);
       }
+    }
+    // Each actor receives some EP at the beginning of their turn.
+    if (actor.currentEnergy < actor.maxEnergy - 1) {
+      actor.currentEnergy = actor.currentEnergy + 2;
+    } else if (actor.currentEnergy < actor.maxEnergy) {
+      actor.currentEnergy++;
     }
   }
 

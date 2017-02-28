@@ -26,6 +26,7 @@ class Actor extends Entity {
     this.destination = null;
     this.currentPath = [];
     this.rangeAttack = null;
+    this.isStatic = false;
   }
   get action() {
     // needs to be implemented differently for heros and monsters atm

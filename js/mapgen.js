@@ -61,13 +61,14 @@ class MapGenerator {
   }
 
   // Generate level and return start position
-  generate(level, width, height) {
+  generate(level, width, height, numPlayers) {
     this.rooms = [];
     //this.chestLocs = [];
     //this.skullLocs = [];
     //this.tombstoneLocs = [];
     //this.signLocs = [];
     //this.magicalObjectLocs = [];
+    this.numPlayers = numPlayers;
     this.reservedLocs = [];
     this.symbolLocs = [];
     this.monsterPlacements = [];
@@ -476,8 +477,12 @@ class MapGenerator {
     if (!neighbours.length)
       throw("no free neighbours next to stairs");
     else {
-      this.entryVec = neighbours[0];
-      this.map.setLocationBlocking(this.entryVec.x, this.entryVec.y, true);
+      this.entryVecs = [];
+      for (let i = 0; i < this.numPlayers; ++i) {
+        this.entryVecs.push(neighbours[i]);
+        this.map.setLocationBlocking(this.entryVecs[i].x, this.entryVecs[i].y,
+                                     true);
+      }
     }
     let loc = this.getRandomLocation(entry);
     console.log("reserving loc for ally:", loc);

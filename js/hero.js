@@ -44,6 +44,8 @@ class Hero extends Actor {
   reset() {
     this.currentHealth = this.maxHealth;
     this.currentEnergy = this.maxEnergy;
+    this.nextAction = null;
+    this.destination = null;
     this.walk = new WalkAction(this);
     this.rest = new RestAction(this);
     this.attack = new InitAttack(this);
@@ -113,7 +115,7 @@ class Hero extends Actor {
       if (this.leader.nextAction == this.leader.attack) {
         this.attack.target = this.leader.attack.target;
         this.nextAction = this.attack;
-      } else if (this.position.getCost(this.leader.position) > 3) {
+      } else if (this.position.getCost(this.leader.position) > 4) {
         this.walk.dest = this.leader.position;
         this.nextAction = this.walk;
       } else {
