@@ -33,7 +33,7 @@ class Game {
   }
 
   saveGame() {
-    localStorage.setItem("mapType", mapType);
+    localStorage.setItem("mapType", this.mapGenerator.type);
     localStorage.setItem("level", this.level);
     /*
     localStorage.setItem("shields", JSON.stringify(this.player.shields));
@@ -74,6 +74,7 @@ class Game {
     this.loading = true;
     this.player = player;
     this.level = localStorage.getItem("level");
+    let mapType = localStorage.getItem("mapType");
     this.mapGenerator = createGenerator(mapType, this.width, this.height);
     this.setupMap(numHeroes);
 

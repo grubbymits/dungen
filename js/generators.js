@@ -3,6 +3,7 @@
 class OldCityGenerator extends MapGenerator {
   constructor(width, height) {
     super(width, height, DIRT, PATH);
+    this.type = OLD_CITY;
     // add rat, spiders, bat, rabbit
     // add mushroom
     // add spider champion,
@@ -100,6 +101,7 @@ class SewerGenerator extends MapGenerator {
   constructor(width, height) {
     // Select room floor and path tiles
     super(width, height, WATER, PATH);
+    this.type = SEWER;
 
     // add rat, spiders, lizard, bat
     // add spider champion,
@@ -185,6 +187,7 @@ class SewerGenerator extends MapGenerator {
 class DungeonGenerator extends MapGenerator {
   constructor(width, height) {
     super(width, height, SPIKES, PATH);
+    this.type = DUNGEON;
 
     // add rat, spiders, bat
     // add spider champion,
@@ -285,6 +288,7 @@ class DungeonGenerator extends MapGenerator {
 class CatacombsGenerator extends MapGenerator {
   constructor(width, height) {
     super(width, height, DIRT, PATH);
+    this.type = CATACOMBS;
 
     // add rat, spiders, bat
     // add spider champion,
@@ -387,6 +391,7 @@ class CatacombsGenerator extends MapGenerator {
 class SorcerersLairGenerator extends MapGenerator {
   constructor(width, height) {
     super(width, height, PATH, PATH);
+    this.type = LAIR;
     // add goblin, orc, slimes, slime champion
     // add zombie
     // add undead
