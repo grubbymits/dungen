@@ -182,7 +182,9 @@ class PrimaryAttack extends AttackBase {
   }
 
   perform() {
-    let energyRequired = this.actor.primaryAtkEnergy;
+    let cost = this.actor.pos.getCost(this.targetActor.pos);
+    let energyRequired = Math.round(this.actor.primaryAtkEnergy * cost);
+
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
@@ -231,7 +233,8 @@ class SecondaryAttack extends AttackBase {
   }
 
   perform() {
-    let energyRequired = this.actor.secondaryAtkEnergy;
+    let cost = this.actor.pos.getCost(this.targetActor.pos);
+    let energyRequired = Math.round(this.actor.secondaryAtkEnergy * cost);
     if (this.actor.currentEnergy < energyRequired) {
       return this.actor.rest;
     }
@@ -415,23 +418,16 @@ class FindTarget extends Action {
     let pos = this.actor.pos;
     this.range = this.actor.vision;
     let visibleTargets = [];
-    
-    //if (pos.x != this.prevPos.x || pos.y != this.prevPos.y) {
-      this.calcVisibility.perform();
-      this.prevPos = pos;
-    //}
+    this.calcVisibility.perform();
+    this.prevPos = pos;
     
     for (let target of this.targetGroup) {
-      //if (target.pos.getCost(this.actor.pos) > this.range) {
-        //continue;
-      //}
       if (this.calcVisibility.isVisible(target)) {
         visibleTargets.push(target);
       }
     }
     
     if (visibleTargets.length !== 0) {
-      console.log("visible targets!", visibleTargets);
       let finalTarget = visibleTargets[0];
       let smallestCost = finalTarget.pos.getCost(this.actor.pos);
       

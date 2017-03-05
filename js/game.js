@@ -386,7 +386,6 @@ class Game {
     // the way of stepping through actors in the game loop. The hero
     // and monster arrays are generally used but then we have duplicate
     // references. And maybe more useful to use a set for these.
-    console.log("remove entity:", entity);
     if (entity.kind == MONSTER) {
       ++this.monstersKilled;
       this.expGained += entity.exp;
@@ -457,12 +456,6 @@ class Game {
   }
 
   update() {
-    if (this.entitiesToRemove.length != 0) {
-      console.log("entitiesToRemove:", this.entitiesToRemove);
-    }
-    if (this.entitiesToCreate.length != 0) {
-      console.log("entitiesToCreate:", this.entitiesToCreate);
-    }
     for (let entity of this.entitiesToRemove) {
       this.removeEntity(entity);
     }

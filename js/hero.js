@@ -80,11 +80,11 @@ class Hero extends Actor {
   }
 
   get primaryAtkPower() {
-    return Math.round(this.equipPrimary.power * this.strength / MAX_STRENGTH);
+    return ((100 * this.equipPrimary.power * this.strength / MAX_STRENGTH)/100).toFixed(2);
   }
 
   get primaryAtkEnergy() {
-    return Math.round(this.equipPrimary.energy * MAX_AGILITY / this.agility);
+    return ((100 * this.equipPrimary.energy * MAX_AGILITY / this.agility)/100).toFixed(2);
   }
 
   get primaryAtkType() {
@@ -232,10 +232,10 @@ class Mage extends Hero {
     this.className = 'mage';
   }
   get primaryAtkPower() {
-    return Math.round(this.equipPrimary.power * this.wisdom / MAX_WISDOM);
+    return ((100 * this.equipPrimary.power * this.wisdom / MAX_WISDOM)/100).toFixed(2);
   }
   get primaryAtkEnergy() {
-    return Math.round(this.equipPrimary.energy * MAX_WILL / this.will);
+    return ((100* this.equipPrimary.energy * MAX_WILL / this.will)/100).toFixed(2);
   }
 }
 
@@ -253,10 +253,10 @@ class Rogue extends Hero {
     this.className = 'rogue';
   }
   get secondaryAtkPower() {
-    return Math.round(this.equipSecondary.power * this.strength / MAX_STRENGTH);
+    return ((100 * this.equipSecondary.power * this.strength / MAX_STRENGTH)/100).toFixed(2);
   }
   get secondaryAtkEnergy() {
-    return Math.round(this.equipSecondary.energy * MAX_AGILITY / this.agility);
+    return ((100 * this.equipSecondary.energy * MAX_AGILITY / this.agility)/100).toFixed(2);
   }
   get secondaryAtkType() {
     return this.equipSecondary.type;
@@ -279,12 +279,12 @@ class Archer extends Hero {
     this.className = 'archer';
   }
   get primaryAtkPower() {
-    return Math.round((this.equipPrimary.power + this.equipSecondary.power) *
-                      this.strength / MAX_STRENGTH);
+    return ((100 * ((this.equipPrimary.power + this.equipSecondary.power) *
+                      this.strength / MAX_STRENGTH))/100).toFixed(2);
   }
   get primaryAtkEnergy() {
-    return Math.round((this.equipPrimary.energy + this.equipSecondary.energy) *
-                      MAX_AGILITY / this.agility);
+    return ((100 * ((this.equipPrimary.energy + this.equipSecondary.energy) *
+                      MAX_AGILITY / this.agility)/100)).toFixed(2);
   }
 }
 

@@ -96,6 +96,9 @@ class LevelUpEvent {
   begin() {
     $("#increase_strength").on('click', { lvlup : this },
     function(event) {
+      if (event.data.lvlup.finished) {
+        return;
+      }
       event.data.lvlup.hero.strength++;
       event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
       $('#lvl_up_menu').css("visibility", "hidden");
@@ -103,6 +106,9 @@ class LevelUpEvent {
     });
     $("#increase_endurance").on('click', { lvlup : this },
     function(event) {
+      if (event.data.lvlup.finished) {
+        return;
+      }
       event.data.lvlup.hero.endurance++;
       event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
       $('#lvl_up_menu').css("visibility", "hidden");
@@ -110,6 +116,9 @@ class LevelUpEvent {
     });
     $("#increase_agility").on('click', { lvlup : this },
     function(event) {
+      if (event.data.lvlup.finished) {
+        return;
+      }
       event.data.lvlup.hero.agility++;
       event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
       $('#lvl_up_menu').css("visibility", "hidden");
@@ -117,6 +126,9 @@ class LevelUpEvent {
     });
     $("#increase_will").on('click', { lvlup : this },
     function(event) {
+      if (event.data.lvlup.finished) {
+        return;
+      }
       event.data.lvlup.hero.will++;
       event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
       $('#lvl_up_menu').css("visibility", "hidden");
@@ -124,6 +136,9 @@ class LevelUpEvent {
     });
     $("#increase_wisdom").on('click', { lvlup : this },
     function(event) {
+      if (event.data.lvlup.finished) {
+        return;
+      }
       event.data.lvlup.hero.wisdom++;
       event.data.lvlup.UI.drawStats(event.data.lvlup.hero, '#stats', true);
       $('#lvl_up_menu').css("visibility", "hidden");
