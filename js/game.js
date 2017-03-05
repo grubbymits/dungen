@@ -103,10 +103,10 @@ class Game {
 
   init(player, playerType, mapType) {
     this.loading = true;
-    this.mapGenerator = createGenerator(mapType);
+    this.player = player;
+    this.mapGenerator = createGenerator(mapType, this.width, this.height);
     this.setupMap(1);
 
-    this.player = player;
     if (this.mapGenerator.entryVecs.length == 0) {
       throw("entryVecs not populated");
     }
