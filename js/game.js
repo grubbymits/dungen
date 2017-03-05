@@ -32,19 +32,78 @@ class Game {
     return this.loading;
   }
 
+  saveGame() {
+    localStorage.setItem("mapType", mapType);
+    localStorage.setItem("level", this.level);
+    /*
+    localStorage.setItem("shields", JSON.stringify(this.player.shields));
+    localStorage.setItem("helmets", JSON.stringify(this.player.helmets));
+    localStorage.setItem("armours", JSON.stringify(this.player.armours));
+    localStorage.setItem("swords", JSON.stringify(this.player.swords));
+    localStorage.setItem("staffs", JSON.stringify(this.player.staffs));
+    localStorage.setItem("axes", JSON.stringify(this.player.axes));
+    localStorage.setItem("bows", JSON.stringify(this.player.bows));
+    localStorage.setItem("arrows", JSON.stringify(this.player.arrows));
+    localStorage.setItem("throwing", JSON.stringify(this.player.throwing));
+    localStorage.setItem("spells", JSON.stringify(this.player.spells));
+    localStorage.setItem("potions", JSON.stringify(this.player.potions));
+    localStorage.setItem("treasure", JSON.stringify(this.player.treasure));
+    */
+    localStorage.setItem("numHeroes", this.heroes.length);
+    for (let i in this.heroes) {
+      let hero = this.heroes[i];
+      localStorage.setItem("hero" + i, JSON.stringify(hero));
+    }
+  }
+
+  loadGame(player) {
+    /*
+    player.shields = JSON.parse(localStorage.getItem("shields"));
+    player.helmets = JSON.parse(localStorage.getItem("helmets"));
+    player.armours = JSON.parse(localStorage.getItem("armours"));
+    player.swords = JSON.parse(localStorage.getItem("swords"));
+    player.staffs = JSON.parse(localStorage.getItem("staffs"));
+    player.axes = JSON.parse(localStorage.getItem("axes"));
+    player.bows = JSON.parse(localStorage.getItem("bows"));
+    player.arrows = JSON.parse(localStorage.getItem("arrows"));
+    player.throwing = JSON.parse(localStorage.getItem("throwing"));
+    player.spells = JSON.parse(localStorage.getItem("spells"));
+    player.potions = JSON.parse(localStorage.getItem("potions"));
+    player.treasure = JSON.parse(localStorage.getItem("treasure"));
+    */
+    this.loading = true;
+    this.player = player;
+    this.level = localStorage.getItem("level");
+    this.mapGenerator = createGenerator(mapType, this.width, this.height);
+    this.setupMap(numHeroes);
+
+    for (let i = 0; i < localStorage.getItem("numHeroes"); ++i) {
+      let stats = localStorage.getItem("hero" + i);
+      var hero = new Hero(stats.health,
+                          stats.energy,
+                          stats.strength,
+                          stats.agility,
+                          stats.wisdom,
+                          stats.will,
+                          stats.endurance,
+                          stats.vision,
+                          this.mapGenerator.entryVecs[i],
+                          stats.subtype,
+                          this);
+      hero.className = stats.className;
+      if (i == 0) {
+        this.player.init(hero);
+      } else {
+        this.player.addHero(hero);
+      }
+    }
+    this.loading = false;
+    this.renderMap();
+  }
+
   init(player, playerType, mapType) {
     this.loading = true;
-    if (mapType == OLD_CITY) {
-      this.mapGenerator = new OldCityGenerator(this.width, this.height);
-    } else if (mapType == SEWER) {
-      this.mapGenerator = new SewerGenerator(this.width, this.height);
-    } else if (mapType == DUNGEON) {
-      this.mapGenerator = new DungeonGenerator(this.width, this.height);
-    } else if (mapType == CATACOMBS) {
-      this.mapGenerator = new CatacombsGenerator(this.width, this.height);
-    } else {
-      this.mapGenerator = new SorcerersLairGenerator(this.width, this.height);
-    }
+    this.mapGenerator = createGenerator(mapType);
     this.setupMap(1);
 
     this.player = player;
@@ -52,7 +111,6 @@ class Game {
       throw("entryVecs not populated");
     }
     let character = this.createHero(this.mapGenerator.entryVecs[0], playerType, false);
-    //this.theMap.addVisibleTiles(character.pos, character.vision);
     this.player.init(character);
     this.loading = false;
     this.renderMap();
@@ -60,6 +118,7 @@ class Game {
 
   loadNextMap() {
     console.log("loadNextMap");
+    this.saveGame();
     this.loading = true;
     this.pause();
 

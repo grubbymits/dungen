@@ -6,6 +6,33 @@ $(document).ready(function() {
   });
 });
 
+function getPlayerType(playerString) {
+  if (playerString == 'mage') {
+    return MAGE;
+  } else if (playerString == 'rogue') {
+    return ROGUE;
+  } else if (playerString == 'archer') {
+    return ARCHER;
+  } else if (playerString == 'warlock') {
+    return WARLOCK;
+  }
+  return KNIGHT;
+}
+
+function getMapType(mapString) {
+  if (mapString == 'oldcity') {
+    return OLD_CITY;
+  } else if (mapString == 'sewer') {
+    return SEWER;
+  } else if (mapString == 'dungeon') {
+    return DUNGEON;
+  } else if (mapString == 'catacombs') {
+    return CATACOMBS;
+  } else {
+    return  LAIR;
+  }
+}
+
 window.onload = function begin() {
   // Initialise canvas
   var mapCanvas = document.getElementById("mapCanvas");
@@ -26,45 +53,24 @@ window.onload = function begin() {
 
   var theGame = new Game(mapContext, overlayContext, mapCanvas.width,
                          mapCanvas.height);
-
-  var searchString = window.location.search.substring(1);
-
-  var variableArray = searchString.split('&');
-  var playerString = variableArray[0].split('=')[1];
-  var playerType = KNIGHT;
-  if (playerString == 'mage') {
-    playerType = MAGE;
-  } else if (playerString == 'rogue') {
-    playerType = ROGUE;
-  } else if (playerString == 'archer') {
-    playerType = ARCHER;
-  } else if (playerString == 'warlock') {
-    playerType = WARLOCK;
-  }
-
-  var mapString = variableArray[1].split('=')[1];
-  var mapType;
-  if (mapString == 'oldcity') {
-    mapType = OLD_CITY;
-  } else if (mapString == 'sewer') {
-    mapType = SEWER;
-  } else if (mapString == 'dungeon') {
-    mapType = DUNGEON;
-  } else if (mapString == 'catacombs') {
-    mapType = CATACOMBS;
-  } else {
-    mapType = LAIR;
-  }
-
-  console.log("init map for", playerString, mapString);
-
   var UI = new Interface(theGame);
   var player = new Player(theGame, UI);
 
-  UI.init(player);
-  theGame.init(player, playerType, mapType);
+  var searchString = window.location.search.substring(1);
+  var variableArray = searchString.split('&');
+  var playerString = variableArray[0].split('=')[1];
 
-  //UI.setupNav();
+  if (playerString == 'continue') {
+    theGame.loadGame();
+  } else {
+    let playerType = getPlayerType(playerString);
+    let mapString = variableArray[1].split('=')[1];
+    let mapType = getMapType(mapString);
+    console.log("init map for", playerString, mapString);
+    theGame.init(player, playerType, mapType);
+  }
+
+  UI.init(player);
   UI.centreCamera();
 
   function *generator() {
