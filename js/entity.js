@@ -131,37 +131,36 @@ class Chest extends Entity {
   }
   pickEquipment() {
     console.log("pickEquipment");
-    // equipment, there are 10 types including spells and jewelry.
     let type = Math.random();
     let itemArray = null;
-    let itemType = 0;
-    if (type < 0.1) {
+
+    if (type < 0.25) {
       itemArray = armours;
-    } else if (type < 0.2) {
-      itemArray = helmets;
-    } else if (type < 0.3) {
-      itemArray = shields;
-    } else if (type < 0.4) {
-      itemArray = swords;
     } else if (type < 0.5) {
-      itemArray = axes;
-    } else if (type < 0.6) {
-      itemArray = staffs;
+      itemArray = helmets;
+    } else if (type < 0.65) {
+      itemArray = swords;
     } else if (type < 0.7) {
-      itemArray = bows;
+      itemArray = shields;
+    } else if (type < 0.75) {
+      itemArray = axes;
     } else if (type < 0.8) {
-      itemArray = spells;
+      itemArray = staffs;
+    } else if (type < 0.85) {
+      itemArray = bows;
     } else if (type < 0.9) {
-      // jewelry
+      itemArray = spells;
+    } else if (type < 0.95) {
+      itemArray = arrows;
     } else {
-      // ammunition
+      itemArray = throwing;
     }
     if (itemArray === null) {
       return null;
     }
-    // TODO more rare items need to become less rare as the game progresses and
-    // actually rare at the start!
-    return itemArray[getBoundedRandom(itemArray.length, 0)];
+
+    let max = itemArray.length < this.game.level ? itemArray.length : this.game.level;
+    return itemArray[getBoundedRandom(max, 0)];
   }
 
   get isInteractable() {
