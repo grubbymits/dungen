@@ -361,6 +361,7 @@ const MAX_WILL = 50;
 const MAX_DEFENSE = 50;
 const MAX_HEALTH_INC = 15;
 const MAX_ENERGY_INC = 10;
+const MAX_HEROES = 4;
 
 const STATS = 0;
 const EQUIP = 1;

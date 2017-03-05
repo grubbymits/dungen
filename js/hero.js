@@ -119,6 +119,7 @@ class Hero extends Actor {
         this.walk.dest = this.leader.position;
         this.nextAction = this.walk;
       } else {
+        console.log("returning findTarget as nextACtion");
         this.nextAction = this.findTarget;
       }
     }

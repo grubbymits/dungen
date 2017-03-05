@@ -1,5 +1,19 @@
 "use strict";
 
+function compareRoomDistances(map, entry) {
+  return function (a, b) {
+    let distA = map.getPath(a.centre, entry.centre).length;
+    let distB = map.getPath(b.centre, entry.centre).length;
+    if (distA < distB) {
+      return -1;
+    } else if (distA > distB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
+
 class MonsterPosition {
   constructor(type, vec) {
     this.type = type;
@@ -195,32 +209,24 @@ class MapGenerator {
           if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
               (this.map.getLocationType(x + 1, y - 1) == PATH)) {
             this.reserveLoc(SIGN, loc);
-            //this.signLocs.push(loc);
-            //loc.blocked = true;
             return;
           }
         } else if (this.map.getLocationType(x - 1, y) == WALL) {
           if ((this.map.getLocationType(x - 1, y - 1) == PATH) ||
               (this.map.getLocationType(x - 1, y + 1) == PATH)) {
             this.reserveLoc(SIGN, loc);
-            //this.signLocs.push(loc);
-            //loc.blocked = true;
             return;
           }
         } else if (this.map.getLocationType(x + 1, y) == WALL) {
           if ((this.map.getLocationType(x + 1, y - 1) == PATH) ||
               (this.map.getLocationType(x + 1, y + 1) == PATH)) {
             this.reserveLoc(SIGN, loc);
-            //this.signLocs.push(loc);
-            //loc.blocked = true;
             return;
           }
         } else if (this.map.getLocationType(x, y + 1) == WALL) {
           if ((this.map.getLocationType(x - 1, y + 1) == PATH) ||
               (this.map.getLocationType(x + 1, y + 1) == PATH)) {
             this.reserveLoc(SIGN, loc);
-            //this.signLocs.push(loc);
-            //loc.blocked = true;
             return;
           }
         }
@@ -312,26 +318,22 @@ class MapGenerator {
           while (x < neighbour.centre.x) {
             this.createPath(x, y);
             x++;
-            //x += PATH_WIDTH; //= PATH_WIDTH;
           }
         } else if (current.centre.x > neighbour.centre.x) {
           while (x > neighbour.centre.x) {
             this.createPath(x, y);
             x--;
-            //x -= PATH_WIDTH;
           }
         }
         if (current.centre.y < neighbour.centre.y) {
           while (y < neighbour.centre.y) {
             this.createPath(x, y);
             y++;
-            //y += PATH_WIDTH;
           }
         } else if (current.centre.y > neighbour.centre.y) {
           while (y > neighbour.centre.y) {
             this.createPath(x, y);
             y--;
-            //y -= PATH_WIDTH;
           }
         }
       }
@@ -441,6 +443,14 @@ class MapGenerator {
     return loc;
   }
 
+  placeAlly() {
+    this.rooms.sort(compareRoomDistances(this.map, this.entryRoom));
+    let allyRoom = this.exitRoom; //this.rooms[Math.floor(this.rooms.length / 2)];
+    let loc = this.getRandomLocation(allyRoom);
+    console.log("reserving loc for ally:", loc);
+    this.reserveLoc(ALLY, loc);
+  }
+
   placeStairs() {
     // Choose the two rooms that are the furthest apart and less the entry
     // and exit stairs in them.
@@ -474,9 +484,11 @@ class MapGenerator {
     this.exitStairLoc = this.getStairLoc(exit);
     this.entryStairLoc = this.getStairLoc(entry);
     let neighbours = this.map.getNeighbours(this.entryStairLoc.vec);
-    if (!neighbours.length)
-      throw("no free neighbours next to stairs");
-    else {
+    if (neighbours.length < this.numPlayers) {
+      for (let i = 0; i < this.numPlayers - neighbours.length; ++i) {
+        neighbours.push(this.getRandomLocation(this.entryRoom).vec);
+      }
+    } else {
       this.entryVecs = [];
       for (let i = 0; i < this.numPlayers; ++i) {
         this.entryVecs.push(neighbours[i]);
@@ -484,9 +496,9 @@ class MapGenerator {
                                      true);
       }
     }
-    let loc = this.getRandomLocation(entry);
-    console.log("reserving loc for ally:", loc);
-    this.reserveLoc(ALLY, loc);
+    if (this.numPlayers < MAX_HEROES) {
+      this.placeAlly();
+    }
   }
 }
 

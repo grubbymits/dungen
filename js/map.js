@@ -62,7 +62,6 @@ class Location {
     // once visible, it can't become hidden or partial
     if (this.visible != VISIBLE) {
       this.visible = visible;
-      //this.dirty = true;
     }
   }
   get isVisible() {
@@ -88,9 +87,9 @@ class GameMap {
     this.yMax = height / TILE_SIZE;
 
     this.shadow = new Set();
-    this.newVisible = [];
-    this.newPartialVisible = [];
-    this.newDirty = [];
+    this.newVisible = new Set();
+    this.newPartialVisible = new Set();
+    this.newDirty = new Set();
     this.locations = [];
     for (let x = 0; x < this.xMax; x++) {
       this.locations[x] = [];
@@ -155,9 +154,8 @@ class GameMap {
     let loc = this.locations[vec.x][vec.y];
     loc.entity = null;
     loc.blocked = false;
-    //this.locations[vec.x][vec.y].dirty = true;
     if (loc.isVisible) {
-      this.newDirty.push(vec);
+      this.newDirty.add(vec);
     }
   }
 
@@ -178,7 +176,7 @@ class GameMap {
 
     //this.locations[pos.x][pos.y].dirty = true;
     if (loc.isVisible) {
-      this.newDirty.push(vec);
+      this.newDirty.add(vec);
     }
   }
 
@@ -192,8 +190,7 @@ class GameMap {
 
   setDirty(vec) {
     if (!this.isOutOfRange(vec.x, vec.y)) {
-      //this.locations[vec.x][vec.y].dirty = true;
-      this.newDirty.push(vec);
+      this.newDirty.add(vec);
     }
   }
 
@@ -257,12 +254,19 @@ class GameMap {
       }
     }
   }
+
+  addVisible(loc) {
+    loc.visibility = VISIBLE;
+    this.newVisible.add(loc.vec);
+    if (this.newPartialVisible.has(loc.vec)) {
+      this.newPartialVisible.delete(loc.vec);
+    }
+  }
   
   calcVisibilityForOctant(startX, startY, maxDistance, octant) {
     for (let row = 1; row < maxDistance; ++row) {
       for (let col = 0; col <= row; ++col) {
         let vec = getOctantVec(startX, startY, col, row, octant);
-        //let y = startY + (row * dy);
         let x = vec.x;
         let y = vec.y;
         if (this.isOutOfRange(x, y)) {
@@ -274,8 +278,7 @@ class GameMap {
 
         let loc = this.locations[x][y];
         if (!loc.isVisible) {
-          loc.visibility = VISIBLE;
-          this.newVisible.push(vec);
+          this.addVisible(loc);
         }
 
         if (loc.isWallOrCeiling) {
@@ -292,8 +295,7 @@ class GameMap {
       for (let y = -1; y < 2; ++y) {
         let loc = this.locations[start.x + x][start.y + y]; //.visibility = VISIBLE;
         if (!loc.isVisible) {
-          this.newVisible.push(loc.vec);
-          loc.visibility = VISIBLE;
+          this.addVisible(loc);
         }
 
         if (0 === x && 0 === y) {
@@ -311,7 +313,7 @@ class GameMap {
         let loc = this.locations[x][y];
         if (loc.isHidden) {
           this.locations[x][y].visibility = PARTIALLY_VISIBLE;
-          this.newPartialVisible.push(loc.vec);
+          this.newPartialVisible.add(loc.vec);
         }
       }
     }

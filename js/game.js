@@ -52,7 +52,7 @@ class Game {
       throw("entryVecs not populated");
     }
     let character = this.createHero(this.mapGenerator.entryVecs[0], playerType, false);
-    this.theMap.addVisibleTiles(character.pos, character.vision);
+    //this.theMap.addVisibleTiles(character.pos, character.vision);
     this.player.init(character);
     this.loading = false;
     this.renderMap();
@@ -83,7 +83,7 @@ class Game {
       hero.reset();
       hero.pos = this.mapGenerator.entryVecs.pop();
       this.theMap.placeEntity(hero.pos, hero);
-      this.theMap.addVisibleTiles(hero.pos, hero.vision);
+      //this.theMap.addVisibleTiles(hero.pos, hero.vision);
       this.actors.push(hero);
     }
     this.player.UI.centreCamera();
@@ -91,7 +91,6 @@ class Game {
     this.renderMap();
     this.clearOverlay();
     this.renderChanges();
-    //this.play();
     this.loading = false;
   }
 
@@ -200,29 +199,29 @@ class Game {
   }
 
   renderChanges() {
-    while (this.theMap.newVisible.length > 0) {
-      let vec = this.theMap.newVisible.pop();
+    for (let vec of this.theMap.newVisible.values()) {
       this.overlayContext.clearRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
                                     TILE_SIZE, TILE_SIZE);
     }
+    this.theMap.newVisible.clear();
 
     this.overlayContext.globalAlpha = 0.5;
     this.overlayContext.fillStyle = '#000000';
-    while (this.theMap.newPartialVisible.length > 0) {
-      let vec = this.theMap.newPartialVisible.pop();
+    for (let vec of this.theMap.newPartialVisible.values()) {
       this.overlayContext.clearRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
                                     TILE_SIZE, TILE_SIZE);
       this.overlayContext.fillRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
                                    TILE_SIZE, TILE_SIZE);
     }
+    this.theMap.newPartialVisible.clear();
     this.overlayContext.globalAlpha = 1.0;
 
-    while (this.theMap.newDirty.length > 0) {
-      let vec = this.theMap.newDirty.pop();
+    for (let vec of this.theMap.newDirty.values()) {
       this.overlayContext.clearRect(vec.x * TILE_SIZE,
                                     vec.y * TILE_SIZE,
                                     TILE_SIZE, TILE_SIZE);
     }
+    this.theMap.newDirty.clear();
   }
  
   renderEntities() {
@@ -383,10 +382,35 @@ class Game {
   }
 
   removeEntity(entity) {
+    // TODO Having a single array for actors is only used because its
+    // the way of stepping through actors in the game loop. The hero
+    // and monster arrays are generally used but then we have duplicate
+    // references. And maybe more useful to use a set for these.
     console.log("remove entity:", entity);
     if (entity.kind == MONSTER) {
       ++this.monstersKilled;
       this.expGained += entity.exp;
+      for (let i in this.monsters) {
+        let monster = this.monsters[i];
+        if (monster == entity) {
+          this.monsters.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    if (entity.kind == HERO) {
+      if (this.heroes.length == 1) {
+        // GAME OVER
+      } else {
+        for (let i in this.heroes) {
+          let hero = this.heroes[i];
+          if (hero == entity) {
+            this.heroes.splice(i, 1);
+            break;
+          }
+        }
+      }
     }
 
     let entities;

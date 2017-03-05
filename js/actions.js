@@ -367,17 +367,13 @@ class CalcVisibility extends Action {
   
   isVisible(target) {
     let targetLoc = this.map.vecToLoc(target.pos);
-    for (let visible of this.visible) {
-      if (visible == targetLoc) {
-        return true;
-      }
-    }
-    return false;
+    return this.visible.has(targetLoc);
   }
   
   perform() {
     this.shadow.clear();
     this.visible.clear();
+    this.start = this.actor.pos;
     
     for (let octant = 0; octant < 8; ++octant) {
       for (let row = 1; row < this.range; ++row) {
@@ -420,10 +416,10 @@ class FindTarget extends Action {
     this.range = this.actor.vision;
     let visibleTargets = [];
     
-    if (pos.x != this.prevPos.x || pos.y != this.prevPos.y) {
+    //if (pos.x != this.prevPos.x || pos.y != this.prevPos.y) {
       this.calcVisibility.perform();
       this.prevPos = pos;
-    }
+    //}
     
     for (let target of this.targetGroup) {
       //if (target.pos.getCost(this.actor.pos) > this.range) {
@@ -435,6 +431,7 @@ class FindTarget extends Action {
     }
     
     if (visibleTargets.length !== 0) {
+      console.log("visible targets!", visibleTargets);
       let finalTarget = visibleTargets[0];
       let smallestCost = finalTarget.pos.getCost(this.actor.pos);
       

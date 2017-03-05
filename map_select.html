@@ -10,59 +10,46 @@
 </head>
 <body bgcolor="#204631">
   <div class="container">
+    <div class="row"></div>
     <div class="row">
-      <ul class="collapsible" data-collapsible="accordion">
-        <li>
-          <div class="collapsible-header" style="background-color: #aec440">
-            <i class="material-icons">nature</i>Old City
-          </div>
-          <div class="collapsible-body" style="background-color: #527f39">
-            <p>Travel through the old town which has been buried and reclaimed by nature.
-              <a href='#' onclick="loadOldCity()">Go!</a>
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header" style="background-color: #aec440"> 
-            <i class="material-icons">pool</i>Sewers
-          </div>
-          <div class="collapsible-body" style="background-color: #527f39">
-            <p>Take passage through the sewers of the city.
-              <a href='#' onclick="loadSewers()">Go!</a>
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header" style="background-color: #aec440">
-            <i class="material-icons">vpn_key</i>Dungeons
-            </div>
-          <div class="collapsible-body" style="background-color: #527f39">
-            <p>Explore the citys dungeons.
-              <a href='#' onclick="loadDungeons()">Go!</a>
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header" style="background-color: #aec440">
-            <i class="material-icons">brightness_3</i>Catacombs
-          </div>
-          <div class="collapsible-body" style="background-color: #527f39">
-            <p>Discover what lurks down in the catacombs.
-              <a href='#' onclick="loadCatacombs()">Go!</a>
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header" style="background-color: #aec440">
-            <i class="material-icons">flash_on</i>Sorcerer's Lair
-          </div>
-          <div class="collapsible-body" style="background-color: #527f39">
-            <p>Battle your way through the summoned monsters.
-              <a href='#' onclick="loadLair()">Go!</a>
-            </p>
-          </div>
-        </li>
-      </ul>
+      <div class="col push-l3 push-m3 l6 m6 s12">
+        <a class="waves-effect waves-light btn-large"
+           style="background-color: #aec440; width: 100%" onclick="loadOldCity()">
+           Old City
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col push-l3 push-m3 l6 m6 s12">
+        <a class="waves-effect waves-light btn-large"
+           style="background-color: #aec440; width: 100%" onclick="loadSewers()">
+           Sewers
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col push-l3 push-m3 l6 m6 s12">
+        <a class="waves-effect waves-light btn-large"
+           style="background-color: #aec440; width: 100%" onclick="loadDungeons()">
+           Dungeons
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col push-l3 push-m3 l6 m6 s12">
+        <a class="waves-effect waves-light dungen-btn btn-large"
+           style="background-color: #aec440; width: 100%" onclick="loadCatacombs()">
+           Catacombs
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col push-l3 push-m3 l6 m6 s12">
+        <a class="waves-effect waves-light dungen-btn btn-large"
+           style="background-color: #aec440; width: 100%" onclick="loadLair()">
+           Evils Lair
+        </a>
+      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
