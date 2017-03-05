@@ -14,6 +14,20 @@ function compareRoomDistances(map, entry) {
   }
 }
 
+function createGenerator(mapType, width, height) {
+  if (mapType == OLD_CITY) {
+    return new OldCityGenerator(width, height);
+  } else if (mapType == SEWER) {
+    return new SewerGenerator(width, height);
+  } else if (mapType == DUNGEON) {
+    return new DungeonGenerator(width, height);
+  } else if (mapType == CATACOMBS) {
+    return new CatacombsGenerator(width, height);
+  } else {
+    return new SorcerersLairGenerator(width, height);
+  }
+}
+
 class MonsterPosition {
   constructor(type, vec) {
     this.type = type;
@@ -480,9 +494,9 @@ class MapGenerator {
       throw("exit room is still null!");
 
     this.entryRoom = entry;
-    this.exitRoom = exit;
-    this.exitStairLoc = this.getStairLoc(exit);
-    this.entryStairLoc = this.getStairLoc(entry);
+    this.exitRoom = entry;
+    this.exitStairLoc = this.getStairLoc(this.exitRoom);
+    this.entryStairLoc = this.getStairLoc(this.entryRoom);
     let neighbours = this.map.getNeighbours(this.entryStairLoc.vec);
     if (neighbours.length < this.numPlayers) {
       for (let i = 0; i < this.numPlayers - neighbours.length; ++i) {
