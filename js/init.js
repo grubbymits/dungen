@@ -55,13 +55,14 @@ window.onload = function begin() {
                          mapCanvas.height);
   var UI = new Interface(theGame);
   var player = new Player(theGame, UI);
+  UI.init(player);
 
   var searchString = window.location.search.substring(1);
   var variableArray = searchString.split('&');
   var playerString = variableArray[0].split('=')[1];
 
   if (playerString == 'continue') {
-    theGame.loadGame();
+    theGame.loadGame(player);
   } else {
     let playerType = getPlayerType(playerString);
     let mapString = variableArray[1].split('=')[1];
@@ -70,7 +71,6 @@ window.onload = function begin() {
     theGame.init(player, playerType, mapType);
   }
 
-  UI.init(player);
   UI.centreCamera();
 
   function *generator() {
