@@ -15,6 +15,7 @@ function compareRoomDistances(map, entry) {
 }
 
 function createGenerator(mapType, width, height) {
+  console.log("create map generator", width, height);
   if (mapType == OLD_CITY) {
     return new OldCityGenerator(width, height);
   } else if (mapType == SEWER) {

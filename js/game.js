@@ -52,7 +52,25 @@ class Game {
     localStorage.setItem("numHeroes", this.heroes.length);
     for (let i in this.heroes) {
       let hero = this.heroes[i];
-      localStorage.setItem("hero" + i, JSON.stringify(hero));
+      localStorage.setItem("hero" + i, JSON.stringify({
+        className : hero.className,
+        subtype : hero.subtype,
+        health : hero.maxHealth,
+        energy : hero.maxEnergy,
+        strength : hero.strength,
+        agility : hero.agility,
+        wisdom : hero.wisdom,
+        will : hero.will,
+        endurance : hero.endurance,
+        vision : hero.vision,
+        primaryType : hero.primary.type,
+        primarySubtype : hero.primary.subtype,
+        secondaryType : hero.secondary.type,
+        secondarySubtype : hero.secondary.subtype,
+        armourType : hero.equipArmour.type,
+        armourSubtype : hero.equipArmour.subtype,
+        helmetType : hero.equipHelmet.type,
+        helmetSubtype : hero.equipHelmet.subtype }));  
     }
   }
 
@@ -71,31 +89,61 @@ class Game {
     player.potions = JSON.parse(localStorage.getItem("potions"));
     player.treasure = JSON.parse(localStorage.getItem("treasure"));
     */
+    console.log("loading game");
     this.loading = true;
     this.player = player;
     this.level = localStorage.getItem("level");
     let mapType = localStorage.getItem("mapType");
+    let numHeroes = localStorage.getItem("numHeroes");
     this.mapGenerator = createGenerator(mapType, this.width, this.height);
     this.setupMap(numHeroes);
+    if (this.mapGenerator.entryVecs.length === 0) {
+      throw("entryVecs not populated");
+    }
 
-    for (let i = 0; i < localStorage.getItem("numHeroes"); ++i) {
-      let stats = localStorage.getItem("hero" + i);
-      var hero = new Hero(stats.health,
-                          stats.energy,
-                          stats.strength,
-                          stats.agility,
-                          stats.wisdom,
-                          stats.will,
-                          stats.endurance,
-                          stats.vision,
-                          this.mapGenerator.entryVecs[i],
-                          stats.subtype,
-                          this);
-      hero.className = stats.className;
+    console.log("numHeroes:", numHeroes);
+
+    for (let i = 0; i < numHeroes; ++i) {
+      let stats = JSON.parse(localStorage.getItem("hero" + i));
+      console.log("hero stats:", stats);
+
+      let pos = this.mapGenerator.entryVecs[i];
+      let isFollowing = i == 0 ? false : true;
+      let hero = this.createHero(pos, stats.subtype, isFollowing);
+
+      hero.maxHealth = stats.health;
+      hero.maxEnergy = stats.energy;
+      hero.strength = stats.strength;
+      hero.agility = stats.agility;
+      hero.wisdom = stats.wisdom;
+      hero.will = stats.will;
+      hero.endurance = stats.endurance;
+      hero.vision = stats.vision;
+
+      if (stats.primaryType == SWORD) {
+        hero.equipPrimary = swords[stats.primarySubtype];
+      } else if (stats.primaryType == BOW) {
+        hero.equipPrimary = bows[stats.primarySubtype];
+      } else if (stats.primaryType == STAFF) {
+        hero.equipPrimary = staffs[stats.primarySubtype];
+      } else {
+        throw("unhandled primary type");
+      }
+      if (stats.secondaryType == SHIELD) {
+        hero.equipSecondary = shields[stats.secondarySubtype];
+      } else if (stats.secondaryType == ARROWS) {
+        hero.equipSecondary = arrows[stats.secondarySubtype];
+      } else if (stats.secondaryType == THROWING) {
+        hero.equipSecondary = throwing[stats.secondarySubtype];
+      } else if (stats.secondaryType == SPELL) {
+        hero.equipSecondary = spells[stats.secondarySubtype];
+      } else {
+        throw("unhandled secondary type");
+      }
+      hero.equipArmour = armours[stats.armourSubtype];
+      hero.equipHelmet = helmets[stats.helmetSubtype];
       if (i == 0) {
         this.player.init(hero);
-      } else {
-        this.player.addHero(hero);
       }
     }
     this.loading = false;

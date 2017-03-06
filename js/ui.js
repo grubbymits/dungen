@@ -200,6 +200,7 @@ class Interface {
   }
 
   drawEquipment(hero) {
+    console.log("drawEquipment for:", hero);
     // Draw hero icon and the current equipment
     let primaryPos = "-" + hero.primary.sprite.offsetX + "px -"
       + hero.primary.sprite.offsetY + "px";
