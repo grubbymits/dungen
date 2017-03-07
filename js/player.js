@@ -23,8 +23,11 @@ class Player {
     for (let hero of this.heroes) {
       let text = hero.name + " gains " + exp + "xp";
       this.game.addTextEvent(text);
+      this.game.add
       if (hero.increaseExp(exp)) {
         this.UI.levelUp(hero);
+      } else {
+        this.UI.updateStats(exp);
       }
     }
   }
