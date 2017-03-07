@@ -157,9 +157,7 @@ class LevelUpEvent {
 class Interface {
   constructor(game) {
     //this.keysDown = {};
-    this.game = game; //player.game;
-    //this.player = player;
-    //this.player.addUI(this);
+    this.game = game;
     this.events = [];
     this.LvlUpEvents = [];
 
@@ -221,7 +219,10 @@ class Interface {
     let text = "";
     // Populate hero stats
     if (writeAll) {
-      text = "  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
+      text = "  Level: " + hero.level + "\n" +
+             "  Exp: " + hero.currentExp + "\n" +
+             "  Exp to next level: " + hero.expToNextLvl + "\n" +
+             "  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
              "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
              "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
              "  Attack: " + hero.primaryAtkPower + "\n" +
@@ -422,6 +423,9 @@ class Interface {
   levelUp(hero) {
     this.events.push(new TextEvent(hero.name + " lvl up!"));
     this.LvlUpEvents.push(new LevelUpEvent(this, hero));
+  }
+
+  updateStats(hero) {
   }
 
   getItems(type) {

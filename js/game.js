@@ -53,8 +53,10 @@ class Game {
     for (let i in this.heroes) {
       let hero = this.heroes[i];
       localStorage.setItem("hero" + i, JSON.stringify({
-        className : hero.className,
         subtype : hero.subtype,
+        level : hero.level,
+        exp : hero.currentExp,
+        expToNext : hero.expToNextLvl,
         health : hero.maxHealth,
         energy : hero.maxEnergy,
         strength : hero.strength,
@@ -111,6 +113,9 @@ class Game {
       let isFollowing = i == 0 ? false : true;
       let hero = this.createHero(pos, stats.subtype, isFollowing);
 
+      hero.level = stats.level;
+      hero.currentExp = stats.exp;
+      hero.expToNextLevel = stats.expToNext;
       hero.maxHealth = stats.health;
       hero.maxEnergy = stats.energy;
       hero.strength = stats.strength;
