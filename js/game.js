@@ -32,23 +32,29 @@ class Game {
     return this.loading;
   }
 
+  saveItems(itemMap, name) {
+    let itemArray = [];
+    for (let [key, value] of itemMap) {
+      itemArray.push({ subtype: key.subtype, amount: value });
+    }
+    localStorage.setItem(name, JSON.stringify(itemArray));
+  }
+
   saveGame() {
     localStorage.setItem("mapType", this.mapGenerator.type);
     localStorage.setItem("level", this.level);
-    /*
-    localStorage.setItem("shields", JSON.stringify(this.player.shields));
-    localStorage.setItem("helmets", JSON.stringify(this.player.helmets));
-    localStorage.setItem("armours", JSON.stringify(this.player.armours));
-    localStorage.setItem("swords", JSON.stringify(this.player.swords));
-    localStorage.setItem("staffs", JSON.stringify(this.player.staffs));
-    localStorage.setItem("axes", JSON.stringify(this.player.axes));
-    localStorage.setItem("bows", JSON.stringify(this.player.bows));
-    localStorage.setItem("arrows", JSON.stringify(this.player.arrows));
-    localStorage.setItem("throwing", JSON.stringify(this.player.throwing));
-    localStorage.setItem("spells", JSON.stringify(this.player.spells));
-    localStorage.setItem("potions", JSON.stringify(this.player.potions));
-    localStorage.setItem("treasure", JSON.stringify(this.player.treasure));
-    */
+
+    this.saveItems(this.player.helmets, "helmets");
+    this.saveItems(this.player.armours, "armours");
+    this.saveItems(this.player.swords, "swords");
+    this.saveItems(this.player.staffs, "staffs");
+    this.saveItems(this.player.bows, "bows");
+    this.saveItems(this.player.axes, "axes");
+    this.saveItems(this.player.throwing, "throwing");
+    this.saveItems(this.player.arrows, "arrows");
+    this.saveItems(this.player.shields, "shields");
+    this.saveItems(this.player.spells, "spells");
+
     localStorage.setItem("numHeroes", this.heroes.length);
     for (let i in this.heroes) {
       let hero = this.heroes[i];
@@ -76,21 +82,18 @@ class Game {
     }
   }
 
+  loadItems(itemMap, name, itemArray) {
+    console.log("load items");
+    let items = JSON.parse(localStorage.getItem(name));
+    console.log(items);
+    for (let item of items) {
+      let newItem = itemArray[item.subtype];
+      console.log("loading item, subtype:", item.subtype, newItem);
+      itemMap.set(newItem, item.amount);
+    }
+  }
+
   loadGame(player) {
-    /*
-    player.shields = JSON.parse(localStorage.getItem("shields"));
-    player.helmets = JSON.parse(localStorage.getItem("helmets"));
-    player.armours = JSON.parse(localStorage.getItem("armours"));
-    player.swords = JSON.parse(localStorage.getItem("swords"));
-    player.staffs = JSON.parse(localStorage.getItem("staffs"));
-    player.axes = JSON.parse(localStorage.getItem("axes"));
-    player.bows = JSON.parse(localStorage.getItem("bows"));
-    player.arrows = JSON.parse(localStorage.getItem("arrows"));
-    player.throwing = JSON.parse(localStorage.getItem("throwing"));
-    player.spells = JSON.parse(localStorage.getItem("spells"));
-    player.potions = JSON.parse(localStorage.getItem("potions"));
-    player.treasure = JSON.parse(localStorage.getItem("treasure"));
-    */
     console.log("loading game");
     this.loading = true;
     this.player = player;
@@ -102,6 +105,17 @@ class Game {
     if (this.mapGenerator.entryVecs.length === 0) {
       throw("entryVecs not populated");
     }
+
+    this.loadItems(this.player.armours, "armours", armours);
+    this.loadItems(this.player.helmets, "helmets", helmets);
+    this.loadItems(this.player.swords, "swords", swords);
+    this.loadItems(this.player.staffs, "staffs", staffs);
+    this.loadItems(this.player.bows, "bows", bows);
+    this.loadItems(this.player.axes, "axes", axes);
+    this.loadItems(this.player.throwing, "throwing", throwing);
+    this.loadItems(this.player.arrows, "arrows", arrows);
+    this.loadItems(this.player.shields, "shields", shields);
+    this.loadItems(this.player.spells, "spells", spells);
 
     console.log("numHeroes:", numHeroes);
 
