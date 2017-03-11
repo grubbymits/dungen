@@ -26,7 +26,7 @@ class Player {
       if (hero.increaseExp(exp)) {
         this.UI.levelUp(hero);
       } else {
-        this.UI.updateStats(exp);
+        this.UI.updateStats(hero);
       }
     }
   }

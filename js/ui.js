@@ -221,7 +221,7 @@ class Interface {
     if (writeAll) {
       text = "  Level: " + hero.level + "\n" +
              "  Exp: " + hero.currentExp + "\n" +
-             "  Exp to next level: " + hero.expToNextLvl + "\n" +
+             "  Exp to next level: " + (hero.expToNextLvl - hero.currentExp) + "\n" +
              "  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
              "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
              "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
@@ -426,6 +426,7 @@ class Interface {
   }
 
   updateStats(hero) {
+    this.drawStats(hero, '#stats', true);
   }
 
   getItems(type) {
