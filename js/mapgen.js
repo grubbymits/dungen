@@ -485,7 +485,7 @@ class MapGenerator {
       throw("exit room is still null!");
 
     this.entryRoom = entry;
-    this.exitRoom = entry;
+    this.exitRoom = exit;
     this.exitStairLoc = this.getStairLoc(this.exitRoom);
     this.entryStairLoc = this.getStairLoc(this.entryRoom);
     let neighbours = this.map.getNeighbours(this.entryStairLoc.vec);

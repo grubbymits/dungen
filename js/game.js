@@ -172,9 +172,7 @@ class Game {
     let character = this.createHero(this.mapGenerator.entryVecs[0], playerType, false);
     this.player.init(character);
     this.loading = false;
-    this.renderer = new Renderer(this.context, this.overlayContext, this.map,
-                                 this.actors, this.objects);
-    this.renderer.renderMap(this.mapGenerator.symbolLocs);
+    this.renderBegin();
   }
 
   loadNextMap() {
@@ -207,6 +205,7 @@ class Game {
     this.player.UI.centreCamera();
 
     this.loading = false;
+    this.renderBegin();
   }
 
   setupMap(numHeroes) {
@@ -483,6 +482,15 @@ class Game {
   play() {
     this.isRunning = true;
     this.audio.playMusic();
+  }
+
+  renderBegin() {
+    this.renderer = new Renderer(this.context, this.overlayContext, this.map,
+                                 this.actors, this.objects);
+    this.renderer.renderMap(this.mapGenerator.symbolLocs);
+    this.renderer.clearOverlay();
+    this.renderer.renderChanges();
+    this.renderer.renderEntities(this.player.currentHero);
   }
 
   render() {
