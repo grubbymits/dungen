@@ -166,7 +166,7 @@ class Game {
       }
     }
     this.loading = false;
-    this.renderMap();
+    //this.renderMap();
   }
 
   init(player, playerType, mapType) {
@@ -181,7 +181,9 @@ class Game {
     let character = this.createHero(this.mapGenerator.entryVecs[0], playerType, false);
     this.player.init(character);
     this.loading = false;
-    this.renderMap();
+    this.renderer = new Renderer(this.context, this.overlayContext, this.map,
+                                 this.actors, this.objects);
+    this.renderer.renderMap(this.mapGenerator.symbolLocs);
   }
 
   loadNextMap() {
@@ -215,9 +217,9 @@ class Game {
     }
     this.player.UI.centreCamera();
 
-    this.renderMap();
-    this.clearOverlay();
-    this.renderChanges();
+    //this.renderMap();
+    //this.clearOverlay();
+    //this.renderChanges();
     this.loading = false;
   }
 
@@ -281,100 +283,6 @@ class Game {
     ++this.level;
   }
   
-  renderMap() {
-    // draw everything
-    this.context.fillStyle = '#000000';
-    this.context.fillRect(0, 0,
-                          this.theMap.width * TILE_SIZE * UPSCALE_FACTOR,
-                          this.theMap.height * TILE_SIZE * UPSCALE_FACTOR);
-    for (var x = 0; x < this.theMap.width; x++) {
-      for (var y = 0; y < this.theMap.height; y++) {
-        let type = this.theMap.getLocationType(x,y);
-        if (type != CEILING) {
-          let spriteIdx = this.theMap.getLocationSprite(x, y);
-          tileSprites[spriteIdx].render(x * TILE_SIZE, y * TILE_SIZE,
-                                        this.context);
-        }
-      }
-    }
-    for (let loc of this.mapGenerator.symbolLocs) {
-      let spriteIdx = 0;
-      if (Math.random() < 0.16) {
-        spriteIdx = 0;
-      } else if (Math.random() < 0.33) {
-        spriteIdx = 1;
-      } else if (Math.random() < 0.5) {
-        spriteIdx = 2;
-      } else if (Math.random() < 0.66) {
-        spriteIdx = 3;
-      } else if (Math.random() < 0.73) {
-        spriteIdx = 4;
-      } else if (Math.random() < 0.73) {
-        spriteIdx = 5;
-      }
-      let sprite = symbolSprites[spriteIdx];
-      sprite.render(loc.vec.x * TILE_SIZE, loc.vec.y * TILE_SIZE,
-                    this.context);
-    }
-  }
-
-  clearOverlay() {
-    this.overlayContext.fillStyle = '#000000';
-    this.overlayContext.fillRect(0, 0,
-                                 this.theMap.width * TILE_SIZE,
-                                 this.theMap.height * TILE_SIZE);
-  }
-
-  renderChanges() {
-    for (let vec of this.theMap.newVisible.values()) {
-      this.overlayContext.clearRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
-                                    TILE_SIZE, TILE_SIZE);
-    }
-    this.theMap.newVisible.clear();
-
-    this.overlayContext.globalAlpha = 0.5;
-    this.overlayContext.fillStyle = '#000000';
-    for (let vec of this.theMap.newPartialVisible.values()) {
-      this.overlayContext.clearRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
-                                    TILE_SIZE, TILE_SIZE);
-      this.overlayContext.fillRect(vec.x * TILE_SIZE, vec.y * TILE_SIZE,
-                                   TILE_SIZE, TILE_SIZE);
-    }
-    this.theMap.newPartialVisible.clear();
-    this.overlayContext.globalAlpha = 1.0;
-
-    for (let vec of this.theMap.newDirty.values()) {
-      this.overlayContext.clearRect(vec.x * TILE_SIZE,
-                                    vec.y * TILE_SIZE,
-                                    TILE_SIZE, TILE_SIZE);
-    }
-    this.theMap.newDirty.clear();
-  }
- 
-  renderEntities() {
-    for (let actor of this.actors) {
-      let loc = this.theMap.getLocation(actor.pos.x, actor.pos.y);
-
-      if (loc.isVisible) {
-        if (actor.kind == HERO) {
-          this.overlayContext.clearRect(actor.drawX, actor.drawY,
-                                        TILE_SIZE, TILE_SIZE);
-          if (actor == this.player.currentHero) {
-            currentActorSprite.render(actor.drawX, actor.drawY,
-                                      this.overlayContext);
-          }
-        }
-        actor.render();
-      }
-    }
-    for (let object of this.objects) {
-      let loc = this.theMap.getLocation(object.pos.x, object.pos.y);
-      if (loc.isVisible) {
-        object.render();
-      }
-    }
-  }
-
   addTextEvent(string) {
     this.player.UI.addEvent(new TextEvent(string));
   }
@@ -582,6 +490,14 @@ class Game {
     }
   }
 
+  openChest() {
+    ++this.openChests;
+  }
+  
+  get map() {
+    return this.theMap;
+  }
+
   update() {
     for (let entity of this.entitiesToRemove) {
       this.removeEntity(entity);
@@ -594,14 +510,6 @@ class Game {
     this.entitiesToRemove = [];
     this.entitiesToCreate = [];
   }
-  
-  openChest() {
-    ++this.openChests;
-  }
-  
-  get map() {
-    return this.theMap;
-  }
 
   pause() {
     this.isRunning = false;
@@ -611,5 +519,10 @@ class Game {
   play() {
     this.isRunning = true;
     this.audio.playMusic();
+  }
+
+  render() {
+    this.renderer.renderChanges();
+    this.renderer.renderEntities(this.player.currentHero);
   }
 }
