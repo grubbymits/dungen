@@ -89,12 +89,13 @@ window.onload = function begin() {
       }
 
         
-      while(action) {
+      while(action && (Date.now() >= actor.nextUpdate)) {
         action = action.perform();
         yield true;
         updateActor = true;
       }
       if (updateActor) {
+        actor.lastPerformed = Date.now();
         actorIdx = (actorIdx + 1) % theGame.actors.length;
       }
 
@@ -115,17 +116,14 @@ window.onload = function begin() {
         theGame.play();
       }
       theGame.render();
-      // set a maximum game rate
-      if (new Date().getTime() >= theGame.nextGameTick) {
-        theGame.nextGameTick = new Date().getTime() + theGame.skipTicks;
-        updater.next();
-        theGame.update();
-        UI.renderInfo();
-      }
+      UI.renderInfo();
+      updater.next();
+      theGame.update();
     }
-    //window.requestAnimationFrame(run);
+    window.requestAnimationFrame(run);
   };
   $('#load_bar').hide();
   //theGame.renderMap();
-  window.setInterval(run, 33);
+  window.requestAnimationFrame(run);
+  //window.setInterval(run, 33);
 };

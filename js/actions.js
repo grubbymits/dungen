@@ -94,7 +94,8 @@ class WalkAction extends Action {
     this.currentPath.shift();
     this.map.removeEntity(pos);
     this.map.placeEntity(next, this.actor);
-    this.actor.pos = next;
+    this.game.addAnimationEvent(this.actor, pos, next);
+    //this.actor.pos = next;
     this.actor.useEnergy(energyRequired);
     if (this.currentPath.length === 0 && this.actor.nextAction == this) {
       this.actor.nextAction = null;

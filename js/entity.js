@@ -11,12 +11,6 @@ class Entity {
     this.isStatic = true;
   }
 
-  render() {
-    this.sprite.render(this.drawX,
-                       this.drawY,
-                       this.game.overlayContext);
-  }
-
   get pos() {
     return this.position;
   }

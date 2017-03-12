@@ -46,9 +46,7 @@ class Monster extends Actor {
     return 0;
   }
   reduceHealth(enemy, damage) {
-    console.log("dealing", damage, "to", ENEMY_NAMES[this.index]);
     this.currentHealth -= damage;
-    console.log(ENEMY_NAMES[this.index],"health now:", this.currentHealth);
     this.setAttack(enemy);
     this.currentSprite = this.damageSprite;
     // set dirty so the health bar is redrawn

@@ -1,3 +1,5 @@
+"use strict";
+
 class Renderer {
   constructor(context, overlayContext, map, actors, objects) {
     this.context = context;
@@ -82,21 +84,23 @@ class Renderer {
       let loc = this.map.getLocation(actor.pos.x, actor.pos.y);
 
       if (loc.isVisible) {
+        this.overlayContext.clearRect(actor.drawX, actor.drawY,
+                                      TILE_SIZE, TILE_SIZE);
         if (actor.kind == HERO) {
-          //this.overlayContext.clearRect(actor.drawX, actor.drawY,
-            //                            TILE_SIZE, TILE_SIZE);
           if (actor == currentHero) {
             currentActorIdentifier.render(actor.drawX, actor.drawY,
                                           this.overlayContext);
           }
         }
-        actor.render();
+        actor.currentSprite.render(actor.drawX, actor.drawY,
+                                   this.overlayContext);
       }
     }
     for (let object of this.objects) {
       let loc = this.map.getLocation(object.pos.x, object.pos.y);
       if (loc.isVisible) {
-        object.render();
+        object.sprite.render(object.drawX, object.drawY,
+                             this.overlayContext);
       }
     }
   }

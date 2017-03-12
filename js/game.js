@@ -2,7 +2,6 @@
 
 class Game {
   constructor(context, overlayContext, width, height) {
-    console.log("Game.constructor");
     this.actors = [];
     this.heroes = [];
     this.monsters = [];
@@ -20,8 +19,8 @@ class Game {
     this.level = 1;
     this.isRunning = false;
     this.loading = false;
-    this.skipTicks = 1000 / 60;
-    this.nextGameTick = (new Date()).getTime();
+    this.skipTicks = 1000/ 30;
+    this.nextGameTick = Date.now(); //(new Date()).getTime();
     this.theMap = null; //new GameMap(width, height, this);
     this.width = width;
     this.height = height;
@@ -83,18 +82,14 @@ class Game {
   }
 
   loadItems(itemMap, name, itemArray) {
-    console.log("load items");
     let items = JSON.parse(localStorage.getItem(name));
-    console.log(items);
     for (let item of items) {
       let newItem = itemArray[item.subtype];
-      console.log("loading item, subtype:", item.subtype, newItem);
       itemMap.set(newItem, item.amount);
     }
   }
 
   loadGame(player) {
-    console.log("loading game");
     this.loading = true;
     this.player = player;
     this.level = localStorage.getItem("level");
@@ -117,12 +112,8 @@ class Game {
     this.loadItems(this.player.shields, "shields", shields);
     this.loadItems(this.player.spells, "spells", spells);
 
-    console.log("numHeroes:", numHeroes);
-
     for (let i = 0; i < numHeroes; ++i) {
       let stats = JSON.parse(localStorage.getItem("hero" + i));
-      console.log("hero stats:", stats);
-
       let pos = this.mapGenerator.entryVecs[i];
       let isFollowing = i == 0 ? false : true;
       let hero = this.createHero(pos, stats.subtype, isFollowing);
@@ -187,7 +178,6 @@ class Game {
   }
 
   loadNextMap() {
-    console.log("loadNextMap");
     this.saveGame();
     this.loading = true;
     this.pause();
@@ -212,14 +202,10 @@ class Game {
       hero.reset();
       hero.pos = this.mapGenerator.entryVecs.pop();
       this.theMap.placeEntity(hero.pos, hero);
-      //this.theMap.addVisibleTiles(hero.pos, hero.vision);
       this.actors.push(hero);
     }
     this.player.UI.centreCamera();
 
-    //this.renderMap();
-    //this.clearOverlay();
-    //this.renderChanges();
     this.loading = false;
   }
 
@@ -260,13 +246,11 @@ class Game {
       case ALLY:
         let newAllies = new Set([ARCHER, ROGUE, MAGE, KNIGHT]);; 
         for (let hero of this.heroes) {
-          console.log("Hero subtype:", hero.subtype);
           newAllies.delete(hero.subtype);
         }
         do {
           var allyType = getBoundedRandom(ROGUE, BLACK_MAGE);
           var found = newAllies.has(allyType);
-          console.log("found", found, "allType:", allyType);
         } while (!found);
 
         let ally = new Ally(loc.vec, allyType, this);
@@ -283,36 +267,18 @@ class Game {
     ++this.level;
   }
   
-  addTextEvent(string) {
-    this.player.UI.addEvent(new TextEvent(string));
-  }
-
-  addGraphicEvent(sprite, pos) {
-    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos,
-                                             sprite));
-  }
-
-  addPathEvent(path) {
-    this.player.UI.addEvent(new PathEvent(this.overlayContext, path));
-  }
-
   createHero(pos, type, isFollowing) {
     var hero;
     if (type == KNIGHT) {
       hero = new Knight(pos, this);
-      console.log("adding knight");
     } else if (type == MAGE) {
       hero = new Mage(pos, this);
-      console.log("adding mage");
     } else if (type == ROGUE) {
       hero = new Rogue(pos, this);
-      console.log("adding rogue");
     } else if (type == ARCHER) {
       hero = new Archer(pos, this);
-      console.log("adding archer");
     } else if (type == WARLOCK) {
       hero = new Warlock(pos, this);
-      console.log("adding warlock");
     } else {
       throw("Hero type unrecognised!");
     }
@@ -329,7 +295,6 @@ class Game {
 
   createMonster(pos, type) {
     let monster = null;
-    console.log("create", ENEMY_NAMES[type]);
     switch(type) {
       case RAT:
         monster = new Rat(pos, this);
@@ -468,7 +433,6 @@ class Game {
   }
 
   addEffect(actor, effect) {
-    console.log("addEffect:", effect);
     this.currentEffects.get(actor).push(effect);
   }
 
@@ -524,5 +488,22 @@ class Game {
   render() {
     this.renderer.renderChanges();
     this.renderer.renderEntities(this.player.currentHero);
+  }
+
+  addAnimationEvent(actor, pos, dest) {
+    this.player.UI.addEvent(new AnimationEvent(actor, pos, dest, this.theMap));
+  }
+
+  addTextEvent(string) {
+    this.player.UI.addEvent(new TextEvent(string));
+  }
+
+  addGraphicEvent(sprite, pos) {
+    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos,
+                                             sprite));
+  }
+
+  addPathEvent(path) {
+    this.player.UI.addEvent(new PathEvent(this.overlayContext, path));
   }
 }

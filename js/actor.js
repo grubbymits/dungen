@@ -27,16 +27,17 @@ class Actor extends Entity {
     this.currentPath = [];
     this.rangeAttack = null;
     this.isStatic = false;
+    this.nextUpdate = Date.now();
   }
+
   get action() {
     // needs to be implemented differently for heros and monsters atm
     return null;
   }
 
-  render() {
-    this.currentSprite.render(this.pos.x * TILE_SIZE,
-                              this.pos.y * TILE_SIZE,
-                              this.game.overlayContext);
+  set lastPerformed(time) {
+    // set a maximum game rate
+    this.nextUpdate = time + 1000;
   }
 
   get path() {
@@ -76,7 +77,6 @@ class Actor extends Entity {
   setDestination(vec) {
     let target = this.game.map.getEntity(vec);
     if (target) {
-      console.log("Target:", target);
       if (target.kind == OBJECT) {
         if (target.isInteractable) {
           this.interact.target = target;

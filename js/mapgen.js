@@ -15,7 +15,6 @@ function compareRoomDistances(map, entry) {
 }
 
 function createGenerator(mapType, width, height) {
-  console.log("create map generator", width, height);
   if (mapType == OLD_CITY) {
     return new OldCityGenerator(width, height);
   } else if (mapType == SEWER) {
@@ -53,7 +52,6 @@ class Room {
     this.connections = new Set();
     this.visited = false;
     this.id = id;
-    console.log("creating room with id:", id);
   }
 
   get area() {
@@ -78,7 +76,6 @@ class MapGenerator {
     if (Math.random() < 0.5) {
       denominator = 4;
     }
-    console.log("room size denominator:", denominator);
 
     this.minLargeDim = Math.round(Math.min(MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS) /
                                 TILE_SIZE / denominator);
@@ -281,7 +278,6 @@ class MapGenerator {
         let dims = this.getDims(i);
 
         if (this.isSpace(x, y, dims.width, dims.height)) {
-          console.log("placing room at (x, y):", x, y, "of size:", dims.width, dims.height);
           this.createRoom(x, y, dims.width, dims.height);
           rooms++;
           roomsToPlace--;
@@ -294,7 +290,6 @@ class MapGenerator {
   }
 
   createConnections() {
-    console.log("creating connections between rooms");
     let connectedRooms = new Set();
     let unconnectedRooms = new Set();
 
@@ -389,10 +384,6 @@ class MapGenerator {
     let nextLimit = Math.floor(total / 8);
     let roomIdx = 0;
     let monsters = this.monsterGroups[level-1];
-    console.log("monster choices:");
-    for (let monsterIdx in monsters) {
-      console.log(ENEMY_NAMES[monsters[monsterIdx]]);
-    }
 
     for (let current = 0; current < total; ++current) {
       if (current >= nextLimit) {
@@ -462,7 +453,6 @@ class MapGenerator {
     this.rooms.sort(compareRoomDistances(this.map, this.entryRoom));
     let allyRoom = this.rooms[Math.floor(this.rooms.length / 2)];
     let loc = this.getRandomLocation(allyRoom);
-    console.log("reserving loc for ally:", loc);
     this.reserveLoc(ALLY, loc);
   }
 

@@ -37,7 +37,6 @@ class Player {
 
   set hasGroupControl(control) {
     this.groupControl = control;
-    console.log("setting group", control);
     if (!control) {
       for (let hero of this.heroes) {
         hero.unfollow();
@@ -54,7 +53,6 @@ class Player {
   }
 
   init(hero) {
-    console.log("init player:", hero);
     this.currentHero = hero;
     this.leadHero = hero;
     this.UI.initNav(hero);
@@ -161,7 +159,6 @@ class Player {
     let candidates = [];
     
     for (let potion of this.potions.keys()) {
-      console.log("potion:", potion);
       let type = potion.subtype;
       if (type == BASIC_HEALTH_POTION ||
           type == HEALTH_POTION ||
@@ -174,7 +171,6 @@ class Player {
     }
     candidates.sort(this.comparePotions);
     if (!candidates.length) {
-      console.log("no available health potions");
       return;
     }
     let chosen = candidates[0];

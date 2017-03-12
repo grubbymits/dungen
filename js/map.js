@@ -122,6 +122,34 @@ class GameMap {
     return this.locations[x][y].type;
   }
 
+  getLocUp(vec) {
+    if (this.isOutOfRange(x, y - 1)) {
+      throw "Index out of range:";
+    }
+    return this.locations[x][y - 1];
+  }
+
+  getLocDown(vec) {
+    if (this.isOutOfRange(x, y + 1)) {
+      throw "Index out of range:";
+    }
+    return this.locations[x][y + 1];
+  }
+
+  getLocLeft(vec) {
+    if (this.isOutOfRange(x - 1, y)) {
+      throw "Index out of range:";
+    }
+    return this.locations[x - 1][y];
+  }
+
+  getLocRight(vec) {
+    if (this.isOutOfRange(x + 1, y)) {
+      throw "Index out of range:";
+    }
+    return this.locations[x + 1][y];
+  }
+
   setLocationType(x, y, type) {
     if (this.isOutOfRange(x, y)) {
       throw "Index out of range:";
@@ -332,15 +360,12 @@ class GameMap {
       throw("goal is undefined");
 
     if (this.isOutOfRange(goal.x, goal.y)) {
-      console.log("goal is out of range");
       return [];
     }
     if (this.isBlocked(goal) && !this.vecToLoc(goal).isOccupied) {
-      console.log("goal blocked and not by something interesting");
       return [];
     }
     if (start.isSame(goal)) {
-      console.log("start == goal");
       return [];
     }
 
@@ -407,7 +432,6 @@ class GameMap {
       }
     }
     if (!current.vec.isSame(goal)) { //!= goal) {
-      console.log("path not found to target");
       return [];
     }
 

@@ -44,7 +44,6 @@ class Interface {
   }
 
   drawEquipment(hero) {
-    console.log("drawEquipment for:", hero);
     // Draw hero icon and the current equipment
     let primaryPos = "-" + hero.primary.sprite.offsetX + "px -"
       + hero.primary.sprite.offsetY + "px";
@@ -200,7 +199,6 @@ class Interface {
   }
 
   initNav(hero) {
-    console.log(hero);
     // Initialise Nav
     $('#hero_icon').addClass(hero.className);
     this.drawEquipment(hero);
@@ -216,7 +214,6 @@ class Interface {
     let y = this.player.currentHero.pos.y * TILE_SIZE * UPSCALE_FACTOR;
     x -= window.innerWidth / 2;
     y -= window.innerHeight / 2;
-    console.log("centreCamera to", x, y);
     window.scrollTo(x, y);
   }
 
@@ -234,7 +231,7 @@ class Interface {
         if (event.type == TEXT_EVENT) {
           eventList += event.string + "\n";
         } else {
-          event.render();
+          event.update();
         }
       } else {
         event.end(game);

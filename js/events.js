@@ -3,10 +3,11 @@
 const TEXT_EVENT = 0;
 const GRAPHIC_EVENT = 1;
 const PATH_EVENT = 2;
+const ANIMATION_EVENT = 3;
 
-class UIEvent {
+class Event {
   constructor(millisecs) {
-    this.startTime = new Date().getTime();
+    this.startTime = Date.now(); //new Date().getTime();
     this.endTime = this.startTime + millisecs;
   }
 
@@ -14,10 +15,12 @@ class UIEvent {
     return (new Date().getTime() >= this.endTime);
   }
 
+  update() { }
+
   end(game) { }
 }
 
-class TextEvent extends UIEvent {
+class TextEvent extends Event {
   constructor(text) {
     super(3000);
     this.string = text;
@@ -25,7 +28,7 @@ class TextEvent extends UIEvent {
   }
 }
 
-class GraphicEvent extends UIEvent {
+class GraphicEvent extends Event {
   constructor(context, pos, sprite) {
     super(1000);
     this.sprite = sprite;
@@ -40,7 +43,7 @@ class GraphicEvent extends UIEvent {
     return this.position;
   }
 
-  render() {
+  update() {
     this.sprite.render(this.x, this.y, this.context);
   }
 
@@ -49,21 +52,60 @@ class GraphicEvent extends UIEvent {
   }
 }
 
-class AnimationEvent extends GraphicEvent {
-  constructor(context, pos, dest, sprite) {
-    super(context, pos, sprite);
-    this.diffX = dest.x - pos.x;
-    this.diffY = dest.y - pos.y; 
+class AnimationEvent extends Event {
+  constructor(actor, pos, dest, map) {
+    super(1000);
+    this.actor = actor;
+    this.type = ANIMATION_EVENT;
+    this.startPos = pos;
+    this.endPos = dest;
+    this.actor.drawX = pos.x * TILE_SIZE;
+    this.actor.drawY = pos.y * TILE_SIZE;
+    this.x = this.actor.drawX;
+    this.y = this.actor.drawY;
+    this.map = map;
+    this.diffX = (dest.x - pos.x) * TILE_SIZE / (this.endTime - this.startTime); 
+    this.diffY = (dest.y - pos.y) * TILE_SIZE / (this.endTime - this.startTime);
   }
 
-  render() {
-    this.x += this.diffX;
-    this.y += this.diffY;
-    this.sprite.render(this.x, this. y, this.context);
+  update() {
+    let x = Math.round(this.x + (this.diffX * (Date.now() - this.startTime)));
+    let y = Math.round(this.y + (this.diffY * (Date.now() - this.startTime)));
+    this.actor.drawX = x;
+    this.actor.drawY = y;
+    this.map.setDirty(this.startPos);
+    this.map.setDirty(this.endPos);
+    if ((this.diffX !== 0) && (this.diffY !==0)) {
+      let dirtyVertical =
+        this.map.getLocation(this.startPos.x,
+                             this.startPos.y + (this.endPos.y - this.startPos.y)).vec;
+      let dirtyHorizontal =
+        this.map.getLocation(this.startPos.x + (this.endPos.x - this.startPos.x),
+                             this.startPos.y).vec;
+      this.map.setDirty(dirtyVertical);
+      this.map.setDirty(dirtyHorizontal);
+    }
+  }
+
+  end(game) {
+    this.map.setDirty(this.startPos);
+    this.map.setDirty(this.endPos);
+    if ((this.diffX !== 0) && (this.diffY !==0)) {
+      let dirtyVertical =
+        this.map.getLocation(this.startPos.x,
+                             this.startPos.y + (this.endPos.y - this.startPos.y)).vec;
+      let dirtyHorizontal =
+        this.map.getLocation(this.startPos.x + (this.endPos.x - this.startPos.x),
+                             this.startPos.y).vec;
+      this.map.setDirty(dirtyVertical);
+      this.map.setDirty(dirtyHorizontal);
+    }
+    this.actor.drawX = this.endPos.x * TILE_SIZE;
+    this.actor.drawY = this.endPos.y * TILE_SIZE;
   }
 }
 
-class PathEvent extends UIEvent {
+class PathEvent extends Event {
   constructor(context, path) {
     super(1000);
     this.context = context;
@@ -71,7 +113,7 @@ class PathEvent extends UIEvent {
     this.type = PATH_EVENT;
   }
 
-  render() {
+  update() {
     if (this.path.length === 0)
       return;
     // draw a line between each location of the path
