@@ -12,7 +12,7 @@ class Effect {
 }
 
 class PhysicalDamage extends Effect {
-  constructor(actor, strength) {
+  constructor(strength, actor) {
     super(strength, 1);
     this.inflictor = actor;
   }
@@ -65,14 +65,15 @@ class RestoreEnergy extends Effect {
 }
 
 class BurnEffect extends Effect {
-  constructor(strength, duration) {
+  constructor(strength, duration, actor) {
     super(strength, duration);
+    this.inflictor = actor;
   }
 
   cause(actor) {
     actor.game.addTextEvent(actor.name + " takes " + this.strength + " burn damage");
     actor.game.addSpriteChangeEvent(actor, actor.burntSprite);
-    actor.reduceHealth(this.strength);
+    actor.reduceHealth(this.inflictor, this.strength);
     --this.duration;
     if (this.duration === 0) {
       return true;
@@ -82,14 +83,15 @@ class BurnEffect extends Effect {
 }
 
 class PoisonEffect extends Effect {
-  constructor(strength, duration) {
+  constructor(strength, duration, actor) {
     super(strength, duration);
+    this.inflictor = actor;
   }
 
   cause(actor) {
     actor.game.addTextEvent(actor.name + " takes " + this.strength + " poison damage");
     actor.game.addSpriteChangeEvent(actor, actor.poisonedSprite);
-    actor.reduceHealth(this.strength);
+    actor.reduceHealth(this.inflictor, this.strength);
     --this.duration;
     if (this.duration === 0) {
       return true;
@@ -99,14 +101,15 @@ class PoisonEffect extends Effect {
 }
 
 class FreezeEffect extends Effect {
-  constructor(strength, duration) {
+  constructor(strength, duration, actor) {
     super(strength, duration);
+    this.inflictor = actor;
   }
 
   cause(actor) {
     actor.game.addTextEvent(actor.name + " has " + this.strength + " AP sapped away");
     actor.game.addSpriteChangeEvent(actor, actor.frozenSprite);
-    actor.reduceEnergy(this.strength);
+    actor.reduceEnergy(this.inflictor, this.strength);
     --this.duration;
     if (this.duration === 0) {
       return true;
@@ -116,14 +119,16 @@ class FreezeEffect extends Effect {
 }
 
 class ShockEffect extends Effect {
-  constructor(strength, duration) {
+  constructor(strength, duration, actor) {
     super(strength, duration);
+    this.inflictor = actor;
   }
 
   cause(actor) {
     actor.game.addTextEvent(actor.name + " has " + this.strength + " HP and AP zapped away");
     actor.game.addSpriteChangeEvent(actor, actor.shockedSprite);
-    actor.reduceEnergy(this.strength);
+    actor.reduceHealth(this.inflictor, this.strength);
+    actor.reduceEnergy(this.inflictor, this.strength);
     --this.duration;
     if (this.duration === 0) {
       return true;

@@ -124,19 +124,19 @@ class DealDamage extends Action {
     let duration = 2;
     switch(elemType) {
     case NORMAL:
-      this.game.addEffect(this.targetActor, new PhysicalDamage(this.actor, damage));
+      this.game.addEffect(this.targetActor, new PhysicalDamage(damage, this.actor));
       break;
     case FIRE:
-      this.game.addEffect(this.targetActor, new BurnEffect(damage, duration));
+      this.game.addEffect(this.targetActor, new BurnEffect(damage, duration, this.actor));
       break;
     case ICE:
-      this.game.addEffect(this.targetActor, new FreezeEffect(damage, duration));
+      this.game.addEffect(this.targetActor, new FreezeEffect(damage, duration, this.actor));
       break;
     case ELECTRIC:
-      this.game.addEffect(this.targetActor, new ShockEffect(damage, duration));
+      this.game.addEffect(this.targetActor, new ShockEffect(damage, duration, this.actor));
       break;
     case POISON:
-      this.game.addEffect(this.targetActor, new PoisonEffect(damage, duration));
+      this.game.addEffect(this.targetActor, new PoisonEffect(damage, duration, this.actor));
       break;
     }
   }
