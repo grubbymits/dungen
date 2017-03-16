@@ -52,6 +52,22 @@ class GraphicEvent extends Event {
   }
 }
 
+class SpriteChangeEvent extends Event {
+  constructor(actor, sprite) {
+    super(1000);
+    this.actor = actor;
+    this.sprite = sprite;
+  }
+
+  update() {
+    this.actor.currentSprite = this.sprite;
+  }
+
+  end(game) {
+    this.actor.currentSprite = this.actor.sprite;
+  }
+}
+
 class AnimationEvent extends Event {
   constructor(actor, pos, dest, map) {
     super(1000);

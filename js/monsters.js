@@ -20,7 +20,14 @@ class Monster extends Actor {
     this.agility = agility;
     this.findTarget.targets = this.game.heroes;
     this.name = ENEMY_NAMES[index];
+    this.damageSprite = monsterDamageSprites[index];
+    this.frozenSprite = frozenMonsterSprites[index];
+    this.shockedSprite = shockedMonsterSprites[index];
+    this.poisonedSprite = shockedMonsterSprites[index];
+    this.burntSprite = burntMonsterSprites[index];
+    this.currentSprite = monsterSprites[index];
   }
+
   get action() {
     this.currentSprite = this.sprite;
     if (this.currentEnergy <= 0) {
@@ -30,35 +37,38 @@ class Monster extends Actor {
     }
     return this.nextAction;
   }
+
   get primaryAtkPower() {
     return this.attackPower; //+ (this.level * this.meleeAttackPower * 0.05);
   }
+
   get primaryAtkEnergy() {
     return this.attackEnergy;
   }
+
   get primaryAtkType() {
     return this.attackType;
   }
+
   get primaryAtkRange() {
     return 3;
   }
+
   get secondaryAtkRange() {
     return 0;
   }
+
   reduceHealth(enemy, damage) {
     this.currentHealth -= damage;
-    this.setAttack(enemy);
-    this.currentSprite = this.damageSprite;
+    if (this.currentHealth <= 0) {
+      this.game.player.increaseExp(this.exp);
+      this.game.audio.die();
+      this.game.entitiesToRemove.push(this);
+    } else {
+      this.setAttack(enemy);
+    }
     // set dirty so the health bar is redrawn
     this.game.map.setDirty(this.position);
-  }
-  render() {
-    super.render();
-    this.game.overlayContext.fillStyle = 'orangered';
-    let healthBar = (this.currentHealth / this.maxHealth) * TILE_SIZE * UPSCALE_FACTOR;
-    this.game.overlayContext.fillRect(this.pos.x * TILE_SIZE * UPSCALE_FACTOR,
-                               this.pos.y * TILE_SIZE * UPSCALE_FACTOR,
-                               healthBar, 2 * UPSCALE_FACTOR);
   }
 }
 
@@ -138,7 +148,7 @@ class Lizard extends Monster {
           7,
           8,
           2,
-          NORMAL,
+          POISON,
           2,
           position, game);
   }
@@ -171,7 +181,7 @@ class SpiderChampion extends Monster {
           10,
           11,
           2.5,
-          NORMAL,
+          POISON,
           2,
           position, game);
   }
@@ -236,7 +246,7 @@ class Snake extends Monster {
           20,           // agility
           18,           // xp
           2.8,          // attack power
-          NORMAL,       // attack type
+          POISON,       // attack type
           2,            // attack energy
           position, game);
   }
@@ -286,7 +296,7 @@ class Scorpion extends Monster {
           22,           // agility
           24,           // xp
           2.9,          // attack power
-          NORMAL,       // attack type
+          POISON,       // attack type
           2,            // attack energy
           position, game);
   }

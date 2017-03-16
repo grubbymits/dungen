@@ -352,6 +352,7 @@ const NORMAL = 0;
 const FIRE = 1;
 const ICE = 2;
 const ELECTRIC = 3;
+const POISON = 4;
 
 const MAX_STRENGTH = 50;
 const MAX_AGILITY = 50;

@@ -115,28 +115,29 @@ class DealDamage extends Action {
 
   perform() {
     let power = this.attack.power;
-    let type = this.attack.type;
     let defense = this.targetActor.physicalDefense;
-    let elemDefense = 1; //this.targetActor.elementalDefense(type);
     let damage = Math.round(power * MAX_DEFENSE / defense);
 
-    this.targetActor.reduceHealth(this.actor, damage);
+    let elemType = this.attack.type;
 
-    if (this.targetActor.health <= 0) {
-      if (this.actor.increaseExp !== null) {
-        this.actor.game.player.increaseExp(this.targetActor.exp);
-      }
-      this.game.audio.die();
-      this.game.entitiesToRemove.push(this.targetActor);
-      this.targetActor = null;
-      this.actor.nextAction = null;
-    } else {
-      this.game.audio.hit();
-      let text = this.actor.name + " deals " + damage + " to " + this.targetActor.name;
-      if (this.actor.kind == HERO) {
-        text += " with " + this.attack.name;
-      }
-      this.game.addTextEvent(text);
+    //let elemDamage = Math.round(willpower * MAX_MAGIC_DEFENSE / this.targetActor.magicDefense);
+    let duration = 2;
+    switch(elemType) {
+    case NORMAL:
+      this.game.addEffect(this.targetActor, new PhysicalDamage(this.actor, damage));
+      break;
+    case FIRE:
+      this.game.addEffect(this.targetActor, new BurnEffect(damage, duration));
+      break;
+    case ICE:
+      this.game.addEffect(this.targetActor, new FreezeEffect(damage, duration));
+      break;
+    case ELECTRIC:
+      this.game.addEffect(this.targetActor, new ShockEffect(damage, duration));
+      break;
+    case POISON:
+      this.game.addEffect(this.targetActor, new PoisonEffect(damage, duration));
+      break;
     }
   }
 
@@ -180,6 +181,10 @@ class PrimaryAttack extends AttackBase {
     if (this.actor.primary) {
       return this.actor.primary.name;
     }
+  }
+
+  get type() {
+    return this.actor.primaryAtkType;
   }
 
   perform() {
@@ -231,6 +236,10 @@ class SecondaryAttack extends AttackBase {
     if (this.actor.secondary) {
       return this.actor.secondary.name;
     }
+  }
+
+  get type() {
+    return this.actor.secondaryAtkType;
   }
 
   perform() {
@@ -452,10 +461,12 @@ class TakePotion extends Action {
   constructor(actor) {
     super(actor);
   }
+
   set potion(potion) {
     this.thePotion = potion;
     this.effect = potion.effect;
   }
+
   perform() {
     this.game.addEffect(this.actor, this.effect);
     this.game.addGraphicEvent(this.thePotion.sprite,

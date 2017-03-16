@@ -502,6 +502,10 @@ class Game {
     this.player.UI.addEvent(new AnimationEvent(actor, pos, dest, this.theMap));
   }
 
+  addSpriteChangeEvent(actor, sprite) {
+    this.player.UI.addEvent(new SpriteChangeEvent(actor, sprite));
+  }
+
   addTextEvent(string) {
     this.player.UI.addEvent(new TextEvent(string));
   }

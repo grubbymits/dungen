@@ -12,7 +12,11 @@ class Hero extends Actor {
     this.equipSecondary = null;
     this.equipArmour = null;
     this.equipHelmet = null;
-    
+
+    this.frozenSprite = frozenHeroSprites[subtype];
+    this.shockedSprite = shockedHeroSprites[subtype];
+    this.poisonedSprite = poisonedHeroSprites[subtype];
+    this.burntSprite = burntHeroSprites[subtype];
 
     this.strength = strength;
     this.agility = agility;
@@ -130,15 +134,27 @@ class Hero extends Actor {
     this.healAction.potion = potion;
     this.nextAction = this.healAction;
   }
+
+  reduceEnergy(damage) {
+    this.currentEnergy -= damage;
+    if (this.currentEnergy < 0) {
+      this.currentEnergy = 0;
+    }
+    this.game.map.setDirty(this.position);
+  }
   
   reduceHealth(enemy, damage) {
     this.currentHealth -= damage;
-    this.game.map.setDirty(this.position);
-    this.currentSprite = this.damageSprite;
-    if (this.isFollowing) {
-      this.setAttack(enemy);
-      this.nextAction = this.attack;
+    if (this.currentHealth <= 0) {
+      this.game.audio.die();
+      this.game.entitiesToRemove.push(this);
+    } else {
+      if (this.isFollowing) {
+        this.setAttack(enemy);
+        this.nextAction = this.attack;
+      }
     }
+    this.game.map.setDirty(this.position);
   }
   
   increaseHealth(amount) {

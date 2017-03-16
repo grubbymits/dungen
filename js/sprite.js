@@ -42,7 +42,6 @@ class Sprite {
   }
 
   render(desX, desY, context) {
-    //context.clearRect(desX, desY, this.width, this.height);
     context.drawImage(this.spriteSheet.image,
                       this.offsetX,
                       this.offsetY,
@@ -56,6 +55,8 @@ var greenSpriteSheet = new SpriteSheet('tileset-green-64');
 var redSpriteSheet = new SpriteSheet('tileset-red-64');
 var blueSpriteSheet = new SpriteSheet('tileset-blue-64');
 var yellowSpriteSheet = new SpriteSheet('tileset-yellow-64');
+var purpleSpriteSheet = new SpriteSheet('tileset-purple-64');
+var orangeSpriteSheet = new SpriteSheet('tileset-orange-64');
 var uiSpriteSheet = new SpriteSheet('ui');
 
 var targetSprite = new Sprite(uiSpriteSheet, 0, 0);
@@ -116,10 +117,14 @@ var heroSprites = [];
 var damageHeroSprites = [];
 var frozenHeroSprites = [];
 var shockedHeroSprites = [];
+var poisonedHeroSprites = [];
+var burntHeroSprites = [];
 var monsterSprites = [];
 var monsterDamageSprites = [];
 var frozenMonsterSprites = [];
 var shockedMonsterSprites = [];
+var poisonedMonsterSprites = [];
+var burntMonsterSprites = [];
 var swordSprites = [];
 var fireSwordSprites = [];
 var iceSwordSprites = [];
@@ -157,23 +162,25 @@ for (let y = MONSTER_OFFSET; y < (MONSTER_OFFSET + 4); ++y) {
     monsterDamageSprites.push(new Sprite(redSpriteSheet, x, y));
     frozenMonsterSprites.push(new Sprite(blueSpriteSheet, x, y));
     shockedMonsterSprites.push(new Sprite(yellowSpriteSheet, x, y));
+    poisonedMonsterSprites.push(new Sprite(purpleSpriteSheet, x, y));
+    burntMonsterSprites.push(new Sprite(orangeSpriteSheet, x, y));
   }
 }
 
 for (let x = 0; x < 3; ++x) {
   throwingSprites.push(new Sprite(greenSpriteSheet, x, THROWING_OFFSET));
-  fireThrowingSprites.push(new Sprite(redSpriteSheet, x, THROWING_OFFSET));
+  fireThrowingSprites.push(new Sprite(orangeSpriteSheet, x, THROWING_OFFSET));
   iceThrowingSprites.push(new Sprite(blueSpriteSheet, x, THROWING_OFFSET));
   electricThrowingSprites.push(new Sprite(yellowSpriteSheet, x, THROWING_OFFSET));
 }
 
 for (let x = 3; x < 8; ++x) {
   bowSprites.push(new Sprite(greenSpriteSheet, x, BOW_OFFSET));
-  fireBowSprites.push(new Sprite(redSpriteSheet, x, BOW_OFFSET));
+  fireBowSprites.push(new Sprite(orangeSpriteSheet, x, BOW_OFFSET));
   iceBowSprites.push(new Sprite(blueSpriteSheet, x, BOW_OFFSET));
   electricBowSprites.push(new Sprite(yellowSpriteSheet, x, BOW_OFFSET));
   arrowSprites.push(new Sprite(greenSpriteSheet, x, PROJECTILE_OFFSET));
-  fireArrowSprites.push(new Sprite(redSpriteSheet, x, PROJECTILE_OFFSET));
+  fireArrowSprites.push(new Sprite(orangeSpriteSheet, x, PROJECTILE_OFFSET));
   iceArrowSprites.push(new Sprite(blueSpriteSheet, x, PROJECTILE_OFFSET));
   electricArrowSprites.push(new Sprite(yellowSpriteSheet, x, PROJECTILE_OFFSET));
 }
@@ -182,17 +189,17 @@ for (let x = 0; x < 8; ++x) {
   spellSprites.push(new Sprite(greenSpriteSheet, x, SPELL_OFFSET));
 
   swordSprites.push(new Sprite(greenSpriteSheet, x, SWORD_OFFSET));
-  fireSwordSprites.push(new Sprite(redSpriteSheet, x, SWORD_OFFSET));
+  fireSwordSprites.push(new Sprite(orangeSpriteSheet, x, SWORD_OFFSET));
   iceSwordSprites.push(new Sprite(blueSpriteSheet, x, SWORD_OFFSET));
   electricSwordSprites.push(new Sprite(yellowSpriteSheet, x, SWORD_OFFSET));
   
   axeSprites.push(new Sprite(greenSpriteSheet, x, AXE_OFFSET));
-  fireAxeSprites.push(new Sprite(redSpriteSheet, x, AXE_OFFSET));
+  fireAxeSprites.push(new Sprite(orangeSpriteSheet, x, AXE_OFFSET));
   iceAxeSprites.push(new Sprite(blueSpriteSheet, x, AXE_OFFSET));
   electricAxeSprites.push(new Sprite(yellowSpriteSheet, x, AXE_OFFSET));
   
   staffSprites.push(new Sprite(greenSpriteSheet, x, STAFF_OFFSET));
-  fireStaffSprites.push(new Sprite(redSpriteSheet, x, STAFF_OFFSET));
+  fireStaffSprites.push(new Sprite(orangeSpriteSheet, x, STAFF_OFFSET));
   iceStaffSprites.push(new Sprite(blueSpriteSheet, x, STAFF_OFFSET));
   electricStaffSprites.push(new Sprite(yellowSpriteSheet, x, STAFF_OFFSET));
   
@@ -207,6 +214,8 @@ for (let x = 0; x < 8; ++x) {
   damageHeroSprites.push(new Sprite(redSpriteSheet, x, HERO_OFFSET));
   frozenHeroSprites.push(new Sprite(blueSpriteSheet, x, HERO_OFFSET));
   shockedHeroSprites.push(new Sprite(yellowSpriteSheet, x, HERO_OFFSET));
+  poisonedHeroSprites.push(new Sprite(purpleSpriteSheet, x, HERO_OFFSET));
+  burntHeroSprites.push(new Sprite(orangeSpriteSheet, x, HERO_OFFSET));
 }
 var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4),
                      new Sprite(greenSpriteSheet, 1, 4)
