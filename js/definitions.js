@@ -355,18 +355,17 @@ const ELECTRIC = 3;
 const POISON = 4;
 
 const MAX_STRENGTH = 50;
+const MAX_ENDURANCE = 50;
 const MAX_AGILITY = 50;
 const MAX_WISDOM = 50;
-const MAX_ENDURANCE = 50;
 const MAX_WILL = 50;
-const MAX_DEFENSE = 50;
+const MAX_ATTACK = 100;
+const MAX_DEFENSE = 100;
+const MAX_MAGIC_DEFENSE = 100;
+const MAX_MAGIC_RESISTANCE = 100;
 const MAX_HEALTH_INC = 15;
 const MAX_ENERGY_INC = 10;
 const MAX_HEROES = 4;
-
-const STATS = 0;
-const EQUIP = 1;
-const TEAM = 2;
 
 const OLD_CITY = 0;
 const SEWER = 1;

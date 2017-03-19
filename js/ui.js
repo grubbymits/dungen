@@ -67,17 +67,21 @@ class Interface {
       text = "  Level: " + hero.level + "\n" +
              "  Exp: " + hero.currentExp + "\n" +
              "  Exp to next level: " + (hero.expToNextLvl - hero.currentExp) + "\n" +
+             "  - - - - - - - - - - - - - - - - - - - - -\n" +
              "  Health: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
              "  Energy: " + hero.currentEnergy + "/" + hero.maxEnergy + "\n" +
              "  Attack Energy: " + hero.primaryAtkEnergy + "\n" +
              "  Attack: " + hero.primaryAtkPower + "\n" +
-             "  Defense: " + hero.physicalDefense + "\n";
+             "  Defense: " + hero.physicalDefense + "\n" +
+             "  Magic Resistance: " + hero.magicResistance + "\n" +
+             "  - - - - - - - - - - - - - - - - - - - - -\n";
     }
     text += "  Strength: " + hero.strength + "\n" +
             "  Endurance: " + hero.endurance + "\n" +
             "  Agility: " + hero.agility + "\n" +
             "  Wisdom: " + hero.wisdom + "\n" +
-            "  Will: " + hero.will + "\n";
+            "  Will: " + hero.will + "\n" +
+            "  - - - - - - - - - - - - - - - - - - - - -\n";
     $(field).text(text);
   }
 

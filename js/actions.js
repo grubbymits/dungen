@@ -119,24 +119,51 @@ class DealDamage extends Action {
     let damage = Math.round(power * MAX_DEFENSE / defense);
 
     let elemType = this.attack.type;
+    if (elemType === NORMAL) {
+      console.log("deal normal damage");
+      this.game.addEffect(this.targetActor,
+                          new PhysicalDamage(damage, this.actor));
+      return;
+    } else {
+      console.log("deal magic damage");
+    }
 
-    //let elemDamage = Math.round(willpower * MAX_MAGIC_DEFENSE / this.targetActor.magicDefense);
-    let duration = 2;
+    /*
+    let magicDefense = this.targetActor.magicalDefense;
+    if (magicDefense !== magicDefense)
+      throw("magicDefense not calculated correctly");
+    */
+
+    let magicDamage = Math.round(power * MAX_MAGIC_DEFENSE / defense);
+    if (magicDamage !== magicDamage)
+      throw("magicDamage not calculated correctly");
+
+    let magicResistance = this.targetActor.magicResistance;
+    if (magicResistance !== magicResistance)
+      throw("magicResistance not calculated correctly");
+
+    let duration = Math.round(this.attack.magicPower * MAX_MAGIC_RESISTANCE /
+                              magicResistance);
+    if (duration !== duration) {
+      throw("duration not calculated correctly:", duration);
+    }
+
     switch(elemType) {
-    case NORMAL:
-      this.game.addEffect(this.targetActor, new PhysicalDamage(damage, this.actor));
-      break;
     case FIRE:
-      this.game.addEffect(this.targetActor, new BurnEffect(damage, duration, this.actor));
+      this.game.addEffect(this.targetActor,
+                          new BurnEffect(magicDamage, duration, this.actor));
       break;
     case ICE:
-      this.game.addEffect(this.targetActor, new FreezeEffect(damage, duration, this.actor));
+      this.game.addEffect(this.targetActor,
+                          new FreezeEffect(magicDamage, duration, this.actor));
       break;
     case ELECTRIC:
-      this.game.addEffect(this.targetActor, new ShockEffect(damage, duration, this.actor));
+      this.game.addEffect(this.targetActor,
+                          new ShockEffect(magicDamage, duration, this.actor));
       break;
     case POISON:
-      this.game.addEffect(this.targetActor, new PoisonEffect(damage, duration, this.actor));
+      this.game.addEffect(this.targetActor,
+                          new PoisonEffect(magicDamage, duration, this.actor));
       break;
     }
   }
@@ -175,6 +202,10 @@ class PrimaryAttack extends AttackBase {
   
   get power() {
     return this.actor.primaryAtkPower;
+  }
+
+  get magicPower() {
+    return this.actor.primaryAtkMagicPower;
   }
 
   get name() {
@@ -230,6 +261,10 @@ class SecondaryAttack extends AttackBase {
   
   get power() {
     return this.actor.secondaryAtkPower;
+  }
+
+  get magicPower() {
+    return this.actor.secondaryAtkMagicPower;
   }
 
   get name() {

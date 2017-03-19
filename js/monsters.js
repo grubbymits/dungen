@@ -17,6 +17,8 @@ class Monster extends Actor {
     this.attackType = atkType;
     this.attackEnergy = atkEnergy;
     this.physicalDefense = defense;
+    this.magicalDefense = defense;
+    this.magicResistance = defense;
     this.agility = agility;
     this.findTarget.targets = this.game.heroes;
     this.name = ENEMY_NAMES[index];
@@ -39,7 +41,7 @@ class Monster extends Actor {
   }
 
   get primaryAtkPower() {
-    return this.attackPower; //+ (this.level * this.meleeAttackPower * 0.05);
+    return this.attackPower;
   }
 
   get primaryAtkEnergy() {
@@ -48,6 +50,10 @@ class Monster extends Actor {
 
   get primaryAtkType() {
     return this.attackType;
+  }
+
+  get primaryAtkMagicPower() {
+    return 0.20; //this.attackPower;
   }
 
   get primaryAtkRange() {

@@ -21,6 +21,7 @@ class Weapon extends Item {
     this.power = power;
     this.range = range;
     this.elemType = elemType;
+    this.effectDuration = 1;
     this.energy = energy;
   }
 }

@@ -68,6 +68,9 @@ class BurnEffect extends Effect {
   constructor(strength, duration, actor) {
     super(strength, duration);
     this.inflictor = actor;
+    console.log(strength + " burn damage for " + duration);
+    actor.game.addTextEvent(actor.name + " inflicts burn for " + duration +
+                            " turns");
   }
 
   cause(actor) {
@@ -85,7 +88,10 @@ class BurnEffect extends Effect {
 class PoisonEffect extends Effect {
   constructor(strength, duration, actor) {
     super(strength, duration);
+    console.log(strength + " poison damage for " + duration);
     this.inflictor = actor;
+    actor.game.addTextEvent(actor.name + " inflicts poison for " + duration +
+                            " turns");
   }
 
   cause(actor) {

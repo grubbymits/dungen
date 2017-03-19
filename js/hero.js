@@ -84,15 +84,22 @@ class Hero extends Actor {
   }
 
   get primaryAtkPower() {
-    return ((100 * this.equipPrimary.power * this.strength / MAX_STRENGTH)/100).toFixed(2);
+    return ((100 * this.equipPrimary.power * this.strength / MAX_STRENGTH) /
+             100).toFixed(2);
+  }
+
+  get primaryAtkMagicPower() {
+    return ((100 * this.equipPrimary.effectDuration * this.wisdom / MAX_WISDOM) /
+             100).toFixed(2);
   }
 
   get primaryAtkEnergy() {
-    return ((100 * this.equipPrimary.energy * MAX_AGILITY / this.agility)/100).toFixed(2);
+    return ((100 * this.equipPrimary.energy * MAX_AGILITY / this.agility) /
+             100).toFixed(2);
   }
 
   get primaryAtkType() {
-    return this.equipPrimary.type;
+    return this.equipPrimary.elemType;
   }
 
   get primaryAtkRange() {
@@ -100,7 +107,7 @@ class Hero extends Actor {
   }
 
   get physicalDefense() {
-    var total = 0;
+    let total = 0;
     if (this.equipArmour) {
       total += this.equipArmour.defense;
     }
@@ -110,6 +117,17 @@ class Hero extends Actor {
     if (this.equipSecondary.type == SHIELD) {
       total += this.equipSecondary.defense;
     }
+    return total;
+  }
+
+  get magicalDefense() {
+    let total = MAX_MAGICAL_DEFENSE / 4;
+    return total;
+  }
+
+  get magicResistance() {
+    let total = 0;
+    total += this.will;
     return total;
   }
 
@@ -268,15 +286,21 @@ class Rogue extends Hero {
     this.secondaryAttack = new SecondaryAttack(this);
     this.className = 'rogue';
   }
+
   get secondaryAtkPower() {
-    return ((100 * this.equipSecondary.power * this.strength / MAX_STRENGTH)/100).toFixed(2);
+    return ((100 * this.equipSecondary.power * this.strength / MAX_STRENGTH) /
+             100).toFixed(2);
   }
+
   get secondaryAtkEnergy() {
-    return ((100 * this.equipSecondary.energy * MAX_AGILITY / this.agility)/100).toFixed(2);
+    return ((100 * this.equipSecondary.energy * MAX_AGILITY / this.agility) /
+             100).toFixed(2);
   }
+
   get secondaryAtkType() {
-    return this.equipSecondary.type;
+    return this.equipSecondary.elemType;
   }
+
   get secondaryAtkRange() {
     return this.equipSecondary.range;
   }
@@ -294,10 +318,12 @@ class Archer extends Hero {
     this.equipSecondary = arrows[ARROWS0];
     this.className = 'archer';
   }
+
   get primaryAtkPower() {
     return ((100 * ((this.equipPrimary.power + this.equipSecondary.power) *
                       this.strength / MAX_STRENGTH))/100).toFixed(2);
   }
+
   get primaryAtkEnergy() {
     return ((100 * ((this.equipPrimary.energy + this.equipSecondary.energy) *
                       MAX_AGILITY / this.agility)/100)).toFixed(2);
