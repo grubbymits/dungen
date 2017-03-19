@@ -451,7 +451,7 @@ class MapGenerator {
 
   placeAlly() {
     this.rooms.sort(compareRoomDistances(this.map, this.entryRoom));
-    let allyRoom = this.rooms[Math.floor(this.rooms.length / 2)];
+    let allyRoom = this.entryRoom; //this.rooms[Math.floor(this.rooms.length / 2)];
     let loc = this.getRandomLocation(allyRoom);
     this.reserveLoc(ALLY, loc);
   }

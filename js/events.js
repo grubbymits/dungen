@@ -156,6 +156,24 @@ class PathEvent extends Event {
   }
 }
 
+class GameOverEvent {
+  constructor(hero) {
+    this.hero = hero;
+    this.finished = false;
+    this.active = false;
+    console.log("creating game over event");
+  }
+
+  begin() {
+    console.log("beginning game over event");
+    this.active = true;
+    $('#game_over_hero_icon').removeClass();
+    $('#game_over_hero_icon').addClass(this.hero.className);
+    $('#lvl_up_menu').css("visibility", "invisible");
+    $('#game_over_menu').css("visibility", "visible");
+  }
+}
+
 class LevelUpEvent {
   constructor(UI, hero) {
     this.UI = UI;

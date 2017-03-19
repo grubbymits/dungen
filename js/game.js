@@ -1,5 +1,10 @@
 "use strict";
 
+const PAUSED = 0;
+const RUNNING = 1;
+const LOADING = 2;
+const OVER = 3;
+
 class Game {
   constructor(context, overlayContext, width, height) {
     this.actors = [];
@@ -17,18 +22,13 @@ class Game {
     this.context = context;
     this.overlayContext = overlayContext;
     this.level = 1;
-    this.isRunning = false;
-    this.loading = false;
+    this.status = PAUSED;
     this.skipTicks = 1000/ 30;
     this.nextGameTick = Date.now(); //(new Date()).getTime();
     this.theMap = null; //new GameMap(width, height, this);
     this.width = width;
     this.height = height;
     this.audio = new Audio(this);
-  }
-
-  get isLoading() {
-    return this.loading;
   }
 
   saveItems(itemMap, name) {
@@ -90,7 +90,7 @@ class Game {
   }
 
   loadGame(player) {
-    this.loading = true;
+    this.status = LOADING;
     this.player = player;
     this.level = localStorage.getItem("level");
     let mapType = localStorage.getItem("mapType");
@@ -156,12 +156,12 @@ class Game {
         this.player.init(hero);
       }
     }
-    this.loading = false;
+    this.status = PAUSED;
     //this.renderMap();
   }
 
   init(player, playerType, mapType) {
-    this.loading = true;
+    this.status = LOADING;
     this.player = player;
     this.mapGenerator = createGenerator(mapType, this.width, this.height);
     this.setupMap(1);
@@ -171,13 +171,13 @@ class Game {
     }
     let character = this.createHero(this.mapGenerator.entryVecs[0], playerType, false);
     this.player.init(character);
-    this.loading = false;
+    this.status = PAUSED;
     this.renderBegin();
   }
 
   loadNextMap() {
     this.saveGame();
-    this.loading = true;
+    this.status = LOADING;
     this.pause();
 
     // reset stuff
@@ -204,7 +204,7 @@ class Game {
     }
     this.player.UI.centreCamera();
 
-    this.loading = false;
+    this.status = PAUSED;
     this.renderBegin();
   }
 
@@ -436,14 +436,15 @@ class Game {
 
     if (entity.kind == HERO) {
       if (this.heroes.length == 1) {
-        // GAME OVER
-      } else {
-        for (let i in this.heroes) {
-          let hero = this.heroes[i];
-          if (hero == entity) {
-            this.heroes.splice(i, 1);
-            break;
-          }
+        console.log("removing only hero");
+        this.status = OVER;
+        this.player.UI.gameOver();
+      }
+      for (let i in this.heroes) {
+        let hero = this.heroes[i];
+        if (hero == entity) {
+          this.heroes.splice(i, 1);
+          break;
         }
       }
     }
@@ -511,13 +512,27 @@ class Game {
     this.entitiesToCreate = [];
   }
 
+  get isRunning() {
+    return this.status === RUNNING;
+  }
+
+  get isPaused() {
+    return this.status === PAUSED;
+  }
+
+  get isLoading() {
+    return this.status === LOADING;
+  }
+
   pause() {
-    this.isRunning = false;
+    if (this.status !== LOADING) {
+      this.status = PAUSED;
+    }
     this.audio.pauseMusic();
   }
 
   play() {
-    this.isRunning = true;
+    this.status = RUNNING;
     this.audio.playMusic();
   }
 

@@ -3,7 +3,7 @@ class Player {
     this.currentHero = null;
     this.game = game;
     this.UI = UI;
-    this.heroes = [];
+    this.heroes = this.game.heroes;
     this.shields = new Map();
     this.helmets = new Map();
     this.armours = new Map();
@@ -59,7 +59,7 @@ class Player {
   }
 
   addHero(hero) {
-    this.heroes.push(hero);
+    //this.heroes.push(hero);
     this.addItem(hero.primary);
     this.addItem(hero.secondary);
     if (hero.armour) {

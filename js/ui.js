@@ -5,7 +5,7 @@ class Interface {
     //this.keysDown = {};
     this.game = game;
     this.events = [];
-    this.LvlUpEvents = [];
+    this.menuEvents = [];
 
     this.hud = document.createElement("canvas");
     this.hud.style.position = 'fixed';
@@ -223,10 +223,6 @@ class Interface {
 
   renderInfo() {
     let game = this.player.game;
-    // Draw text onto the canvas for ~1 second to inform the player of changes.
-    // - chest contents
-    // - exp gain
-    // - level up
     let eventList = "";
     for (let i in this.events) {
       let event = this.events[i];
@@ -244,8 +240,8 @@ class Interface {
       }
     }
 
-    for (let i in this.LvlUpEvents) {
-      let event = this.LvlUpEvents[i];
+    for (let i in this.menuEvents) {
+      let event = this.menuEvents[i];
       if (event.active && !event.finished) {
         break;
       }
@@ -253,8 +249,8 @@ class Interface {
         event.begin();
         break;
       } else if (event.finished) {
-        delete this.LvlUpEvents[i];
-        this.LvlUpEvents.splice(i, 1);
+        delete this.menuEvents[i];
+        this.menuEvents.splice(i, 1);
       }
     }
 
@@ -267,7 +263,11 @@ class Interface {
 
   levelUp(hero) {
     this.events.push(new TextEvent(hero.name + " lvl up!"));
-    this.LvlUpEvents.push(new LevelUpEvent(this, hero));
+    this.menuEvents.push(new LevelUpEvent(this, hero));
+  }
+
+  gameOver() {
+    this.menuEvents.push(new GameOverEvent(this.player.currentHero));
   }
 
   updateStats(hero) {

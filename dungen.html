@@ -50,6 +50,34 @@
     </div>
   </div>
   </div>
+  <div style="position:fixed; width: 100%; visibility: hidden" id="game_over_menu">
+  <div class="row">
+    <div class="col s12 m8 push-m2 l6 push-l3">
+      <div class="card horizontal">
+        <div class="card-image" style="margin: auto; top: 5px; width: 64px;">
+          <ul>
+          <img src="res/img/tileset-green-64.png" id="game_over_hero_icon">
+        </ul>
+        </div>
+        <div class="card-stacked">
+          <div class="card-content">
+            <p>BAH! A valiant effort, but the party has fallen. Continue from
+               the beginning of the map?
+              <br><br>
+            </p>
+          </div>
+          <div class="card-action">
+            <a class="waves-effect waves-light btn-large"
+               style="background-color: #aec440; width: 100%"
+               onclick="window.location.href='dungen.html?player=continue'">
+               Continue
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
   <div class="container">
     <div class="progress" style="width: 50%; top: 50%; left: 25%; position: fixed;" id="load_bar">
       <div class="indeterminate"></div>

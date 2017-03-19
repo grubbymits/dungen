@@ -107,18 +107,22 @@ window.onload = function begin() {
   var updater = generator();
 
   var run = function() {
-    if (!document.hasFocus() || theGame.isLoading) {
-      if (theGame.isRunning) {
-        theGame.pause();
-      }
-    } else {
-      if (!theGame.isRunning) {
-        theGame.play();
-      }
+    if (theGame.isLoading) {
+      // do nothing
+    } else if (!document.hasFocus()) {
+      theGame.pause();
+    } else if (document.hasFocus() && theGame.isPaused) {
+      theGame.play();
+    } else if (theGame.isRunning) {
       theGame.render();
       UI.renderInfo();
       updater.next();
       theGame.update();
+    } else {
+      // Game over.
+      theGame.render();
+      UI.renderInfo();
+      console.log("Game over?");
     }
     window.requestAnimationFrame(run);
   };
