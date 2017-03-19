@@ -123,7 +123,5 @@ window.onload = function begin() {
     window.requestAnimationFrame(run);
   };
   $('#load_bar').hide();
-  //theGame.renderMap();
   window.requestAnimationFrame(run);
-  //window.setInterval(run, 33);
 };

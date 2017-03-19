@@ -62,6 +62,14 @@ class Actor extends Entity {
     this.currentEnergy = energy;
   }
 
+  reduceEnergy(damage) {
+    this.currentEnergy -= damage;
+    if (this.currentEnergy < 0) {
+      this.currentEnergy = 0;
+    }
+    this.game.map.setDirty(this.position);
+  }
+
   get health() {
     return this.currentHealth;
   }

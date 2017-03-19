@@ -258,12 +258,10 @@ class Interface {
       }
     }
 
-    let hero = this.player.currentHero;
-    $('#hero_hud').text("HP: " + hero.currentHealth + "/" + hero.maxHealth + "\n" +
-                        "EP: " + hero.currentEnergy + "/" + hero.maxEnergy);
-    $('#score_hud').text("Chests: " + game.openChests +"/" + game.totalChests + "\n" +
-                         "Killed: " + game.monstersKilled + "/" + game.totalMonsters + "\n" +
-                         "Exp: " + game.expGained);
+    $('#score_hud').text("Chests: " + game.openChests + "/" + game.totalChests +
+                         "\n" +
+                         "Killed: " + game.monstersKilled + "/" + game.totalMonsters +
+                         "\n");
     $('#action_hud').text(eventList);
   }
 

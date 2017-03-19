@@ -153,14 +153,6 @@ class Hero extends Actor {
     this.nextAction = this.healAction;
   }
 
-  reduceEnergy(damage) {
-    this.currentEnergy -= damage;
-    if (this.currentEnergy < 0) {
-      this.currentEnergy = 0;
-    }
-    this.game.map.setDirty(this.position);
-  }
-  
   reduceHealth(enemy, damage) {
     this.currentHealth -= damage;
     if (this.currentHealth <= 0) {

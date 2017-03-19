@@ -96,7 +96,12 @@ class Renderer {
                                    this.overlayContext);
         this.overlayContext.fillStyle = 'orangered';
         let healthBar = (actor.currentHealth / actor.maxHealth) * TILE_SIZE;
-        this.overlayContext.fillRect(actor.drawX, actor.drawY, healthBar, 2);
+        this.overlayContext.fillRect(actor.drawX, actor.drawY,
+                                     healthBar, 2);
+        this.overlayContext.fillStyle = 'cadetblue';
+        let energyBar = (actor.currentEnergy / actor.maxEnergy) * TILE_SIZE;
+        this.overlayContext.fillRect(actor.drawX, actor.drawY + 3,
+                                     energyBar, 2);
       }
     }
     for (let object of this.objects) {

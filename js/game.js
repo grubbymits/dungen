@@ -258,7 +258,8 @@ class Game {
       }
     }
 
-    this.mapGenerator.placeMonsters(this.level, 32);
+    let numMonsters = getBoundedRandom(45, 32);
+    this.mapGenerator.placeMonsters(this.level, numMonsters);
     for (let monster of this.mapGenerator.monsterPlacements) {
       this.createMonster(monster.vec, monster.type);
     }
@@ -328,6 +329,9 @@ class Game {
       case SNAKE:
         monster = new Snake(pos, this);
         break;
+      case SERPENT:
+        monster = new Serpent(pos, this);
+        break;
       case SCARAB:
         monster = new Scarab(pos, this);
         break;
@@ -339,6 +343,9 @@ class Game {
         break;
       case UNDEAD:
         monster = new Undead(pos, this);
+        break;
+      case WOLF:
+        monster = new Wolf(pos, this);
         break;
       case WEREWOLF:
         monster = new Werewolf(pos, this);
@@ -354,6 +361,36 @@ class Game {
         break;
       case ORC:
         monster = new Orc(pos, this);
+        break;
+      case VAMPIRE:
+        monster = new Vampire(pos, this);
+        break;
+      case MUMMY:
+        monster = new Mummy(pos, this);
+        break;
+      case CYCLOPS:
+        monster = new Cyclops(pos, this);
+        break;
+      case BOAR:
+        monster = new Boar(pos, this);
+        break;
+      case WRAITH:
+        monster = new Wraith(pos, this);
+        break;
+      case BEAR:
+        monster = new Bear(pos, this);
+        break;
+      case KRAKEN:
+        monster = new Kraken(pos, this);
+        break;
+      case GOLEM:
+        monster = new Golem(pos, this);
+        break;
+      case CARABIA:
+        monster = new Carabia(pos, this);
+        break;
+      case DEMON:
+        monster = new Demon(pos, this);
         break;
       default:
         throw("unhandled monster type!");
