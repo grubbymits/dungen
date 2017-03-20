@@ -318,7 +318,8 @@ class InitAttack extends Action {
 
   set target(target) {
     if (target === null) {
-      throw("target is undefined");
+      console.log("trying to target null...");
+      return;
     }
     if (target.health < 1) {
       this.targetActor = null;
