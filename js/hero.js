@@ -157,7 +157,7 @@ class Hero extends Actor {
     this.currentHealth -= damage;
     if (this.currentHealth <= 0) {
       this.game.audio.die();
-      this.game.entitiesToRemove.push(this);
+      this.game.entitiesToRemove.add(this);
     } else {
       if (this.isFollowing) {
         this.setAttack(enemy);

@@ -175,7 +175,8 @@ class GameMap {
     if (this.isOutOfRange(vec.x, vec.y)) {
       return true;
     }
-    return this.getLocation(vec.x, vec.y).isBlocked;
+    let loc = this.getLocation(vec.x, vec.y);
+    return loc.isBlocked;
   }
 
   removeEntity(vec) {

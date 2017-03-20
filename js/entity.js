@@ -225,10 +225,10 @@ class Ally extends Entity {
   }
 
   interact(actor) {
-    this.game.entitiesToCreate.push({ type: HERO,
-                                      subtype: this.subtype,
-                                      pos: this.position });
-    this.game.entitiesToRemove.push(this);
+    this.game.entitiesToCreate.add({ type: HERO,
+                                     subtype: this.subtype,
+                                     pos: this.position });
+    this.game.entitiesToRemove.add(this);
   }
 
   get isInteractable() {

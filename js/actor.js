@@ -90,15 +90,22 @@ class Actor extends Entity {
           this.interact.target = target;
           this.nextAction = this.interact;
           return;
+        } else {
+          console.log("object not interactable");
         }
       } else if (target.kind != this.kind) {
         this.attack.target = target;
         this.nextAction = this.attack;
         return;
+      } else {
+        console.log("doing nothing, target:", target);
       }
     } else if (!this.game.map.isBlocked(vec)) {
       this.walk.dest = vec; //this.game.map.getLocation(x, y).vec;
       this.nextAction = this.walk;
+    } else {
+      console.log("no target, but map is blocked:",
+                  this.game.map.getLocation(vec.x, vec.y));
     }
   }
 

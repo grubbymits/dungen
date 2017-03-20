@@ -122,7 +122,6 @@ window.onload = function begin() {
       // Game over.
       theGame.render();
       UI.renderInfo();
-      console.log("Game over?");
     }
     window.requestAnimationFrame(run);
   };

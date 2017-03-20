@@ -227,6 +227,7 @@ class PrimaryAttack extends AttackBase {
     }
     if (this.targetActor.health < 1) {
       this.actor.nextAction = null;
+      this.targetActor = null;
       return null;
     }
 
@@ -285,6 +286,7 @@ class SecondaryAttack extends AttackBase {
     }
     if (this.targetActor.health < 1) {
       this.actor.nextAction = null;
+      this.targetActor = null;
       return null;
     }
 
@@ -315,6 +317,9 @@ class InitAttack extends Action {
   }
 
   set target(target) {
+    if (target === null) {
+      throw("target is undefined");
+    }
     if (target.health < 1) {
       this.targetActor = null;
       return;
@@ -334,6 +339,7 @@ class InitAttack extends Action {
     }
     if (this.targetActor.health < 1) {
       this.actor.nextAction = null;
+      this.targetActor = null;
       return null;
     }
 

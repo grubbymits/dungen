@@ -8,24 +8,23 @@ const OVER = 3;
 class Game {
   constructor(context, overlayContext, width, height) {
     this.actors = [];
-    this.heroes = [];
-    this.monsters = [];
+    this.heroes = new Set();
+    this.monsters = new Set();
     this.currentEffects = new Map();
     this.objects = [];
-    this.entitiesToRemove = [];
-    this.entitiesToCreate = [];
+    this.entitiesToRemove = new Set();
+    this.entitiesToCreate = new Set();
     this.totalChests = 0;
     this.openChests = 0;
     this.totalMonsters = 0;
     this.monstersKilled = 0;
-    this.expGained = 0;
     this.context = context;
     this.overlayContext = overlayContext;
     this.level = 1;
     this.status = PAUSED;
     this.skipTicks = 1000/ 30;
-    this.nextGameTick = Date.now(); //(new Date()).getTime();
-    this.theMap = null; //new GameMap(width, height, this);
+    this.nextGameTick = Date.now();
+    this.theMap = null;
     this.width = width;
     this.height = height;
     this.audio = new Audio(this);
@@ -55,8 +54,9 @@ class Game {
     this.saveItems(this.player.spells, "spells");
 
     localStorage.setItem("numHeroes", this.heroes.length);
-    for (let i in this.heroes) {
-      let hero = this.heroes[i];
+    let i = 0;
+    for (let hero of this.heroes.values()) {
+      //let hero = this.heroes[i];
       localStorage.setItem("hero" + i, JSON.stringify({
         subtype : hero.subtype,
         level : hero.level,
@@ -157,7 +157,7 @@ class Game {
       }
     }
     this.status = PAUSED;
-    //this.renderMap();
+    this.renderBegin();
   }
 
   init(player, playerType, mapType) {
@@ -182,21 +182,20 @@ class Game {
 
     // reset stuff
     this.actors = [];
-    this.monsters = [];
     this.objects = [];
-    this.entitiesToRemove = [];
-    this.entitiesToCreate = [];
+    this.monsters.clear();
+    this.entitiesToRemove.clear();
+    this.entitiesToCreate.clear();
     this.totalChests = 0;
     this.openChests = 0;
     this.totalMonsters = 0;
     this.monstersKilled = 0;
-    this.expGained = 0;
     this.currentEffects.clear();
 
 
     this.setupMap(this.heroes.length);
     // re-add the heroes
-    for (let hero of this.heroes) {
+    for (let hero of this.heroes.values()) {
       hero.reset();
       hero.pos = this.mapGenerator.entryVecs.pop();
       this.theMap.placeEntity(hero.pos, hero);
@@ -286,8 +285,8 @@ class Game {
       hero.follow(this.player.currentHero);
     }
     this.actors.push(hero);
-    this.heroes.push(hero);
-    this.currentEffects.set(hero, []);
+    this.heroes.add(hero);
+    this.currentEffects.set(hero, new Set());
     this.theMap.placeEntity(pos, hero);
     this.player.addHero(hero);
     return hero;
@@ -396,9 +395,9 @@ class Game {
         throw("unhandled monster type!");
     }
     this.actors.push(monster);
-    this.monsters.push(monster);
+    this.monsters.add(monster);
     this.theMap.placeEntity(pos, monster);
-    this.currentEffects.set(monster, []);
+    this.currentEffects.set(monster, new Set());
     ++this.totalMonsters;
     this.map.getLocation(pos.x, pos.y).blocked = false;
     return monster;
@@ -424,14 +423,8 @@ class Game {
     // references. And maybe more useful to use a set for these.
     if (entity.kind == MONSTER) {
       ++this.monstersKilled;
-      this.expGained += entity.exp;
-      for (let i in this.monsters) {
-        let monster = this.monsters[i];
-        if (monster == entity) {
-          this.monsters.splice(i, 1);
-          break;
-        }
-      }
+      console.log("deleting monster:", entity);
+      this.monsters.delete(entity);
     }
 
     if (entity.kind == HERO) {
@@ -440,13 +433,8 @@ class Game {
         this.status = OVER;
         this.player.UI.gameOver();
       }
-      for (let i in this.heroes) {
-        let hero = this.heroes[i];
-        if (hero == entity) {
-          this.heroes.splice(i, 1);
-          break;
-        }
-      }
+      console.log("deleting hero:", entity);
+      this.heroes.delete(entity);
     }
 
     let entities;
@@ -458,6 +446,7 @@ class Game {
 
     for (let index in entities) {
       if (entities[index] == entity) {
+        console.log("removing entity from map:", entity);
         this.theMap.removeEntity(entity.position);
         delete entities[index];
         entities.splice(index, 1);
@@ -470,17 +459,16 @@ class Game {
   }
 
   addEffect(actor, effect) {
-    this.currentEffects.get(actor).push(effect);
+    this.currentEffects.get(actor).add(effect);
   }
 
   applyEffects(index) {
     let actor = this.actors[index];
     let effects = this.currentEffects.get(actor);
-    for (let i in effects) {
-      let expired = effects[i].cause(actor);
+    for (let effect of effects.values()) {
+      let expired = effect.cause(actor);
       if (expired) {
-        delete this.currentEffects.get(actor)[i];
-        this.currentEffects.get(actor).splice(i, 1);
+        effects.delete(effect);
       }
     }
     // Each actor receives some EP at the beginning of their turn.
@@ -500,16 +488,16 @@ class Game {
   }
 
   update() {
-    for (let entity of this.entitiesToRemove) {
+    for (let entity of this.entitiesToRemove.values()) {
       this.removeEntity(entity);
     }
-    for (let entity of this.entitiesToCreate) {
+    for (let entity of this.entitiesToCreate.values()) {
       if (entity.type == HERO) {
         this.createHero(entity.pos, entity.subtype, true);
       }
     }
-    this.entitiesToRemove = [];
-    this.entitiesToCreate = [];
+    this.entitiesToRemove.clear();
+    this.entitiesToCreate.clear();
   }
 
   get isRunning() {
