@@ -87,6 +87,7 @@ class Actor extends Entity {
     if (target) {
       if (target.kind == OBJECT) {
         if (target.isInteractable) {
+          console.log("object is interactable");
           this.interact.target = target;
           this.nextAction = this.interact;
           return;
@@ -94,6 +95,7 @@ class Actor extends Entity {
           console.log("object not interactable");
         }
       } else if (target.kind != this.kind) {
+        console.log("attack!");
         this.attack.target = target;
         this.nextAction = this.attack;
         return;
@@ -101,6 +103,7 @@ class Actor extends Entity {
         console.log("doing nothing, target:", target);
       }
     } else if (!this.game.map.isBlocked(vec)) {
+      console.log("set destination");
       this.walk.dest = vec; //this.game.map.getLocation(x, y).vec;
       this.nextAction = this.walk;
     } else {

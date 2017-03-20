@@ -134,6 +134,7 @@ class Player {
   setDestination(x, y) {
     let loc = this.game.theMap.getLocation(x, y);
     if (loc.isHidden) {
+      console.log("loc is hidden");
       return;
     }
     this.currentHero.setDestination(loc.vec);
