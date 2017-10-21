@@ -13,6 +13,12 @@ class Vec {
     this.x = x;
     this.y = y;
   }
+  getNeighbourCost(other) {
+    if ((other.x == this.x) || (other.y == this.y)) {
+      return 2;
+    }
+    return 3;
+  }
   getCost(other) {
     var costX = Math.abs(other.x - this.x) * 2;
     var costY = Math.abs(other.y - this.y) * 2;
@@ -416,7 +422,7 @@ class GameMap {
       }
       var neighbours = this.getNeighbours(current.vec);
       for (let next of neighbours) {
-        let newCost = costSoFar.get(current.vec) + current.vec.getCost(next);
+        let newCost = costSoFar.get(current.vec) + current.vec.getNeighbourCost(next);
 
         if (!costSoFar.has(next) || newCost < costSoFar.get(next)) {
           frontier.push({vec: next, cost : newCost});
