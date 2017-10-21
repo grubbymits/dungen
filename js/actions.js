@@ -114,11 +114,15 @@ class DealDamage extends Action {
   }
 
   perform() {
+    if (this.targetActor.currentHealth < 1) {
+      return;
+    }
+
     let power = this.attack.power;
     let defense = this.targetActor.physicalDefense;
     let damage = Math.round(power * MAX_DEFENSE / defense);
-
     let elemType = this.attack.type;
+
     if (elemType === NORMAL) {
       console.log("deal normal damage");
       this.game.addEffect(this.targetActor,

@@ -39,6 +39,7 @@ class Game {
   }
 
   saveGame() {
+    console.log("save game");
     localStorage.setItem("mapType", this.mapGenerator.type);
     localStorage.setItem("level", this.level);
 
@@ -53,9 +54,11 @@ class Game {
     this.saveItems(this.player.shields, "shields");
     this.saveItems(this.player.spells, "spells");
 
-    localStorage.setItem("numHeroes", this.heroes.length);
+    console.log("number of heroes to save:", this.heroes.size);
+    localStorage.setItem("numHeroes", this.heroes.size);
     let i = 0;
     for (let hero of this.heroes.values()) {
+      console.log("saving hero.");
       //let hero = this.heroes[i];
       localStorage.setItem("hero" + i, JSON.stringify({
         subtype : hero.subtype,
@@ -176,6 +179,7 @@ class Game {
   }
 
   loadNextMap() {
+    console.log("load next map");
     this.saveGame();
     this.status = LOADING;
     this.pause();
@@ -193,13 +197,14 @@ class Game {
     this.currentEffects.clear();
 
 
-    this.setupMap(this.heroes.length);
+    this.setupMap(this.heroes.size);
     // re-add the heroes
     for (let hero of this.heroes.values()) {
       hero.reset();
       hero.pos = this.mapGenerator.entryVecs.pop();
       this.theMap.placeEntity(hero.pos, hero);
       this.actors.push(hero);
+      this.currentEffects.set(hero, new Set());
     }
     this.player.UI.centreCamera();
 
@@ -208,6 +213,7 @@ class Game {
   }
 
   setupMap(numHeroes) {
+    console.log("setup map for number of heroes:", numHeroes);
     this.mapGenerator.generate(this.level, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS,
                                numHeroes);
     this.theMap = this.mapGenerator.map;
@@ -425,6 +431,7 @@ class Game {
       ++this.monstersKilled;
       console.log("deleting monster:", entity);
       this.monsters.delete(entity);
+      this.theMap.removeEntity(entity.position);
     } else if (entity.kind == HERO) {
       if (this.heroes.length == 1) {
         console.log("removing only hero");
@@ -433,10 +440,11 @@ class Game {
       }
       console.log("deleting hero:", entity);
       this.heroes.delete(entity);
+      this.theMap.removeEntity(entity.position);
     } else if (entity.kind == OBJECT) {
       console.log("deleting object:", entity);
-      this.theMap.removeEntity(entity.position);
       this.objects.delete(entity);
+      this.theMap.removeEntity(entity.position);
       return;
     } else {
       console.log(entity);
@@ -444,11 +452,9 @@ class Game {
     }
 
     for (let index in this.actors) {
-      if (entities[index] == entity) {
-        console.log("removing entity from map:", entity);
-        this.theMap.removeEntity(entity.position);
-        delete entities[index];
-        entities.splice(index, 1);
+      if (this.actors[index] == entity) {
+        delete this.actors[index];
+        this.actors.splice(index, 1);
       }
     }
   }
@@ -458,17 +464,25 @@ class Game {
   }
 
   addEffect(actor, effect) {
+    if (!this.currentEffects.has(actor)) {
+      console.log("actor isn't in current effects.");
+      return;
+    }
     this.currentEffects.get(actor).add(effect);
   }
 
   applyEffects(index) {
     let actor = this.actors[index];
-    let effects = this.currentEffects.get(actor);
-    for (let effect of effects.values()) {
-      let expired = effect.cause(actor);
-      if (expired) {
-        effects.delete(effect);
+    if (this.currentEffects.has(actor)) {
+      let effects = this.currentEffects.get(actor);
+      for (let effect of effects.values()) {
+        let expired = effect.cause(actor);
+        if (expired) {
+          effects.delete(effect);
+        }
       }
+    } else {
+      console.log("actor isn't in effects.");
     }
     // Each actor receives some EP at the beginning of their turn.
     if (actor.currentEnergy < actor.maxEnergy - 1) {

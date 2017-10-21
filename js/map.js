@@ -37,6 +37,10 @@ class Location {
     this.vec = new Vec(x, y);
     this.visible = HIDDEN;
   }
+  clear() {
+    this.blocked = false;
+    this.entity = null;
+  }
   get isBlocked() {
     // this.blocking is used to cause a temp block until an entity is placed.
     return (this.entity !== null || this.tileType == WALL ||
@@ -181,8 +185,7 @@ class GameMap {
 
   removeEntity(vec) {
     let loc = this.locations[vec.x][vec.y];
-    loc.entity = null;
-    loc.blocked = false;
+    loc.clear();
     if (loc.isVisible) {
       this.newDirty.add(vec);
     }

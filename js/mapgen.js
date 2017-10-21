@@ -493,14 +493,15 @@ class MapGenerator {
       for (let i = 0; i < this.numPlayers - neighbours.length; ++i) {
         neighbours.push(this.getRandomLocation(this.entryRoom).vec);
       }
-    } else {
-      this.entryVecs = [];
-      for (let i = 0; i < this.numPlayers; ++i) {
-        this.entryVecs.push(neighbours[i]);
-        this.map.setLocationBlocking(this.entryVecs[i].x, this.entryVecs[i].y,
-                                     true);
-      }
     }
+    this.entryVecs = [];
+    for (let i = 0; i < this.numPlayers; ++i) {
+      this.entryVecs.push(neighbours[i]);
+      this.map.setLocationBlocking(this.entryVecs[i].x, this.entryVecs[i].y,
+                                   true);
+    }
+    console.log("Number of players:", this.numPlayers);
+    console.log("Number of EntryVecs:", this.entryVecs.length);
     if (this.numPlayers < MAX_HEROES) {
       this.placeAlly();
     }
