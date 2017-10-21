@@ -11,7 +11,7 @@ class Game {
     this.heroes = new Set();
     this.monsters = new Set();
     this.currentEffects = new Map();
-    this.objects = [];
+    this.objects = new Set();
     this.entitiesToRemove = new Set();
     this.entitiesToCreate = new Set();
     this.totalChests = 0;
@@ -182,7 +182,7 @@ class Game {
 
     // reset stuff
     this.actors = [];
-    this.objects = [];
+    this.objects.clear();
     this.monsters.clear();
     this.entitiesToRemove.clear();
     this.entitiesToCreate.clear();
@@ -411,7 +411,7 @@ class Game {
   }
 
   addObject(object, loc) {
-    this.objects.push(object);
+    this.objects.add(object);
     this.theMap.placeEntity(object.pos, object);
     loc.blocked = false;
   }
@@ -425,9 +425,7 @@ class Game {
       ++this.monstersKilled;
       console.log("deleting monster:", entity);
       this.monsters.delete(entity);
-    }
-
-    if (entity.kind == HERO) {
+    } else if (entity.kind == HERO) {
       if (this.heroes.length == 1) {
         console.log("removing only hero");
         this.status = OVER;
@@ -435,16 +433,17 @@ class Game {
       }
       console.log("deleting hero:", entity);
       this.heroes.delete(entity);
-    }
-
-    let entities;
-    if (entity.kind != OBJECT) {
-      entities = this.actors;
+    } else if (entity.kind == OBJECT) {
+      console.log("deleting object:", entity);
+      this.theMap.removeEntity(entity.position);
+      this.objects.delete(entity);
+      return;
     } else {
-      entities = this.objects;
+      console.log(entity);
+      throw("why is this happening?");
     }
 
-    for (let index in entities) {
+    for (let index in this.actors) {
       if (entities[index] == entity) {
         console.log("removing entity from map:", entity);
         this.theMap.removeEntity(entity.position);

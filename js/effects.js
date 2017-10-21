@@ -18,7 +18,8 @@ class PhysicalDamage extends Effect {
   }
 
   cause(actor) {
-    actor.game.addTextEvent(actor.name + " takes " + this.strength + " physical damage");
+    actor.game.addTextEvent(actor.name + " takes " + this.strength +
+                            " physical damage");
     actor.game.audio.hit();
     actor.game.addSpriteChangeEvent(actor, actor.damageSprite);
     actor.reduceHealth(this.inflictor, this.strength);

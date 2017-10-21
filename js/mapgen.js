@@ -484,7 +484,7 @@ class MapGenerator {
     if (exit === undefined)
       throw("exit room is still null!");
 
-    this.entryRoom = entry;
+    this.entryRoom = exit;
     this.exitRoom = exit;
     this.exitStairLoc = this.getStairLoc(this.exitRoom);
     this.entryStairLoc = this.getStairLoc(this.entryRoom);
