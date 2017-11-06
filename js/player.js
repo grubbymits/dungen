@@ -16,6 +16,7 @@ class Player {
     this.spells = new Map();
     this.potions = new Map();
     this.treasure = new Map();
+    this.wallet = 0;
     this.groupControl = true;
   }
 
@@ -128,6 +129,8 @@ class Player {
       if (this.currentHero !== null) {
         this.UI.refreshEquipmentLists(this.currentHero);
       }
+    } else if (item.type == TREASURE) {
+      this.wallet += item.value;
     }
   }
 

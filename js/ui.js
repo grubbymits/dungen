@@ -254,10 +254,6 @@ class Interface {
       }
     }
 
-    $('#score_hud').text("Chests: " + game.openChests + "/" + game.totalChests +
-                         "\n" +
-                         "Killed: " + game.monstersKilled + "/" + game.totalMonsters +
-                         "\n");
     $('#action_hud').text(eventList);
   }
 

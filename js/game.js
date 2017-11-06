@@ -103,6 +103,7 @@ class Game {
     if (this.mapGenerator.entryVecs.length === 0) {
       throw("entryVecs not populated");
     }
+    console.log("loading level:", this.level);
 
     this.loadItems(this.player.armours, "armours", armours);
     this.loadItems(this.player.helmets, "helmets", helmets);
@@ -183,6 +184,7 @@ class Game {
     this.saveGame();
     this.status = LOADING;
     this.pause();
+    ++this.level;
 
     // reset stuff
     this.actors = [];
@@ -269,7 +271,8 @@ class Game {
       this.createMonster(monster.vec, monster.type);
     }
 
-    ++this.level;
+    //++this.level;
+    console.log("level now set:", this.level);
   }
   
   createHero(pos, type, isFollowing) {
@@ -544,11 +547,17 @@ class Game {
     this.renderer.clearOverlay();
     this.renderer.renderChanges();
     this.renderer.renderEntities(this.player.currentHero);
+    this.renderer.renderUI(this.level, this.openChests, this.totalChests,
+                           this.monstersKilled, this.totalMonsters,
+                           this.player.wallet);
   }
 
   render() {
     this.renderer.renderChanges();
     this.renderer.renderEntities(this.player.currentHero);
+    this.renderer.renderUI(this.level, this.openChests, this.totalChests,
+                           this.monstersKilled, this.totalMonsters,
+                           this.player.wallet);
   }
 
   addAnimationEvent(actor, pos, dest) {

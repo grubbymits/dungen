@@ -33,12 +33,12 @@ class SpriteSheet {
 }
 
 class Sprite {
-  constructor(spriteSheet, offsetX, offsetY) {
+  constructor(spriteSheet, offsetX, offsetY, width = TILE_SIZE, height = TILE_SIZE) {
     this.spriteSheet = spriteSheet;
-    this.offsetX = offsetX * TILE_SIZE;
-    this.offsetY = offsetY * TILE_SIZE;
-    this.width = TILE_SIZE;
-    this.height = TILE_SIZE;
+    this.offsetX = offsetX * width;
+    this.offsetY = offsetY * height;
+    this.width = width;
+    this.height = height;
   }
 
   render(desX, desY, context) {
@@ -237,3 +237,18 @@ for (let x = 0; x < 6; ++x) {
 
 var signSprites = [ new Sprite(greenSpriteSheet, 6, 17),
                     new Sprite(greenSpriteSheet, 7, 17) ];
+
+
+// UI sprites are either half or a quarter size of the other spirtes.
+var purpleUISheet = new SpriteSheet('purple-ui');
+var chestIconSprite = new Sprite(purpleUISheet, 3, 0, 32, 32);
+var coinIconSprite = new Sprite(purpleUISheet, 11, 0, 32, 32);
+var levelUISprites = [];
+for (let x = 0; x < 11; ++x) {
+  levelUISprites.push(new Sprite(purpleUISheet, x, 2, 32, 32));
+}
+var numberSprites = [];
+for (let x = 22; x < 32; ++x) {
+  numberSprites.push(new Sprite(purpleUISheet, x, 2, 16, 32));
+}
+var killsSprite = new Sprite(purpleUISheet, 12, 0, 32, 32);

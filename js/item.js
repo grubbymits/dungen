@@ -260,14 +260,14 @@ var throwing = [ new Throwing(THROWING0, 10, 8, 1, NORMAL),
 // Kusanagi - amaterasu sword
 
 
-var treasures = [ new Treasure(TREASURE0, 50),
-                  new Treasure(TREASURE1, 75),
-                  new Treasure(TREASURE2, 100),
-                  new Treasure(TREASURE3, 125),
-                  new Treasure(TREASURE4, 150),
-                  new Treasure(TREASURE5, 175),
-                  new Treasure(TREASURE6, 200),
-                  new Treasure(TREASURE7, 225)
+var treasures = [ new Treasure(TREASURE0, 5),
+                  new Treasure(TREASURE1, 7),
+                  new Treasure(TREASURE2, 10),
+                  new Treasure(TREASURE3, 13),
+                  new Treasure(TREASURE4, 15),
+                  new Treasure(TREASURE5, 18),
+                  new Treasure(TREASURE6, 20),
+                  new Treasure(TREASURE7, 22)
                 ];
 
 var spells = [ new Spell(SPELL0),

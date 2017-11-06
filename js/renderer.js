@@ -112,4 +112,29 @@ class Renderer {
       }
     }
   }
+
+  renderUI(level, openChests, totalChests, monstersKilled, totalMonsters,
+            wallet) {
+    let canvas = document.getElementById("scoreCanvas");
+    let context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    levelUISprites[0].render(0, 0, context);
+    levelUISprites[level].render(32, 0, context);
+
+    killsSprite.render(0, 32, context);
+    let remaining = totalMonsters - monstersKilled;
+    numberSprites[Math.floor(remaining / 10)].render(32, 32, context);
+    numberSprites[remaining % 10].render(48, 32, context);
+
+    chestIconSprite.render(0, 64, context);
+    remaining = totalChests - openChests;
+    numberSprites[Math.floor(remaining / 10)].render(32, 64, context);
+    numberSprites[remaining % 10].render(48, 64, context);
+
+    coinIconSprite.render(0, 96, context);
+    numberSprites[Math.floor(wallet / 1000)].render(32, 96, context);
+    numberSprites[Math.floor((wallet % 1000) / 100)].render(48, 96, context);
+    numberSprites[Math.floor((wallet % 100) / 10)].render(64, 96, context);
+    numberSprites[Math.floor(wallet % 10)].render(80, 96, context);
+  }
 }

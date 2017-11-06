@@ -125,8 +125,10 @@
       <li><a class="btn-floating orange" id="heal_button"><i class="material-icons">healing</i></a></li>
     </ul>
   </div>
-  <div style="position: fixed; bottom: 0px; left: 0px;">
-    <p id="score_hud" style="color: orange; background-color: rgba(100,100,100,0.8); white-space: pre-wrap"></p>
+  <div style="position: fixed; bottom: 128px; left: 0px;">
+  <canvas id="scoreCanvas" width="96" height="128"
+    style="left: 0px; top: 0px; position: absolute; zIndex: -1;">
+  </canvas>
   </div>
   <div style="position: fixed; top: 0px; right: 1px">
     <p id="action_hud" style="color: orange; background-color: rgba(100,100,100,0.8); white-space: pre-wrap"></p>
