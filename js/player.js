@@ -15,7 +15,6 @@ class Player {
     this.throwing = new Map();
     this.spells = new Map();
     this.potions = new Map();
-    this.treasure = new Map();
     this.wallet = 0;
     this.groupControl = true;
   }
@@ -116,21 +115,19 @@ class Player {
       items = this.potions;
       break;
       case TREASURE:
-      items = this.treasure;
-      break;
+      this.wallet += item.value;
+      return;
     }
     if (items.has(item)) {
       number += items.get(item);
     }
     items.set(item, number);
-    if (item.type != TREASURE && item.type != POTION) {
+    if (item.type != POTION) {
       // at the beginning, the UI would not have been defined and the equipment
       // list will be populated once it is.
       if (this.currentHero !== null) {
         this.UI.refreshEquipmentLists(this.currentHero);
       }
-    } else if (item.type == TREASURE) {
-      this.wallet += item.value;
     }
   }
 

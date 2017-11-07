@@ -55,8 +55,33 @@ class Hero extends Actor {
     this.attack = new InitAttack(this);
     this.findTarget = new FindTarget(this);
     this.primaryAttack = new PrimaryAttack(this);
-    this.interact = new Interact(this);
+    this.interaction = new Interact(this);
     this.findTarget.targets = this.game.monsters;
+  }
+
+  get isInteractable() {
+    return this.isFollowing;
+  }
+
+  interact(actor) {
+    console.log("actor at:", this.pos);
+    // If this hero is interacted with, it needs to move out of its current
+    // location to make way for the leader.
+    let dest = 0;
+    if ((actor.pos.x < this.pos.x) && (!this.map.getLocRight(this.pos).isBlocked)) {
+      dest = this.map.getLocRight(this.pos).vec;
+    } else if ((actor.pos.y < this.pos.y) && (!this.map.getLocDown(this.pos).isBlocked)) {
+      dest = this.map.getLocDown(this.pos).vec;
+    } else if ((actor.pos.x > this.pos.x) && (!this.map.getLocLeft(this.pos).isBlocked)) {
+      dest = this.map.getLocLeft(this.pos).vec;
+    } else if ((actor.pos.y > this.pos.y) && (!this.map.getLocUp(this.pos).isBlocked)) {
+      dest = this.map.getLocUp(this.pos).vec;
+    } else {
+      console.log("failed to find new location");
+      return;
+    }
+    this.walk.dest = dest;
+    this.nextAction = this.walk;
   }
 
   get name() {
@@ -137,9 +162,11 @@ class Hero extends Actor {
       if (this.leader.nextAction == this.leader.attack) {
         this.attack.target = this.leader.attack.target;
         this.nextAction = this.attack;
-      } else if (this.position.getCost(this.leader.position) > 4) {
+      } else if (this.position.getCost(this.leader.position) > 5) {
         this.walk.dest = this.leader.position;
         this.nextAction = this.walk;
+      } else if ((this.nextAction == this.walk) && (this.walk.dest != this.pos)) {
+        return this.nextAction;
       } else {
         console.log("returning findTarget as nextACtion");
         this.nextAction = this.findTarget;

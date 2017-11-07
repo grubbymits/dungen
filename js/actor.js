@@ -21,13 +21,14 @@ class Actor extends Entity {
     this.findTarget = new FindTarget(this);
     this.primaryAttack = new PrimaryAttack(this);
     this.secondaryAttack = null;
-    this.interact = new Interact(this);
+    this.interaction = new Interact(this);
     this.nextAction = null;
     this.destination = null;
     this.currentPath = [];
     this.rangeAttack = null;
     this.isStatic = false;
     this.nextUpdate = Date.now();
+    this.map = this.game.map;
   }
 
   get action() {
@@ -83,25 +84,22 @@ class Actor extends Entity {
   }
 
   setDestination(vec) {
+    console.log("setDestination:", vec);
     let target = this.game.map.getEntity(vec);
     if (target) {
-      if (target.kind == OBJECT) {
-        if (target.isInteractable) {
-          console.log("object is interactable");
-          this.interact.target = target;
-          this.nextAction = this.interact;
-          return;
-        } else {
-          console.log("object not interactable");
-        }
-      } else if (target.kind != this.kind) {
+      if (target.kind != this.kind && target.kind != OBJECT) {
         console.log("attack!");
         this.attack.target = target;
         this.nextAction = this.attack;
         return;
-      } else {
-        console.log("doing nothing, target:", target);
       }
+      if (target.isInteractable) {
+        console.log("object is interactable");
+        this.interaction.target = target;
+        this.nextAction = this.interaction;
+        return;
+      }
+      console.log("doing nothing, target:", target);
     } else if (!this.game.map.isBlocked(vec)) {
       console.log("set destination");
       this.walk.dest = vec; //this.game.map.getLocation(x, y).vec;

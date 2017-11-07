@@ -384,7 +384,8 @@ class Interact extends Action {
       return;
     }
     let targetDistance =  this.map.getDistance(this.actor, this.targetObject);
-    if (this.actor.primaryAtkRange >= targetDistance) {
+    if (targetDistance < 3) {
+      console.log("target to interact:", this.targetObject);
       this.targetObject.interact(this.actor);
       this.actor.nextAction = null;
       return null;

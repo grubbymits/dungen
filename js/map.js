@@ -133,31 +133,31 @@ class GameMap {
   }
 
   getLocUp(vec) {
-    if (this.isOutOfRange(x, y - 1)) {
+    if (this.isOutOfRange(vec.x, vec.y - 1)) {
       throw "Index out of range:";
     }
-    return this.locations[x][y - 1];
+    return this.locations[vec.x][vec.y - 1];
   }
 
   getLocDown(vec) {
-    if (this.isOutOfRange(x, y + 1)) {
+    if (this.isOutOfRange(vec.x, vec.y + 1)) {
       throw "Index out of range:";
     }
-    return this.locations[x][y + 1];
+    return this.locations[vec.x][vec.y + 1];
   }
 
   getLocLeft(vec) {
-    if (this.isOutOfRange(x - 1, y)) {
+    if (this.isOutOfRange(vec.x - 1, vec.y)) {
       throw "Index out of range:";
     }
-    return this.locations[x - 1][y];
+    return this.locations[vec.x - 1][vec.y];
   }
 
   getLocRight(vec) {
-    if (this.isOutOfRange(x + 1, y)) {
+    if (this.isOutOfRange(vec.x + 1, vec.y)) {
       throw "Index out of range:";
     }
-    return this.locations[x + 1][y];
+    return this.locations[vec.x + 1][vec.y];
   }
 
   setLocationType(x, y, type) {
