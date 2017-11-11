@@ -168,14 +168,14 @@ for (let y = MONSTER_OFFSET; y < (MONSTER_OFFSET + 4); ++y) {
 }
 
 for (let x = 0; x < 3; ++x) {
-  throwingSprites.push(new Sprite(greenSpriteSheet, x, THROWING_OFFSET));
+  throwingSprites.push(new Sprite(purpleSpriteSheet, x, THROWING_OFFSET));
   fireThrowingSprites.push(new Sprite(orangeSpriteSheet, x, THROWING_OFFSET));
   iceThrowingSprites.push(new Sprite(blueSpriteSheet, x, THROWING_OFFSET));
   electricThrowingSprites.push(new Sprite(yellowSpriteSheet, x, THROWING_OFFSET));
 }
 
 for (let x = 3; x < 8; ++x) {
-  bowSprites.push(new Sprite(greenSpriteSheet, x, BOW_OFFSET));
+  bowSprites.push(new Sprite(purpleSpriteSheet, x, BOW_OFFSET));
   fireBowSprites.push(new Sprite(orangeSpriteSheet, x, BOW_OFFSET));
   iceBowSprites.push(new Sprite(blueSpriteSheet, x, BOW_OFFSET));
   electricBowSprites.push(new Sprite(yellowSpriteSheet, x, BOW_OFFSET));
@@ -186,29 +186,29 @@ for (let x = 3; x < 8; ++x) {
 }
 
 for (let x = 0; x < 8; ++x) {
-  spellSprites.push(new Sprite(greenSpriteSheet, x, SPELL_OFFSET));
+  spellSprites.push(new Sprite(purpleSpriteSheet, x, SPELL_OFFSET));
 
-  swordSprites.push(new Sprite(greenSpriteSheet, x, SWORD_OFFSET));
+  swordSprites.push(new Sprite(purpleSpriteSheet, x, SWORD_OFFSET));
   fireSwordSprites.push(new Sprite(orangeSpriteSheet, x, SWORD_OFFSET));
   iceSwordSprites.push(new Sprite(blueSpriteSheet, x, SWORD_OFFSET));
   electricSwordSprites.push(new Sprite(yellowSpriteSheet, x, SWORD_OFFSET));
   
-  axeSprites.push(new Sprite(greenSpriteSheet, x, AXE_OFFSET));
+  axeSprites.push(new Sprite(purpleSpriteSheet, x, AXE_OFFSET));
   fireAxeSprites.push(new Sprite(orangeSpriteSheet, x, AXE_OFFSET));
   iceAxeSprites.push(new Sprite(blueSpriteSheet, x, AXE_OFFSET));
   electricAxeSprites.push(new Sprite(yellowSpriteSheet, x, AXE_OFFSET));
   
-  staffSprites.push(new Sprite(greenSpriteSheet, x, STAFF_OFFSET));
+  staffSprites.push(new Sprite(purpleSpriteSheet, x, STAFF_OFFSET));
   fireStaffSprites.push(new Sprite(orangeSpriteSheet, x, STAFF_OFFSET));
   iceStaffSprites.push(new Sprite(blueSpriteSheet, x, STAFF_OFFSET));
   electricStaffSprites.push(new Sprite(yellowSpriteSheet, x, STAFF_OFFSET));
   
-  armourSprites.push(new Sprite(greenSpriteSheet, x, ARMOUR_OFFSET));
-  helmetSprites.push(new Sprite(greenSpriteSheet, x, HELMET_OFFSET));
-  shieldSprites.push(new Sprite(greenSpriteSheet, x, SHIELD_OFFSET));
-  spellSprites.push(new Sprite(greenSpriteSheet, x, SPELL_OFFSET));
-  potionSprites.push(new Sprite(greenSpriteSheet, x, POTION_OFFSET));
-  treasureSprites.push(new Sprite(greenSpriteSheet, x, TREASURE_OFFSET));
+  armourSprites.push(new Sprite(purpleSpriteSheet, x, ARMOUR_OFFSET));
+  helmetSprites.push(new Sprite(purpleSpriteSheet, x, HELMET_OFFSET));
+  shieldSprites.push(new Sprite(purpleSpriteSheet, x, SHIELD_OFFSET));
+  spellSprites.push(new Sprite(purpleSpriteSheet, x, SPELL_OFFSET));
+  potionSprites.push(new Sprite(purpleSpriteSheet, x, POTION_OFFSET));
+  treasureSprites.push(new Sprite(purpleSpriteSheet, x, TREASURE_OFFSET));
   
   heroSprites.push(new Sprite(greenSpriteSheet, x, HERO_OFFSET));
   damageHeroSprites.push(new Sprite(redSpriteSheet, x, HERO_OFFSET));
