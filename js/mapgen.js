@@ -41,12 +41,6 @@ class Room {
     this.pos = new Vec(x, y);
     this.centre = new Vec(x + Math.floor(width / 2),
                           y + Math.floor(height / 2));
-    // Adjust the centre so that when creating paths, we don't go OoB.
-    if (this.centre.x > Math.floor(PATH_WIDTH / 2))
-      this.centre.x -= Math.floor(PATH_WIDTH / 2);
-    if (this.centre.y > Math.floor(PATH_WIDTH / 2))
-      this.centre.y -= Math.floor(PATH_WIDTH / 2);
-
     this.width = width;
     this.height = height;
     this.connections = new Set();
@@ -89,11 +83,6 @@ class MapGenerator {
   // Generate level and return start position
   generate(level, width, height, numPlayers) {
     this.rooms = [];
-    //this.chestLocs = [];
-    //this.skullLocs = [];
-    //this.tombstoneLocs = [];
-    //this.signLocs = [];
-    //this.magicalObjectLocs = [];
     this.numPlayers = numPlayers;
     this.reservedLocs = [];
     this.symbolLocs = [];
@@ -277,6 +266,14 @@ class MapGenerator {
         let y = this.randomY;
         let dims = this.getDims(i);
 
+        // Allow for paths to be draw between the rooms.
+        if (x + dims.width > (this.xMax - (Math.floor(PATH_WIDTH) / 2))) {
+          continue;
+        }
+        if (y + dims.height > (this.yMax - (Math.floor(PATH_WIDTH) / 2))) {
+          continue;
+        }
+
         if (this.isSpace(x, y, dims.width, dims.height)) {
           this.createRoom(x, y, dims.width, dims.height);
           rooms++;
@@ -441,6 +438,7 @@ class MapGenerator {
     let y = room.centre.y;
     let loc = this.map.getLocation(x, y);
     while (loc.isBlocked) {
+      console.log("loc is stairs is blocked, trying again:", loc);
       x = getBoundedRandom(room.pos.x, room.pos.x + room.width);
       y = getBoundedRandom(room.pos.y, room.pos.y + room.height);
       loc = this.map.getLocation(x, y);
@@ -484,7 +482,7 @@ class MapGenerator {
     if (exit === undefined)
       throw("exit room is still null!");
 
-    this.entryRoom = exit;
+    this.entryRoom = entry;
     this.exitRoom = exit;
     this.exitStairLoc = this.getStairLoc(this.exitRoom);
     this.entryStairLoc = this.getStairLoc(this.entryRoom);

@@ -90,6 +90,9 @@ class OldCityGenerator extends MapGenerator {
     }
     // add some signs
     for (let room of this.rooms) {
+      if (room.id == this.exitRoom.id || room.id == this.entryRoom.id) {
+        continue;
+      }
       if (Math.random() < 0.33) {
         this.placeSign(room);
       }
@@ -277,6 +280,9 @@ class DungeonGenerator extends MapGenerator {
       }
     }
     for (let room of this.rooms) {
+      if (room.id == this.exitRoom.id || room.id == this.entryRoom.id) {
+        continue;
+      }
       // 1/3 rooms can have skulls
       if (Math.random() < 0.33) {
         this.placeSkull(room);
