@@ -184,7 +184,7 @@ class Chest extends Entity {
     } else {
       console.log("received:", item.name);
     }
-    this.game.addTextEvent("Received " + item.name);
+    //this.game.addTextEvent("Received " + item.name);
     this.game.addGraphicEvent(item.sprite,
                               new Vec(this.pos.x, this.pos.y - 1));
     this.game.player.addItem(item);

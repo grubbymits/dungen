@@ -178,7 +178,7 @@ class Interface {
   }
 
   addHero(hero) {
-    this.events.push(new TextEvent(hero.name + " joins the team"));
+    //this.events.push(new TextEvent(hero.name + " joins the team"));
     // Add a button for the new hero
     let name = hero.className;
     let id = name + '_id';
@@ -223,16 +223,11 @@ class Interface {
 
   renderInfo() {
     let game = this.player.game;
-    let eventList = "";
     for (let i in this.events) {
       let event = this.events[i];
 
       if (!event.isFinished()) {
-        if (event.type == TEXT_EVENT) {
-          eventList += event.string + "\n";
-        } else {
-          event.update();
-        }
+        event.update();
       } else {
         event.end(game);
         delete this.events[i];
@@ -253,12 +248,10 @@ class Interface {
         this.menuEvents.splice(i, 1);
       }
     }
-
-    $('#action_hud').text(eventList);
   }
 
   levelUp(hero) {
-    this.events.push(new TextEvent(hero.name + " lvl up!"));
+    //this.events.push(new TextEvent(hero.name + " lvl up!"));
     this.menuEvents.push(new LevelUpEvent(this, hero));
   }
 

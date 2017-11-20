@@ -123,18 +123,18 @@ class Renderer {
 
     killsSprite.render(0, 32, context);
     let remaining = totalMonsters - monstersKilled;
-    numberSprites[Math.floor(remaining / 10)].render(32, 32, context);
-    numberSprites[remaining % 10].render(48, 32, context);
+    largeNumberSprites[Math.floor(remaining / 10)].render(32, 32, context);
+    largeNumberSprites[remaining % 10].render(48, 32, context);
 
     chestIconSprite.render(0, 64, context);
     remaining = totalChests - openChests;
-    numberSprites[Math.floor(remaining / 10)].render(32, 64, context);
-    numberSprites[remaining % 10].render(48, 64, context);
+    largeNumberSprites[Math.floor(remaining / 10)].render(32, 64, context);
+    largeNumberSprites[remaining % 10].render(48, 64, context);
 
     coinIconSprite.render(0, 96, context);
-    numberSprites[Math.floor(wallet / 1000)].render(32, 96, context);
-    numberSprites[Math.floor((wallet % 1000) / 100)].render(48, 96, context);
-    numberSprites[Math.floor((wallet % 100) / 10)].render(64, 96, context);
-    numberSprites[Math.floor(wallet % 10)].render(80, 96, context);
+    largeNumberSprites[Math.floor(wallet / 1000)].render(32, 96, context);
+    largeNumberSprites[Math.floor((wallet % 1000) / 100)].render(48, 96, context);
+    largeNumberSprites[Math.floor((wallet % 100) / 10)].render(64, 96, context);
+    largeNumberSprites[Math.floor(wallet % 10)].render(80, 96, context);
   }
 }

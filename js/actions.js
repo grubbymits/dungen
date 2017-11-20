@@ -247,8 +247,8 @@ class PrimaryAttack extends AttackBase {
       return this.dealDamage;
     } else {
       this.actor.useEnergy(energyRequired);
-      let text = this.targetActor.name + " dodged attack from " + this.actor.name;
-      this.game.addTextEvent(text);
+      //let text = this.targetActor.name + " dodged attack from " + this.actor.name;
+      //this.game.addTextEvent(text);
       this.game.audio.dodge();
       return null;
     }
@@ -306,8 +306,8 @@ class SecondaryAttack extends AttackBase {
       return this.dealDamage;
     } else {
       this.actor.useEnergy(energyRequired);
-      let text = this.targetActor.name + " dodged attack from " + this.actor.name;
-      this.game.addTextEvent(text);
+      //let text = this.targetActor.name + " dodged attack from " + this.actor.name;
+      //this.game.addTextEvent(text);
       this.game.audio.dodge();
       return null;
     }

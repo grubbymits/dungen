@@ -247,8 +247,20 @@ var levelUISprites = [];
 for (let x = 0; x < 11; ++x) {
   levelUISprites.push(new Sprite(purpleUISheet, x, 2, 32, 32));
 }
-var numberSprites = [];
+var largeNumberSprites = [];
 for (let x = 22; x < 32; ++x) {
-  numberSprites.push(new Sprite(purpleUISheet, x, 2, 16, 32));
+  largeNumberSprites.push(new Sprite(purpleUISheet, x, 2, 16, 32));
+}
+var smallNumberSprites = [];
+for (let x = 12; x < 22; ++x) {
+  smallNumberSprites.push(new Sprite(purpleUISheet, x, 6, 16, 16));
 }
 var killsSprite = new Sprite(purpleUISheet, 12, 0, 32, 32);
+
+var ASprite = new Sprite(purpleUISheet, 0, 8, 16, 16);
+var HSprite = new Sprite(purpleUISheet, 1, 8, 16, 16);
+var XSprite = new Sprite(purpleUISheet, 2, 8, 16, 16);
+var PSprite = new Sprite(purpleUISheet, 3, 8, 16, 16);
+var minusSprite = new Sprite(purpleUISheet, 4, 8, 16, 16);
+var plusSprite = new Sprite(purpleUISheet, 5, 8, 16, 16);
+

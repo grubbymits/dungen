@@ -20,14 +20,6 @@ class Event {
   end(game) { }
 }
 
-class TextEvent extends Event {
-  constructor(text) {
-    super(3000);
-    this.string = text;
-    this.type = TEXT_EVENT;
-  }
-}
-
 class GraphicEvent extends Event {
   constructor(context, pos, sprite) {
     super(1000);
@@ -49,6 +41,163 @@ class GraphicEvent extends Event {
 
   end(game) {
     game.map.setDirty(this.position);
+  }
+}
+
+class HPEvent extends Event {
+  constructor(context, pos, value) {
+    super(1000);
+    this.value = value;
+    this.context = context;
+    this.position = pos;
+    this.x = pos.x * TILE_SIZE * UPSCALE_FACTOR;
+    this.y = pos.y * TILE_SIZE * UPSCALE_FACTOR;
+    this.type = GRAPHIC_EVENT;
+  }
+
+  get pos() {
+    return this.position;
+  }
+
+  update() {
+    let x = this.x;
+    let y = this.y;
+
+    // draw plus or minus
+    if (this.value > 0) {
+      plusSprite.render(x, y, this.context);
+    } else {
+      minusSprite.render(x, y, this.context);
+    }
+
+    x += 16;
+    let absVal = Math.abs(this.value);
+
+    // draw numbers
+    if (absVal > 100) {
+      smallNumberSprites[Math.floor((absVal % 1000) / 100)].render(x, y, this.context);
+      x += 16;
+    }
+    if (absVal > 10) {
+      smallNumberSprites[Math.floor((absVal % 100) / 10)].render(x, y, this.context);
+      x += 16;
+    }
+    if (absVal > 0) {
+      smallNumberSprites[Math.floor(absVal % 10)].render(x, y, this.context);
+      x += 16;
+    }
+
+    // draw 'HP'
+    HSprite.render(x, y, this.context);
+    PSprite.render(x + 16, y, this.context);
+  }
+
+  end(game) {
+    game.map.setDirty(this.position);
+    game.map.setDirty(game.map.getLocRight(this.position).vec);
+  }
+}
+
+class APEvent extends Event {
+  constructor(context, pos, value) {
+    super(1000);
+    this.value = value;
+    this.context = context;
+    this.position = pos;
+    this.x = pos.x * TILE_SIZE * UPSCALE_FACTOR;
+    this.y = pos.y * TILE_SIZE * UPSCALE_FACTOR;
+    this.type = GRAPHIC_EVENT;
+  }
+
+  get pos() {
+    return this.position;
+  }
+
+  update() {
+    let x = this.x;
+    let y = this.y;
+
+    // draw plus or minus
+    if (this.value > 0) {
+      plusSprite.render(x, y, this.context);
+    } else {
+      minusSprite.render(x, y, this.context);
+    }
+
+    x += 16;
+    let absVal = Math.abs(this.value);
+
+    // draw numbers
+    if (absVal > 100) {
+      smallNumberSprites[Math.floor((absVal % 1000) / 100)].render(x, y, this.context);
+      x += 16;
+    }
+    if (absVal > 10) {
+      smallNumberSprites[Math.floor((absVal % 100) / 10)].render(x, y, this.context);
+      x += 16;
+    }
+    if (absVal > 0) {
+      smallNumberSprites[Math.floor(absVal % 10)].render(x, y, this.context);
+      x += 16;
+    }
+
+    // draw 'AP'
+    ASprite.render(x, y, this.context);
+    PSprite.render(x + 16, y, this.context);
+  }
+
+  end(game) {
+    game.map.setDirty(this.position);
+    game.map.setDirty(game.map.getLocRight(this.position).vec);
+  }
+}
+
+class XPEvent extends Event {
+  constructor(context, pos, value) {
+    super(1000);
+    this.value = value;
+    this.context = context;
+    this.position = pos;
+    this.x = pos.x * TILE_SIZE * UPSCALE_FACTOR;
+    this.y = pos.y * TILE_SIZE * UPSCALE_FACTOR;
+    this.type = GRAPHIC_EVENT;
+  }
+
+  get pos() {
+    return this.position;
+  }
+
+  update() {
+    let x = this.x;
+    let y = this.y;
+
+    // draw plus or minus
+    plusSprite.render(x, y, this.context);
+    x += 16;
+    let absVal = Math.abs(this.value);
+
+    // draw numbers
+    if (absVal > 100) {
+      smallNumberSprites[Math.floor((absVal % 1000) / 100)].render(x, y, this.context);
+      x += 16;
+    }
+    if (absVal > 10) {
+      smallNumberSprites[Math.floor((absVal % 100) / 10)].render(x, y, this.context);
+      x += 16;
+    }
+    if (absVal > 0) {
+      smallNumberSprites[Math.floor(absVal % 10)].render(x, y, this.context);
+      x += 16;
+    }
+
+    // draw 'HP'
+    XSprite.render(x, y, this.context);
+    PSprite.render(x + 16, y, this.context);
+  }
+
+  end(game) {
+    game.map.setDirty(this.position);
+    game.map.setDirty(game.map.getLocRight(this.position).vec);
   }
 }
 

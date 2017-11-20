@@ -568,8 +568,16 @@ class Game {
     this.player.UI.addEvent(new SpriteChangeEvent(actor, sprite));
   }
 
-  addTextEvent(string) {
-    this.player.UI.addEvent(new TextEvent(string));
+  addHPEvent(pos, value) {
+    this.player.UI.addEvent(new HPEvent(this.overlayContext, pos, value));
+  }
+
+  addAPEvent(pos, value) {
+    this.player.UI.addEvent(new APEvent(this.overlayContext, pos, value));
+  }
+
+  addXPEvent(pos, value) {
+    this.player.UI.addEvent(new XPEvent(this.overlayContext, pos, value));
   }
 
   addGraphicEvent(sprite, pos) {
