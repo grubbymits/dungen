@@ -37,6 +37,7 @@ class HealEffect extends Effect {
 
   cause(actor) {
     actor.game.audio.cure();
+    actor.game.addSpriteChangeEvent(actor, actor.healSprite);
     actor.game.addHPEvent(actor.pos, this.strength);
     actor.increaseHealth(this.strength);
     --this.duration;

@@ -159,6 +159,22 @@ class GameMap {
     return this.locations[vec.x + 1][vec.y];
   }
 
+  getFreeOpposite(current, opposite) {
+    let dest = current;
+    if ((opposite.x < current.x) && (!this.getLocRight(current).isBlocked)) {
+      dest = this.getLocRight(current).vec;
+    } else if ((opposite.y < current.y) && (!this.getLocDown(current).isBlocked)) {
+      dest = this.getLocDown(current).vec;
+    } else if ((opposite.x > current.x) && (!this.getLocLeft(current).isBlocked)) {
+      dest = this.getLocLeft(current).vec;
+    } else if ((opposite.y > current.y) && (!this.getLocUp(current).isBlocked)) {
+      dest = this.getLocUp(current).vec;
+    } else {
+      console.log("failed to find new location");
+    }
+    return dest;
+  }
+
   setLocationType(x, y, type) {
     if (this.isOutOfRange(x, y)) {
       throw "Index out of range:";

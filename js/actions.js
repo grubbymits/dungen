@@ -223,6 +223,10 @@ class PrimaryAttack extends AttackBase {
   }
 
   perform() {
+    if (this.targetActor.currentHealth < 1) {
+      this.targetActor = null;
+      return;
+    }
     let cost = this.actor.pos.getCost(this.targetActor.pos);
     let energyRequired = Math.round(this.actor.primaryAtkEnergy * cost);
 
@@ -247,8 +251,6 @@ class PrimaryAttack extends AttackBase {
       return this.dealDamage;
     } else {
       this.actor.useEnergy(energyRequired);
-      //let text = this.targetActor.name + " dodged attack from " + this.actor.name;
-      //this.game.addTextEvent(text);
       this.game.audio.dodge();
       return null;
     }
@@ -306,8 +308,6 @@ class SecondaryAttack extends AttackBase {
       return this.dealDamage;
     } else {
       this.actor.useEnergy(energyRequired);
-      //let text = this.targetActor.name + " dodged attack from " + this.actor.name;
-      //this.game.addTextEvent(text);
       this.game.audio.dodge();
       return null;
     }
@@ -521,3 +521,29 @@ class TakePotion extends Action {
     this.actor.nextAction = null;
   }
 }
+
+class CastSpell extends Action {
+  constructor(actor) {
+    super(actor);
+  }
+
+  set spell(spell) {
+    this.theSpell = spell;
+    this.effect = spell.effect;
+  }
+
+  set target(target) {
+    this.targetActor = target;
+  }
+
+  perform() {
+    if (this.actor.currentEnergy >= this.theSpell.energy) {
+      this.game.addEffect(this.targetActor, this.effect);
+      this.game.addGraphicEvent(this.theSpell.sprite,
+                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
+      this.actor.reduceEnergy(this.theSpell.energy);
+      this.actor.nextAction = null;
+    }
+  }
+}
+

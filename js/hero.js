@@ -17,6 +17,7 @@ class Hero extends Actor {
     this.shockedSprite = shockedHeroSprites[subtype];
     this.poisonedSprite = poisonedHeroSprites[subtype];
     this.burntSprite = burntHeroSprites[subtype];
+    this.healSprite = healHeroSprites[subtype];
 
     this.strength = strength;
     this.agility = agility;
@@ -67,19 +68,7 @@ class Hero extends Actor {
     console.log("actor at:", this.pos);
     // If this hero is interacted with, it needs to move out of its current
     // location to make way for the leader.
-    let dest = 0;
-    if ((actor.pos.x < this.pos.x) && (!this.map.getLocRight(this.pos).isBlocked)) {
-      dest = this.map.getLocRight(this.pos).vec;
-    } else if ((actor.pos.y < this.pos.y) && (!this.map.getLocDown(this.pos).isBlocked)) {
-      dest = this.map.getLocDown(this.pos).vec;
-    } else if ((actor.pos.x > this.pos.x) && (!this.map.getLocLeft(this.pos).isBlocked)) {
-      dest = this.map.getLocLeft(this.pos).vec;
-    } else if ((actor.pos.y > this.pos.y) && (!this.map.getLocUp(this.pos).isBlocked)) {
-      dest = this.map.getLocUp(this.pos).vec;
-    } else {
-      console.log("failed to find new location");
-      return;
-    }
+    let dest = this.map.getFreeOpposite(this.pos, actor.pos);
     this.walk.dest = dest;
     this.nextAction = this.walk;
   }
@@ -280,12 +269,53 @@ class Mage extends Hero {
     this.equipHelmet = helmets[HELMET0];
     this.equipPrimary = staffs[STAFF0];
     this.equipSecondary = spells[SPELL0];
-    //this.equipRing = basicRing;
     this.className = 'mage';
+    this.castSpell = new CastSpell(this);
   }
+
+  get action() {
+    // In order of priority:
+    // - attempt to heal anyone in bad shape
+    // - attack whoever the leader is attacking
+    // - set destination near the leader
+    // - move away from a potential melee attacker
+    // - walk
+    if (this.isFollowing) {
+      for (let hero of this.game.heroes) {
+        if (hero.currentHealth < hero.maxHealth / 2) {
+          this.castSpell.spell = this.equipSecondary;
+          this.castSpell.target = hero;
+          this.nextAction = this.castSpell;
+          return this.nextAction;
+        }
+      }
+      if (this.leader.nextAction == this.leader.attack) {
+        this.attack.target = this.leader.attack.target;
+        this.nextAction = this.attack;
+      } else if (this.position.getCost(this.leader.position) > 5) {
+        this.walk.dest = this.leader.position;
+        this.nextAction = this.walk;
+      } else if (this.attack.target != null &&
+                 this.attack.target.currentHealth > 0 &&
+                 (this.position.getCost(this.attack.target.pos) <= 3)) {
+        // Mages should try to keep away from melee attacks.
+        let dest = this.map.getFreeOpposite(this.pos, this.attack.target.pos);
+        this.walk.dest = dest;
+        this.nextAction = this.walk;
+      } else if ((this.nextAction == this.walk) && (this.walk.dest != this.pos)) {
+        return this.nextAction;
+      } else {
+        console.log("returning findTarget as nextACtion");
+        this.nextAction = this.findTarget;
+      }
+    }
+    return this.nextAction;
+  }
+
   get primaryAtkPower() {
     return ((100 * this.equipPrimary.power * this.wisdom / MAX_WISDOM)/100).toFixed(2);
   }
+
   get primaryAtkEnergy() {
     return ((100* this.equipPrimary.energy * MAX_WILL / this.will)/100).toFixed(2);
   }
@@ -335,6 +365,36 @@ class Archer extends Hero {
     this.equipPrimary = bows[BOW0];
     this.equipSecondary = arrows[ARROWS0];
     this.className = 'archer';
+  }
+
+  get action() {
+    // In order of priority:
+    // - attack whoever the leader is attacking
+    // - set destination near the leader
+    // - move away from a potential melee attacker
+    // - walk
+    if (this.isFollowing) {
+      if (this.leader.nextAction == this.leader.attack) {
+        this.attack.target = this.leader.attack.target;
+        this.nextAction = this.attack;
+      } else if (this.position.getCost(this.leader.position) > 5) {
+        this.walk.dest = this.leader.position;
+        this.nextAction = this.walk;
+      } else if (this.attack.target != null &&
+                 this.attack.target.currentHealth > 0 &&
+                 (this.position.getCost(this.attack.target.pos) <= 3)) {
+        // Archers should try to keep away from melee attacks.
+        let dest = this.map.getFreeOpposite(this.pos, this.attack.target.pos);
+        this.walk.dest = dest;
+        this.nextAction = this.walk;
+      } else if ((this.nextAction == this.walk) && (this.walk.dest != this.pos)) {
+        return this.nextAction;
+      } else {
+        console.log("returning findTarget as nextACtion");
+        this.nextAction = this.findTarget;
+      }
+    }
+    return this.nextAction;
   }
 
   get primaryAtkPower() {

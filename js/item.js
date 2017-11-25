@@ -157,8 +157,18 @@ class Spell extends Item {
     this.names = SPELL_NAMES;
     this.sprites = spellSprites;
   }
-  use(actor) {
-    
+}
+
+class HealingSpell extends Spell {
+  constructor(kind, strength, duration, energy) {
+    super(kind);
+    this.duration = duration;
+    this.strength = strength;
+    this.energy = energy;
+  }
+
+  get effect() {
+    return new HealEffect(this.strength, this.duration);
   }
 }
 
@@ -270,9 +280,9 @@ var treasures = [ new Treasure(TREASURE0, 5),
                   new Treasure(TREASURE7, 22)
                 ];
 
-var spells = [ new Spell(SPELL0),
-                new Spell(SPELL1),
-                new Spell(SPELL2),
+var spells = [ new HealingSpell(SPELL0, 32, 1, 3),
+                new HealingSpell(SPELL1, 64, 1, 6),
+                new HealingSpell(SPELL2, 96, 1, 9),
                 new Spell(SPELL3),
                 new Spell(SPELL4),
                 new Spell(SPELL5),

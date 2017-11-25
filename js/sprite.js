@@ -52,6 +52,7 @@ class Sprite {
 }
 
 var greenSpriteSheet = new SpriteSheet('tileset-green-64');
+var paleSpriteSheet = new SpriteSheet('tileset-pale-green-64');
 var redSpriteSheet = new SpriteSheet('tileset-red-64');
 var blueSpriteSheet = new SpriteSheet('tileset-blue-64');
 var yellowSpriteSheet = new SpriteSheet('tileset-yellow-64');
@@ -115,6 +116,7 @@ var exitStairSprite = new Sprite(greenSpriteSheet, 5, 1);
                     
 var heroSprites = [];
 var damageHeroSprites = [];
+var healHeroSprites = [];
 var frozenHeroSprites = [];
 var shockedHeroSprites = [];
 var poisonedHeroSprites = [];
@@ -212,6 +214,7 @@ for (let x = 0; x < 8; ++x) {
   
   heroSprites.push(new Sprite(greenSpriteSheet, x, HERO_OFFSET));
   damageHeroSprites.push(new Sprite(redSpriteSheet, x, HERO_OFFSET));
+  healHeroSprites.push(new Sprite(paleSpriteSheet, x, HERO_OFFSET));
   frozenHeroSprites.push(new Sprite(blueSpriteSheet, x, HERO_OFFSET));
   shockedHeroSprites.push(new Sprite(yellowSpriteSheet, x, HERO_OFFSET));
   poisonedHeroSprites.push(new Sprite(purpleSpriteSheet, x, HERO_OFFSET));
