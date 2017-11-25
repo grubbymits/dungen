@@ -191,7 +191,6 @@ class Hero extends Actor {
         this.nextAction = this.attack;
       }
     }
-    this.game.map.setDirty(this.position);
   }
   
   increaseHealth(amount) {

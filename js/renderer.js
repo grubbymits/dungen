@@ -1,8 +1,9 @@
 "use strict";
 
 class Renderer {
-  constructor(context, overlayContext, map, actors, objects) {
-    this.context = context;
+  constructor(background, foreground, overlayContext, map, actors, objects) {
+    this.background = background;
+    this.foreground = foreground;
     this.overlayContext = overlayContext;
     this.map = map;
     this.actors = actors;
@@ -11,8 +12,8 @@ class Renderer {
 
   renderMap(symbolLocs) {
     // draw everything
-    this.context.fillStyle = '#000000';
-    this.context.fillRect(0, 0,
+    this.background.fillStyle = '#000000';
+    this.background.fillRect(0, 0,
                           this.map.width * TILE_SIZE * UPSCALE_FACTOR,
                           this.map.height * TILE_SIZE * UPSCALE_FACTOR);
     for (var x = 0; x < this.map.width; x++) {
@@ -21,7 +22,7 @@ class Renderer {
         if (type != CEILING) {
           let spriteIdx = this.map.getLocationSprite(x, y);
           tileSprites[spriteIdx].render(x * TILE_SIZE, y * TILE_SIZE,
-                                        this.context);
+                                        this.background);
         }
       }
     }
@@ -42,7 +43,7 @@ class Renderer {
       }
       let sprite = symbolSprites[spriteIdx];
       sprite.render(loc.vec.x * TILE_SIZE, loc.vec.y * TILE_SIZE,
-                    this.context);
+                    this.background);
     }
   }
 
@@ -70,46 +71,33 @@ class Renderer {
     }
     this.map.newPartialVisible.clear();
     this.overlayContext.globalAlpha = 1.0;
-
-    for (let vec of this.map.newDirty.values()) {
-      this.overlayContext.clearRect(vec.x * TILE_SIZE,
-                                    vec.y * TILE_SIZE,
-                                    TILE_SIZE, TILE_SIZE);
-    }
-    this.map.newDirty.clear();
   }
  
   renderEntities(currentHero) {
+    this.foreground.clearRect(0, 0, this.map.width * TILE_SIZE,
+                              this.map.height * TILE_SIZE);
     for (let actor of this.actors) {
       let loc = this.map.getLocation(actor.pos.x, actor.pos.y);
 
-      if (loc.isVisible) {
-        this.overlayContext.clearRect(actor.drawX, actor.drawY,
-                                      TILE_SIZE, TILE_SIZE);
-        if (actor.kind == HERO) {
-          if (actor == currentHero) {
-            currentActorIdentifier.render(actor.drawX, actor.drawY,
-                                          this.overlayContext);
-          }
+      if (actor.kind == HERO) {
+        if (actor == currentHero) {
+          currentActorIdentifier.render(actor.drawX, actor.drawY,
+                                        this.foreground);
         }
-        actor.currentSprite.render(actor.drawX, actor.drawY,
-                                   this.overlayContext);
-        this.overlayContext.fillStyle = 'orangered';
-        let healthBar = (actor.currentHealth / actor.maxHealth) * TILE_SIZE;
-        this.overlayContext.fillRect(actor.drawX, actor.drawY,
-                                     healthBar, 2);
-        this.overlayContext.fillStyle = 'cadetblue';
-        let energyBar = (actor.currentEnergy / actor.maxEnergy) * TILE_SIZE;
-        this.overlayContext.fillRect(actor.drawX, actor.drawY + 3,
-                                     energyBar, 2);
       }
+      actor.currentSprite.render(actor.drawX, actor.drawY,
+                                 this.foreground);
+      this.foreground.fillStyle = 'orangered';
+      let healthBar = (actor.currentHealth / actor.maxHealth) * TILE_SIZE;
+      this.foreground.fillRect(actor.drawX, actor.drawY, healthBar, 2);
+      this.foreground.fillStyle = 'cadetblue';
+      let energyBar = (actor.currentEnergy / actor.maxEnergy) * TILE_SIZE;
+      this.foreground.fillRect(actor.drawX, actor.drawY + 3, energyBar, 2);
     }
     for (let object of this.objects) {
       let loc = this.map.getLocation(object.pos.x, object.pos.y);
-      if (loc.isVisible) {
-        object.sprite.render(object.drawX, object.drawY,
-                             this.overlayContext);
-      }
+      object.sprite.render(object.drawX, object.drawY,
+                             this.foreground);
     }
   }
 

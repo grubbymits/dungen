@@ -38,10 +38,6 @@ class GraphicEvent extends Event {
   update() {
     this.sprite.render(this.x, this.y, this.context);
   }
-
-  end(game) {
-    game.map.setDirty(this.position);
-  }
 }
 
 class HPEvent extends Event {
@@ -90,11 +86,6 @@ class HPEvent extends Event {
     // draw 'HP'
     HSprite.render(x, y, this.context);
     PSprite.render(x + 16, y, this.context);
-  }
-
-  end(game) {
-    game.map.setDirty(this.position);
-    game.map.setDirty(game.map.getLocRight(this.position).vec);
   }
 }
 
@@ -145,11 +136,6 @@ class APEvent extends Event {
     ASprite.render(x, y, this.context);
     PSprite.render(x + 16, y, this.context);
   }
-
-  end(game) {
-    game.map.setDirty(this.position);
-    game.map.setDirty(game.map.getLocRight(this.position).vec);
-  }
 }
 
 class XPEvent extends Event {
@@ -194,11 +180,6 @@ class XPEvent extends Event {
     XSprite.render(x, y, this.context);
     PSprite.render(x + 16, y, this.context);
   }
-
-  end(game) {
-    game.map.setDirty(this.position);
-    game.map.setDirty(game.map.getLocRight(this.position).vec);
-  }
 }
 
 class SpriteChangeEvent extends Event {
@@ -238,33 +219,9 @@ class AnimationEvent extends Event {
     let y = Math.round(this.y + (this.diffY * (Date.now() - this.startTime)));
     this.actor.drawX = x;
     this.actor.drawY = y;
-    this.map.setDirty(this.startPos);
-    this.map.setDirty(this.endPos);
-    if ((this.diffX !== 0) && (this.diffY !==0)) {
-      let dirtyVertical =
-        this.map.getLocation(this.startPos.x,
-                             this.startPos.y + (this.endPos.y - this.startPos.y)).vec;
-      let dirtyHorizontal =
-        this.map.getLocation(this.startPos.x + (this.endPos.x - this.startPos.x),
-                             this.startPos.y).vec;
-      this.map.setDirty(dirtyVertical);
-      this.map.setDirty(dirtyHorizontal);
-    }
   }
 
   end(game) {
-    this.map.setDirty(this.startPos);
-    this.map.setDirty(this.endPos);
-    if ((this.diffX !== 0) && (this.diffY !==0)) {
-      let dirtyVertical =
-        this.map.getLocation(this.startPos.x,
-                             this.startPos.y + (this.endPos.y - this.startPos.y)).vec;
-      let dirtyHorizontal =
-        this.map.getLocation(this.startPos.x + (this.endPos.x - this.startPos.x),
-                             this.startPos.y).vec;
-      this.map.setDirty(dirtyVertical);
-      this.map.setDirty(dirtyHorizontal);
-    }
     this.actor.drawX = this.endPos.x * TILE_SIZE;
     this.actor.drawY = this.endPos.y * TILE_SIZE;
   }
@@ -293,15 +250,6 @@ class PathEvent extends Event {
                           dest.y * TILE_SIZE + (TILE_SIZE / 2));
     }
     this.context.stroke();
-  }
-
-  end(game) {
-    for (let node of this.path) {
-      game.map.setDirty(node);
-      // clean up diagonal artifacts
-      game.map.setDirty(new Vec(node.x - 1, node.y));
-      game.map.setDirty(new Vec(node.x + 1, node.y));
-    }
   }
 }
 

@@ -62,8 +62,6 @@ class Monster extends Actor {
     } else {
       this.setAttack(enemy);
     }
-    // set dirty so the health bar is redrawn
-    this.game.map.setDirty(this.position);
   }
 }
 

@@ -6,7 +6,7 @@ const LOADING = 2;
 const OVER = 3;
 
 class Game {
-  constructor(context, overlayContext, width, height) {
+  constructor(background, foreground, overlay, width, height) {
     this.actors = [];
     this.heroes = new Set();
     this.monsters = new Set();
@@ -18,8 +18,9 @@ class Game {
     this.openChests = 0;
     this.totalMonsters = 0;
     this.monstersKilled = 0;
-    this.context = context;
-    this.overlayContext = overlayContext;
+    this.background = background;
+    this.foreground = foreground;
+    this.overlay = overlay;
     this.level = 1;
     this.status = PAUSED;
     this.skipTicks = 1000/ 30;
@@ -541,7 +542,8 @@ class Game {
   }
 
   renderBegin() {
-    this.renderer = new Renderer(this.context, this.overlayContext, this.map,
+    this.renderer = new Renderer(this.background, this.foreground,
+                                 this.overlay, this.map,
                                  this.actors, this.objects);
     this.renderer.renderMap(this.mapGenerator.symbolLocs);
     this.renderer.clearOverlay();
@@ -569,23 +571,23 @@ class Game {
   }
 
   addHPEvent(pos, value) {
-    this.player.UI.addEvent(new HPEvent(this.overlayContext, pos, value));
+    this.player.UI.addEvent(new HPEvent(this.foreground, pos, value));
   }
 
   addAPEvent(pos, value) {
-    this.player.UI.addEvent(new APEvent(this.overlayContext, pos, value));
+    this.player.UI.addEvent(new APEvent(this.foreground, pos, value));
   }
 
   addXPEvent(pos, value) {
-    this.player.UI.addEvent(new XPEvent(this.overlayContext, pos, value));
+    this.player.UI.addEvent(new XPEvent(this.foreground, pos, value));
   }
 
   addGraphicEvent(sprite, pos) {
-    this.player.UI.addEvent(new GraphicEvent(this.overlayContext, pos,
+    this.player.UI.addEvent(new GraphicEvent(this.foreground, pos,
                                              sprite));
   }
 
   addPathEvent(path) {
-    this.player.UI.addEvent(new PathEvent(this.overlayContext, path));
+    this.player.UI.addEvent(new PathEvent(this.foreground, path));
   }
 }

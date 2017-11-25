@@ -15,7 +15,10 @@
 </head>
 <body>
   <canvas id="mapCanvas" width="2560" height="2560"
-    style="left: 0px; top: 0px; position: absolute; zIndex: -1;">
+    style="left: 0px; top: 0px; position: absolute; zIndex: -2;">
+  </canvas>
+  <canvas id="foregroundCanvas" width="2560" height="2560"
+    style="left: 0px; top: 0px; position: absolute; zIndex: -1; pointer-events:none;">
   </canvas>
   <canvas id="overlayCanvas" width="2560" height="2560"
     style="left: 0px; top: 0px; position: absolute; zIndex: 0; pointer-events:none; ">

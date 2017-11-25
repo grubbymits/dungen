@@ -38,20 +38,29 @@ window.onload = function begin() {
   var mapCanvas = document.getElementById("mapCanvas");
   mapCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
   mapCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
-  var mapContext = mapCanvas.getContext("2d");
-  mapContext.fillStyle = '#000000';
-  mapContext.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
+  var background = mapCanvas.getContext("2d");
+  background.fillStyle = '#000000';
+  background.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
   console.log("canvas resolution set to: ", mapCanvas.width, "x",
               mapCanvas.height);
+
+  var foregroundCanvas = document.getElementById("foregroundCanvas");
+  foregroundCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
+  foregroundCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
+  var foreground = foregroundCanvas.getContext("2d");
+  foreground.fillStyle = '#000000';
+  foreground.fillRect(0, 0, foregroundCanvas.width, foregroundCanvas.height);
+  console.log("canvas resolution set to: ", foregroundCanvas.width, "x",
+              foregroundCanvas.height);
 
   var overlayCanvas = document.getElementById("overlayCanvas");
   overlayCanvas.width = MAP_WIDTH_PIXELS * UPSCALE_FACTOR;
   overlayCanvas.height = MAP_HEIGHT_PIXELS * UPSCALE_FACTOR;
-  var overlayContext = overlayCanvas.getContext("2d");
-  overlayContext.fillStyle = '#000000';
-  overlayContext.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  var overlay = overlayCanvas.getContext("2d");
+  overlay.fillStyle = '#000000';
+  overlay.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-  var theGame = new Game(mapContext, overlayContext, mapCanvas.width,
+  var theGame = new Game(background, foreground, overlay, mapCanvas.width,
                          mapCanvas.height);
   var UI = new Interface(theGame);
   var player = new Player(theGame, UI);

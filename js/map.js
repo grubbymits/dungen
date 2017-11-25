@@ -99,7 +99,6 @@ class GameMap {
     this.shadow = new Set();
     this.newVisible = new Set();
     this.newPartialVisible = new Set();
-    this.newDirty = new Set();
     this.locations = [];
     for (let x = 0; x < this.xMax; x++) {
       this.locations[x] = [];
@@ -192,9 +191,6 @@ class GameMap {
   removeEntity(vec) {
     let loc = this.locations[vec.x][vec.y];
     loc.clear();
-    if (loc.isVisible) {
-      this.newDirty.add(vec);
-    }
   }
 
   placeEntity(vec, entity) {
@@ -211,11 +207,6 @@ class GameMap {
     loc.entity = entity;
     entity.pos = vec;
     loc.blocking = false;
-
-    //this.locations[pos.x][pos.y].dirty = true;
-    if (loc.isVisible) {
-      this.newDirty.add(vec);
-    }
   }
 
   getEntity(vec) {
@@ -224,12 +215,6 @@ class GameMap {
     }
     // entity maybe null;
     return this.locations[vec.x][vec.y].entity;
-  }
-
-  setDirty(vec) {
-    if (!this.isOutOfRange(vec.x, vec.y)) {
-      this.newDirty.add(vec);
-    }
   }
 
   get width() {
