@@ -98,7 +98,7 @@ window.onload = function begin() {
       }
 
         
-      while(action && (Date.now() >= actor.nextUpdate)) {
+      while(action && (Date.now() >= actor.nextUpdate) && actor.currentHealth > 1) {
         action = action.perform();
         yield true;
         updateActor = true;

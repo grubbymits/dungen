@@ -44,7 +44,7 @@ class Location {
     this.visible = HIDDEN;
   }
   clear() {
-    this.blocked = false;
+    this.blocking = false;
     this.entity = null;
   }
   get isBlocked() {
@@ -206,6 +206,10 @@ class GameMap {
 
   removeEntity(vec) {
     let loc = this.locations[vec.x][vec.y];
+    if (loc.entity == null) {
+      console.log(loc);
+      throw("entity already null");
+    }
     loc.clear();
   }
 
@@ -222,7 +226,7 @@ class GameMap {
 
     loc.entity = entity;
     entity.pos = vec;
-    loc.blocking = false;
+    loc.blocking = true;
   }
 
   getEntity(vec) {

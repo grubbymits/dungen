@@ -20,6 +20,9 @@ class Monster extends Actor {
   }
 
   get action() {
+    if (this.currentHealth < 1) {
+      throw("monster is already dead!");
+    }
     this.currentSprite = this.sprite;
     if (this.currentEnergy <= 0) {
       return this.rest;

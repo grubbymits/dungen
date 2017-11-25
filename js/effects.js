@@ -18,6 +18,9 @@ class PhysicalDamage extends Effect {
   }
 
   cause(actor) {
+    if (actor.currentHealth < 1) {
+      return true;
+    }
     actor.game.addHPEvent(actor.pos, -this.strength);
     actor.game.audio.hit();
     actor.game.addSpriteChangeEvent(actor, actor.damageSprite);
@@ -75,6 +78,9 @@ class BurnEffect extends Effect {
   }
 
   cause(actor) {
+    if (actor.currentHealth < 1) {
+      return true;
+    }
     //actor.game.addTextEvent(actor.name + " takes " + this.strength + " burn damage");
     actor.game.addHPEvent(actor.pos, -this.strength);
     actor.game.addSpriteChangeEvent(actor, actor.burntSprite);
@@ -97,6 +103,9 @@ class PoisonEffect extends Effect {
   }
 
   cause(actor) {
+    if (actor.currentHealth < 1) {
+      return true;
+    }
     //actor.game.addTextEvent(actor.name + " takes " + this.strength + " poison damage");
     actor.game.addHPEvent(actor.pos, -this.strength);
     actor.game.addSpriteChangeEvent(actor, actor.poisonedSprite);
@@ -116,6 +125,9 @@ class FreezeEffect extends Effect {
   }
 
   cause(actor) {
+    if (actor.currentHealth < 1) {
+      return true;
+    }
     //actor.game.addTextEvent(actor.name + " has " + this.strength + " AP sapped away");
     actor.game.addAPEvent(actor.pos, -this.strength);
     actor.game.addSpriteChangeEvent(actor, actor.frozenSprite);
@@ -135,6 +147,9 @@ class ShockEffect extends Effect {
   }
 
   cause(actor) {
+    if (actor.currentHealth < 1) {
+      return true;
+    }
     //actor.game.addTextEvent(actor.name + " has " + this.strength + " HP and AP zapped away");
     actor.game.addHPEvent(actor.pos, -this.strength);
     actor.game.addAPEvent(actor.pos, -this.strength);

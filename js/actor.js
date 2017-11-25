@@ -87,7 +87,7 @@ class Actor extends Entity {
     let target = this.game.map.getEntity(vec);
     if (target) {
       if (target.kind != this.kind && target.kind != OBJECT) {
-        console.log("attack!");
+        console.log("attack!", target);
         this.attack.target = target;
         this.nextAction = this.attack;
         return;

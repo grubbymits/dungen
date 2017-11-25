@@ -85,14 +85,14 @@ class Renderer {
                                         this.foreground);
         }
       }
-      actor.currentSprite.render(actor.drawX, actor.drawY,
-                                 this.foreground);
       this.foreground.fillStyle = 'orangered';
       let healthBar = (actor.currentHealth / actor.maxHealth) * TILE_SIZE;
       this.foreground.fillRect(actor.drawX, actor.drawY, healthBar, 2);
       this.foreground.fillStyle = 'cadetblue';
       let energyBar = (actor.currentEnergy / actor.maxEnergy) * TILE_SIZE;
       this.foreground.fillRect(actor.drawX, actor.drawY + 3, energyBar, 2);
+      actor.currentSprite.render(actor.drawX, actor.drawY,
+                                 this.foreground);
     }
     for (let object of this.objects) {
       let loc = this.map.getLocation(object.pos.x, object.pos.y);

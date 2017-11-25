@@ -435,7 +435,6 @@ class Game {
       ++this.monstersKilled;
       console.log("deleting monster:", entity);
       this.monsters.delete(entity);
-      this.theMap.removeEntity(entity.position);
     } else if (entity.kind == HERO) {
       if (this.heroes.length == 1) {
         console.log("removing only hero");
@@ -444,7 +443,6 @@ class Game {
       }
       console.log("deleting hero:", entity);
       this.heroes.delete(entity);
-      this.theMap.removeEntity(entity.position);
     } else if (entity.kind == OBJECT) {
       console.log("deleting object:", entity);
       this.objects.delete(entity);
@@ -455,15 +453,22 @@ class Game {
       throw("why is this happening?");
     }
 
+    this.theMap.removeEntity(entity.position);
+    if (this.theMap.isBlocked(entity.position))
+      throw("Location not unblocked!");
+
     for (let index in this.actors) {
       if (this.actors[index] == entity) {
-        delete this.actors[index];
         this.actors.splice(index, 1);
+        return;
       }
     }
   }
 
   getAction(actor) {
+    if (this.actors[actor].currentHealth < 1) {
+      console.log("actor is dead");
+    }
     return this.actors[actor].action;
   }
 
@@ -506,6 +511,7 @@ class Game {
 
   update() {
     for (let entity of this.entitiesToRemove.values()) {
+      console.log("need to remove:", entity);
       this.removeEntity(entity);
     }
     for (let entity of this.entitiesToCreate.values()) {
