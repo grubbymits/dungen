@@ -26,8 +26,8 @@ static void DefineWeapon(Weapon &item, &js) {
 */
 
 int main(void) {
-  const unsigned XOffset = 0;
-  const unsigned YOffset = 7;
+  unsigned XOffset = 0;
+  unsigned YOffset = 7;
   const unsigned Size = 10;
   const unsigned TileWidth = 64;
   const unsigned TileHeight = 64;
@@ -51,7 +51,7 @@ int main(void) {
     for (unsigned number = 0; number < NumItems[item]; ++number) {
       string ItemName = ItemNames[item];
       int x = XOffset + number;
-      int y = YOffset + item;
+      int y = YOffset;
       int PixelX = -x * TileWidth;
       int PixelY = -y * TileHeight;
 
@@ -60,6 +60,13 @@ int main(void) {
 
       js << "const " << ItemDefs[item] << number << " = " << number << ";\n";
     }
+
+    if (NumItems[item] < 8) {
+      XOffset += NumItems[item];
+      XOffset %= 8;
+    }
+    if (XOffset == 0)
+      ++YOffset;
 
     js << "const " << ItemDefs[item] << "_CLASS = [\n";
 
