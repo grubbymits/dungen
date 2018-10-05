@@ -5,7 +5,11 @@ class Item {
     this.type = type;
     this.subtype = subtype;
   }
-  
+ 
+  get css_class() {
+    return this.css_name[this.subtype];
+  }
+
   get name() {
     return this.names[this.subtype];
   }
@@ -31,6 +35,7 @@ class Sword extends Weapon {
     super(SWORD, subtype, power, range, energy, elemType);
     this.sprites = swordSprites;
     this.names = SWORD_NAMES;
+    this.css_name = SWORD_CLASS;
   }
 }
 
@@ -39,6 +44,7 @@ class Staff extends Weapon {
     super(STAFF, subtype, power, range, energy, elemType);
     this.sprites = staffSprites;
     this.names = STAFF_NAMES;
+    this.css_name = STAFF_CLASS;
   }
 }
 
@@ -46,7 +52,7 @@ class Axe extends Weapon {
   constructor(subtype, power, range, energy, elemType) {
     super(AXE, subtype, power, range, energy, elemType);
     this.sprites = axeSprites;
-    this.names = AXE_NAMES;
+    this.css_name = AXE_CLASS;
   }
 }
 
@@ -55,6 +61,7 @@ class Bow extends Weapon {
     super(BOW, subtype, power, range, energy, elemType);
     this.sprites = bowSprites;
     this.names = BOW_NAMES;
+    this.css_name = BOW_CLASS;
   }
 }
 
@@ -63,6 +70,7 @@ class Arrows extends Weapon {
     super(ARROWS, subtype, power, range, energy, elemType);
     this.sprites = arrowSprites;
     this.names = ARROW_NAMES;
+    this.css_name = ARROW_CLASS;
   }
 }
 
@@ -71,6 +79,7 @@ class Throwing extends Weapon {
     super(THROWING, subtype, power, range, energy, elemType);
     this.sprites = throwingSprites;
     this.names = THROWING_NAMES;
+    this.css_name = THROWING_CLASS;
   }
 }
 
@@ -89,6 +98,7 @@ class Helmet extends Armour {
     this.elemType = elemType;
     this.sprites = helmetSprites;
     this.names = HELMET_NAMES;
+    this.css_name = HELMET_CLASS;
   }
 }
 
@@ -99,6 +109,7 @@ class BodyArmour extends Armour {
     this.elemType = elemType;
     this.sprites = armourSprites;
     this.names = ARMOUR_NAMES;
+    this.css_name = ARMOUR_CLASS;
   }
 }
 
@@ -109,6 +120,7 @@ class Shield extends Armour {
     this.elemType = elemType;
     this.sprites = shieldSprites;
     this.names = SHIELD_NAMES;
+    this.css_name = SHIELD_CLASS;
   }
 }
 
@@ -212,7 +224,7 @@ var shields = [ new Shield(SHIELD0, 2, NORMAL),
                 new Shield(SHIELD7, 16, ELECTRIC)
               ];
               
-var staffs = [ new Staff(STAFF0, 10, 8, 1, FIRE),
+const staffs = [ new Staff(STAFF0, 10, 8, 1, FIRE),
                new Staff(STAFF1, 20, 8, 2, ICE),
                new Staff(STAFF2, 30, 8, 2, ELECTRIC),
                new Staff(STAFF3, 50, 9, 3, FIRE),
@@ -222,7 +234,7 @@ var staffs = [ new Staff(STAFF0, 10, 8, 1, FIRE),
                new Staff(STAFF7, 150, 10, 5, ICE)
              ];
 
-var swords = [ new Sword(SWORD0, 20, 3, 1, NORMAL),
+const swords = [ new Sword(SWORD0, 20, 3, 1, NORMAL),
                new Sword(SWORD1, 30, 3, 2, NORMAL),
                new Sword(SWORD2, 40, 3, 2, NORMAL),
                new Sword(SWORD3, 50, 3, 3, NORMAL),
@@ -232,7 +244,7 @@ var swords = [ new Sword(SWORD0, 20, 3, 1, NORMAL),
                new Sword(SWORD7, 150, 3, 5, NORMAL)
              ];
 
-var axes = [ new Axe(AXE0, 30, 3, 2, NORMAL),
+const axes = [ new Axe(AXE0, 30, 3, 2, NORMAL),
              new Axe(AXE1, 45, 3, 3, NORMAL),
              new Axe(AXE2, 52, 3, 3, NORMAL),
              new Axe(AXE3, 65, 3, 4, NORMAL),
@@ -242,19 +254,19 @@ var axes = [ new Axe(AXE0, 30, 3, 2, NORMAL),
              new Axe(AXE7, 175, 3, 6, NORMAL)
             ];
              
-var bows = [ new Bow(BOW0, 20, 9, 1, NORMAL),
+const bows = [ new Bow(BOW0, 20, 9, 1, NORMAL),
              new Bow(BOW1, 30, 8, 2, NORMAL),
              new Bow(BOW2, 40, 9, 2, NORMAL),
              new Bow(BOW3, 50, 8, 3, NORMAL),
              new Bow(BOW4, 75, 9, 3, NORMAL)
            ];
 
-var arrows = [ new Arrows(ARROWS0, 10, 8, 1, NORMAL),
+const arrows = [ new Arrows(ARROWS0, 10, 8, 1, NORMAL),
                new Arrows(ARROWS1, 16, 7, 1, NORMAL),
                new Arrows(ARROWS2, 22, 8, 1, NORMAL)
              ];
              
-var throwing = [ new Throwing(THROWING0, 10, 8, 1, NORMAL),
+const throwing = [ new Throwing(THROWING0, 10, 8, 1, NORMAL),
                  new Throwing(THROWING1, 16, 8, 2, NORMAL),
                  new Throwing(THROWING2, 22, 8, 2, NORMAL)
                ];
