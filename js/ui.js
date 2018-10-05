@@ -45,19 +45,22 @@ class Interface {
 
   drawEquipment(hero) {
     // Draw hero icon and the current equipment
-    let primaryPos = "-" + hero.primary.sprite.offsetX + "px -"
-      + hero.primary.sprite.offsetY + "px";
-    let secondaryPos = "-" + hero.secondary.sprite.offsetX + "px -"
-      + hero.secondary.sprite.offsetY + "px";
-    let headPos = "-" + hero.helmet.sprite.offsetX + "px -"
-      + hero.helmet.sprite.offsetY + "px";
-    let bodyPos = "-" + hero.armour.sprite.offsetX + "px -"
-      + hero.armour.sprite.offsetY + "px";
 
-    $('#primary_icon').css("object-position", primaryPos);
-    $('#secondary_icon').css("object-position", secondaryPos);
-    $('#head_icon').css("object-position", headPos);
-    $('#body_icon').css("object-position", bodyPos);
+    $('#primary_icon').removeClass();
+    $('#primary_icon').addClass('item-button');
+    $('#primary_icon').addClass(hero.primary.css_class);
+
+    $('#secondary_icon').removeClass();
+    $('#secondary_icon').addClass('item-button');
+    $('#secondary_icon').addClass(hero.secondary.css_class);
+
+    $('#head_icon').removeClass();
+    $('#head_icon').addClass('item-button');
+    $('#head_icon').addClass(hero.helmet.css_class);
+
+    $('#body_icon').removeClass();
+    $('#body_icon').addClass('item-button');
+    $('#body_icon').addClass(hero.body.css_class);
   }
 
   drawStats(hero, field, writeAll) {
