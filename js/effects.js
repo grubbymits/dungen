@@ -58,7 +58,6 @@ class RestoreEnergy extends Effect {
 
   cause(actor) {
     actor.game.audio.cure();
-    //actor.game.addTextEvent(actor.name + " is healed by " + this.strength + "AP");
     actor.increaseEnergy(this.strength);
     --this.duration;
     if (this.duration === 0) {
@@ -73,15 +72,12 @@ class BurnEffect extends Effect {
     super(strength, duration);
     this.inflictor = actor;
     console.log(strength + " burn damage for " + duration);
-    //actor.game.addTextEvent(actor.name + " inflicts burn for " + duration +
-      //                      " turns");
   }
 
   cause(actor) {
     if (actor.currentHealth < 1) {
       return true;
     }
-    //actor.game.addTextEvent(actor.name + " takes " + this.strength + " burn damage");
     actor.game.addHPEvent(actor.pos, -this.strength);
     actor.game.addSpriteChangeEvent(actor, actor.burntSprite);
     actor.reduceHealth(this.inflictor, this.strength);
@@ -98,15 +94,12 @@ class PoisonEffect extends Effect {
     super(strength, duration);
     console.log(strength + " poison damage for " + duration);
     this.inflictor = actor;
-    //actor.game.addTextEvent(actor.name + " inflicts poison for " + duration +
-      //                      " turns");
   }
 
   cause(actor) {
     if (actor.currentHealth < 1) {
       return true;
     }
-    //actor.game.addTextEvent(actor.name + " takes " + this.strength + " poison damage");
     actor.game.addHPEvent(actor.pos, -this.strength);
     actor.game.addSpriteChangeEvent(actor, actor.poisonedSprite);
     actor.reduceHealth(this.inflictor, this.strength);
@@ -128,7 +121,6 @@ class FreezeEffect extends Effect {
     if (actor.currentHealth < 1) {
       return true;
     }
-    //actor.game.addTextEvent(actor.name + " has " + this.strength + " AP sapped away");
     actor.game.addAPEvent(actor.pos, -this.strength);
     actor.game.addSpriteChangeEvent(actor, actor.frozenSprite);
     actor.reduceEnergy(this.inflictor, this.strength);
@@ -150,7 +142,6 @@ class ShockEffect extends Effect {
     if (actor.currentHealth < 1) {
       return true;
     }
-    //actor.game.addTextEvent(actor.name + " has " + this.strength + " HP and AP zapped away");
     actor.game.addHPEvent(actor.pos, -this.strength);
     actor.game.addAPEvent(actor.pos, -this.strength);
     actor.game.addSpriteChangeEvent(actor, actor.shockedSprite);

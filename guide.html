@@ -21,9 +21,39 @@
               more characters as they adventure down into the depths of the
               dungeon, defeating monsters, increasing their skills and
               collecting a wealth of equipment and treasure.
+              Nothing ground-breaking here!<br><br>
+              The levels are procedurally generated at runtime, hopefully providing
+              something different each time. Progress is saved though, between levels
+              so the 'CONTINUE' button should load the team and items from the
+              previous session. This requires local storage.
               <br><br>
+            <cb_p>
+            <cb_h2>Game Play<br></cb_h2>
+            <cb_p>
+              The purpose of the game is to survive! Each level begins at a
+              set of stairs and the party must make their way through the level
+              and descend further. Each area comprises of 10 levels - 10 sets of
+              steps, with each level becoming more difficult than the last. Each
+              area contains different types of enemy and also get tougher.
+              <br><br>
+              The game is a turn-based which allows each character (including
+              enemies) to take their turn in order. During a character's turn, it
+              can perform an action as long as it has enough action points (AP),
+              if it doesn't have enough AP then the character rests for that turn
+              and recovers some AP. At the beginning of their turn, the character
+              receives 2 APs. Movements and attacks both use AP with attacks
+              using heavier weapons and/or by a less agile character will consume
+              more AP.
+              <br><br>
+              Each character has health points (HP) too and when this value hits
+              zero, the character collapses and will not take another turn until
+              they have been revived. When a monster dies, the heroes in the team
+              gain experience points (XP) which when accumulated allow the characters
+              to level-up which increases maximum HP, AP and their attributes.
+              <br>
             </cb_p>
-            <cb_h1>Characters<br></cb_h1>
+            <br><br>
+            <cb_h1>Playable Characters<br></cb_h1>
             <cb_p>
               The player initially gets to choose a character to play as, and
               as the game progresses, more characters will join the team. Each
@@ -34,10 +64,10 @@
               - Strength, which affects how much damage weapons do.<br>
               - Agility, which affects how efficiently characters use weapons
                 and can allow characters to dodge blows.<br>
-              - Endurance, affects the character's total HP and EP <br>
+              - Endurance, affects the character's total HP and AP <br>
               - Wisdom, effectiveness of magical spells that the character
                 casts - including attacks with staffs.<br>
-              - Will, affects the character's total EP increases and also defines
+              - Will, affects the character's total AP increases and also defines
                 their resistance to magical attacks and the efficiency of
                 magical attacks. <br>
               <br>
@@ -46,12 +76,11 @@
               <img src="res/img/knight.png" alt="knight" height="64" width="320">
               <cb_p>
                 <br>
-                The Knight uses a sword to attack and is equipped with a shield,
-                armour and a helmet for defense. The knight is not restricted in
-                what defensiveness equipment he can use, which means his defense
-                is high, suitable to close range combat with the sword. This
-                combat style is matched by his high strength and endurance, as
-                well as reasonable agility.
+                The Knight, a chivalrous brute, uses a sword to attack and is equipped
+                with a shield, armour and a helmet for defense. The knight is not
+                restricted in what defensiveness equipment he can use, which means his
+                defense is high, suitable to close range combat with the sword. This
+                combat style is matched by his high strength and endurance.
                 <br><br>
               </cb_p>
               <cb_h2>Mage<br></cb_h2>
@@ -61,9 +90,10 @@
                 The Mage is the opposite of the knight. His wisdom is high to enable
                 him to perform effective ranged magical attacks with his staff as well
                 as resisting incoming spells as well. The mage has low strength and
-                can only equip a limited set of defensive clothing, so he has to rely on
-                being agile enough to dodge blows as well as using defensive and
-                recovery spells.
+                can only equip a limited set of defensive clothing, so he will try to
+                avoid monsters - running away if needed! However, he can use
+                defensive and recovery spells. The Mage will also attempt to heal other
+                members of the party.
                 <br><br>
               </cb_p>
               <cb_h2>Rogue<br></cb_h2>
@@ -81,11 +111,12 @@
               <img src="res/img/archer.png" alt="archer" height="64" width="320">
               <cb_p>
                 <br>
-                The Archer is a long range combantant who uses a combination of bows
+                The Archer is a long range combatant who uses a combination of bows
                 and arrows to deal high damage from afar. The Archer's key skill is
                 agility to enable him to fire arrows in quick succession, but he also
-                needs strength to draw his bow. Like the Rogue, he can equip a good
-                selection of armour and helmets but not the heavier items.
+                needs strength to draw his bow. As a ranged character, the Archer will
+                try to keep away from melee combatants. Like the Rogue, he can equip a
+                good selection of armour and helmets but not the heavier items.
                 <br><br>
               </cb_p>
               <cb_h2>Warlock<br></cb_h2>
@@ -94,30 +125,11 @@
                 <br>
                 The Warlock is a physically strong character who wields an axe
                 but can also use spells. The warlock has strong will, endurance and
-                strength but is not very agile.
+                strength but is not very agile. ALSO NOT AVAILABLE YET.
                 <br><br>
               </cb_p>
             <br><br>
-            <cb_h1>Game Play<br></cb_h1>
-            <cb_h2>Turn-based action<br></cb_h2>
-            <cb_p>
-              Dungen is a turn-based game which allows each character (including
-              enemies) to take their turn in order. During a character's turn, it
-              can perform an action as long as it has enough energy points (EP),
-              if it doesn't have enough EP then the character rests for that turn
-              and recovers some EP. At the beginning of their turn, the character
-              receives 2 EPs. Movements and attacks both use EP with attacks
-              using heavier weapons and/or by a less agile character will consume
-              more EP.
-              Each character has health points (HP) too and when this value hits
-              zero, the character collapses and will not take another turn until
-              they have been revived. When a monster dies, the heroes in the team
-              gain experience points (XP) which when accumulated allow the characters
-              to level-up which increases maximum HP, EP and their attributes.
-              <br>
-            </cb_p>
-            <br><br>
-            <cb_h2>Equipment and Items<br></cb_h2>
+            <cb_h1>Equipment and Items<br></cb_h1>
             <cb_p>
               Each character has four equipment slots: their primary attack weapon,
               their secondary item, body armour and a helmet. The class of the
@@ -126,21 +138,58 @@
               which contain equipment and potions and treasure that will help the team
               survive their adventure.
               <br><br>
-              <cb_h3>Weapons<br></cb_h3>
-              <cb_h3>Armour<br></cb_h3>
-              <cb_h3>Potions<br></cb_h3>
+              <cb_h2>Weapons<br></cb_h2>
+              Weapons have a number of statistics which describe their potential:<br>
+              - power, how much damage it can do.<br>
+              - range, how close does the enemy have to be to perform an attack.<br>
+              - magic type, some weapons can cause magical damage.<br>
+              - energy, how much energy it will cost to use it.<br>
+              <br>
+              <cb_h2>Armour<br></cb_h2>
+              Armour comes in three forms: body armour, helmet, and for the Knight, a
+              shield. All of these have the same kind of attributes:<br>
+              - defense, how much physical damage the item provides.<br>
+              - elemental type, the item maybe magical and provide protection from an
+              opposing element type.<br>
+              <br>
+              <cb_h2>Potions<br></cb_h2>
+              Potions will be found in chests which help restore HP or AP, or possibly both.
+              The effects can be on a single character only or across the team, it depends
+              on the potion.<br>
+              <br>
+              <cb_h2>Treasure<br></cb_h2>
+              Ah, the shiny things... maybe will be useful for something at some point.<br>
+              <br>
               <br>
             </cb_p>
+            <cb_h2>Magical Effects<br></cb_h2>
+            <cb_p>
+            As mentioned above, it is possible for items to be imbued with magical properties.
+            Fire, frost, electric and poison items will be found inside chests. A weapon with
+            magical properties will often damage the opponent in additional ways:<br>
+            - both fire and poison will deal extra damage.<br>
+            - the frost effect will drain the opponent's energy.<br>
+            - while an electric attack will reduce both health and energy.<br>
+            The effects may last multiple turns.<br><br>
+            TODO: A magical defensive item should provide a passive effect:<br>
+            - protect against other magical attacks.<br>
+            - poison armour could poison melee attackers.<br>
+            - restore health and energy.<br>
+            <br>
+            </cb_p>
             <br><br>
-            <cb_h2>Controls<br><br></cb_h2>
+            <cb_h1>Controls<br><br></cb_h2>
           </div>
         </div>
         <div class="row">
           <div class="col-md-offset-1 col-lg-offset-1 col-lg-5 col-md-5 col-sm-12">
             <cb_p>
-              Control of the heroes is performed purely through touch or mouse clicks.
-              The player will click or tap on targets or items they want to interact with
-              as well as some on-screen buttons that are provided for menus, etc...
+              Control of the heroes is performed purely through touch or mouse clicks,
+              clicking or tapping on targets or items they want to interact with. This
+              includes monsters, chests and potential team mates. If an item is
+              interactable, an orange target will appear over the target once it has
+              been targeted.<br>
+              There are also some on-screen buttons that are provided for menus, etc...
               In the bottom right of the screen is the main controller
               button, which looks like a directional controller from an old
               gamepad. On clicking this button, another set of buttons will
