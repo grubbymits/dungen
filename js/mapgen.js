@@ -36,7 +36,6 @@ class MonsterPosition {
 }
 
 class Room {
-  
   constructor(x, y, width, height, id) {
     this.pos = new Vec(x, y);
     this.centre = new Vec(x + Math.floor(width / 2),
@@ -92,8 +91,11 @@ class MapGenerator {
                               (TILE_SIZE * TILE_SIZE * this.medRoomDim * this.medRoomDim));
     this.placeRooms(numRooms);
     this.createConnections();
-    this.fixupMap();
     this.placeStairs();
+    if (this.numPlayers < MAX_HEROES) {
+      this.placeAlly();
+    }
+    this.fixupMap();
     this.decorate(); //Rooms();
   }
 
@@ -139,6 +141,21 @@ class MapGenerator {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+  isSpaceForItem(startX, startY, width, height) {
+    for (let x = startX; x < startX + width; x++) {
+      for (let y = startY; y < startY + height; y++) {
+        if (this.map.isOutOfRange(x, y)) {
+          return false;
+        }
+        // Only carve rooms into 'blocked' ceiling regions
+        if (this.map.getLocationType(x, y) == WALL) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   isSpace(startX, startY, width, height) {
     for (let x = startX; x < startX + width; x++) {
       for (let y = startY; y < startY + height; y++) {
@@ -163,6 +180,29 @@ class MapGenerator {
       }
     }
     return room;
+  }
+
+  createPrison(startX, startY, width, height) {
+    // Create a walled room within a space. Requires creating walls
+    // and adding a locked door.
+    //#|#|#
+    //#|_|#
+    //#|&|#
+    //#|_|#
+    for (let x = startX; x < startX + width; x++) {
+      if (x == Math.floor(width / 2))
+        continue;
+
+      for (let y = startY; y < startY + height; y++) {
+        this.map.setLocationType(x, y, CEILING);
+      }
+    }
+
+    for (let x = startX+1; x < startX + width-1; x++) {
+      for (let y = startY+1; y < startY + height-1; y++) {
+        this.placeTile(x, y, this.roomFloor, false);
+      }
+    }
   }
 
   createPath(startX, startY) {
@@ -448,10 +488,28 @@ class MapGenerator {
   }
 
   placeAlly() {
+    console.log("trying to place ally");
     this.rooms.sort(compareRoomDistances(this.map, this.entryRoom));
-    let allyRoom = this.entryRoom; //this.rooms[Math.floor(this.rooms.length / 2)];
-    let loc = this.getRandomLocation(allyRoom);
-    this.reserveLoc(ALLY, loc);
+    let allyRoom = this.rooms[Math.floor(this.rooms.length / 2)];
+
+    const MaxAttempts = 50;
+    for (let i = 0; i < MaxAttempts; ++i) {
+      let loc = this.getRandomLocation(allyRoom);
+
+      // put the ally in a 3x3 prison, if there's space.
+      let x = loc.vec.x;
+      let y = loc.vec.y;
+      if (this.isSpaceForItem(x, y, 3, 4)) {
+        this.createPrison(x, y, 3, 4);
+        // place the ally in the middle of the prison: x+1, y+1
+        let allyLoc = this.map.getLocation(x + 1, y + 2);
+        this.reserveLoc(ALLY, allyLoc);
+        this.createPath(x + 1, y + 2);
+        console.log("placed ally");
+        break;
+      } else
+        i++;
+    }
   }
 
   placeStairs() {
@@ -500,9 +558,6 @@ class MapGenerator {
     }
     console.log("Number of players:", this.numPlayers);
     console.log("Number of EntryVecs:", this.entryVecs.length);
-    if (this.numPlayers < MAX_HEROES) {
-      this.placeAlly();
-    }
   }
 }
 
