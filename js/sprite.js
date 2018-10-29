@@ -223,6 +223,11 @@ for (let x = 0; x < 8; ++x) {
 var chestSprites = [ new Sprite(greenSpriteSheet, 0, 4),
                      new Sprite(greenSpriteSheet, 1, 4)
                    ];
+                   
+var keySprites = [];
+for (let i = 2; i < 8; i++) {
+  keySprites.push(new Sprite(greenSpriteSheet, i, 4));
+}
 
 var skullSprites = [ new Sprite(greenSpriteSheet, 0, 16),
                      new Sprite(greenSpriteSheet, 1, 16),

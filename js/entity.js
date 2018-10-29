@@ -72,6 +72,46 @@ class Sign extends Entity {
   }
 }
 
+class Door extends Entity {
+  constructor(position, game) {
+    super(position, tileSprites[TILE_ROUND_DOOR], OBJECT, game);
+    this.open = false;
+  }
+  
+  get isInteractable() {
+    return !this.open;
+  }
+  
+  interact(actor) {
+    if (!this.game.player.hasKey) {
+      console.log("you don't have the key");
+      return;
+    }
+    this.open = true;
+    this.game.audio.chest();
+    this.game.entitiesToRemove.add(this);
+    this.game.player.hasKey = false;
+  }
+}
+
+class Key extends Entity {
+  constructor(position, game) {
+    super(position, keySprites[0], OBJECT, game);
+  }
+  
+  get isInteractable() {
+    return true;
+  }
+  
+  interact(actor) {
+    this.game.addGraphicEvent(this.sprite,
+                              new Vec(actor.pos.x, actor.pos.y - 1));
+    this.game.audio.chest();
+    this.game.player.hasKey = true;
+    this.game.entitiesToRemove.add(this);
+  }
+}
+
 class Chest extends Entity {
   constructor(position, game) {
     super(position, chestSprites[0], OBJECT, game);

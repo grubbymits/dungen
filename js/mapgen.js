@@ -45,6 +45,7 @@ class Room {
     this.connections = new Set();
     this.visited = false;
     this.id = id;
+    console.log("created room of size", width, height);
   }
 
   get area() {
@@ -96,7 +97,7 @@ class MapGenerator {
       this.placeAlly();
     }
     this.fixupMap();
-    this.decorate(); //Rooms();
+    this.decorate();
   }
 
   fixupMap() {
@@ -147,8 +148,7 @@ class MapGenerator {
         if (this.map.isOutOfRange(x, y)) {
           return false;
         }
-        // Only carve rooms into 'blocked' ceiling regions
-        if (this.map.getLocationType(x, y) == WALL) {
+        if (this.map.getLocation(x, y).isBlocked) {
           return false;
         }
       }
@@ -180,29 +180,6 @@ class MapGenerator {
       }
     }
     return room;
-  }
-
-  createPrison(startX, startY, width, height) {
-    // Create a walled room within a space. Requires creating walls
-    // and adding a locked door.
-    //#|#|#
-    //#|_|#
-    //#|&|#
-    //#|_|#
-    for (let x = startX; x < startX + width; x++) {
-      if (x == Math.floor(width / 2))
-        continue;
-
-      for (let y = startY; y < startY + height; y++) {
-        this.map.setLocationType(x, y, CEILING);
-      }
-    }
-
-    for (let x = startX+1; x < startX + width-1; x++) {
-      for (let y = startY+1; y < startY + height-1; y++) {
-        this.placeTile(x, y, this.roomFloor, false);
-      }
-    }
   }
 
   createPath(startX, startY) {
@@ -489,28 +466,90 @@ class MapGenerator {
 
   placeAlly() {
     console.log("trying to place ally");
-    this.rooms.sort(compareRoomDistances(this.map, this.entryRoom));
-    let allyRoom = this.rooms[Math.floor(this.rooms.length / 2)];
+    //this.rooms.sort(compareRoomDistances(this.map, this.entryRoom));
 
     const MaxAttempts = 50;
-    for (let i = 0; i < MaxAttempts; ++i) {
-      let loc = this.getRandomLocation(allyRoom);
+    for (let i = 0; i < 1000; i++) {
+      let allyRoom = this.rooms[Math.floor(Math.random() * this.rooms.length)];
+     
+      let Done = false;
+      for (let j = 0; j < 1000; j++) {
+        let loc = this.getRandomLocation(allyRoom);
 
-      // put the ally in a 3x3 prison, if there's space.
-      let x = loc.vec.x;
-      let y = loc.vec.y;
-      if (this.isSpaceForItem(x, y, 3, 4)) {
-        this.createPrison(x, y, 3, 4);
-        // place the ally in the middle of the prison: x+1, y+1
-        let allyLoc = this.map.getLocation(x + 1, y + 2);
-        this.reserveLoc(ALLY, allyLoc);
-        this.createPath(x + 1, y + 2);
-        console.log("placed ally");
+        // put the ally in a 3x3 prison, if there's space. Check for a
+        // 5x6 space so that the player could access the door.
+        let x = loc.vec.x;
+        let y = loc.vec.y;
+        if (this.isSpaceForItem(x, y, 4, 5)) {
+          this.createPrison(x, y, 3, 4);
+          // place the ally in the middle of the prison: x+1, y+2
+          let allyLoc = this.map.getLocation(x + 1, y + 2);
+          this.reserveLoc(ALLY, allyLoc);
+          console.log("placed ally at", x + 1, y + 2);
+          Done = true;
+          break;
+        }
+        // Now reserve those locations around the prison.
+        for (let pathX = x; pathX < x + 4; pathX++) {
+          this.reserveLoc(RES_PATH, this.map.getLocation(pathX, y));
+          this.reserveLoc(RES_PATH, this.map.getLocation(pathX, y+5));
+        }
+        for (let pathY = y; pathY < y + 5; pathY++) {
+          this.reserveLoc(RES_PATH, this.map.getLocation(x, pathY));
+          this.reserveLoc(RES_PATH, this.map.getLocation(x+4, pathY));
+        }
+      }
+      if (Done) {
         break;
-      } else
-        i++;
+      }
     }
+    
+    for (let i = 0; i < MaxAttempts; ++i) {
+      let keyRoom = this.rooms[Math.floor(Math.random() * this.rooms.length)];
+      
+      for (let j = 0; j < MaxAttempts; ++j) {
+        let x = getBoundedRandom(keyRoom.pos.x, keyRoom.pos.x + keyRoom.width);
+        let y = getBoundedRandom(keyRoom.pos.y, keyRoom.pos.y + keyRoom.height);
+        let keyLoc = this.map.getLocation(x, y);
+        if (!keyLoc.isBlocked) {
+          this.reserveLoc(KEY, keyLoc);
+          return;
+        }
+      }
+    }
+    console.log("failed to reserve place for key");
   }
+  
+  createPrison(startX, startY, width, height) {
+    // Create a walled room within a space. Requires creating walls
+    // and adding a locked door.
+    //#|#|#
+    //#|_|#
+    //#|&|#
+    //#|_|#
+    console.log("placing prison at", startX, startY);
+    for (let x = startX; x < startX + width; x++) {
+      this.map.setLocationType(x, y, CEILING);
+    }
+    for (let x = startX; x < startX + width; x++) {
+      if (x == startX + Math.floor(width / 2))
+        continue;
+
+      for (let y = startY; y < startY + height; y++) {
+        this.map.setLocationType(x, y, CEILING);
+      }
+    }
+
+    for (let x = startX+1; x < startX + width-1; x++) {
+      for (let y = startY+1; y < startY + height-1; y++) {
+        this.placeTile(x, y, this.pathFloor, false);
+      }
+    }
+    let doorLoc = this.map.getLocation(startX + Math.floor(width / 2), startY + height);
+    this.placeTile(doorLoc.vec.x, doorLoc.vec.y, this.pathFloor, false);
+    this.reserveLoc(DOOR, doorLoc);
+  }
+
 
   placeStairs() {
     // Choose the two rooms that are the furthest apart and less the entry
@@ -535,15 +574,49 @@ class MapGenerator {
       }
     }
 
-    if (entry === undefined)
+    if (entry === undefined) {
       throw("entry room is still null!");
-    if (exit === undefined)
+    }
+    if (exit === undefined) {
       throw("exit room is still null!");
+    }
 
     this.entryRoom = entry;
     this.exitRoom = exit;
     this.exitStairLoc = this.getStairLoc(this.exitRoom);
     this.entryStairLoc = this.getStairLoc(this.entryRoom);
+
+    // Find the best route from the start to finish and reserve those locations
+    // so the player can complete the map!
+    let exitNeighbours = this.map.getNeighbours(this.exitStairLoc.vec);
+    let entryNeighbours = this.map.getNeighbours(this.entryStairLoc.vec);
+    let route;
+    if (entryNeighbours.length === 0) {
+      throw("no space around the entry");
+    }
+    if (exitNeighbours.length === 0) {
+      throw("no space around the exit");
+    }
+    for (let i = 0; i < entryNeighbours.length; i++) {
+      for (let j = 0; j < exitNeighbours.length; j++) {
+        let entry = entryNeighbours[i];
+        let exit = exitNeighbours[j];
+        console.log("entry:", entry);
+        console.log("exit:", exit);
+        route = this.map.getPath(entry, exit);
+        if (route.length !== 0) {
+          break;
+        }
+        continue;
+      }
+    }
+    if (route.length === 0) {
+      throw("route from start to finish is 0!");
+    }
+    for (let vec of route) {
+      this.reserveLoc(RES_PATH, this.map.vecToLoc(vec));
+    }
+
     let neighbours = this.map.getNeighbours(this.entryStairLoc.vec);
     if (neighbours.length < this.numPlayers) {
       for (let i = 0; i < this.numPlayers - neighbours.length; ++i) {
@@ -556,6 +629,7 @@ class MapGenerator {
       this.map.setLocationBlocking(this.entryVecs[i].x, this.entryVecs[i].y,
                                    true);
     }
+
     console.log("Number of players:", this.numPlayers);
     console.log("Number of EntryVecs:", this.entryVecs.length);
   }

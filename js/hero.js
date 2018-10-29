@@ -247,7 +247,7 @@ class Hero extends Actor {
 
 class Knight extends Hero {
   constructor(position, game) {
-    super(50, 15,
+    super(100, 15,
           22, 14, 7, 10, 17,     // 70
           5,
           position, KNIGHT, game);

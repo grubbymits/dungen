@@ -291,6 +291,9 @@ const SKULL = 2;
 const TOMBSTONE = 3;
 const MAGICAL_OBJ = 4;
 const ALLY = 5;
+const DOOR = 6;
+const KEY = 7;
+const RES_PATH = 8;
 
 const NORTH = 0;
 const EAST = 1;

@@ -81,7 +81,7 @@ class Game {
         armourType : hero.equipArmour.type,
         armourSubtype : hero.equipArmour.subtype,
         helmetType : hero.equipHelmet.type,
-        helmetSubtype : hero.equipHelmet.subtype }));  
+        helmetSubtype : hero.equipHelmet.subtype }));
     }
   }
 
@@ -231,8 +231,17 @@ class Game {
     for (let resEntity of this.mapGenerator.reservedLocs) {
       let loc = resEntity.loc;
       switch(resEntity.type) {
+      case RES_PATH:
+        loc.blocked = false;
+        break;
       case CHEST:
         this.createChest(loc);
+        break;
+      case DOOR:
+        this.createDoor(loc);
+        break;
+      case KEY:
+        this.createKey(loc);
         break;
       case SKULL:
         let skull = new Skull(loc.vec, this);
@@ -251,7 +260,7 @@ class Game {
         this.addObject(object, loc);
         break;
       case ALLY:
-        let newAllies = new Set([ARCHER, ROGUE, MAGE, KNIGHT]);; 
+        let newAllies = new Set([ARCHER, ROGUE, MAGE, KNIGHT]);;
         for (let hero of this.heroes) {
           newAllies.delete(hero.subtype);
         }
@@ -419,6 +428,16 @@ class Game {
     ++this.totalChests;
     this.addObject(chest, loc);
   }
+  
+  createDoor(loc) {
+    let door = new Door(loc.vec, this);
+    this.addObject(door, loc);
+  }
+  
+  createKey(loc) {
+    let key = new Key(loc.vec, this);
+    this.addObject(key, loc);
+  }
 
   addObject(object, loc) {
     this.objects.add(object);
@@ -450,12 +469,10 @@ class Game {
       return;
     } else {
       console.log(entity);
-      throw("why is this happening?");
+      throw("trying to remove an unknown entity!");
     }
 
     this.theMap.removeEntity(entity.position);
-    if (this.theMap.isBlocked(entity.position))
-      throw("Location not unblocked!");
 
     for (let index in this.actors) {
       if (this.actors[index] == entity) {

@@ -369,9 +369,9 @@ class GameMap {
   // return an array of Vecs
   getPath(start, goal) {
     // ignore if the click is out range, blocked or the current location.
-    if (start == undefined)
+    if (start === undefined)
       throw("start is undefined");
-    if (goal == undefined)
+    if (goal === undefined)
       throw("goal is undefined");
 
     if (this.isOutOfRange(goal.x, goal.y)) {

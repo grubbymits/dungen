@@ -1,6 +1,7 @@
 class Player {
   constructor(game, UI) {
     this.currentHero = null;
+    this.hasKey = false;
     this.game = game;
     this.UI = UI;
     this.heroes = this.game.heroes;
