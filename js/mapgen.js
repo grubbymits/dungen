@@ -486,17 +486,17 @@ class MapGenerator {
           let allyLoc = this.map.getLocation(x + 1, y + 2);
           this.reserveLoc(ALLY, allyLoc);
           console.log("placed ally at", x + 1, y + 2);
+          // Now reserve those locations around the prison.
+          for (let pathX = x; pathX < x + 4; pathX++) {
+            this.reserveLoc(RES_PATH, this.map.getLocation(pathX, y));
+            this.reserveLoc(RES_PATH, this.map.getLocation(pathX, y+5));
+          }
+          for (let pathY = y; pathY < y + 5; pathY++) {
+            this.reserveLoc(RES_PATH, this.map.getLocation(x, pathY));
+            this.reserveLoc(RES_PATH, this.map.getLocation(x+4, pathY));
+          }
           Done = true;
           break;
-        }
-        // Now reserve those locations around the prison.
-        for (let pathX = x; pathX < x + 4; pathX++) {
-          this.reserveLoc(RES_PATH, this.map.getLocation(pathX, y));
-          this.reserveLoc(RES_PATH, this.map.getLocation(pathX, y+5));
-        }
-        for (let pathY = y; pathY < y + 5; pathY++) {
-          this.reserveLoc(RES_PATH, this.map.getLocation(x, pathY));
-          this.reserveLoc(RES_PATH, this.map.getLocation(x+4, pathY));
         }
       }
       if (Done) {
@@ -529,7 +529,7 @@ class MapGenerator {
     //#|_|#
     console.log("placing prison at", startX, startY);
     for (let x = startX; x < startX + width; x++) {
-      this.map.setLocationType(x, y, CEILING);
+      this.map.setLocationType(x, startY, CEILING);
     }
     for (let x = startX; x < startX + width; x++) {
       if (x == startX + Math.floor(width / 2))
