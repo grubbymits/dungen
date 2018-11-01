@@ -132,25 +132,10 @@ class DealDamage extends Action {
       console.log("deal magic damage");
     }
 
-    /*
-    let magicDefense = this.targetActor.magicalDefense;
-    if (magicDefense !== magicDefense)
-      throw("magicDefense not calculated correctly");
-    */
-
     let magicDamage = Math.round(power * MAX_MAGIC_DEFENSE / defense);
-    if (magicDamage !== magicDamage)
-      throw("magicDamage not calculated correctly");
-
     let magicResistance = this.targetActor.magicResistance;
-    if (magicResistance !== magicResistance)
-      throw("magicResistance not calculated correctly");
-
     let duration = Math.round(this.attack.magicPower * MAX_MAGIC_RESISTANCE /
                               magicResistance);
-    if (duration !== duration) {
-      throw("duration not calculated correctly:", duration);
-    }
 
     switch(elemType) {
     case FIRE:
@@ -463,7 +448,7 @@ class FindTarget extends Action {
     super(actor);
     this.map = this.actor.game.map;
     this.calcVisibility = new CalcVisibility(actor);
-    this.calcVisibility.perform();
+    //this.calcVisibility.perform();
     this.prevPos = this.actor.pos;
   }
   
