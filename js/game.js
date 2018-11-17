@@ -10,7 +10,6 @@ class Game {
     this.actors = [];
     this.heroes = new Set();
     this.monsters = new Set();
-    this.currentEffects = new Map();
     this.objects = new Set();
     this.entitiesToRemove = new Set();
     this.entitiesToCreate = new Set();
@@ -487,35 +486,6 @@ class Game {
       console.log("actor is dead");
     }
     return this.actors[actor].action;
-  }
-
-  addEffect(actor, effect) {
-    if (!this.currentEffects.has(actor)) {
-      console.log("actor isn't in current effects.");
-      return;
-    }
-    this.currentEffects.get(actor).add(effect);
-  }
-
-  applyEffects(index) {
-    let actor = this.actors[index];
-    if (this.currentEffects.has(actor)) {
-      let effects = this.currentEffects.get(actor);
-      for (let effect of effects.values()) {
-        let expired = effect.cause(actor);
-        if (expired) {
-          effects.delete(effect);
-        }
-      }
-    } else {
-      console.log("actor isn't in effects.");
-    }
-    // Each actor receives some EP at the beginning of their turn.
-    if (actor.currentEnergy < actor.maxEnergy - 1) {
-      actor.currentEnergy = actor.currentEnergy + 2;
-    } else if (actor.currentEnergy < actor.maxEnergy) {
-      actor.currentEnergy++;
-    }
   }
 
   openChest() {

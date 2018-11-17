@@ -7,7 +7,7 @@ const ANIMATION_EVENT = 3;
 
 class Event {
   constructor(millisecs) {
-    this.startTime = Date.now(); //new Date().getTime();
+    this.startTime = Date.now();
     this.endTime = this.startTime + millisecs;
   }
 
@@ -16,8 +16,6 @@ class Event {
   }
 
   update() { }
-
-  end(game) { }
 }
 
 class GraphicEvent extends Event {
@@ -190,11 +188,11 @@ class SpriteChangeEvent extends Event {
   }
 
   update() {
-    this.actor.currentSprite = this.sprite;
-  }
-
-  end(game) {
-    this.actor.currentSprite = this.actor.sprite;
+    if (this.isFinished()) {
+      this.actor.currentSprite = this.actor.sprite;
+    } else {
+      this.actor.currentSprite = this.sprite;
+    }
   }
 }
 
@@ -215,15 +213,17 @@ class AnimationEvent extends Event {
   }
 
   update() {
-    let x = Math.round(this.x + (this.diffX * (Date.now() - this.startTime)));
-    let y = Math.round(this.y + (this.diffY * (Date.now() - this.startTime)));
+    let x = 0;
+    let y = 0;
+    if (this.isFinished()) {
+      x = this.endPos.x * TILE_SIZE;
+      y = this.endPos.y * TILE_SIZE;
+    } else {
+      x = Math.round(this.x + (this.diffX * (Date.now() - this.startTime)));
+      y = Math.round(this.y + (this.diffY * (Date.now() - this.startTime)));
+    }
     this.actor.drawX = x;
     this.actor.drawY = y;
-  }
-
-  end(game) {
-    this.actor.drawX = this.endPos.x * TILE_SIZE;
-    this.actor.drawY = this.endPos.y * TILE_SIZE;
   }
 }
 
