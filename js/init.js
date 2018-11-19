@@ -94,7 +94,7 @@ window.onload = function begin() {
       }
       
       if (action) {
-        theGame.applyEffects(actorIdx);
+        theGame.updateActor(actor);
       }
 
         

@@ -16,10 +16,10 @@ class Actor extends Entity {
     this.vision = vision;
 
     this.walk = new WalkAction(this);
-    this.rest = new RestAction(this);
-    this.attack = new InitAttack(this);
+    this.rest = new RestAction(this, game.battleEngine);
+    this.attack = new InitAttack(this, game.battleEngine);
     this.findTarget = new FindTarget(this);
-    this.primaryAttack = new PrimaryAttack(this);
+    this.primaryAttack = new PrimaryAttack(this, game.battleEngine);
     this.secondaryAttack = null;
     this.interaction = new Interact(this);
     this.nextAction = null;
@@ -48,11 +48,14 @@ class Actor extends Entity {
   incrementEnergy() {
     if (this.currentEnergy < this.maxEnergy - 1) {
       this.currentEnergy = this.currentEnergy + 2;
+      return 2;
     } else if (this.currentEnergy < this.maxEnergy) {
       this.currentEnergy++;
+      return 1;
     } else if (this.nextAction == this.rest) {
       this.nextAction = null;
     }
+    return 0;
   }
 
   useEnergy(required) {
@@ -109,14 +112,15 @@ class Actor extends Entity {
     }
   }
 
-  setRest() {
-    this.nextAction = this.rest;
-  }
-  setAttack(target) {
-    this.attack.target = target;
-    this.nextAction = this.attack;
-  }
-  applyEffect(effect) {
-    this.game.addEffect(this, effect);
-  }
+  //setRest() {
+    //this.nextAction = this.rest;
+  //}
+
+  //setAttack(target) {
+    //this.attack.target = target;
+    //this.nextAction = this.attack;
+  //}
+  //applyEffect(effect) {
+    //this.game.addEffect(this, effect);
+  //}
 }

@@ -226,10 +226,9 @@ class Interface {
     for (let i in this.events) {
       let event = this.events[i];
 
-      if (!event.isFinished()) {
+      if (!event.isFinished) {
         event.update();
       } else {
-        event.end(game);
         delete this.events[i];
         this.events.splice(i, 1);
       }

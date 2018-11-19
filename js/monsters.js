@@ -57,13 +57,15 @@ class Monster extends Actor {
   }
 
   reduceHealth(enemy, damage) {
+    console.log("monster takes damage:", damage);
     this.currentHealth -= damage;
     if (this.currentHealth <= 0) {
       this.game.player.increaseExp(this.exp);
       this.game.audio.die();
       this.game.entitiesToRemove.add(this);
     } else {
-      this.setAttack(enemy);
+      this.attack.target = enemy;
+      this.nextAction = this.attack;
     }
   }
 }

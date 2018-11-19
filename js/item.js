@@ -112,33 +112,29 @@ class Shield extends Armour {
   }
 }
 
-class Potion extends Item {
-  constructor(kind, strength, duration) {
-    super(POTION, kind);
+class Magic {
+  constructor(elem, strength, duration) {
+    this.elem = elem;
     this.strength = strength;
     this.duration = duration;
+  }
+}
+
+class HealthPotion extends Item {
+  constructor(kind, strength, duration) {
+    super(POTION, kind);
+    this.effect = new Magic(HP_EVENT, strength, duration);
     this.sprites = potionSprites;
     this.names = POTION_NAMES;
   }
 }
 
-class HealthPotion extends Potion {
+class EnergyPotion extends Item {
   constructor(kind, strength, duration) {
-    super(kind, strength, duration);
-  }
-  
-  get effect() {
-    return new HealEffect(this.strength, this.duration);
-  }
-}
-
-class EnergyPotion extends Potion {
-  constructor(kind, strength, duration) {
-    super(kind, strength, duration);
-  }
-  
-  get effect() {
-    return new RestoreEnergyEffect(this.strength, this.duration);
+    super(POTION, kind);
+    this.effect = new Magic(AP_EVENT, strength, duration);
+    this.sprites = potionSprites;
+    this.names = POTION_NAMES;
   }
 }
 
@@ -162,13 +158,8 @@ class Spell extends Item {
 class HealingSpell extends Spell {
   constructor(kind, strength, duration, energy) {
     super(kind);
-    this.duration = duration;
-    this.strength = strength;
+    this.effect = new Magic(HP_EVENT, strength, duration);
     this.energy = energy;
-  }
-
-  get effect() {
-    return new HealEffect(this.strength, this.duration);
   }
 }
 

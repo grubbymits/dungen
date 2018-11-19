@@ -38,7 +38,7 @@ class Hero extends Actor {
     this.isFollowing = false;
     this.leader = null;
     this.nextAction = null;
-    this.healAction = new TakePotion(this);
+    this.healAction = new TakePotion(this, this.game.battleEngine);
     this.level = 1;
     this.currentExp = 0;
     this.expToNextLvl = 15;
@@ -55,7 +55,7 @@ class Hero extends Actor {
     this.rest = new RestAction(this);
     this.attack = new InitAttack(this);
     this.findTarget = new FindTarget(this);
-    this.primaryAttack = new PrimaryAttack(this);
+    this.primaryAttack = new PrimaryAttack(this, this.game.battleEngine);
     this.interaction = new Interact(this);
     this.findTarget.targets = this.game.monsters;
   }
@@ -171,6 +171,7 @@ class Hero extends Actor {
 
   reduceHealth(enemy, damage) {
     this.currentHealth -= damage;
+    console.log("hero takes damage:", damage);
     if (this.currentHealth <= 0) {
       this.game.audio.die();
       this.game.entitiesToRemove.add(this);
@@ -270,7 +271,7 @@ class Mage extends Hero {
     this.equipPrimary = staffs[STAFF0];
     this.equipSecondary = spells[SPELL0];
     this.className = 'mage';
-    this.castSpell = new CastSpell(this);
+    this.castSpell = new CastSpell(this, this.game.battleEngine);
   }
 
   get action() {
@@ -331,7 +332,7 @@ class Rogue extends Hero {
     this.equipHelmet = helmets[HELMET0];
     this.equipPrimary = swords[SWORD0];
     this.equipSecondary = throwing[THROWING0];
-    this.secondaryAttack = new SecondaryAttack(this);
+    this.secondaryAttack = new SecondaryAttack(this, game.battleEngine);
     this.className = 'rogue';
   }
 

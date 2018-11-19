@@ -2,6 +2,13 @@ class BattleEngine {
   constructor() {
     this.observers = new Set();
     this.currentEffects = new Map();
+    this.events = [];
+  }
+
+  reset() {
+    this.observers.clear();
+    this.currentEffects.clear();
+    this.events = [];
   }
 
   addObserver(observer) {
@@ -12,27 +19,44 @@ class BattleEngine {
     this.observers.remove(observer);
   }
 
-  addEffect(actor, target, effect, duration) {
+  addActor(actor) {
+    this.currentEffects.set(actor, new Set());
+  }
+
+  addEvent(change) {
+    for (let observer of this.observers) {
+      observer.notify(change);
+    }
+  }
+
+  attack(actor, target) {
+    actor.attack.target = target;
+    actor.nextAction = actor.attack;
+    this.addEvent(new StateChange(actor, target, TARGET_EVENT, 0));
+  }
+
+  rest(actor) {
+    actor.nextAction = actor.rest;
+    this.addEvent(new StateChange(actor, actor, REST_EVENT, 0));
+  }
+
+  addEffect(actor, target, effect) {
     if (!this.currentEffects.has(actor)) {
       console.log("actor isn't in current effects.");
       return;
     }
     this.currentEffects.get(actor).add(effect);
-    let result = effect(actor, target, duration);
-
-    for (observer of observers) {
-      observer.notify(actor, target, result)
-    }
+    this.addEvent(effect());
   }
 
-  applyEffects(index) {
-    let actor = this.actors[index];
+  applyEffects(actor) {
     if (this.currentEffects.has(actor)) {
       let effects = this.currentEffects.get(actor);
       for (let effect of effects.values()) {
-        effect.cause(actor);
         if (effect.finished) {
           effects.delete(effect);
+        } else {
+          this.addEvent(effect());
         }
       }
     } else {

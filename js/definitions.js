@@ -375,3 +375,22 @@ const SEWER = 1;
 const DUNGEON = 2;
 const CATACOMBS = 3;
 const LAIR = 4;
+
+// Events
+const HP_EVENT = 0;
+const AP_EVENT = 1;
+const HPAP_EVENT = 2;
+const XP_EVENT = 3;
+const REST_EVENT = 4;
+const TARGET_EVENT = 5;
+const PRIMARY_ATTACK_EVENT = 6;
+const SECONDARY_ATTACK_EVENT = 7;
+const DODGE_EVENT = 8;
+const PHYSICAL_EVENT = 9;
+const POTION_EVENT = 10;
+const SPELL_EVENT = 11;
+const FIRE_EVENT = 12;
+const POISON_EVENT = 13;
+const ICE_EVENT = 14;
+const ELECTRIC_EVENT = 15;
+const NOTHING = 16;

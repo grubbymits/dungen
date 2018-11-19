@@ -1,12 +1,10 @@
 "use strict";
 
 class Action {
-  constructor(actor) {
+  constructor(actor, engine) {
     this.actor = actor;
     this.game = this.actor.game;
-  }
-  set bindActor(actor) {
-    this.actor = actor;
+    this.engine = engine;
   }
   perform() {
     return null;
@@ -14,11 +12,12 @@ class Action {
 }
 
 class RestAction extends Action {
-  constructor(actor) {
-    super(actor);
+  constructor(actor, engine) {
+    super(actor, engine);
   }
   perform() {
-    this.actor.incrementEnergy();
+    let amount = this.actor.incrementEnergy();
+    this.engine.addEvent(new OneEntityChange(this.actor, REST_EVENT, amount));
   }
 }
 
@@ -104,39 +103,22 @@ class WalkAction extends Action {
 
 }
 
-// Performing an attack action will return the attack attempt (eg swingweapon)
-// Whether it connects depends on the actor and the target.
-// DealDamage is the final action which determines how much damage is dealt.
-class DealDamage extends Action {
-  constructor(actor, attack) {
-    super(actor);
-    this.attack = attack;
+class AttackBase extends Action {
+  constructor(actor, engine) {
+    super(actor, engine);
   }
 
-  perform() {
-    if (this.targetActor.currentHealth < 1) {
-      return;
-    }
+  dealDamage(power) {
 
-    let power = this.attack.power;
-    let defense = this.targetActor.physicalDefense;
-    let damage = Math.round(power * MAX_DEFENSE / defense);
-    let elemType = this.attack.type;
-
-    if (elemType === NORMAL) {
+    if (this.type  === NORMAL) {
       console.log("deal normal damage");
-      this.game.addEffect(this.targetActor,
-                          new PhysicalDamage(damage, this.actor));
+      let defense = this.targetActor.physicalDefense;
+      let damage = Math.round(power * MAX_DEFENSE / defense);
+      var effect = DamageHP(this.actor, this.targetActor, 1, damage,
+                            PHYSICAL_EVENT);
+      this.engine.addEffect(this.actor, this.targetActor, effect);
       return;
-    } else {
-      console.log("deal magic damage");
     }
-
-    /*
-    let magicDefense = this.targetActor.magicalDefense;
-    if (magicDefense !== magicDefense)
-      throw("magicDefense not calculated correctly");
-    */
 
     let magicDamage = Math.round(power * MAX_MAGIC_DEFENSE / defense);
     if (magicDamage !== magicDamage)
@@ -146,41 +128,34 @@ class DealDamage extends Action {
     if (magicResistance !== magicResistance)
       throw("magicResistance not calculated correctly");
 
-    let duration = Math.round(this.attack.magicPower * MAX_MAGIC_RESISTANCE /
+    var duration = Math.round(this.magicPower * MAX_MAGIC_RESISTANCE /
                               magicResistance);
     if (duration !== duration) {
       throw("duration not calculated correctly:", duration);
     }
 
+    console.log("deal magic damage");
     switch(elemType) {
-    case FIRE:
-      this.game.addEffect(this.targetActor,
-                          new BurnEffect(magicDamage, duration, this.actor));
-      break;
-    case ICE:
-      this.game.addEffect(this.targetActor,
-                          new FreezeEffect(magicDamage, duration, this.actor));
-      break;
-    case ELECTRIC:
-      this.game.addEffect(this.targetActor,
-                          new ShockEffect(magicDamage, duration, this.actor));
-      break;
-    case POISON:
-      this.game.addEffect(this.targetActor,
-                          new PoisonEffect(magicDamage, duration, this.actor));
-      break;
+      default:
+        throw("unhandled element type");
+      case FIRE:
+      case POISON:
+        let eventType = elemType == FIRE ? FIRE_EVENT : POISON_EVENT;
+        this.engine.addEffect(this.actor, this.targetActor,
+                              HPDamage(this.targetActor, duration, this.strength,
+                              eventType));
+        break;
+      case ICE:
+        this.engine.addEffect(this.actor, this.targetActor,
+                              APDamage(this.targetActor, duration, this.strength,
+                                       ICE_EVENT));
+        break;
+      case ELECTRIC:
+        this.engine.addEffect(this.actor, this.targetActor,
+                              DamageHPAP(this.targetActor, duration, this.strength,
+                              ELECTRIC_EVENT));
+        break;
     }
-  }
-
-  set target(target) {
-    this.targetActor = target;
-  }
-}
-
-class AttackBase extends Action {
-  constructor(actor) {
-    super(actor);
-    this.dealDamage = new DealDamage(actor, this);
   }
 
   set target(target) {
@@ -196,8 +171,8 @@ class AttackBase extends Action {
 }
 
 class PrimaryAttack extends AttackBase {
-  constructor(actor) {
-    super(actor);
+  constructor(actor, engine) {
+    super(actor, engine);
   }
   
   get range() {
@@ -239,27 +214,24 @@ class PrimaryAttack extends AttackBase {
       return null;
     }
 
-    if (this.actor.kind == HERO) {
-      this.game.addGraphicEvent(this.actor.primary.sprite,
-                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
-    }
+    this.actor.useEnergy(energyRequired);
+    this.engine.addEvent(new ItemUse(this.actor, this.actor.primary,
+                                     PRIMARY_ATTACK_EVENT));
 
-    if (this.success) {
-      this.game.audio.playAttack(this.actor);
-      this.dealDamage.target = this.targetActor;
-      this.actor.useEnergy(energyRequired);
-      return this.dealDamage;
-    } else {
-      this.actor.useEnergy(energyRequired);
+    if (!this.success) {
+      this.engine.addEvent(new OneEntityChange(this.targetActor, DODGE_EVENT, 0));
       this.game.audio.dodge();
       return null;
     }
+
+    this.game.audio.playAttack(this.actor);
+    return this.dealDamage(this.power);
   }
 }
 
 class SecondaryAttack extends AttackBase {
-  constructor(actor) {
-    super(actor);
+  constructor(actor, engine) {
+    super(actor, engine);
   }
   
   get range() {
@@ -296,27 +268,24 @@ class SecondaryAttack extends AttackBase {
       return null;
     }
 
-    if (this.actor.kind == HERO) {
-      this.game.addGraphicEvent(this.actor.secondary.sprite,
-                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
-    }
+    this.actor.useEnergy(energyRequired);
+    this.engine.addEvent(new ItemUse(this.actor, this.actor.secondary,
+                         SECONDARY_ATTACK_EVENT));
 
-    if (this.success) {
-      this.game.audio.playAttack(this.actor);
-      this.dealDamage.target = this.targetActor;
-      this.actor.useEnergy(energyRequired);
-      return this.dealDamage;
-    } else {
-      this.actor.useEnergy(energyRequired);
+    if (!this.success) {
+      this.engine.addEvent(new OneEntityChange(this.targetActor, DODGE_EVENT, 0));
       this.game.audio.dodge();
       return null;
     }
+
+    this.game.audio.playAttack(this.actor);
+    return this.dealDamage(this.power);
   }
 }
 
 class InitAttack extends Action {
-  constructor(actor) {
-    super(actor);
+  constructor(actor, engine) {
+    super(actor, engine);
     this.map = this.actor.game.map;
   }
 
@@ -329,7 +298,6 @@ class InitAttack extends Action {
       this.targetActor = null;
       return;
     }
-    this.game.addGraphicEvent(targetSprite, target.pos);
     this.targetActor = target;
   }
 
@@ -505,8 +473,8 @@ class FindTarget extends Action {
 }
 
 class TakePotion extends Action {
-  constructor(actor) {
-    super(actor);
+  constructor(actor, engine) {
+    super(actor, engine);
   }
 
   set potion(potion) {
@@ -515,21 +483,19 @@ class TakePotion extends Action {
   }
 
   perform() {
-    this.game.addEffect(this.actor, this.effect);
-    this.game.addGraphicEvent(this.thePotion.sprite,
-                              new Vec(this.actor.pos.x, this.actor.pos.y - 1));
+    this.engine.addEffect(this.actor, this.effect);
+    this.engine.addEvent(new ItemUse(this.actor, this.thePotion, POTION_EVENT));
     this.actor.nextAction = null;
   }
 }
 
 class CastSpell extends Action {
-  constructor(actor) {
-    super(actor);
+  constructor(actor, engine) {
+    super(actor, engine);
   }
 
   set spell(spell) {
-    this.theSpell = spell;
-    this.effect = spell.effect;
+    this.magic = spell;
   }
 
   set target(target) {
@@ -537,11 +503,18 @@ class CastSpell extends Action {
   }
 
   perform() {
-    if (this.actor.currentEnergy >= this.theSpell.energy) {
-      this.game.addEffect(this.targetActor, this.effect);
-      this.game.addGraphicEvent(this.theSpell.sprite,
-                                new Vec(this.actor.pos.x, this.actor.pos.y - 1));
-      this.actor.reduceEnergy(this.theSpell.energy);
+    if (this.actor.currentEnergy >= this.magic.energy) {
+      switch(this.magic.elem) {
+        default:
+          throw("unhandled element");
+        case HEALTH:
+          var effect = HealHP(this.targetActor, this.magic.strength,
+                              this.magic.duration);
+          break;
+      }
+      this.engine.addEffect(this.targetActor, effect);
+      this.engine.addEvent(new ItemUse(this.actor, this.magic, SPELL_EVENT));
+      this.actor.reduceEnergy(this.magic.energy);
       this.actor.nextAction = null;
     }
   }

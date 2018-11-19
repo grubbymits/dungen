@@ -8,6 +8,7 @@ class Renderer {
     this.map = map;
     this.actors = actors;
     this.objects = objects;
+    this.events = [];
   }
 
   renderMap(symbolLocs) {
@@ -124,5 +125,89 @@ class Renderer {
     largeNumberSprites[Math.floor((wallet % 1000) / 100)].render(48, 96, context);
     largeNumberSprites[Math.floor((wallet % 100) / 10)].render(64, 96, context);
     largeNumberSprites[Math.floor(wallet % 10)].render(80, 96, context);
+  }
+
+  renderEvents() {
+    for (let i in this.events) {
+      let event = this.events[i];
+      event.update();
+      if (event.isFinished) {
+        delete this.events[i];
+        this.events.splice(i, 1);
+      }
+    }
+  }
+
+  notify(change) {
+    if (change.type == NOTHING) {
+      return;
+    }
+
+    let actor = change.actor;
+    let pos = new Vec(actor.pos.x, actor.pos.y - 1);
+    switch(change.type) {
+    case HP_EVENT:
+      this.events.push(new SpriteChangeEvent(actor, actor.healSprite));
+      this.events.push(new HPEvent(this.foreground, actor.pos, change.amount));
+      break;
+    case AP_EVENT:
+    case REST_EVENT:
+      this.events.push(new APEvent(this.foreground, actor.pos, change.amount));
+      break;
+    case XP_EVENT:
+      break;
+    case TARGET_EVENT:
+      this.events.push(new GraphicEvent(this.foreground, actor.pos, targetSprite));
+      break;
+    case PRIMARY_ATTACK_EVENT:
+      if (actor.kind == HERO) {
+        this.events.push(new GraphicEvent(this.foreground, pos, actor.primary.sprite));
+      }
+      break;
+    case SECONDARY_ATTACK_EVENT:
+      if (actor.kind == HERO) {
+        this.events.push(new GraphicEvent(this.foreground, pos, actor.secondary.sprite));
+      }
+      break;
+    case DODGE_EVENT:
+      break;
+    case PHYSICAL_EVENT: {
+      let target = change.target;
+      this.events.push(new SpriteChangeEvent(target, target.damageSprite));
+      this.events.push(new HPEvent(this.foreground, target.pos, change.amount));
+      break;
+    }
+    case POTION_EVENT:
+      this.events.push(new GraphicEvent(this.foreground, pos, change.target.sprite));
+      break;
+    case SPELL_EVENT:
+      this.events.push(new GraphicEvent(this.foreground, pos, change.target.sprite));
+      break;
+    case FIRE_EVENT: {
+      let target = change.target;
+      this.events.push(new SpriteChangeEvent(target, target.burntSprite));
+      this.events.push(new HPEvent(this.foreground, target.pos, change.amount));
+      break;
+    }
+    case POISON_EVENT: {
+      let target = change.target;
+      this.events.push(new SpriteChangeEvent(target, target.poisonedSprite));
+      this.events.push(new HPEvent(this.foreground, target.pos, change.amount));
+      break;
+    }
+    case ICE_EVENT: {
+      let target = change.target;
+      this.events.push(new SpriteChangeEvent(target, target.frozenSprite));
+      this.events.push(new APEvent(this.foreground, target.pos, change.amount));
+      break;
+    }
+    case ELECTRIC_EVENT: {
+      let target = change.target;
+      this.events.push(new SpriteChangeEvent(target, target.shockedSprite));
+      this.events.push(new APEvent(this.foreground, target.pos, change.amount));
+      this.events.push(new HPEvent(this.foreground, target.pos, change.amount));
+      break;
+    }
+    }
   }
 }

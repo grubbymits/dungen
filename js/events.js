@@ -11,7 +11,7 @@ class Event {
     this.endTime = this.startTime + millisecs;
   }
 
-  isFinished() {
+  get isFinished() {
     return (new Date().getTime() >= this.endTime);
   }
 
@@ -188,7 +188,7 @@ class SpriteChangeEvent extends Event {
   }
 
   update() {
-    if (this.isFinished()) {
+    if (this.isFinished) {
       this.actor.currentSprite = this.actor.sprite;
     } else {
       this.actor.currentSprite = this.sprite;
@@ -215,7 +215,7 @@ class AnimationEvent extends Event {
   update() {
     let x = 0;
     let y = 0;
-    if (this.isFinished()) {
+    if (this.isFinished) {
       x = this.endPos.x * TILE_SIZE;
       y = this.endPos.y * TILE_SIZE;
     } else {

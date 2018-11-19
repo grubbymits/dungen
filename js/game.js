@@ -28,6 +28,7 @@ class Game {
     this.width = width;
     this.height = height;
     this.audio = new Audio(this);
+    this.battleEngine = new BattleEngine();
   }
 
   saveItems(itemMap, name) {
@@ -196,8 +197,6 @@ class Game {
     this.openChests = 0;
     this.totalMonsters = 0;
     this.monstersKilled = 0;
-    this.currentEffects.clear();
-
 
     this.setupMap(this.heroes.size);
     // re-add the heroes
@@ -206,7 +205,7 @@ class Game {
       hero.pos = this.mapGenerator.entryVecs.pop();
       this.theMap.placeEntity(hero.pos, hero);
       this.actors.push(hero);
-      this.currentEffects.set(hero, new Set());
+      this.battleEngine.add(hero);
     }
     this.player.UI.centreCamera();
 
@@ -304,7 +303,7 @@ class Game {
     }
     this.actors.push(hero);
     this.heroes.add(hero);
-    this.currentEffects.set(hero, new Set());
+    this.battleEngine.addActor(hero);
     this.theMap.placeEntity(pos, hero);
     this.player.addHero(hero);
     return hero;
@@ -415,7 +414,7 @@ class Game {
     this.actors.push(monster);
     this.monsters.add(monster);
     this.theMap.placeEntity(pos, monster);
-    this.currentEffects.set(monster, new Set());
+    this.battleEngine.addActor(monster);
     ++this.totalMonsters;
     this.map.getLocation(pos.x, pos.y).blocked = false;
     return monster;
@@ -479,6 +478,10 @@ class Game {
         return;
       }
     }
+  }
+
+  updateActor(actor) {
+    this.battleEngine.applyEffects(actor);
   }
 
   getAction(actor) {
@@ -545,11 +548,13 @@ class Game {
     this.renderer.renderUI(this.level, this.openChests, this.totalChests,
                            this.monstersKilled, this.totalMonsters,
                            this.player.wallet);
+    this.battleEngine.addObserver(this.renderer);
   }
 
   render() {
     this.renderer.renderChanges();
     this.renderer.renderEntities(this.player.currentHero);
+    this.renderer.renderEvents();
     this.renderer.renderUI(this.level, this.openChests, this.totalChests,
                            this.monstersKilled, this.totalMonsters,
                            this.player.wallet);
@@ -561,14 +566,6 @@ class Game {
 
   addSpriteChangeEvent(actor, sprite) {
     this.player.UI.addEvent(new SpriteChangeEvent(actor, sprite));
-  }
-
-  addHPEvent(pos, value) {
-    this.player.UI.addEvent(new HPEvent(this.foreground, pos, value));
-  }
-
-  addAPEvent(pos, value) {
-    this.player.UI.addEvent(new APEvent(this.foreground, pos, value));
   }
 
   addXPEvent(pos, value) {
