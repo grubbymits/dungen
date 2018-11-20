@@ -86,26 +86,35 @@ window.onload = function begin() {
     let actorIdx = 0;
     while(true) {
       let updateActor = false;
-      let action = theGame.getAction(actorIdx);
+
+      if (actorIdx >= theGame.numActors) {
+        actorIdx = actorIdx % theGame.numActors;
+      }
 
       let actor = theGame.actors[actorIdx];
+
       if (actor.kind == HERO && !actor.isFollowing) {
         player.currentHero = actor;
       }
-      
+
+      let action = theGame.getAction(actorIdx);
       if (action) {
         theGame.updateActor(actor);
       }
-
         
-      while(action && (Date.now() >= actor.nextUpdate) && actor.currentHealth > 1) {
+      while(action && (Date.now() >= actor.nextUpdate)) {
+        if (actor.currentHealth < 1) {
+          updateActor = true;
+          break;
+        }
         action = action.perform();
         yield true;
         updateActor = true;
       }
+
       if (updateActor) {
         actor.lastPerformed = Date.now();
-        actorIdx = (actorIdx + 1) % theGame.actors.length;
+        actorIdx = (actorIdx + 1) % theGame.numActors;
       }
 
       yield;

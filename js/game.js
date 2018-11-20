@@ -8,15 +8,13 @@ const OVER = 3;
 class Game {
   constructor(background, foreground, overlay, width, height) {
     this.actors = [];
-    this.heroes = new Set();
-    this.monsters = new Set();
+    //this.heroes = new Set();
+    //this.monsters = new Set();
     this.objects = new Set();
-    this.entitiesToRemove = new Set();
-    this.entitiesToCreate = new Set();
-    this.totalChests = 0;
-    this.openChests = 0;
-    this.totalMonsters = 0;
-    this.monstersKilled = 0;
+    //this.totalChests = 0;
+    //this.openChests = 0;
+    //this.totalMonsters = 0;
+    //this.monstersKilled = 0;
     this.background = background;
     this.foreground = foreground;
     this.overlay = overlay;
@@ -190,22 +188,20 @@ class Game {
     // reset stuff
     this.actors = [];
     this.objects.clear();
-    this.monsters.clear();
-    this.entitiesToRemove.clear();
-    this.entitiesToCreate.clear();
-    this.totalChests = 0;
-    this.openChests = 0;
-    this.totalMonsters = 0;
-    this.monstersKilled = 0;
+    //this.monsters.clear();
+    //this.totalChests = 0;
+    //this.openChests = 0;
+    //this.totalMonsters = 0;
+    //this.monstersKilled = 0;
 
     this.setupMap(this.heroes.size);
     // re-add the heroes
     for (let hero of this.heroes.values()) {
       hero.reset();
       hero.pos = this.mapGenerator.entryVecs.pop();
-      this.theMap.placeEntity(hero.pos, hero);
+      this.stateTracker.addHero(hero, hero.pos);
       this.actors.push(hero);
-      this.battleEngine.add(hero);
+      this.battleEngine.addActor(hero);
     }
     this.player.UI.centreCamera();
 
@@ -218,59 +214,15 @@ class Game {
     this.mapGenerator.generate(this.level, MAP_WIDTH_PIXELS, MAP_HEIGHT_PIXELS,
                                numHeroes);
     this.theMap = this.mapGenerator.map;
-
-    let stair = new Stair(this.mapGenerator.exitStairLoc.vec, true, this);
-    this.addObject(stair, this.mapGenerator.exitStairLoc);
-    stair = new Stair(this.mapGenerator.entryStairLoc.vec, false, this);
-    this.addObject(stair, this.mapGenerator.entryStairLoc);
-
+    this.stateTracker.addReservedEntity(ENTRY_STAIR,
+                                        this.mapGenerator.entryStairLoc);
+    this.stateTracker.addReservedEntity(EXIT_STAIR,
+                                        this.mapGenerator.exitStairLoc);
     this.mapGenerator.placeChests();
 
     for (let resEntity of this.mapGenerator.reservedLocs) {
       let loc = resEntity.loc;
-      switch(resEntity.type) {
-      case RES_PATH:
-        loc.blocked = false;
-        break;
-      case CHEST:
-        this.createChest(loc);
-        break;
-      case DOOR:
-        this.createDoor(loc);
-        break;
-      case KEY:
-        this.createKey(loc);
-        break;
-      case SKULL:
-        let skull = new Skull(loc.vec, this);
-        this.addObject(skull, loc);
-        break;
-      case TOMBSTONE:
-        let tombstone = new Tombstone(loc.vec, this);
-        this.addObject(tombstone, loc);
-        break;
-      case SIGN:
-        let sign = new Sign(loc.vec, this);
-        this.addObject(sign, loc);
-        break;
-      case MAGICAL_OBJ:
-        let object = new MagicalObject(loc.vec, this);
-        this.addObject(object, loc);
-        break;
-      case ALLY:
-        let newAllies = new Set([ARCHER, ROGUE, MAGE, KNIGHT]);;
-        for (let hero of this.heroes) {
-          newAllies.delete(hero.subtype);
-        }
-        do {
-          var allyType = getBoundedRandom(ROGUE, BLACK_MAGE);
-          var found = newAllies.has(allyType);
-        } while (!found);
-
-        let ally = new Ally(loc.vec, allyType, this);
-        this.addObject(ally, loc);
-        break;
-      }
+      this.stateTracker.addReservedEntity(resEntity,type, loc);
     }
 
     let numMonsters = getBoundedRandom(45, 32);
@@ -302,9 +254,10 @@ class Game {
       hero.follow(this.player.currentHero);
     }
     this.actors.push(hero);
-    this.heroes.add(hero);
+    //this.heroes.add(hero);
     this.battleEngine.addActor(hero);
-    this.theMap.placeEntity(pos, hero);
+    this.stateTracker.addHero(hero, pos);
+    //this.theMap.placeEntity(pos, hero);
     this.player.addHero(hero);
     return hero;
   }
@@ -412,105 +365,31 @@ class Game {
         throw("unhandled monster type!");
     }
     this.actors.push(monster);
-    this.monsters.add(monster);
-    this.theMap.placeEntity(pos, monster);
+    //this.monsters.add(monster);
+    //this.theMap.placeEntity(pos, monster);
     this.battleEngine.addActor(monster);
-    ++this.totalMonsters;
-    this.map.getLocation(pos.x, pos.y).blocked = false;
+    this.stateTracker.addMonsert(monster);
+    //this.map.getLocation(pos.x, pos.y).blocked = false;
     return monster;
-  }
-
-
-  createChest(loc) {
-    let chest = new Chest(loc.vec, this);
-    ++this.totalChests;
-    this.addObject(chest, loc);
-  }
-  
-  createDoor(loc) {
-    let door = new Door(loc.vec, this);
-    this.addObject(door, loc);
-  }
-  
-  createKey(loc) {
-    let key = new Key(loc.vec, this);
-    this.addObject(key, loc);
-  }
-
-  addObject(object, loc) {
-    this.objects.add(object);
-    this.theMap.placeEntity(object.pos, object);
-    loc.blocked = false;
-  }
-
-  removeEntity(entity) {
-    // TODO Having a single array for actors is only used because its
-    // the way of stepping through actors in the game loop. The hero
-    // and monster arrays are generally used but then we have duplicate
-    // references. And maybe more useful to use a set for these.
-    if (entity.kind == MONSTER) {
-      ++this.monstersKilled;
-      console.log("deleting monster:", entity);
-      this.monsters.delete(entity);
-    } else if (entity.kind == HERO) {
-      if (this.heroes.length == 1) {
-        console.log("removing only hero");
-        this.status = OVER;
-        this.player.UI.gameOver();
-      }
-      console.log("deleting hero:", entity);
-      this.heroes.delete(entity);
-    } else if (entity.kind == OBJECT) {
-      console.log("deleting object:", entity);
-      this.objects.delete(entity);
-      this.theMap.removeEntity(entity.position);
-      return;
-    } else {
-      console.log(entity);
-      throw("trying to remove an unknown entity!");
-    }
-
-    this.theMap.removeEntity(entity.position);
-
-    for (let index in this.actors) {
-      if (this.actors[index] == entity) {
-        this.actors.splice(index, 1);
-        return;
-      }
-    }
   }
 
   updateActor(actor) {
     this.battleEngine.applyEffects(actor);
   }
 
-  getAction(actor) {
-    if (this.actors[actor].currentHealth < 1) {
+  get numActors() {
+    return this.actors.length;
+  }
+
+  getAction(idx) {
+    if (this.actors[idx].currentHealth < 1) {
       console.log("actor is dead");
     }
-    return this.actors[actor].action;
+    return this.actors[idx].action;
   }
 
-  openChest() {
-    ++this.openChests;
-  }
-  
   get map() {
     return this.theMap;
-  }
-
-  update() {
-    for (let entity of this.entitiesToRemove.values()) {
-      console.log("need to remove:", entity);
-      this.removeEntity(entity);
-    }
-    for (let entity of this.entitiesToCreate.values()) {
-      if (entity.type == HERO) {
-        this.createHero(entity.pos, entity.subtype, true);
-      }
-    }
-    this.entitiesToRemove.clear();
-    this.entitiesToCreate.clear();
   }
 
   get isRunning() {
